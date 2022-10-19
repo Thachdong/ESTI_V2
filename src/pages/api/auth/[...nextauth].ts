@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
 import { authenticate } from "src/api";
@@ -5,25 +6,23 @@ import { parseJwt } from "~modules-core/utility";
 
 const handleCredentialsAuthorize = async (credentials: any ) => {
   try {
-    const { data } = credentials;
+    const { data: stringifyPayload } = credentials;
 
-    const payload = JSON.parse(data as string);
+    const payload = JSON.parse(stringifyPayload as string);
 
     const res = await authenticate.login(payload);
 
-    const { Data } = res;
+    const { token } = res.data;
 
-    const { userInfo, exp } = parseJwt(Data.token);
+    const { userInfo, exp } = parseJwt(token);
 
     return Promise.resolve({
       ...userInfo,
-      accessToken: Data.token,
+      accessToken: token,
       accessTokenExp: exp,
     });
-  } catch (error) {
-    console.log("authorize error", error);
-
-    return Promise.reject(new Error(encodeURIComponent(JSON.stringify(error))));
+  } catch (error: any) {
+    return Promise.reject(new Error(encodeURIComponent(JSON.stringify(error?.data))));
   }
 };
 

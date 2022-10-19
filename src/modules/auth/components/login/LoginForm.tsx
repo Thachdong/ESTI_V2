@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { signIn, SignInOptions, SignInResponse } from "next-auth/react";
 import { FormInput, FormInputPassword } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 
 type TLoginCredential = {
   username: string;
@@ -49,16 +50,18 @@ export function LoginForm() {
       if (ok) {
         router.push(url || "/dashboard");
 
-        console.log("Đăng nhập thành công!");
+        toast.success("Đăng nhập thành công!")
       }
 
       if (!ok && error) {
+        
         const errorData = JSON.parse(decodeURIComponent(error as string));
 
-        console.log(errorData?.data?.ResultMessage);
+        toast.error(errorData?.resultMessage)
       }
     } catch (error) {
       console.log(error);
+      toast.error("Lỗi không xác định!")
     }
   };
 

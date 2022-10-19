@@ -1,14 +1,14 @@
 type TBaseResponse<TData> = {
-  Data: TData;
-  ResultCode: number;
-  ResultMessage: string;
-  Success: boolean;
+  data: TData;
+  resultCode: number;
+  resultMessage: string;
+  success: boolean;
 };
 
 type TPaginationResponse<TItem> = {
-  Items: TItem[];
-  PageIndex: number;
-  PageSize: number;
-  TotalItem: number;
-  TotalPage: number;
+  items: TItem[];
+  pageIndex: number;
+  pageSize: number;
+  totalItem: number;
+  totalPage: number;
 };

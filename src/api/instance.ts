@@ -16,58 +16,60 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
   return baseURL ? url?.replace(baseURL, "") : url;
 };
 
-instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    const { method, params, data } = config || {};
+const useRequestCongif = (config: AxiosRequestConfig) => {
+  const { method, params, data } = config || {};
 
-    console.log(
-      `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
-      "color: #0086b3; font-weight: bold",
-      { params, data }
-    );
+  console.log(
+    `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
+    "color: #0086b3; font-weight: bold",
+    { params, data }
+  );
 
-    return config;
-  },
-  (error: AxiosError) => Promise.reject(error)
-);
+  return config;
+};
 
-instance.interceptors.response.use(
-  async(response: AxiosResponse) => {
-    const { data, status, config } = response || {};
+const useRequestConfigError = (error: AxiosError) => Promise.reject(error);
+
+instance.interceptors.request.use(useRequestCongif, useRequestConfigError);
+
+const useResponseSuccess = (response: AxiosResponse) => {
+  const { data, status, config } = response || {};
+
+  console.log(
+    `%c ${status} - ${getUrlFromConfig(config)}:`,
+    "color: #008000; font-weight: bold",
+    data
+  );
+
+  return response;
+};
+
+const useResponseError = (error: AxiosError) => {
+  const { isAxiosError, response } = error || {};
+
+  if (isAxiosError && response) {
+    const { config, status, data } = response || {};
 
     console.log(
       `%c ${status} - ${getUrlFromConfig(config)}:`,
-      "color: #008000; font-weight: bold",
+      "color: #a71d5d; font-weight: bold",
       data
     );
 
-    return response;
-  },
-  (error: AxiosError) => {
-    const { isAxiosError, response } = error || {};
-
-    if (isAxiosError && response) {
-      const { config, status, data } = response || {};
-
-      console.log(
-        `%c ${status} - ${getUrlFromConfig(config)}:`,
-        "color: #a71d5d; font-weight: bold",
-        data
-      );
-
-      switch(status) {
-        case 401: {
-          // TRIGGER TOKEN ROTATION HERE
-          // TOAST statusText
-          break;
-        }
-        default:
-          break;
+    switch (status) {
+      case 401: {
+        // TRIGGER TOKEN ROTATION HERE
+        // TOAST statusText
+        break;
       }
-     } else {
-      console.log("Lỗi không xác định!");
+      default:
+        break;
     }
-
-    return Promise.reject(error);
+  } else {
+    console.log("Lỗi không xác định!");
   }
-);
+
+  return Promise.reject(error);
+};
+
+instance.interceptors.response.use(useResponseSuccess, useResponseError);
