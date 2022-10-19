@@ -1,0 +1,120 @@
+import * as React from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {
+  Paper,
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Link,
+  Button,
+  Avatar,
+} from "@mui/material";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { signIn, SignInOptions, SignInResponse } from "next-auth/react";
+import { FormInput, FormInputPassword } from "~modules-core/components";
+
+type TLoginCredential = {
+  username: string;
+  password: string;
+};
+
+export function LoginForm() {
+  const { control, handleSubmit } = useForm<TLoginCredential>({
+    defaultValues: {
+      username: "admin",
+      password: "monasoftware@@pja",
+    }
+  });
+
+  const router = useRouter();
+
+  const onSubmit = async (data: TLoginCredential) => {
+    const { callbackUrl } = router.query;
+    try {
+      const signInPayload: SignInOptions = {
+        data: JSON.stringify(data),
+        callbackUrl: callbackUrl as string,
+        redirect: false,
+      };
+
+      const response: SignInResponse | undefined = await signIn(
+        "credentials-signin",
+        signInPayload
+      );
+
+      const { error, ok, url } = response || {};
+
+      if (ok) {
+        router.push(url || "/dashboard");
+
+        console.log("Đăng nhập thành công!");
+      }
+
+      if (!ok && error) {
+        const errorData = JSON.parse(decodeURIComponent(error as string));
+
+        console.log(errorData?.data?.ResultMessage);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <Paper className="grid gap-4 justify-center p-8 mt-10">
+        <Avatar className="mx-auto" sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+
+        <Typography className="mx-auto" component="h1" variant="h5">
+          Đăng nhập
+        </Typography>
+
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid gap-4 mt-4"
+        >
+          <FormInput
+            control={control}
+            name="username"
+            label="Email / tên đăng nhập"
+            inputProps={{ autoComplete: "email", autoFocus: true }}
+            rules={{ required: "Phải nhập email / tên đăng nhập" }}
+          />
+
+          <FormInputPassword
+            control={control}
+            name="password"
+            label="Mật khẩu"
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Đăng nhập
+          </Button>
+
+          <Grid container>
+            <Grid item xs>
+              <Link className="mr-4" href="#" variant="body2">
+                Quên mật khẩu?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Bạn chưa có tài khoản? đăng ký"}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Paper>
+    </Container>
+  );
+}

@@ -13,8 +13,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "~modules-core/*": ["./src/modules/core/*"],
+      "~modules-auth/*": ["./src/modules/auth/*"],
+      "~modules-dashboard/*": ["./src/modules/dashboard/*"],
+      "~styles/*": ["./src/styles/*"],
+      "~types/*": ["./src/types/*"],
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/middleware.js"],
   "exclude": ["node_modules"]
 }
