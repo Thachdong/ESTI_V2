@@ -1,0 +1,35 @@
+/* TOAST SUCCESS */
+.toast-success {
+  background: rgb(237, 247, 237);
+}
+
+.toast-success .toast-header {
+  @apply text-success;
+}
+
+/* TOAST ERROR */
+.toast-error {
+  background: rgb(253, 237, 237);
+}
+
+.toast-error .toast-header {
+  @apply text-error;
+}
+
+/* TOAST INFO */
+.toast-info {
+  background: rgb(229, 246, 253);
+}
+
+.toast-info .toast-header {
+  @apply text-info;
+}
+
+/* TOAST WARNING */
+.toast-warning {
+  background: rgb(255, 244, 229);
+}
+
+.toast-warning .toast-header {
+  @apply text-warning;
+}

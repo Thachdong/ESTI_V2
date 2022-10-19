@@ -14,7 +14,7 @@ const convertLoginPayloadToFormdata = (payload: TLoginPayload) => {
 export const authenticate = {
   login: (loginPayload: TLoginPayload) =>
     request.post<FormData, TLoginResponse>(
-      "authenticate/login",
+      "Authenticate/login",
       convertLoginPayloadToFormdata(loginPayload)
     ),
 };
