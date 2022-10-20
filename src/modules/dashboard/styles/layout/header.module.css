@@ -1,0 +1,5 @@
+.header {
+  @apply flex items-center justify-center px-4 mb-4;
+  height: 60px;
+  border-bottom: 1px solid #e0e0e0;
+}

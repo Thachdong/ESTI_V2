@@ -1,0 +1,14 @@
+.sidebar {
+    @apply bg-contain bg-no-repeat relative;
+    width: 250px;
+    height: 100vh;
+    background-color: #051e34;
+    background-image: url("../../../../../public/nav_bg.png");
+    background-repeat: no-repeat;
+}
+
+.sidebar .logo-box {
+    @apply flex items-center justify-center text-white mb-4;
+    height: 60px;
+    border-bottom: 1px solid #e0e0e0;
+}

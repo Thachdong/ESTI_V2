@@ -18,12 +18,15 @@ function MyApp({
   pageProps: { session, ...pageProps },
   emotionCache = clientEmotionCache,
 }: IMyAppProps) {
+  const getLayout = Component.getLayout ?? ((page) => page)
   return (
     <SessionProvider session={session}>
       <ReactQueryProvider>
         <MuiProvider emotionCache={emotionCache}>
           <ToastContainer {...toastOptions} />
-          <Component {...pageProps} />
+          {
+            getLayout(<Component {...pageProps} />)
+          }
         </MuiProvider>
       </ReactQueryProvider>
     </SessionProvider>

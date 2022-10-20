@@ -1,6 +1,9 @@
 import { toast as toastify, ToastOptions } from "react-toastify";
 import { Box, Typography } from "@mui/material";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
+import FeedRoundedIcon from '@mui/icons-material/FeedRounded';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import style from "../styles/toast.module.css";
 
 const StatusIcons: React.FC<{ type: string }> = ({ type }) => {
@@ -8,11 +11,11 @@ const StatusIcons: React.FC<{ type: string }> = ({ type }) => {
     case "success":
       return <CheckCircleOutlineOutlinedIcon sx={{width: 15}} />;
     case "error":
-      return <CheckCircleOutlineOutlinedIcon sx={{width: 15}} />;
+      return <ReportGmailerrorredRoundedIcon sx={{width: 15}} />;
     case "info":
-      return <CheckCircleOutlineOutlinedIcon sx={{width: 15}} />;
+      return <FeedRoundedIcon sx={{width: 15}} />;
     case "warning":
-      return <CheckCircleOutlineOutlinedIcon sx={{width: 15}} />;
+      return <WarningAmberRoundedIcon sx={{width: 15}} />;
     default:
       return <></>;
   }
