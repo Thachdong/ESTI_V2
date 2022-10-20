@@ -1,0 +1,3 @@
+.layout {
+    @apply flex-grow overflow-x-hidden overflow-y-auto p-2;
+}

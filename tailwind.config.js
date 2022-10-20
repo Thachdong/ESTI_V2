@@ -7,7 +7,9 @@ module.exports = {
       success: "#2e7d32",
       warning: "#ed6c02",
       error: "#d32f2f",
-      info: "#0288d1"
+      info: "#0288d1",
+      white: "#fff",
+      'grey-3': "#e0e0e0"
     }
   },
   plugins: [],
