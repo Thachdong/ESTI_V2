@@ -1,14 +1,41 @@
 .sidebar {
-    @apply bg-contain bg-no-repeat relative;
-    width: 250px;
-    height: 100vh;
-    background-color: #051e34;
-    background-image: url("../../../../../public/nav_bg.png");
-    background-repeat: no-repeat;
+  @apply bg-contain bg-no-repeat relative;
+  width: 250px;
+  height: 100vh;
+  background-color: #051e34;
+  background-image: url("../../../../../public/nav_bg.png");
+  background-repeat: no-repeat;
 }
 
 .sidebar .logo-box {
-    @apply flex items-center justify-center text-white;
-    height: 60px;
-    border-bottom: 1px solid #e0e0e0;
+  @apply flex items-center justify-center text-white;
+  height: 60px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu {
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+  color: #fff;
+}
+/* SCROLLBAR STYLING */
+/* width */
+.menu::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+.menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.menu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.menu::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
