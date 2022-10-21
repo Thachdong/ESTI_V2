@@ -13,7 +13,7 @@ export const DashboardLayout: React.FC<TProps> = ({ children, title }) => {
   console.log("sdfasdfasdf", children);
 
   return (
-    <Box className="flex">
+    <Box className="flex" sx={{ height: "100vh", overflow: "hidden" }}>
       <Sidebar />
 
       <Box className="flex flex-col flex-grow">

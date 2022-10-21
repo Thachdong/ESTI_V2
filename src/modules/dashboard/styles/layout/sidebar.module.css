@@ -8,7 +8,7 @@
 }
 
 .sidebar .logo-box {
-    @apply flex items-center justify-center text-white mb-4;
+    @apply flex items-center justify-center text-white;
     height: 60px;
     border-bottom: 1px solid #e0e0e0;
 }
