@@ -1,9 +1,11 @@
 import { Control, RegisterOptions } from "react-hook-form";
 import { TextFieldProps } from "@mui/material";
+import { TControllerProps } from "~types/react-hook-form";
 
-type TFormInputProps = {
-  name: string;
-  control: Control<any, any>;
-  rules?: RegisterOptions;
-  inputProps?: TextFieldProps;
-}
+type TFormInputBaseProps = {
+  baseProps?: TextFieldProps;
+};
+
+type TFormInputProps = TFormInputBaseProps & {
+  controlProps: TControllerProps;
+};

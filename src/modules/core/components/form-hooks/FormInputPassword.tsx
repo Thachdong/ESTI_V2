@@ -3,8 +3,8 @@ import { IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { TControllerProps } from "~types/react-hook-form";
-import { FormInputBase } from "../form-base";
+import { TRenderControllerParams } from "~types/react-hook-form";
+import { FormInputBase } from "../form-bases";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 
 export const FormInputPassword: React.FC<TFormInputProps> = ({
@@ -31,7 +31,7 @@ export const FormInputPassword: React.FC<TFormInputProps> = ({
     field,
     fieldState: { error },
     formState: { errors },
-  }: TControllerProps) => {
+  }: TRenderControllerParams) => {
     const defaultProps = {
       id: name,
       label: "Mật khẩu",
