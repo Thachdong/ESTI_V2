@@ -1,36 +1,17 @@
 import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  OutlinedInputProps,
-} from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
-import {
-  Control,
-  Controller,
-  RegisterOptions,
-} from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { TControllerProps } from "~types/react-hook-form";
+import { FormInputBase } from "../form-base";
+import { TFormInputProps } from "~types/form-controlled/form-input";
 
-type TProps = {
-  name: string;
-  control: Control<any, any>;
-  label: string;
-  rules?: RegisterOptions;
-  inputProps?: OutlinedInputProps
-};
-
-export const FormInputPassword: React.FC<TProps> = ({
+export const FormInputPassword: React.FC<TFormInputProps> = ({
   name,
   control,
-  label,
   rules,
-  inputProps
+  inputProps,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -46,37 +27,36 @@ export const FormInputPassword: React.FC<TProps> = ({
     </InputAdornment>
   );
 
-  const initInputProps: OutlinedInputProps = {
-    id: name,
-    type: showPassword ? "text" : "password",
-    label: label  || "Mật khẩu",
-    endAdornment,
-    ...inputProps
-  };
-
   const renderController = ({
     field,
     fieldState: { error },
     formState: { errors },
-  }: TControllerProps) => (
-    <FormControl variant="outlined" fullWidth>
-      <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
-      <OutlinedInput {...initInputProps} {...field} error={!!error} />
-      <FormHelperText error={!!error}>
+  }: TControllerProps) => {
+    const defaultProps = {
+      id: name,
+      label: "Mật khẩu",
+      type: showPassword ? "text" : "password",
+      helperText: (
         <ErrorMessage
           errors={errors}
-          name={name as any}
+          name={name}
           render={({ message }) => message}
         />
-      </FormHelperText>
-    </FormControl>
-  );
+      ),
+      InputProps: { endAdornment },
+      error: !!error,
+      ...inputProps,
+      ...field,
+    };
+
+    return <FormInputBase inputProps={defaultProps} />;
+  };
 
   return (
     <Controller
       control={control}
       name={name}
-      rules={rules || {required: "Phải nhập mật khẩu"}}
+      rules={rules || { required: "Phải nhập mật khẩu" }}
       render={renderController}
     />
   );

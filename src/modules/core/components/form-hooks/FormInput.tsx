@@ -1,53 +1,35 @@
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  OutlinedInput,
-  OutlinedInputProps,
-} from "@mui/material";
-import { Control, Controller, RegisterOptions } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { TControllerProps } from "~types/react-hook-form";
+import { TFormInputProps } from "~types/form-controlled/form-input";
+import { FormInputBase } from "~modules-core/components/form-base";
 
-type TProps = {
-  name: string;
-  control: Control<any, any>;
-  label: string;
-  rules?: RegisterOptions;
-  inputProps?: OutlinedInputProps;
-};
-
-export const FormInput: React.FC<TProps> = ({
+export const FormInput: React.FC<TFormInputProps> = ({
   name,
   control,
-  label,
   rules,
   inputProps,
 }) => {
-  const initInputProps: OutlinedInputProps = {
-    id: name,
-    label: label,
-    type: "text",
-    ...inputProps,
-  };
-
   const renderController = ({
     field,
     fieldState: { error },
     formState: { errors },
-  }: TControllerProps) => (
-    <FormControl variant="outlined" fullWidth>
-      <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
-      <OutlinedInput {...initInputProps} {...field} error={!!error} />
-      <FormHelperText error={!!error}>
+  }: TControllerProps) => {
+    const defaultProps = {
+      helperText: (
         <ErrorMessage
           errors={errors}
           name={name as any}
           render={({ message }) => message}
         />
-      </FormHelperText>
-    </FormControl>
-  );
+      ),
+      error: !!error,
+      ...field,
+      ...inputProps,
+    };
+
+    return <FormInputBase inputProps={defaultProps} />;
+  };
 
   return (
     <Controller

@@ -1,15 +1,13 @@
 import { DashboardLayout } from "~modules-dashboard/layouts";
-import { Home } from "~modules-dashboard/pages";
+import { QuotationsRequests } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const HomePage: TNextPageWithLayout = () => {
-  return <Home />;
-};
+const HomePage: TNextPageWithLayout = () => <QuotationsRequests />;
 
-HomePage.displayName = "Dashboard";
+HomePage.displayName = "Yêu cầu báo giá";
 
 HomePage.getLayout = () => (
-  <DashboardLayout title="dashboard">
+  <DashboardLayout title="BÁO GIÁ / YÊU CẦU">
     <HomePage />
   </DashboardLayout>
 );

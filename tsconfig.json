@@ -21,6 +21,7 @@
       "~modules-dashboard/*": ["./src/modules/dashboard/*"],
       "~styles/*": ["./src/styles/*"],
       "~types/*": ["./src/types/*"],
+      "~assets/*": ["./src/assets/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/middleware.js"],

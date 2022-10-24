@@ -39,3 +39,7 @@
 .menu::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.menu-items:hover {
+  background: #e1e1e166;
+}

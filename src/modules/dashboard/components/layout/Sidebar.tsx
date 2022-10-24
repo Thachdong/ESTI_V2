@@ -2,9 +2,11 @@ import {
   Box,
   Collapse,
   List,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
 import React, { useState } from "react";
@@ -40,27 +42,32 @@ export const Sidebar: React.FC = () => {
 
   return (
     <Box className={styles["sidebar"]}>
-      <Box className={styles["logo-box"]}>ESTI</Box>
+      <Box className={styles["logo-box"]}>
+        <img src="/logo.ico" alt="Esti" width={36} />
+        <Typography variant="h4" component="span">
+          ESTI
+        </Typography>
+      </Box>
+
       <List component="nav" className={styles["menu"]}>
         {menu.map((item, index) => (
           <React.Fragment key={index}>
-            <ListItemButton
-              key={item.id}
-              onClick={() => handleCollapse(item.id)}
-            >
-              <ListItemIcon className="text-white min-w-[32px]">
-                {item.icon}
-              </ListItemIcon>
+            <ListItem className={styles["menu-items"]} disablePadding>
+              <ListItemButton onClick={() => handleCollapse(item.id)}>
+                <ListItemIcon className="text-white min-w-[32px]">
+                  {item.icon}
+                </ListItemIcon>
 
-              <ListItemText primary={item.title} />
+                <ListItemText primary={item.title} />
 
-              {collapses.includes(item.id) ||
-              handleCollapseBaseOnActiveRoute(item.childrens) ? (
-                <ExpandLess />
-              ) : (
-                <ExpandMore />
-              )}
-            </ListItemButton>
+                {collapses.includes(item.id) ||
+                handleCollapseBaseOnActiveRoute(item.childrens) ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )}
+              </ListItemButton>
+            </ListItem>
 
             <Collapse
               in={
@@ -70,20 +77,25 @@ export const Sidebar: React.FC = () => {
             >
               <List>
                 {item.childrens.map((child) => (
-                  <ListItemButton
-                    LinkComponent={Link}
-                    href={`/dashboard/${child.link}`}
-                    className="pl-[32px]"
+                  <ListItem
                     key={child.link}
+                    disablePadding
+                    className={styles["menu-items"]}
                     sx={{
+                      pl: "32px",
                       background:
                         pathname === `/dashboard/${child.link}`
                           ? "#e1e1e166 !important"
                           : "",
                     }}
                   >
-                    <ListItemText primary={child.title} />
-                  </ListItemButton>
+                    <ListItemButton
+                      LinkComponent={Link}
+                      href={`/dashboard/${child.link}`}
+                    >
+                      <ListItemText primary={child.title} />
+                    </ListItemButton>
+                  </ListItem>
                 ))}
               </List>
             </Collapse>

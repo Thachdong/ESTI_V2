@@ -5,7 +5,7 @@ const nextConfig = {
   redirects: () => ([
     {
       source: '/',
-      destination: '/dashboard',
+      destination: '/dashboard/quotations/requests',
       permanent: true,
     },
   ])

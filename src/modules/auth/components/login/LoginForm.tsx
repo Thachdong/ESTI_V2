@@ -30,6 +30,7 @@ export function LoginForm() {
       username: "admin",
       password: "23312331",
     },
+    mode: "onBlur",
   });
 
   const router = useRouter();
@@ -51,7 +52,7 @@ export function LoginForm() {
       const { error, ok, url } = response || {};
 
       if (ok) {
-        router.push(url || "/dashboard");
+        router.push(url || "/dashboard/qoutation/requests");
 
         toast.success("Đăng nhập thành công!");
       }
@@ -86,16 +87,11 @@ export function LoginForm() {
           <FormInput
             control={control}
             name="username"
-            label="Email / tên đăng nhập"
-            inputProps={{ autoComplete: "email", autoFocus: true }}
+            inputProps={{ label: "Email / tên đăng nhập" }}
             rules={{ required: "Phải nhập email / tên đăng nhập" }}
           />
 
-          <FormInputPassword
-            control={control}
-            name="password"
-            label="Mật khẩu"
-          />
+          <FormInputPassword control={control} name="password" />
 
           <Button buttonProps={{ type: "submit", loading: isSubmitting }}>
             Đăng nhập
