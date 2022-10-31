@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
 import { authenticate } from "src/api";
@@ -66,8 +65,8 @@ export default NextAuth({
       session.token = token.accesToken;
 
       token.user && (session.user = token.user as Session["user"]);
-
-      return session;
+      
+      return {...session, accessToken: session?.user?.accessToken};
     },
   },
 

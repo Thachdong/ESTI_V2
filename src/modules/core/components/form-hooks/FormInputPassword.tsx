@@ -8,10 +8,8 @@ import { FormInputBase } from "../form-bases";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 
 export const FormInputPassword: React.FC<TFormInputProps> = ({
-  name,
-  control,
-  rules,
-  inputProps,
+  baseProps,
+  controlProps,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -33,30 +31,29 @@ export const FormInputPassword: React.FC<TFormInputProps> = ({
     formState: { errors },
   }: TRenderControllerParams) => {
     const defaultProps = {
-      id: name,
+      id: controlProps.name,
       label: "Mật khẩu",
       type: showPassword ? "text" : "password",
       helperText: (
         <ErrorMessage
           errors={errors}
-          name={name}
+          name={controlProps.name}
           render={({ message }) => message}
         />
       ),
       InputProps: { endAdornment },
       error: !!error,
-      ...inputProps,
+      ...baseProps,
       ...field,
     };
 
-    return <FormInputBase inputProps={defaultProps} />;
+    return <FormInputBase baseProps={defaultProps} />;
   };
 
   return (
     <Controller
-      control={control}
-      name={name}
-      rules={rules || { required: "Phải nhập mật khẩu" }}
+      {...controlProps}
+      rules={controlProps.rules || { required: "Phải nhập mật khẩu" }}
       render={renderController}
     />
   );

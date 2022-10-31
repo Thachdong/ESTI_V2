@@ -1,3 +1,3 @@
 import { LoginForm } from "~modules-auth/components";
 
-export const LoginPage = () => <LoginForm />
+export const Login = () => <LoginForm />

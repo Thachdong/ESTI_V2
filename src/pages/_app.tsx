@@ -15,6 +15,7 @@ import { createEmotionCache } from "~modules-core/providers/mui-provider/theme/u
 import { MuiProvider, ReactQueryProvider } from "~modules-core/providers";
 import { toastOptions } from "~modules-core/toast";
 import { useNprogress } from "~modules-core/customHooks/useNprogress";
+import { useStartUp } from "~modules-core/customHooks";
 
 const clientEmotionCache = createEmotionCache();
 
@@ -26,6 +27,8 @@ function MyApp({
   const [loading, setLoading] = useState(false);
 
   useNprogress(setLoading);
+
+  useStartUp();
 
   const getLayout = Component.getLayout ?? ((page) => page);
 

@@ -85,13 +85,21 @@ export function LoginForm() {
           className="grid gap-4 mt-4"
         >
           <FormInput
-            control={control}
-            name="username"
-            inputProps={{ label: "Email / tên đăng nhập" }}
-            rules={{ required: "Phải nhập email / tên đăng nhập" }}
+            controlProps={{
+              control: control,
+              name: "username",
+              rules: { required: "Phải nhập email / tên đăng nhập" },
+            }}
+            baseProps={{ label: "Email / tên đăng nhập" }}
           />
 
-          <FormInputPassword control={control} name="password" />
+          <FormInputPassword
+            controlProps={{
+              control: control,
+              name: "password",
+              rules: { required: "Phải nhập mật khẩu" },
+            }}
+          />
 
           <Button buttonProps={{ type: "submit", loading: isSubmitting }}>
             Đăng nhập

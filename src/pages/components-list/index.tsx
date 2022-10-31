@@ -3,18 +3,14 @@ import { Moment } from "moment";
 import { NextPage } from "next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  FormDatepickerBase,
-  FormInput,
-} from "~modules-core/components";
+import { FormDatepickerBase, FormInput } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 import { FormSelect } from "~modules-core/components/form-hooks/FormSelect";
+import { DataTable } from "~modules-core/components/table/DataTable";
 
 const Index: NextPage = () => {
   const { control } = useForm();
   const [date, setDate] = useState<Moment>();
-
-  console.log(date?.format("DD/MM/YYYY HH:mm:ss"));
 
   return (
     <Stack sx={{ maxWidth: "md", padding: "2rem", mx: "auto" }} spacing={2}>
@@ -24,7 +20,7 @@ const Index: NextPage = () => {
         </FormLabel>
 
         <FormInput
-          controlProps={{control, name: "form-input"}}
+          controlProps={{ control, name: "form-input" }}
           baseProps={{
             label: "Input type: Text",
             placeholder: "placeholder text ...",
@@ -33,7 +29,7 @@ const Index: NextPage = () => {
         />
 
         <FormInput
-          controlProps={{control, name: "form-text-area"}}
+          controlProps={{ control, name: "form-text-area" }}
           baseProps={{
             label: "Input type: Textarea",
             multiline: true,
@@ -83,6 +79,15 @@ const Index: NextPage = () => {
           onChange={(val) => setDate(val)}
           pickerProps={{ label: "Date of birth" }}
         />
+      </FormControl>
+
+      <FormControl component="fieldset" variant="standard">
+        <FormLabel component="legend" className="h4 mb-3">
+          Data table
+        </FormLabel>
+        <div style={{ height: 400, width: "100%" }}>
+          <DataTable />
+        </div>
       </FormControl>
     </Stack>
   );

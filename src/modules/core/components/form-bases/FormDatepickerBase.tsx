@@ -12,6 +12,7 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = ({
       renderInput={(params: any) => <TextField {...params} />}
       value={value}
       onChange={onChange}
+      dayOfWeekFormatter={(day) => `${day}`}
       {...pickerProps}
     />
   );

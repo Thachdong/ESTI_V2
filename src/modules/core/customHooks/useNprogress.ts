@@ -23,5 +23,5 @@ export const useNprogress = (setLoading: Dispatch<SetStateAction<boolean>>) => {
       Router.events.on("routeChangeComplete", handleRouteDone);
       Router.events.on("routeChangeError", handleRouteDone);
     };
-  }, []);
+  }, [setLoading]);
 };

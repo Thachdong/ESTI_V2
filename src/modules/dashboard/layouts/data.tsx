@@ -107,30 +107,38 @@ export const menu = [
       ],
     },
     {
-      id: "menu_parent_5",
+      id: "menu_parent_6",
       title: "Tài khoản",
       icon: <AccountIcon />,
       childrens: [
         {
           title: "Danh sách nhà cung cấp",
-          link: "account/supplier",
+          link: "account/suppliers",
         },
         {
           title: "Danh sách khách hàng",
           link: "account/customers",
         },
         {
-          title: "Thông báo khách hàng",
-          link: "account/customer-notification",
-        },
-        {
           title: "Danh sách nhân viên",
           link: "account/staff",
+        },
+        {
+          title: "Danh sách nhân viên sale",
+          link: "account/sale-staff",
+        },
+        {
+          title: "Danh sách nhân viên sale admin",
+          link: "account/sale-admin-staff",
+        },
+        {
+          title: "Danh sách nhân viên phân phối",
+          link: "account/delivery-staff",
         },
       ],
     },
     {
-      id: "menu_parent_6",
+      id: "menu_parent_7",
       title: "Cấu hình",
       icon: <SettingsIcon />,
       childrens: [

@@ -1,3 +1,8 @@
-import { LoginPage } from "~modules-auth/pages";
+import { Login } from "~modules-auth/pages";
+import { TNextPageWithLayout } from "~types/_app";
 
-export default () => <LoginPage />
+const LoginPage: TNextPageWithLayout = () => <Login />
+
+LoginPage.displayName = "Trang đăng nhập";
+
+export default LoginPage;

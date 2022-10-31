@@ -1,3 +1,5 @@
+import "moment/locale/vi";
+
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { EmotionCache } from "@emotion/cache";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
@@ -18,7 +20,7 @@ export const MuiProvider: React.FC<TProps> = ({ emotionCache, children }) => (
   <CacheProvider value={emotionCache}>
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={lightTheme}>
-        <LocalizationProvider dateAdapter={AdapterMoment}>
+        <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="vi">
           <>
             <CssBaseline />
             {children}

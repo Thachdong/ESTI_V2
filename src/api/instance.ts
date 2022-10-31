@@ -7,8 +7,8 @@ export const instance = axios.create({
   timeout: TIMEOUT_IN_MILISECOND,
 });
 
-export const setBearerToken = (token: string) =>
-  (instance.defaults.headers.common["Authorization"] = "Bearer " + token);
+export const setBearerToken = (token: string) => (instance.defaults.headers.common["Authorization"] = "Bearer " + token)
+  
 
 const getUrlFromConfig = (config: AxiosRequestConfig) => {
   const { baseURL, url } = config;
@@ -19,6 +19,8 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 const useRequestCongif = (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
 
+  console.log(config.headers?.common);
+  
   console.log(
     `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
     "color: #0086b3; font-weight: bold",

@@ -8,8 +8,6 @@ export const FormSelectBase: React.FC<TFormSelectBase> = ({
   inputProps,
   callback,
 }) => {
-  console.log(selectShape);
-  
   const renderOptions = () => {
     if (options.length === 0) {
       return <MenuItem className="text-center">No Option</MenuItem>;

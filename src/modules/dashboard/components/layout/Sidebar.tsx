@@ -14,6 +14,8 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { menu } from "~modules-dashboard/layouts/data";
+import Image from "next/image"
+import clsx from "clsx";
 
 export const Sidebar: React.FC = () => {
   const [collapses, setCollapses] = useState<string[]>([]);
@@ -43,7 +45,8 @@ export const Sidebar: React.FC = () => {
   return (
     <Box className={styles["sidebar"]}>
       <Box className={styles["logo-box"]}>
-        <img src="/logo.ico" alt="Esti" width={36} />
+        <Image src="/logo.ico" alt="Esti" width={36} height={36} />
+
         <Typography variant="h4" component="span">
           ESTI
         </Typography>
@@ -52,7 +55,7 @@ export const Sidebar: React.FC = () => {
       <List component="nav" className={styles["menu"]}>
         {menu.map((item, index) => (
           <React.Fragment key={index}>
-            <ListItem className={styles["menu-items"]} disablePadding>
+            <ListItem className={clsx(styles["menu-items"], "text-xs")} disablePadding>
               <ListItemButton onClick={() => handleCollapse(item.id)}>
                 <ListItemIcon className="text-white min-w-[32px]">
                   {item.icon}
@@ -80,7 +83,7 @@ export const Sidebar: React.FC = () => {
                   <ListItem
                     key={child.link}
                     disablePadding
-                    className={styles["menu-items"]}
+                    className={clsx(styles["menu-items"], "!text-xs")}
                     sx={{
                       pl: "32px",
                       background:

@@ -9,7 +9,7 @@ export const FormSelect: React.FC<TFormSelect> = ({
   baseProps,
 }) => {
   const renderController = ({
-    field: { value, ...resField },
+    field: { value, ref, ...resField },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
