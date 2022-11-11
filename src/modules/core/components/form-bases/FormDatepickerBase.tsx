@@ -9,7 +9,7 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = ({
 }) => {
   return (
     <DateTimePicker
-      renderInput={(params: any) => <TextField {...params} />}
+      renderInput={(params: any) => <TextField {...params} inputProps={{...params.inputProps, placeholder: "Chọn ngày"}} />}
       value={value}
       onChange={onChange}
       dayOfWeekFormatter={(day) => `${day}`}

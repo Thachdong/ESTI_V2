@@ -1,15 +1,14 @@
-import { DashboardLayout } from "~modules-dashboard/layouts";
 import { QuotationsRequests } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const HomePage: TNextPageWithLayout = () => <QuotationsRequests />;
+const Index: TNextPageWithLayout = () => <QuotationsRequests />;
 
-HomePage.displayName = "Yêu cầu báo giá";
+Index.displayName = "Yêu cầu báo giá";
 
-HomePage.getLayout = () => (
-  <DashboardLayout title="BÁO GIÁ / YÊU CẦU">
-    <HomePage />
-  </DashboardLayout>
-);
+Index.layoutName = "Dashboard";
 
-export default HomePage;
+Index.data = {
+    title: "BÁO GIÁ / YÊU CẦU BÁO GIÁ"
+  }
+
+export default Index;

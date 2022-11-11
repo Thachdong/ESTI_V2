@@ -1,30 +1,14 @@
-import { useQuery } from "react-query";
-import { customer } from "src/api/customer";
-import { DashboardLayout } from "~modules-dashboard/layouts";
+import { CustomersList } from "~modules-dashboard/pages/account/customers";
 import { TNextPageWithLayout } from "~types/_app";
 
-const CustomerPage: TNextPageWithLayout = () => {
-  const { data } = useQuery(["CustomerList"], () =>
-    customer.getList({ pageIndex: 1, pageSize: 20 })
-  );
+const Index: TNextPageWithLayout = () => <CustomersList />
 
-  console.log(data);
+Index.displayName = "Danh sách khách hàng";
 
-  return (
-    <ul>
-      {data?.data?.items.map((item) => (
-        <li>{item.companyName}</li>
-      ))}
-    </ul>
-  );
-};
+Index.layoutName = "Dashboard";
 
-CustomerPage.displayName = "Danh sách khách hàng";
+Index.data = {
+  title: "TÀI KHOẢN / DANH SÁCH KHÁCH HÀNG"
+}
 
-CustomerPage.getLayout = () => (
-  <DashboardLayout title="TÀI KHOẢN / DANH SÁCH KHÁCH HÀNG">
-    <CustomerPage />
-  </DashboardLayout>
-);
-
-export default CustomerPage;
+export default Index;

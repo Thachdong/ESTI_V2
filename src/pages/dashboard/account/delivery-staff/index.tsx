@@ -1,30 +1,14 @@
-import { useQuery } from "react-query";
-import { staff } from "src/api";
-import { DashboardLayout } from "~modules-dashboard/layouts";
+import { DeliveryStaffsList } from "~modules-dashboard/pages/account/deliveryStaffs";
 import { TNextPageWithLayout } from "~types/_app";
 
-const DeliveryStaffPage: TNextPageWithLayout = () => {
-  const { data } = useQuery(["DeliveryStaff"], () =>
-    staff.getListDeliveryStaff()
-  );
+const Index: TNextPageWithLayout = () => <DeliveryStaffsList />
 
-  console.log(data?.data);
+Index.displayName = "Danh sách nhân viên phân phối";
 
-  return (
-    <ul>
-      {data?.data?.map((item: any) => (
-        <li key={item.id}>{item.fullName}</li>
-      ))}
-    </ul>
-  );
-};
+Index.layoutName = "Dashboard"
 
-DeliveryStaffPage.displayName = "Danh sách nhân viên phân phối";
+Index.data = {
+  title: "TÀI KHOẢN / DANH SÁCH NHÂN VIÊN PHÂN PHỐI"
+}
 
-DeliveryStaffPage.getLayout = () => (
-  <DashboardLayout title="TÀI KHOẢN / DANH SÁCH NHÂN VIÊN PHÂN PHỐI">
-    <DeliveryStaffPage />
-  </DashboardLayout>
-);
-
-export default DeliveryStaffPage;
+export default Index;

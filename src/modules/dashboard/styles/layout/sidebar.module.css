@@ -40,6 +40,10 @@
   background: #555;
 }
 
+.parent-menu-items {
+  border-bottom: 1px solid rgba(72,94,144,.16);
+}
+
 .menu-items:hover {
   background: #e1e1e166;
 }

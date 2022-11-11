@@ -5,16 +5,17 @@ import { EmotionCache } from "@emotion/cache";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import { createTheme, CssBaseline, StyledEngineProvider } from "@mui/material";
 import { ReactNode } from "react";
-import { viVN } from "@mui/material/locale";
 import { themeOptions } from "./theme/themeOptions";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { viVN as dataGridVN } from '@mui/x-data-grid';
+import { viVN as muiViVN } from "@mui/material/locale";
 
 type TProps = {
   emotionCache: EmotionCache;
   children: ReactNode;
 };
 
-const lightTheme = createTheme(themeOptions.lightThemeOptions, viVN);
+const lightTheme = createTheme(themeOptions.lightThemeOptions, muiViVN, dataGridVN);
 
 export const MuiProvider: React.FC<TProps> = ({ emotionCache, children }) => (
   <CacheProvider value={emotionCache}>

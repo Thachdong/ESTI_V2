@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { FormDatepickerBase, FormInput } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 import { FormSelect } from "~modules-core/components/form-hooks/FormSelect";
-import { DataTable } from "~modules-core/components/table/DataTable";
 
 const Index: NextPage = () => {
   const { control } = useForm();
@@ -86,7 +85,7 @@ const Index: NextPage = () => {
           Data table
         </FormLabel>
         <div style={{ height: 400, width: "100%" }}>
-          <DataTable />
+          {/* <DataTable /> */}
         </div>
       </FormControl>
     </Stack>

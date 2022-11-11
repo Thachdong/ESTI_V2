@@ -1,7 +1,12 @@
-import { LoadingButton, LoadingButtonProps } from "@mui/lab";
+import { LoadingButton } from "@mui/lab";
+import { ButtonProps } from "@mui/material";
+import { ReactNode } from "react";
 
 type TProps = {
-  buttonProps: LoadingButtonProps;
+  buttonProps: ButtonProps & any;
+  // USE BUTTONPROPS INSTEAD OF LOADINGBUTTONPROPS,
+  // LOADINGBUTTONPROPS CAN LEADING TO BUGS "next build stuck on "Checking validity of types..."
+  // https://github.com/vercel/next.js/issues/31994
   children: ReactNode;
 };
 

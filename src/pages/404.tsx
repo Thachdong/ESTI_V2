@@ -6,10 +6,6 @@ const NotFoundPage: TNextPageWithLayout = () => <NotFound />;
 
 NotFoundPage.displayName = "Không tìm thấy trang!";
 
-NotFoundPage.getLayout = () => (
-  <DashboardLayout title="Không tìm thấy trang!">
-    <NotFoundPage />
-  </DashboardLayout>
-);
+NotFoundPage.layoutName = "Dashboard"
 
 export default NotFoundPage;

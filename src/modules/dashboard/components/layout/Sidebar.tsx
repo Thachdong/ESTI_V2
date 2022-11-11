@@ -5,20 +5,25 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Typography,
 } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { menu } from "~modules-dashboard/layouts/data";
-import Image from "next/image"
+import Image from "next/image";
 import clsx from "clsx";
 
 export const Sidebar: React.FC = () => {
   const [collapses, setCollapses] = useState<string[]>([]);
+
+  useEffect(() => {
+    return () => console.log("component unmounting ...");
+    
+  }, [])
+  
 
   const { pathname } = useRouter();
 
@@ -45,23 +50,25 @@ export const Sidebar: React.FC = () => {
   return (
     <Box className={styles["sidebar"]}>
       <Box className={styles["logo-box"]}>
-        <Image src="/logo.ico" alt="Esti" width={36} height={36} />
-
-        <Typography variant="h4" component="span">
-          ESTI
-        </Typography>
+        <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
       </Box>
 
       <List component="nav" className={styles["menu"]}>
         {menu.map((item, index) => (
           <React.Fragment key={index}>
-            <ListItem className={clsx(styles["menu-items"], "text-xs")} disablePadding>
+            <ListItem
+              className={clsx(
+                styles["menu-items"],
+                styles["parent-menu-items"]
+              )}
+              disablePadding
+            >
               <ListItemButton onClick={() => handleCollapse(item.id)}>
                 <ListItemIcon className="text-white min-w-[32px]">
                   {item.icon}
                 </ListItemIcon>
 
-                <ListItemText primary={item.title} />
+                <span className="flex-grow text-sm py-2">{item.title}</span>
 
                 {collapses.includes(item.id) ||
                 handleCollapseBaseOnActiveRoute(item.childrens) ? (
@@ -83,7 +90,7 @@ export const Sidebar: React.FC = () => {
                   <ListItem
                     key={child.link}
                     disablePadding
-                    className={clsx(styles["menu-items"], "!text-xs")}
+                    className={clsx(styles["menu-items"], "text-sm")}
                     sx={{
                       pl: "32px",
                       background:
@@ -92,11 +99,10 @@ export const Sidebar: React.FC = () => {
                           : "",
                     }}
                   >
-                    <ListItemButton
-                      LinkComponent={Link}
-                      href={`/dashboard/${child.link}`}
-                    >
-                      <ListItemText primary={child.title} />
+                    <ListItemButton>
+                      <Link href={`/dashboard/${child.link}`}>
+                        <span className="py-2">{child.title}</span>
+                      </Link>
                     </ListItemButton>
                   </ListItem>
                 ))}

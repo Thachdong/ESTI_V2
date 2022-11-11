@@ -1,8 +1,8 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
-import { qouteRequest } from "src/api/qoute-request";
+import { customer } from "src/api";
 import {
   DataTable,
   FilterDateRange,
@@ -16,23 +16,27 @@ type TFilterParams = {
   ToDate?: number;
 };
 
-export const QuotationsRequests = () => {
+export const CustomersList = () => {
   const [filterParams, setFilterPrams] = useState<TFilterParams>();
 
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { data, isLoading, isFetching } = useQuery(
     [
-      "qouteRequestsList",
+      "customersList",
       "loading",
-      { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, ...filterParams },
+      {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        ...filterParams,
+      },
     ],
     () =>
-      qouteRequest
+      customer
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          ...filterParams
+          ...filterParams,
         })
         .then((res) => res.data),
     {
@@ -62,17 +66,20 @@ export const QuotationsRequests = () => {
           />
         ),
     },
-    { field: "preOrderCode", headerName: "Mã yêu cầu" },
-    { field: "customerCode", headerName: "Mã KH" },
-    { field: "companyName", headerName: "Tên KH" },
-    { field: "customerStatusName", headerName: "Tài khoản" },
     { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "salesCode", headerName: "Nhân viên sale" },
-    { field: "preOrderStatusName", headerName: "Trạng thái YC" },
-    { field: "action", headerName: "Thao tác" },
+    { field: "customerCode", headerName: "Sale phụ trách" },
+    { field: "companyProfessionId", headerName: "Mã KH" },
+    { field: "companyName", headerName: "Tên KH" },
+    { field: "companyTaxCode", headerName: "Mã số thuế" },
+    { field: "salesCode", headerName: "Ngành nghề" },
+    { field: "preOrderStatusName", headerName: "Trạng thái" },
+    { field: "action", headerName: "Người tạo" },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
+
+  console.log(data?.items);
+  
 
   return (
     <DataTable

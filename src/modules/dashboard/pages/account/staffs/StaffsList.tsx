@@ -2,12 +2,10 @@ import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { qouteRequest } from "src/api/qoute-request";
+import { staff } from "src/api";
 import {
   DataTable,
-  FilterDateRange,
   generatePaginationProps,
-  renderFilterHeader,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
@@ -16,23 +14,27 @@ type TFilterParams = {
   ToDate?: number;
 };
 
-export const QuotationsRequests = () => {
+export const StaffsList = () => {
   const [filterParams, setFilterPrams] = useState<TFilterParams>();
 
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { data, isLoading, isFetching } = useQuery(
     [
-      "qouteRequestsList",
+      "staffsList",
       "loading",
-      { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, ...filterParams },
+      {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        ...filterParams,
+      },
     ],
     () =>
-      qouteRequest
+      staff
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          ...filterParams
+          ...filterParams,
         })
         .then((res) => res.data),
     {
@@ -44,31 +46,23 @@ export const QuotationsRequests = () => {
 
   const columns: GridColDef[] = [
     {
-      field: "created",
-      headerName: "Ngày tạo",
-      type: "dateTime",
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
-      renderHeader: (params) =>
-        renderFilterHeader(
-          params,
-          <FilterDateRange
-            handleFilter={(FromDate?: number, ToDate?: number) =>
-              setFilterPrams({ FromDate, ToDate })
-            }
-            handleClear={() => setFilterPrams({})}
-          />
-        ),
+      field: "code",
+      headerName: "Mã",
     },
-    { field: "preOrderCode", headerName: "Mã yêu cầu" },
-    { field: "customerCode", headerName: "Mã KH" },
-    { field: "companyName", headerName: "Tên KH" },
-    { field: "customerStatusName", headerName: "Tài khoản" },
+    { field: "roleName", headerName: "Tên tài khoản" },
+    { field: "fullName", headerName: "Tên nhân viên" },
+    { field: "roleCode", headerName: "Chức vụ" },
     { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "salesCode", headerName: "Nhân viên sale" },
-    { field: "preOrderStatusName", headerName: "Trạng thái YC" },
+    { field: "phone", headerName: "Số điện thoại" },
+    { field: "address", headerName: "Địa chỉ" },
+    { field: "email", headerName: "Email" },
+    {
+      field: "birthday",
+      headerName: "Ngày sinh",
+      renderCell: ({ row }) =>
+        row.birthday ? moment(row.birthday).format("DD/MM/YYYY") : "__",
+    },
+    { field: "statusName", headerName: "Trạng thái" },
     { field: "action", headerName: "Thao tác" },
   ];
 

@@ -1,31 +1,14 @@
-import { useQuery } from "react-query";
-import { staff } from "src/api";
-import { DashboardLayout } from "~modules-dashboard/layouts";
+import { StaffsList } from "~modules-dashboard/pages/account/staffs";
 import { TNextPageWithLayout } from "~types/_app";
 
-export const StaffPage: TNextPageWithLayout = () => {
-  const { data } = useQuery(["StaffList"], () =>
-    staff.getList({ pageIndex: 1, pageSize: 20 })
-  );
+export const Index: TNextPageWithLayout = () => <StaffsList />
 
-  console.log(data);
-  
+Index.displayName = "Danh sách nhân viên";
 
-  return (
-    <ul>
-      {data?.data.items.map((item) => (
-        <li key={item.id}>{item.fullName}</li>
-      ))}
-    </ul>
-  );
-};
+Index.layoutName = "Dashboard";
 
-StaffPage.displayName = "Danh sách nhân viên";
+Index.data = {
+  title: "TÀI KHOẢN / DANH SÁCH NHÂN VIÊN"
+}
 
-StaffPage.getLayout = () => (
-  <DashboardLayout title="TÀI KHOẢN / DANH SÁCH NHÂN VIÊN">
-    <StaffPage />
-  </DashboardLayout>
-);
-
-export default StaffPage;
+export default Index;

@@ -29,14 +29,14 @@ const queryClientConfig: QueryClientConfig = {
   },
 };
 
-const queryClient = new QueryClient(queryClientConfig);
+export const queryClient = new QueryClient(queryClientConfig);
 
 type TProps = {
   children: ReactNode;
 };
 
 export const ReactQueryProvider: React.FC<TProps> = ({ children }) => (
-  <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient} contextSharing={true}>
     {children}
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>

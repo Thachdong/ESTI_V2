@@ -1,28 +1,14 @@
-import { useQuery } from "react-query";
-import { suppliers } from "src/api";
-import { DashboardLayout } from "~modules-dashboard/layouts";
+import { SuppliersList } from "~modules-dashboard/pages/account/suppliers";
 import { TNextPageWithLayout } from "~types/_app";
 
-const SuppliersPage: TNextPageWithLayout = () => {
-  const { data } = useQuery(["Suppliers"], () =>
-    suppliers.getList({ pageIndex: 1, pageSize: 20 })
-  );
+const Index: TNextPageWithLayout = () => <SuppliersList />
 
-  return (
-    <ul>
-      {
-        data?.data.items.map(item => <li key={item.id}>{item.supplierName}</li>)
-      }
-    </ul>
-  );
-};
+Index.displayName = "Danh sách nhà cung cấp";
 
-SuppliersPage.displayName = "Danh sách nhà cung cấp";
+Index.layoutName = "Dashboard"
 
-SuppliersPage.getLayout = () => (
-  <DashboardLayout title="TÀI KHOẢN / DANH SÁCH NHÀ CUNG CẤP">
-    <SuppliersPage />
-  </DashboardLayout>
-);
+Index.data = {
+  title: "TÀI KHOẢN / DANH SÁCH NHÀ CUNG CẤP"
+}
 
-export default SuppliersPage;
+export default Index;

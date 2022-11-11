@@ -16,12 +16,13 @@ import { MuiProvider, ReactQueryProvider } from "~modules-core/providers";
 import { toastOptions } from "~modules-core/toast";
 import { useNprogress } from "~modules-core/customHooks/useNprogress";
 import { useStartUp } from "~modules-core/customHooks";
+import { CoreLayout } from "~modules-core/components/CoreLayout";
 
 const clientEmotionCache = createEmotionCache();
 
 function MyApp({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { session },
   emotionCache = clientEmotionCache,
 }: IMyAppProps) {
   const [loading, setLoading] = useState(false);
@@ -30,8 +31,6 @@ function MyApp({
 
   useStartUp();
 
-  const getLayout = Component.getLayout ?? ((page) => page);
-
   const displayName = Component.displayName;
 
   return (
@@ -39,13 +38,13 @@ function MyApp({
       <ReactQueryProvider>
         <MuiProvider emotionCache={emotionCache}>
           <Head>
-            <link rel="icon" type="image/png" href="/logo.ico" />
+            <link rel="icon" type="image/png" href="/logo-full.png" />
             <title>{loading ? "Đang chuyển hướng..." : displayName}</title>
           </Head>
 
           <ToastContainer {...toastOptions} />
 
-          {getLayout(<Component {...pageProps} />)}
+          <CoreLayout Page={Component} />
         </MuiProvider>
       </ReactQueryProvider>
     </SessionProvider>
