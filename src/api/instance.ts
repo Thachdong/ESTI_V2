@@ -18,8 +18,6 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 
 const useRequestCongif = (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
-
-  console.log(config.headers?.common);
   
   console.log(
     `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,

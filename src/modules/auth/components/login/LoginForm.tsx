@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { signIn, SignInOptions, SignInResponse } from "next-auth/react";
+import { getSession, signIn, SignInOptions, SignInResponse } from "next-auth/react";
 import { Button, FormInput, FormInputPassword } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { setBearerToken } from "src/api/instance";
 
 type TLoginCredential = {
   username: string;
@@ -47,7 +48,7 @@ export function LoginForm() {
       const response: SignInResponse | undefined = await signIn(
         "credentials-signin",
         signInPayload
-      );
+      );      
 
       const { error, ok, url } = response || {};
 
@@ -55,6 +56,10 @@ export function LoginForm() {
         router.push(url || "/dashboard/qoutation/requests");
 
         toast.success("Đăng nhập thành công!");
+
+        const session = await getSession();
+
+        session?.accessToken && setBearerToken(session.accessToken);
       }
 
       if (!ok && error) {
