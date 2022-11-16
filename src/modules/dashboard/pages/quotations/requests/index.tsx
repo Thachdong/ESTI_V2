@@ -7,7 +7,6 @@ import {
   DataTable,
   FilterDateRange,
   generatePaginationProps,
-  renderFilterHeader,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
@@ -51,16 +50,6 @@ export const QuotationsRequests = () => {
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
-      renderHeader: (params) =>
-        renderFilterHeader(
-          params,
-          <FilterDateRange
-            handleFilter={(FromDate?: number, ToDate?: number) =>
-              setFilterPrams({ FromDate, ToDate })
-            }
-            handleClear={() => setFilterPrams({})}
-          />
-        ),
     },
     { field: "preOrderCode", headerName: "Mã yêu cầu" },
     { field: "customerCode", headerName: "Mã KH" },

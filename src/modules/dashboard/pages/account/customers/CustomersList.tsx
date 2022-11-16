@@ -7,9 +7,7 @@ import {
   AddButton,
   DataTable,
   FilterButton,
-  FilterDateRange,
   generatePaginationProps,
-  renderFilterHeader,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -62,16 +60,6 @@ export const CustomersList = () => {
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
-      renderHeader: (params) =>
-        renderFilterHeader(
-          params,
-          <FilterDateRange
-            handleFilter={(FromDate?: number, ToDate?: number) =>
-              setFilterPrams({ FromDate, ToDate })
-            }
-            handleClear={() => setFilterPrams({})}
-          />
-        ),
     },
     { field: "branchCode", headerName: "Chi nhánh" },
     { field: "customerCode", headerName: "Sale phụ trách" },
@@ -83,13 +71,16 @@ export const CustomersList = () => {
     { field: "action", headerName: "Người tạo" },
   ];
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);  
+  const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox handleSearch={(val) => setSearchContent(val)} label="Tìm kiếm sale phụ trách" />
+          <SearchBox
+            handleSearch={(val) => setSearchContent(val)}
+            label="Tìm kiếm sale phụ trách"
+          />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
@@ -101,14 +92,13 @@ export const CustomersList = () => {
       </div>
 
       <DataTable
-      rows={data?.items}
-      columns={columns}
-      gridProps={{
-        loading: isLoading || isFetching,
-        ...paginationProps,
-      }}
-    />
+        rows={data?.items}
+        columns={columns}
+        gridProps={{
+          loading: isLoading || isFetching,
+          ...paginationProps,
+        }}
+      />
     </>
-    
   );
 };

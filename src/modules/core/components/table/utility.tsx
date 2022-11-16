@@ -42,35 +42,35 @@ export const generatePaginationProps = (
     setPagination((old) => ({ ...old, pageSize: newPageSize })),
 });
 
-export const renderFilterHeader = (
-  data: GridColumnHeaderParams<any, any, any>,
-  Component: ReactNode
-) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+// export const renderFilterHeader = (
+//   data: GridColumnHeaderParams<any, any, any>,
+//   Component: ReactNode
+// ) => {
+//   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
+//   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+//     setAnchorEl(anchorEl ? null : event.currentTarget);
+//   };
 
-  const open = Boolean(anchorEl);
+//   const open = Boolean(anchorEl);
 
-  return (
-    <div className="flex items-center">
-      <span className="mr-2">{data.colDef.headerName}</span>
+//   return (
+//     <div className="flex items-center">
+//       <span className="mr-2">{data.colDef.headerName}</span>
 
-      <button
-        type="button"
-        onClick={handleClick}
-        className="border-0"
-      >
-        {open ? <CloseIcon /> : <FilterListIcon />}
-      </button>
+//       <button
+//         type="button"
+//         onClick={handleClick}
+//         className="border-0"
+//       >
+//         {open ? <CloseIcon /> : <FilterListIcon />}
+//       </button>
 
-      <Popper open={open} anchorEl={anchorEl} sx={{ p: 1, background: "#fff", boxShadow: 2,  borderRadius: "8px"}}>
-        <Box>
-          {Component}
-        </Box>
-      </Popper>
-    </div>
-  );
-};
+//       <Popper open={open} anchorEl={anchorEl} sx={{ p: 1, background: "#fff", boxShadow: 2,  borderRadius: "8px"}}>
+//         <Box>
+//           {Component}
+//         </Box>
+//       </Popper>
+//     </div>
+//   );
+// };
