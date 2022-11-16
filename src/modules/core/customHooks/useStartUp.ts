@@ -8,7 +8,9 @@ export const useStartUp = () => {
   }, []);
 
   async function handleSetBearerToken() {
-    const { accessToken } = (await getSession()) || {};
+    const session = await getSession();
+
+    const { accessToken } = session || {};
 
     accessToken && setBearerToken(accessToken);
   }

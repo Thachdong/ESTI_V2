@@ -17,4 +17,5 @@ export const authenticate = {
       "Authenticate/login",
       convertLoginPayloadToFormdata(loginPayload)
     ),
+  fotgotPassword: (payload: TForgotPassword) => request.post<TForgotPassword, string>("Authenticate/forgot-password", payload)
 };

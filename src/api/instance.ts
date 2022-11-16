@@ -18,14 +18,12 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 
 const useRequestCongif = (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
-
-  console.log(config.headers?.common);
   
-  console.log(
-    `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
-    "color: #0086b3; font-weight: bold",
-    { params, data }
-  );
+  // console.log(
+  //   `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
+  //   "color: #0086b3; font-weight: bold",
+  //   { params, data }
+  // );
 
   return config;
 };
@@ -37,11 +35,11 @@ instance.interceptors.request.use(useRequestCongif, useRequestConfigError);
 const useResponseSuccess = (response: AxiosResponse) => {
   const { data, status, config } = response || {};
 
-  console.log(
-    `%c ${status} - ${getUrlFromConfig(config)}:`,
-    "color: #008000; font-weight: bold",
-    data
-  );
+  // console.log(
+  //   `%c ${status} - ${getUrlFromConfig(config)}:`,
+  //   "color: #008000; font-weight: bold",
+  //   data
+  // );
 
   return response;
 };

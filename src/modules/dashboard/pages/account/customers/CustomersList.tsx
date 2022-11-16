@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { customer } from "src/api";
 import {
+  AddButton,
   DataTable,
+  FilterButton,
   FilterDateRange,
   generatePaginationProps,
   renderFilterHeader,
+  SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
@@ -21,6 +24,8 @@ export const CustomersList = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
+  const [searchContent, setSearchContent] = useState("");
+
   const { data, isLoading, isFetching } = useQuery(
     [
       "customersList",
@@ -28,6 +33,7 @@ export const CustomersList = () => {
       {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
+        searchContent,
         ...filterParams,
       },
     ],
@@ -36,6 +42,7 @@ export const CustomersList = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
+          searchContent,
           ...filterParams,
         })
         .then((res) => res.data),
@@ -76,13 +83,24 @@ export const CustomersList = () => {
     { field: "action", headerName: "Người tạo" },
   ];
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);
-
-  console.log(data?.items);
-  
+  const paginationProps = generatePaginationProps(pagination, setPagination);  
 
   return (
-    <DataTable
+    <>
+      <div className="flex mb-3">
+        <div className="w-1/2">
+          <SearchBox handleSearch={(val) => setSearchContent(val)} label="Tìm kiếm sale phụ trách" />
+        </div>
+
+        <div className="w-1/2 flex items-center justify-end">
+          <AddButton variant="contained" className="mr-3">
+            Tạo khách hàng
+          </AddButton>
+          <FilterButton variant="contained">Lọc</FilterButton>
+        </div>
+      </div>
+
+      <DataTable
       rows={data?.items}
       columns={columns}
       gridProps={{
@@ -90,5 +108,7 @@ export const CustomersList = () => {
         ...paginationProps,
       }}
     />
+    </>
+    
   );
 };
