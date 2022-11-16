@@ -24,7 +24,7 @@ const queryClientConfig: QueryClientConfig = {
       refetchInterval: REFETCH_INTERVAL_IN_MILISECONDS,
     },
     mutations: {
-      retry: 2,
+      retry: false,
     },
   },
 };
