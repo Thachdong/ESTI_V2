@@ -5,16 +5,21 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
-  Link,
+  Link as MuiLink,
   Avatar,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { getSession, signIn, SignInOptions, SignInResponse } from "next-auth/react";
+import {
+  getSession,
+  signIn,
+  SignInOptions,
+  SignInResponse,
+} from "next-auth/react";
 import { Button, FormInput, FormInputPassword } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { setBearerToken } from "src/api/instance";
+import Link from "next/link";
 
 type TLoginCredential = {
   username: string;
@@ -36,6 +41,8 @@ export function LoginForm() {
 
   const router = useRouter();
 
+  console.log(router.asPath);
+
   const onSubmit = async (data: TLoginCredential) => {
     const { callbackUrl } = router.query;
     try {
@@ -48,7 +55,7 @@ export function LoginForm() {
       const response: SignInResponse | undefined = await signIn(
         "credentials-signin",
         signInPayload
-      );      
+      );
 
       const { error, ok, url } = response || {};
 
@@ -74,8 +81,8 @@ export function LoginForm() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper className="grid gap-4 justify-center p-8 mt-10">
+    <Container component="main" maxWidth="sm">
+      <Paper className="w-full grid gap-4 justify-center p-8 mt-10">
         <Avatar className="mx-auto" sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -87,15 +94,15 @@ export function LoginForm() {
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-4 mt-4"
+          className="w-[375px] grid gap-4 mt-4"
         >
           <FormInput
             controlProps={{
               control: control,
               name: "username",
-              rules: { required: "Phải nhập email / tên đăng nhập" },
+              rules: { required: "Phải nhập tên đăng nhập" },
             }}
-            baseProps={{ label: "Email / tên đăng nhập" }}
+            baseProps={{ label: "Tên đăng nhập" }}
           />
 
           <FormInputPassword
@@ -110,18 +117,13 @@ export function LoginForm() {
             Đăng nhập
           </Button>
 
-          <Grid container>
-            <Grid item xs>
-              <Link className="mr-4" href="#" variant="body2">
+          <Typography className="text-right">
+            <Link href={`/auth/reset-password?callbackUrl=${router.query.callbackUrl}`}>
+              <MuiLink className="mr-4" variant="body2">
                 Quên mật khẩu?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Bạn chưa có tài khoản? đăng ký"}
-              </Link>
-            </Grid>
-          </Grid>
+              </MuiLink>
+            </Link>
+          </Typography>
         </Box>
       </Paper>
     </Container>

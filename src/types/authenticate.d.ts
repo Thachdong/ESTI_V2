@@ -6,3 +6,7 @@ type TLoginPayload = {
 type TLoginResponse = {
   token: string;
 }
+
+type TForgotPassword = {
+  userName: string
+}
