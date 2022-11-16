@@ -19,12 +19,6 @@ import clsx from "clsx";
 export const Sidebar: React.FC = () => {
   const [collapses, setCollapses] = useState<string[]>([]);
 
-  useEffect(() => {
-    return () => console.log("component unmounting ...");
-    
-  }, [])
-  
-
   const { pathname } = useRouter();
 
   const handleCollapse = (id: string) => {

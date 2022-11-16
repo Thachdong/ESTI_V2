@@ -3,7 +3,15 @@ import moment from "moment";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { suppliers } from "src/api";
-import { DataTable, FilterDateRange, generatePaginationProps, renderFilterHeader } from "~modules-core/components";
+import {
+  AddButton,
+  DataTable,
+  FilterButton,
+  FilterDateRange,
+  generatePaginationProps,
+  renderFilterHeader,
+  SearchBox,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
 type TFilterParams = {
@@ -16,18 +24,26 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
+  const [searchContent, setSearchContent] = useState("");
+
   const { data, isLoading, isFetching } = useQuery(
     [
       "Suppliers",
       "loading",
-      { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, ...filterParams },
+      {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        searchContent,
+        ...filterParams,
+      },
     ],
     () =>
-    suppliers
+      suppliers
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          ...filterParams
+          searchContent,
+          ...filterParams,
         })
         .then((res) => res.data),
     {
@@ -46,16 +62,6 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
-      renderHeader: (params) =>
-        renderFilterHeader(
-          params,
-          <FilterDateRange
-            handleFilter={(FromDate?: number, ToDate?: number) =>
-              setFilterPrams({ FromDate, ToDate })
-            }
-            handleClear={() => setFilterPrams({})}
-          />
-        ),
     },
     { field: "supplierCode", headerName: "Mã NCC" },
     { field: "supplierName", headerName: "Tên NCC" },
@@ -69,17 +75,29 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
-  console.log(data);
-
   return (
-    <DataTable
-      rows={data?.items}
-      columns={columns}
-      gridProps={{
-        loading: isLoading || isFetching,
-        ...paginationProps,
-      }}
-    />
-  );
+    <>
+      <div className="flex mb-3">
+        <div className="w-1/2">
+          <SearchBox handleSearch={(val) => setSearchContent(val)} />
+        </div>
 
+        <div className="w-1/2 flex items-center justify-end">
+          <AddButton variant="contained" className="mr-3">
+            Tạo nhà cung cấp
+          </AddButton>
+          <FilterButton variant="contained">Lọc</FilterButton>
+        </div>
+      </div>
+
+      <DataTable
+        rows={data?.items}
+        columns={columns}
+        gridProps={{
+          loading: isLoading || isFetching,
+          ...paginationProps,
+        }}
+      />
+    </>
+  );
 };

@@ -3,19 +3,12 @@ import moment from "moment";
 import React from "react";
 import { useQuery } from "react-query";
 import { staff } from "src/api";
-import {
-  DataTable,
-} from "~modules-core/components";
+import { DataTable, FilterButton } from "~modules-core/components";
 
 export const SaleStaffsList = () => {
   const { data, isLoading, isFetching } = useQuery(
-    [
-      "saleStaffsList",
-      "loading",
-    ],
-    () =>
-      staff.getListSale()
-        .then((res) => res.data)
+    ["saleStaffsList", "loading"],
+    () => staff.getListSale().then((res) => res.data)
   );
 
   const columns: GridColDef[] = [
@@ -40,15 +33,25 @@ export const SaleStaffsList = () => {
   ];
 
   console.log(data);
-  
 
   return (
-    <DataTable
-      rows={data}
-      columns={columns}
-      gridProps={{
-        loading: isLoading || isFetching,
-      }}
-    />
+    <>
+      <div className="flex mb-3">
+        <div className="w-1/2"></div>
+
+        <div className="w-1/2 flex items-center justify-end">
+          <FilterButton variant="contained">Lọc</FilterButton>
+        </div>
+      </div>
+      <DataTable
+        rows={data}
+        columns={columns}
+        gridProps={{
+          loading: isLoading || isFetching,
+          paginationMode: "client",
+          // pagination: false,
+        }}
+      />
+    </>
   );
 };
