@@ -9,7 +9,7 @@ export const FormInput: React.FC<TFormInputProps> = ({
   controlProps,
 }) => {
   const renderController = ({
-    field,
+    field: {value, ...restField},
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -22,9 +22,10 @@ export const FormInput: React.FC<TFormInputProps> = ({
         />
       ),
       error: !!error,
-      ...field,
+      value: value || "",
+      ...restField,
       ...baseProps,
-    };
+    };    
 
     return <FormInputBase baseProps={defaultProps} />;
   };

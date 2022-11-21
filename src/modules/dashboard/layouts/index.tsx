@@ -27,13 +27,12 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
       <Box className="flex flex-col flex-grow">
         <Header title={title} />
 
-        <Box className="bg-[#f3f6f9] flex-grow relative p-3" component="main">
+        <Box className="bg-[#f3f6f9] flex-grow relative  overflow-y-auto p-3" component="main">
           {!!isFetching && (
             <div className="absolute w-full">
               <Loading />
             </div>
           )}
-
           <Paper elevation={3} className={clsx(styles["layout"], "relative bg-white w-full h-full")}>
             <Page />
           </Paper>
