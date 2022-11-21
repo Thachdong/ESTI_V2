@@ -16,7 +16,7 @@ import {
   SignInOptions,
   SignInResponse,
 } from "next-auth/react";
-import { Button, FormInput, FormInputPassword } from "~modules-core/components";
+import { BaseButton, FormInput, FormInputPassword } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { setBearerToken } from "src/api/instance";
 import Link from "next/link";
@@ -40,8 +40,6 @@ export function LoginForm() {
   });
 
   const router = useRouter();
-
-  console.log(router.asPath);
 
   const onSubmit = async (data: TLoginCredential) => {
     const { callbackUrl } = router.query;
@@ -113,12 +111,14 @@ export function LoginForm() {
             }}
           />
 
-          <Button buttonProps={{ type: "submit", loading: isSubmitting }}>
+          <BaseButton type="submit" isSubmitting={isSubmitting}>
             Đăng nhập
-          </Button>
+          </BaseButton>
 
           <Typography className="text-right">
-            <Link href={`/auth/reset-password?callbackUrl=${router.query.callbackUrl}`}>
+            <Link
+              href={`/auth/reset-password?callbackUrl=${router.query.callbackUrl}`}
+            >
               <MuiLink className="mr-4" variant="body2">
                 Quên mật khẩu?
               </MuiLink>

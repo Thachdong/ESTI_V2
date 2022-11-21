@@ -18,6 +18,7 @@ const defaultColumnProps: Partial<GridColDef> = {
   //If `true`, the column menu is disabled for this column.
   sortable: false,
   // If `true`, the column is sortable.
+  headerClassName: "bg-main text-white text-sm !font-normal"
 };
 
 export const generateColumn = (props: GridColDef) => ({

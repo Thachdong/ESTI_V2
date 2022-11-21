@@ -7,7 +7,7 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { Button, FormInput } from "~modules-core/components";
+import { BaseButton, FormInput } from "~modules-core/components";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -65,9 +65,9 @@ export const ResetPasswordForm: React.FC = () => {
             baseProps={{ label: "Tên đăng nhập" }}
           />
 
-          <Button buttonProps={{ type: "submit", loading: isSubmitting }}>
+          <BaseButton type="submit" isSubmitting={isSubmitting}>
             Lấy lại mật khẩu
-          </Button>
+          </BaseButton>
 
           <Typography className="text-right">
             <Link href={`/auth/login?callbackUrl=${router.query.callbackUrl}`}>

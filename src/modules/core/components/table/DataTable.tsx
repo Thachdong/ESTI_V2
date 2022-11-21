@@ -16,6 +16,7 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   filterMode: "server",
   paginationMode: "server",
   autoHeight: true,
+  headerHeight: 42
 };
 
 export const DataTable: React.FC<TDataGrid> = ({
@@ -32,7 +33,6 @@ export const DataTable: React.FC<TDataGrid> = ({
       {...gridProps}
       rows={rows || []}
       columns={fullColumns}
-      
     />
   );
 };

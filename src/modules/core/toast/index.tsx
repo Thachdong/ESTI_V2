@@ -43,7 +43,7 @@ export const toast = {
   error: (message: string, options?: ToastOptions) =>
     toastify(
       <Container title={"Lỗi"} message={message} type={"error"} />,
-      {...options, className: style["toast-error"]}
+      {...options, className: style["toast-error"], autoClose: false}
     ),
 
   info: (message: string, options?: ToastOptions) =>

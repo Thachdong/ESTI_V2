@@ -1,4 +1,4 @@
-import { StaffsList } from "~modules-dashboard/pages/account/staffs";
+import { StaffsList } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
 export const Index: TNextPageWithLayout = () => <StaffsList />

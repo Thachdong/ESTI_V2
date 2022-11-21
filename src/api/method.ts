@@ -4,7 +4,7 @@ import { instance } from "./instance";
 const handleResponse = <TData>(response: AxiosResponse<TBaseResponse<TData>>) =>
   response.data;
 
-const handleError = (error: AxiosError) => Promise.reject(error.response?.data);
+const handleError = (error: AxiosError<TBaseResponse<any>>) => Promise.reject(error.response?.data);
 
 export const request = {
   getPagination: <TItem>(url: string, params?: any) =>

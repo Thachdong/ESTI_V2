@@ -5,10 +5,9 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  Typography,
 } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";

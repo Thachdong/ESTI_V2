@@ -1,4 +1,4 @@
-import { CustomersList } from "~modules-dashboard/pages/account/customers";
+import { CustomersList } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
 const Index: TNextPageWithLayout = () => <CustomersList />
