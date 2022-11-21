@@ -6,3 +6,4 @@ export * from "./table";
 export * from "./FilterDateRange";
 export * from "./SearchBox";
 export * from "./buttons";
+export * from "./Dialog";

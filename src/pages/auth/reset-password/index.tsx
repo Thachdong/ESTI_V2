@@ -1,4 +1,4 @@
-import { Login, ResetPasswordForm } from "~modules-auth/pages";
+import { ResetPasswordForm } from "~modules-auth/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
 const Index: TNextPageWithLayout = () => <ResetPasswordForm />

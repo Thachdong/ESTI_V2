@@ -7,7 +7,7 @@ import { createEmotionCache } from "~modules-core/providers/mui-provider/theme/u
 export default class MyDocument extends Document {
   render(): JSX.Element {
     return (
-      <Html>
+      <Html id="__ESTI_ANCESTOR">
         <Head>
           <link
             rel="stylesheet"

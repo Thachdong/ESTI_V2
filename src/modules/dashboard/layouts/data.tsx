@@ -144,15 +144,15 @@ export const menu = [
       childrens: [
         {
           title: "Cấu hình đơn vị",
-          link: "setting/product-units",
+          link: "settings/product-units",
         },
         {
           title: "Cấu hình kho",
-          link: "setting/warehouse",
+          link: "settings/warehouses",
         },
         {
           title: "Cấu hình chi nhánh",
-          link: "setting/branchs",
+          link: "settings/branchs",
         },
       ],
     },
