@@ -1,18 +1,18 @@
 import { GridColDef } from "@mui/x-data-grid";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { branchs, TBranch } from "src/api";
+import { branchs, TBranch, warehouseConfig } from "src/api";
 import {
   AddButton,
   DataTable,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
+import { ViewButton } from "~modules-core/components/buttons/ViewButton";
 import { defaultPagination } from "~modules-core/constance";
-import { BranchsDialog } from "~modules-dashboard/components";
+import { WarehouseConfigDialog } from "~modules-dashboard/components/settings/WarehouseConfigDialog";
 
-export const BranchsPage: React.FC = () => {
+export const WarehouseConfigPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [searchContent, setSearchContent] = useState("");
@@ -29,6 +29,7 @@ export const BranchsPage: React.FC = () => {
   const onUpdate = useCallback(
     (row: TBranch) => {
       setDialog({ open: true, type: "View" });
+
 
       setDefaultValue(row)
     },
@@ -52,7 +53,7 @@ export const BranchsPage: React.FC = () => {
       },
     ],
     () =>
-      branchs
+      warehouseConfig
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -67,11 +68,9 @@ export const BranchsPage: React.FC = () => {
   );
 
   const columns: GridColDef<TBranch>[] = [
-    { field: "code", headerName: "MÃ CN" },
-    { field: "name", headerName: "TÊN CN" },
-    { field: "address", headerName: "ĐỊA CHỈ", flex: 2 },
-    { field: "phone", headerName: "SỐ ĐIỆN THOẠI" },
-    { field: "email", headerName: "EMAIL" },
+    { field: "code", headerName: "MÃ KHO" },
+    { field: "branchCode", headerName: "MÃ CN" },
+    { field: "position", headerName: "SỐ VỊ TRÍ" },
     {
       field: "action",
       headerName: "CHI TIẾT",
@@ -83,7 +82,7 @@ export const BranchsPage: React.FC = () => {
     },
   ];
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);
+  const paginationProps = generatePaginationProps(pagination, setPagination);  
 
   return (
     <>
@@ -100,7 +99,7 @@ export const BranchsPage: React.FC = () => {
             variant="contained"
             onClick={onAdd}
           >
-            Tạo chi nhánh
+            Tạo kho
           </AddButton>
         </div>
       </div>
@@ -114,12 +113,11 @@ export const BranchsPage: React.FC = () => {
         }}
       />
 
-      <BranchsDialog
+      <WarehouseConfigDialog
         onClose={onClose}
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        title="tạo chi nhánh"
         defaultValue={defaultValue as any}
       />
     </>
