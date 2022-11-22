@@ -4,3 +4,4 @@ export * from "./suppliers";
 export * from "./staff";
 export * from "./branchs";
 export * from  "./warehouse-config";
+export * from "./units";
