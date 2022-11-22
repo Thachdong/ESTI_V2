@@ -4,17 +4,16 @@ import { TFormSelect } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormSelectBase } from "../form-bases";
 
-export const FormSelect: React.FC<TFormSelect> = ({
-  controlProps,
-  baseProps,
-}) => {
+export const FormSelect: React.FC<TFormSelect> = (props) => {
+  const { selectShape = {valueKey: "id", labelKey: "name"}} = props;
+
+  const {controlProps, ...baseProps} = props;
+
   const renderController = ({
-    field: { value, ref, ...resField },
+    field: {ref, ...restField}, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    const { options, selectShape = {valueKey: "id", labelKey: "name"} } = baseProps;
-
     const {name} = controlProps;
 
     const defaultBaseProps = {
@@ -26,9 +25,8 @@ export const FormSelect: React.FC<TFormSelect> = ({
         />
       ),
       error: !!error,
-      value: options.find((opt) => opt[selectShape.valueKey] === value),
       selectShape: selectShape,
-      ...resField,
+      ...restField,
       ...baseProps,
     };
 

@@ -1,26 +1,36 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { branchs, TBranch } from "src/api";
-import { BaseButton, Dialog, FormInput } from "~modules-core/components";
+import { useMutation, useQuery } from "react-query";
+import { branchs, TWarehouseConfig, warehouseConfig } from "src/api";
+import {
+  BaseButton,
+  Dialog,
+  FormInput,
+  FormSelect,
+} from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const BranchsDialog: React.FC<TDialog> = ({
+export const WarehouseConfigDialog: React.FC<TDialog> = ({
+  type,
+  defaultValue,
   onClose,
   refetch,
   open,
-  defaultValue,
-  type,
 }) => {
-  const { control, handleSubmit, reset } = useForm<TBranch>({
+  const { control, handleSubmit, reset } = useForm<TWarehouseConfig>({
     mode: "onBlur",
   });
 
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const title = type === "Add" ? "Tạo chi nhánh" : (type === "View" && isUpdate) ? "Cập nhật chi nhánh" : "Thông chi nhánh";
+  const title =
+    type === "Add"
+      ? "Tạo kho"
+      : type === "View" && isUpdate
+      ? "Cập nhật kho"
+      : "Thông tin kho";
 
   useEffect(() => {
     if (type === "Add") {
@@ -32,8 +42,11 @@ export const BranchsDialog: React.FC<TDialog> = ({
     }
   }, [defaultValue, reset]);
 
+  // THIS MUST BE REPLACE BY EFFECTIVELY METHOD SOON
+  const {data: branchsList} = useQuery(["BranchsList"], () => branchs.getList({pageSize: 999, pageIndex: 1}).then(res => res.data.items))  
+
   const mutationAdd = useMutation(
-    (payload: Omit<TBranch, "id">) => branchs.create(payload),
+    (payload: Omit<TWarehouseConfig, "id">) => warehouseConfig.create(payload),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -49,7 +62,7 @@ export const BranchsDialog: React.FC<TDialog> = ({
   );
 
   const mutateUpdate = useMutation(
-    (payload: TBranch) => branchs.update(payload),
+    (payload: TWarehouseConfig) => warehouseConfig.update(payload),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -70,7 +83,7 @@ export const BranchsDialog: React.FC<TDialog> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit((data: Omit<TBranch, "id">) =>
+              onClick={handleSubmit((data: Omit<TWarehouseConfig, "id">) =>
                 mutationAdd.mutateAsync(data)
               )}
               className="mr-2"
@@ -125,82 +138,40 @@ export const BranchsDialog: React.FC<TDialog> = ({
           controlProps={{
             name: "code",
             control,
-            rules: { required: "Phải nhập mã chi nhánh" },
+            rules: { required: "Phải nhập mã kho" },
           }}
           baseProps={{
-            label: "Mã chi nhánh",
+            label: "Mã kho",
             required: true,
             className: "mb-4",
             disabled: type === "View" && !isUpdate,
           }}
         />
 
-        <FormInput
+        <FormSelect
           controlProps={{
-            name: "name",
+            name: "branchId",
             control,
-            rules: { required: "Phải nhập tên chi nhánh " },
+            rules: { required: "Phải nhập số vị trí" },
           }}
-          baseProps={{
-            label: "Tên chi nhánh",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          options={branchsList as []}
+          selectShape={{valueKey: "id", labelKey: "code"}}
+          label="Chọn chi nhánh"
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
           controlProps={{
-            name: "taxCode",
+            name: "position",
             control,
-            rules: { required: "Phải nhập mã số thuế " },
+            rules: { required: "Phải nhập số vị trí" },
           }}
           baseProps={{
-            label: "Mã số thuế",
+            type: "number",
+            label: "Số vị trí",
             required: true,
             className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "address",
-            control,
-            rules: { required: "Phải nhập mã địa chỉ " },
-          }}
-          baseProps={{
-            label: "Địa chỉ",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "email",
-            control,
-            rules: { required: "Phải nhập email " },
-          }}
-          baseProps={{
-            label: "Email",
-            type: "email",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "phone",
-            control,
-            rules: { required: "Phải nhập số điện thoại " },
-          }}
-          baseProps={{
-            label: "Số điện thoại",
-            required: true,
             disabled: type === "View" && !isUpdate,
           }}
         />

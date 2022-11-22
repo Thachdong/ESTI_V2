@@ -1,18 +1,16 @@
 import { TextFieldProps } from "@mui/material";
-import { Control, RegisterOptions } from "react-hook-form";
+import { TControllerProps } from "~types/react-hook-form";
 
-type TFormSelectBase = {
+type TFormSelectBase = TextFieldProps & {
   options: any[];
   label: string;
   selectShape?: {
     labelKey: string;
     valueKey: string;
   };
-  inputProps?: TextFieldProps;
   callback?: (option: any) => void;
 };
 
-type TFormSelect = {
+type TFormSelect = TFormSelectBase & {
   controlProps: TControllerProps;
-  baseProps: TFormSelectBase;
 };

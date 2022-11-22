@@ -25,7 +25,7 @@ export const FormInput: React.FC<TFormInputProps> = ({
       value: value || "",
       ...restField,
       ...baseProps,
-    };    
+    };
 
     return <FormInputBase baseProps={defaultProps} />;
   };
