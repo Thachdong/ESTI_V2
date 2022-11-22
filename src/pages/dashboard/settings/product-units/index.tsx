@@ -1,6 +1,7 @@
+import { UnitsPage } from "~modules-dashboard/pages/settings";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <div>Product units list</div>
+const Index: TNextPageWithLayout = () => <UnitsPage />
 
 Index.displayName = "Danh sách đơn vị";
 
