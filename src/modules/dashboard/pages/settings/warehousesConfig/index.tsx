@@ -1,7 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { branchs, TBranch, warehouseConfig } from "src/api";
+import { TBranch, warehouseConfig } from "src/api";
 import {
   AddButton,
   DataTable,
@@ -24,7 +24,7 @@ export const WarehouseConfigPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
-  const onClose = useCallback(() => setDialog({ open: false }), [dialog]);
+  const onClose = useCallback(() => setDialog({ open: false }), []);
 
   const onUpdate = useCallback(
     (row: TBranch) => {
@@ -33,14 +33,14 @@ export const WarehouseConfigPage: React.FC = () => {
 
       setDefaultValue(row)
     },
-    [dialog, setDefaultValue]
+    [setDefaultValue]
   );
 
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
     setDefaultValue(null)
-  }, [dialog, setDefaultValue])
+  }, [setDefaultValue])
 
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
