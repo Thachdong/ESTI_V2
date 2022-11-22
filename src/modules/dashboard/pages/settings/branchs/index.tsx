@@ -24,7 +24,7 @@ export const BranchsPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
-  const onClose = useCallback(() => setDialog({ open: false }), [dialog]);
+  const onClose = useCallback(() => setDialog({ open: false }), []);
 
   const onUpdate = useCallback(
     (row: TBranch) => {
@@ -32,14 +32,14 @@ export const BranchsPage: React.FC = () => {
 
       setDefaultValue(row)
     },
-    [dialog, setDefaultValue]
+    [setDefaultValue]
   );
 
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
     setDefaultValue(null)
-  }, [dialog, setDefaultValue])
+  }, [setDefaultValue])
 
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
