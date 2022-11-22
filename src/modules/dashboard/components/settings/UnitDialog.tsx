@@ -127,7 +127,7 @@ export const UnitDialog: React.FC<TDialog> = ({
           controlProps={{
             name: "unitName",
             control,
-            rules: { required: "Phải nhập mã chi nhánh" },
+            rules: { required: "Phải nhập tên đơn vị" },
           }}
           baseProps={{
             label: "Tên đơn vị",

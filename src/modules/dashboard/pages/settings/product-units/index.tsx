@@ -14,7 +14,6 @@ import { ViewButton } from "~modules-core/components/buttons/ViewButton";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { UnitDialog } from "~modules-dashboard/components";
-import { WarehouseConfigDialog } from "~modules-dashboard/components/settings/WarehouseConfigDialog";
 
 export const UnitsPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
@@ -120,7 +119,7 @@ export const UnitsPage: React.FC = () => {
         <div className="w-1/2">
           <SearchBox
             handleSearch={(val) => setSearchContent(val)}
-            label="Tìm kiếm"
+            label="Tìm kiếm tên đơn vị"
           />
         </div>
 
