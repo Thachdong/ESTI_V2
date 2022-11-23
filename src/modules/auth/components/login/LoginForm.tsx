@@ -100,7 +100,7 @@ export function LoginForm() {
               name: "username",
               rules: { required: "Phải nhập tên đăng nhập" },
             }}
-            baseProps={{ label: "Tên đăng nhập" }}
+            label="Tên đăng nhập"
           />
 
           <FormInputPassword

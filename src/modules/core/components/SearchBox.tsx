@@ -32,24 +32,22 @@ export const SearchBox: React.FC<TSearchBox> = ({
     }
   };
 
+  const endAdornment = (
+    <InputAdornment
+      position="end"
+      onClick={() => handleSearch(content)}
+      className="cursor-pointer"
+    >
+      <SearchRoundedIcon />
+    </InputAdornment>
+  );
+
   return (
     <FormInputBase
-      baseProps={{
-        InputProps: {
-          endAdornment: (
-            <InputAdornment
-              position="end"
-              onClick={() => handleSearch(content)}
-              className="cursor-pointer"
-            >
-              <SearchRoundedIcon />
-            </InputAdornment>
-          ),
-        },
-        onChange: handleChange,
-        onKeyPress: handleEnter,
-        label
-      }}
+      InputProps={{ endAdornment }}
+      onChange={handleChange}
+      onKeyPress={handleEnter}
+      label={label}
     />
   );
 };

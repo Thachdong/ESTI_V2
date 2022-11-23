@@ -1,8 +1,7 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import NumberFormat, { NumberFormatProps } from "react-number-format";
-import { TFormInputNumberBaseProps } from "~types/form-controlled/form-input-number";
 
-export const FormInputNumberBase: React.FC<TFormInputNumberBaseProps> = ({ baseProps }) => {
+export const FormInputNumberBase: React.FC<NumberFormatProps<TextFieldProps>> = (props) => {
   const defaultProps: NumberFormatProps<TextFieldProps> = {
     allowLeadingZeros: false,
     required: true,
@@ -10,7 +9,7 @@ export const FormInputNumberBase: React.FC<TFormInputNumberBaseProps> = ({ baseP
     thousandSeparator: true,
     decimalSeparator: ".",
     decimalScale: 0,
-    ...baseProps,
+    ...props,
   };
 
   return (

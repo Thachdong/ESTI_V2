@@ -1,6 +1,12 @@
-import { TextField } from "@mui/material";
-import { TFormInputBaseProps } from "~types/form-controlled/form-input";
+import { TextField, TextFieldProps } from "@mui/material";
 
-export const FormInputBase: React.FC<TFormInputBaseProps> = ({ baseProps }) => (
-  <TextField fullWidth variant="outlined" size="small" {...baseProps} />
-);
+export const FormInputBase: React.FC<TextFieldProps> = (props) => {
+  const defaultProps: TextFieldProps = {
+    fullWidth: true,
+    variant: "outlined",
+    size: "small",
+    ...props,
+  };
+
+  return <TextField {...defaultProps} />;
+};

@@ -7,10 +7,10 @@ import { FormSelectBase } from "../form-bases";
 export const FormSelect: React.FC<TFormSelect> = (props) => {
   const { selectShape = {valueKey: "id", labelKey: "name"}} = props;
 
-  const {controlProps, ...baseProps} = props;
+  const {controlProps, ...selectProps} = props;
 
   const renderController = ({
-    field: {ref, ...restField}, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+    field: {ref, value, ...restField}, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -26,8 +26,9 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       ),
       error: !!error,
       selectShape: selectShape,
+      value: value || "",
       ...restField,
-      ...baseProps,
+      ...selectProps,
     };
 
     return <FormSelectBase {...defaultBaseProps} />;

@@ -1,0 +1,16 @@
+.form-avatar {
+    width: 125px;
+    height: 125px;
+}
+
+.form-avatar:hover .input-box {
+    background: rgba(0, 0, 0, 0.2);
+    transform: .5s;
+}
+
+.form-avatar .input-box {
+    width: 125px;
+    height: 125px;
+    cursor: pointer;
+    top: 0;
+}

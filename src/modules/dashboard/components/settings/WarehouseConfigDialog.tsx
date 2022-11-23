@@ -43,7 +43,11 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
   }, [defaultValue, reset]);
 
   // THIS MUST BE REPLACE BY EFFECTIVELY METHOD SOON
-  const {data: branchsList} = useQuery(["BranchsList"], () => branchs.getList({pageSize: 999, pageIndex: 1}).then(res => res.data.items))  
+  const { data: branchsList } = useQuery(["BranchsList"], () =>
+    branchs
+      .getList({ pageSize: 999, pageIndex: 1 })
+      .then((res) => res.data.items)
+  );
 
   const mutationAdd = useMutation(
     (payload: Omit<TWarehouseConfig, "id">) => warehouseConfig.create(payload),
@@ -140,12 +144,10 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập mã kho" },
           }}
-          baseProps={{
-            label: "Mã kho",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Mã kho"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormSelect
@@ -155,7 +157,7 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập số vị trí" },
           }}
           options={branchsList as []}
-          selectShape={{valueKey: "id", labelKey: "code"}}
+          selectShape={{ valueKey: "id", labelKey: "code" }}
           label="Chọn chi nhánh"
           className="mb-4"
           disabled={type === "View" && !isUpdate}
@@ -167,13 +169,11 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập số vị trí" },
           }}
-          baseProps={{
-            type: "number",
-            label: "Số vị trí",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          type="number"
+          label="Số vị trí"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <Box className="flex items-center justify-end mt-4">

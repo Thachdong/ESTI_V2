@@ -3,7 +3,7 @@ import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRou
 import { LoadingButton } from "@mui/lab";
 import styles from "~modules-dashboard/styles/layout/header.module.css";
 import { signOut } from "next-auth/react";
-import clsx from 'clsx';
+import clsx from "clsx";
 
 type TProps = {
   title: string;
@@ -12,7 +12,7 @@ type TProps = {
 export const Header: React.FC<TProps> = ({ title }) => {
   return (
     <Box className={clsx(styles["header"])}>
-      <Typography component="h1" variant="h5" className="flex-grow">
+      <Typography component="h1" variant="h5" className="flex-grow pl-4">
         {title}
       </Typography>
 
