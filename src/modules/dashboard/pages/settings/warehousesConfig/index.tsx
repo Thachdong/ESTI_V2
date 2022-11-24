@@ -17,7 +17,7 @@ export const WarehouseConfigPage: React.FC = () => {
 
   const [searchContent, setSearchContent] = useState("");
 
-  const [defaultValue, setDefaultValue] = useState<TBranch | null>()
+  const [defaultValue, setDefaultValue] = useState<TBranch | null>();
 
   const [dialog, setDialog] = useState<{
     open: boolean;
@@ -30,8 +30,7 @@ export const WarehouseConfigPage: React.FC = () => {
     (row: TBranch) => {
       setDialog({ open: true, type: "View" });
 
-
-      setDefaultValue(row)
+      setDefaultValue(row);
     },
     [setDefaultValue]
   );
@@ -39,8 +38,8 @@ export const WarehouseConfigPage: React.FC = () => {
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
-    setDefaultValue(null)
-  }, [setDefaultValue])
+    setDefaultValue(null);
+  }, [setDefaultValue]);
 
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
@@ -82,23 +81,17 @@ export const WarehouseConfigPage: React.FC = () => {
     },
   ];
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);  
+  const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox
-            handleSearch={(val) => setSearchContent(val)}
-            label="Tìm kiếm"
-          />
+          <SearchBox label="Tìm kiếm" />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton
-            variant="contained"
-            onClick={onAdd}
-          >
+          <AddButton variant="contained" onClick={onAdd}>
             Tạo kho
           </AddButton>
         </div>

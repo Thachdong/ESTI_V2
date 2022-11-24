@@ -25,9 +25,9 @@ export const StaffDialog: React.FC<TDialog> = ({
 }) => {
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const { control, handleSubmit, reset, setError } = useForm<TStaff>({
+  const { control, handleSubmit, reset, setError, watch } = useForm<TStaff>({
     mode: "onBlur",
-  });
+  });  
 
   const { data: branchsList } = useQuery(["branchsList"], () =>
     branchs
@@ -45,7 +45,7 @@ export const StaffDialog: React.FC<TDialog> = ({
       : type === "View" && isUpdate
       ? "Cập nhật nhân viên"
       : "Thông nhân viên";
-
+      
   useEffect(() => {
     if (type === "Add") {
       reset({});
@@ -93,7 +93,7 @@ export const StaffDialog: React.FC<TDialog> = ({
       return;
     }
 
-    const momentBirthday = moment(birthday).add(1, "d");
+    const momentBirthday = moment(birthday);
 
     if (momentBirthday.isAfter(moment())) {
       setError("birthday", {
@@ -108,6 +108,25 @@ export const StaffDialog: React.FC<TDialog> = ({
       birthday: momentBirthday.valueOf(),
     });
   };
+
+  const handleUpdateStaff = async (data: TStaff) => {
+    const {birthday} = data;
+
+    const momentBirthday = moment(birthday);
+
+    if (momentBirthday.isAfter(moment())) {
+      setError("birthday", {
+        type: "birthday",
+        message: "Ngày sinh không hợp lệ!",
+      });
+      return;
+    }
+
+    await mutateUpdate.mutateAsync({
+      ...data,
+      birthday: momentBirthday.valueOf(),
+    });
+  }
 
   const renderButtons = () => {
     switch (true) {
@@ -148,7 +167,7 @@ export const StaffDialog: React.FC<TDialog> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit((data) => mutateUpdate.mutateAsync(data))}
+              onClick={handleSubmit(handleUpdateStaff)}
               className="mr-2"
             >
               Cập nhật
@@ -200,7 +219,6 @@ export const StaffDialog: React.FC<TDialog> = ({
                 }}
                 label="Mật khẩu"
                 className="mb-4"
-                disabled={!isUpdate}
               />
 
               <FormInputPassword
@@ -210,7 +228,6 @@ export const StaffDialog: React.FC<TDialog> = ({
                   rules: { required: "Nhập lại mật khẩu không khớp" },
                 }}
                 label="Nhập lại mật khẩu"
-                disabled={!isUpdate}
               />
             </>
           )}

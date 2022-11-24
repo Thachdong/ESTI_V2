@@ -117,10 +117,7 @@ export const UnitsPage: React.FC = () => {
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox
-            handleSearch={(val) => setSearchContent(val)}
-            label="Tìm kiếm tên đơn vị"
-          />
+          <SearchBox label="Tìm kiếm tên đơn vị" />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">

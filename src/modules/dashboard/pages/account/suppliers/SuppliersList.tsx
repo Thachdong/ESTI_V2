@@ -1,6 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { suppliers } from "src/api";
 import {
@@ -12,17 +13,20 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
-type TFilterParams = {
-  FromDate?: number;
-  ToDate?: number;
-};
-
-export const SuppliersList: React.FC<TFilterParams> = () => {
-  const [filterParams, setFilterPrams] = useState<TFilterParams>();
-
+export const SuppliersList = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
+  const router = useRouter();
+
+  const { query } = router;
+
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+    router.push({ query: initQuery, ...query });
+  }, [pagination]);
 
   const { data, isLoading, isFetching } = useQuery(
     [
@@ -31,8 +35,7 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
       {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-        searchContent,
-        ...filterParams,
+        query,
       },
     ],
     () =>
@@ -40,8 +43,7 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
-          ...filterParams,
+          query,
         })
         .then((res) => res.data),
     {
@@ -77,7 +79,7 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox handleSearch={(val) => setSearchContent(val)} />
+          <SearchBox />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
