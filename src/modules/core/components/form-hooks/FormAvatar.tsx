@@ -7,7 +7,7 @@ import { TFormAvatar } from "~types/form-controlled/form-avatar";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Controller } from "react-hook-form";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { staff } from "src/api";
 import { toast } from "~modules-core/toast";
@@ -26,30 +26,29 @@ export const FormAvatar: React.FC<TFormAvatar> = (props) => {
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    const handleUpload = useCallback(
-      async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>) => {
-        const file = e.target.files?.[0];
+    const handleUpload = async (
+      e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
+    ) => {
+      const file = e.target.files?.[0];
 
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append("file", file);
+      formData.append("file", file);
 
-        setLoading(true);
+      setLoading(true);
 
-        await mutateAdd
-          .mutateAsync(formData)
-          .then((res) => {
-            onChange(res.data);
-          })
-          .catch((error) => {
-            toast.error(error?.resultMessage);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      },
-      []
-    );
+      await mutateAdd
+        .mutateAsync(formData)
+        .then((res) => {
+          onChange(res.data);
+        })
+        .catch((error) => {
+          toast.error(error?.resultMessage);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
 
     return (
       <Tooltip title={label || "Tải ảnh lên"} arrow>
