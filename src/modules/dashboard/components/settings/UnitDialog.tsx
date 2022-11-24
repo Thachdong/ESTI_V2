@@ -20,7 +20,12 @@ export const UnitDialog: React.FC<TDialog> = ({
 
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const title = type === "Add" ? "Tạo đơn vị" : (type === "View" && isUpdate) ? "Cập nhật đơn vị" : "Thông tin đơn vị";
+  const title =
+    type === "Add"
+      ? "Tạo đơn vị"
+      : type === "View" && isUpdate
+      ? "Cập nhật đơn vị"
+      : "Thông tin đơn vị";
 
   useEffect(() => {
     if (type === "Add") {
@@ -51,7 +56,8 @@ export const UnitDialog: React.FC<TDialog> = ({
   );
 
   const mutateUpdate = useMutation(
-    (payload: Pick<TUnit, "id" | "unitName">) => units.update({unitName: payload.unitName, id: payload.id}),
+    (payload: Pick<TUnit, "id" | "unitName">) =>
+      units.update({ unitName: payload.unitName, id: payload.id }),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -129,12 +135,10 @@ export const UnitDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập tên đơn vị" },
           }}
-          baseProps={{
-            label: "Tên đơn vị",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Tên đơn vị"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <Box className="flex items-center justify-end mt-4">

@@ -20,7 +20,12 @@ export const BranchsDialog: React.FC<TDialog> = ({
 
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const title = type === "Add" ? "Tạo chi nhánh" : (type === "View" && isUpdate) ? "Cập nhật chi nhánh" : "Thông chi nhánh";
+  const title =
+    type === "Add"
+      ? "Tạo chi nhánh"
+      : type === "View" && isUpdate
+      ? "Cập nhật chi nhánh"
+      : "Thông chi nhánh";
 
   useEffect(() => {
     if (type === "Add") {
@@ -127,12 +132,10 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập mã chi nhánh" },
           }}
-          baseProps={{
-            label: "Mã chi nhánh",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Mã chi nhánh"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
@@ -141,12 +144,10 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập tên chi nhánh " },
           }}
-          baseProps={{
-            label: "Tên chi nhánh",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Tên chi nhánh"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
@@ -155,12 +156,10 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập mã số thuế " },
           }}
-          baseProps={{
-            label: "Mã số thuế",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Mã số thuế"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
@@ -169,12 +168,10 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập mã địa chỉ " },
           }}
-          baseProps={{
-            label: "Địa chỉ",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Địa chỉ"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
@@ -183,13 +180,10 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập email " },
           }}
-          baseProps={{
-            label: "Email",
-            type: "email",
-            required: true,
-            className: "mb-4",
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Email"
+          required
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
         />
 
         <FormInput
@@ -198,11 +192,9 @@ export const BranchsDialog: React.FC<TDialog> = ({
             control,
             rules: { required: "Phải nhập số điện thoại " },
           }}
-          baseProps={{
-            label: "Số điện thoại",
-            required: true,
-            disabled: type === "View" && !isUpdate,
-          }}
+          label="Số điện thoại"
+          required
+          disabled={type === "View" && !isUpdate}
         />
 
         <Box className="flex items-center justify-end mt-4">

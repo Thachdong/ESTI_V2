@@ -123,18 +123,6 @@ export const menu = [
           title: "Danh sách nhân viên",
           link: "account/staff",
         },
-        {
-          title: "Danh sách nhân viên sale",
-          link: "account/sale-staff",
-        },
-        {
-          title: "Danh sách nhân viên sale admin",
-          link: "account/sale-admin-staff",
-        },
-        {
-          title: "Danh sách nhân viên phân phối",
-          link: "account/delivery-staff",
-        },
       ],
     },
     {

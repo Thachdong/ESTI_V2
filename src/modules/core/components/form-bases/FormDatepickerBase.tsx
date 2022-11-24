@@ -1,19 +1,23 @@
 import { TextField } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { TFormDatepickerBase } from "~types/form-controlled/form-datepicker";
+import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers";
 
-export const FormDatepickerBase: React.FC<TFormDatepickerBase> = ({
-  value,
-  onChange,
-  pickerProps,
-}) => {
+export const FormDatepickerBase: React.FC<DateTimePickerProps<any, any>> = (
+  props
+) => {
+  const { renderInput, ...restProps } = props;
+
   return (
     <DateTimePicker
-      renderInput={(params: any) => <TextField {...params} inputProps={{...params.inputProps, placeholder: "Chọn ngày"}} />}
-      value={value}
-      onChange={onChange}
+      renderInput={(params: any) => (
+        <TextField
+          size="small"
+          inputProps={{ ...params.inputProps, placeholder: "Chọn ngày" }}
+          {...params}
+          {...restProps}
+        />
+      )}
       dayOfWeekFormatter={(day) => `${day}`}
-      {...pickerProps}
+      {...restProps}
     />
   );
 };

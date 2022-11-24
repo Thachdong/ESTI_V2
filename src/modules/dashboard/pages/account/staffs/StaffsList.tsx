@@ -1,20 +1,29 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { staff } from "src/api";
+import React, { useCallback, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { staff, TStaff } from "src/api";
 import {
   AddButton,
   DataTable,
+  DeleteButton,
   FilterButton,
   generatePaginationProps,
   SearchBox,
+  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
+import { StaffDialog } from "~modules-dashboard/components/account";
 
 type TFilterParams = {
   FromDate?: number;
   ToDate?: number;
+};
+
+type TDialog = {
+  open: boolean;
+  type?: "View" | "Add";
 };
 
 export const StaffsList = () => {
@@ -24,7 +33,20 @@ export const StaffsList = () => {
 
   const [searchContent, setSearchContent] = useState("");
 
-  const { data, isLoading, isFetching } = useQuery(
+  const [dialog, setDialog] = useState<TDialog>({ open: false });
+
+  const [defaultValue, setDefaultValue] = useState<TStaff>();
+
+  const onUpdate = useCallback(
+    (row: any) => {
+      setDialog({ open: true, type: "View" });
+
+      setDefaultValue(row);
+    },
+    [setDefaultValue]
+  );
+
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "staffsList",
       "loading",
@@ -51,12 +73,29 @@ export const StaffsList = () => {
     }
   );
 
+  const mutateDelete = useMutation((id: string) => staff.deleteStaff(id), {
+    onError: (error: any) => {
+      toast.error(error?.resultMessage);
+
+      refetch();
+    },
+    onSuccess: (data) => {
+      toast.success(data.resultMessage);
+    }
+  })
+
+  const onDelete = useCallback(async (staff: TStaff) => {
+    if (confirm("Xác nhận nhân viên: " + staff.username)) {
+      await mutateDelete.mutateAsync(staff.id)
+    }
+  }, []);
+
   const columns: GridColDef[] = [
     {
       field: "code",
       headerName: "Mã",
     },
-    { field: "roleName", headerName: "Tên tài khoản" },
+    { field: "username", headerName: "Tên tài khoản" },
     { field: "fullName", headerName: "Tên nhân viên" },
     { field: "roleCode", headerName: "Chức vụ" },
     { field: "branchCode", headerName: "Chi nhánh" },
@@ -70,7 +109,22 @@ export const StaffsList = () => {
         row.birthday ? moment(row.birthday).format("DD/MM/YYYY") : "__",
     },
     { field: "statusName", headerName: "Trạng thái" },
-    { field: "action", headerName: "Thao tác" },
+    {
+      field: "action",
+      headerName: "Thao tác",
+      renderCell: (record) => (
+        <>
+          <ViewButton
+            className="min-h-[40px] min-w-[40px]"
+            onClick={() => onUpdate(record.row)}
+          />
+          <DeleteButton
+            onClick={() => onDelete(record.row)}
+            className="min-h-[40px] min-w-[40px]"
+          />
+        </>
+      ),
+    },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -83,7 +137,11 @@ export const StaffsList = () => {
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" className="mr-3">
+          <AddButton
+            variant="contained"
+            className="mr-3"
+            onClick={() => setDialog({ open: true, type: "Add" })}
+          >
             Tạo nhà nhân viên
           </AddButton>
           <FilterButton variant="contained">Lọc</FilterButton>
@@ -97,6 +155,13 @@ export const StaffsList = () => {
           loading: isLoading || isFetching,
           ...paginationProps,
         }}
+      />
+
+      <StaffDialog
+        onClose={() => setDialog({ open: false })}
+        open={dialog.open}
+        type={dialog.type}
+        defaultValue={defaultValue as any}
       />
     </>
   );

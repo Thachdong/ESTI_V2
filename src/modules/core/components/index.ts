@@ -7,3 +7,4 @@ export * from "./FilterDateRange";
 export * from "./SearchBox";
 export * from "./buttons";
 export * from "./Dialog";
+export * from "./form-hooks/FormAvatar";

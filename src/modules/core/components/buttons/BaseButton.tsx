@@ -25,7 +25,7 @@ export const BaseButton: React.FC<TBaseButton> = (props) => {
     } finally {
       setLoading(false);
     }
-  }, [onClick]);
+  }, [onClick]);  
 
   return (
     <Tooltip title={tooltipText} placement={tooltipPlacement || "top"}>

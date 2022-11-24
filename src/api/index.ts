@@ -5,3 +5,4 @@ export * from "./staff";
 export * from "./branchs";
 export * from  "./warehouse-config";
 export * from "./units";
+export * from "./role";

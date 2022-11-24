@@ -4,12 +4,11 @@ import { TFormInputNumberProps } from "~types/form-controlled/form-input-number"
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputNumberBase } from "../form-bases";
 
-export const FormInputNumber: React.FC<TFormInputNumberProps> = ({
-  controlProps,
-  baseProps,
-}) => {
+export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
+  const {controlProps, ...baseProps} = props;
+
   const renderController = ({
-    field,
+    field: {ref, ...restField},
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -22,11 +21,11 @@ export const FormInputNumber: React.FC<TFormInputNumberProps> = ({
         />
       ),
       error: !!error,
-      ...field,
+      ...restField,
       ...baseProps,
     };
 
-    return <FormInputNumberBase baseProps={defaultProps} />;
+    return <FormInputNumberBase {...defaultProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

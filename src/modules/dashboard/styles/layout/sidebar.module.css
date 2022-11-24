@@ -1,16 +1,38 @@
 .sidebar {
   @apply bg-contain bg-no-repeat relative;
-  width: 250px;
+  /* width: 250px; */
   height: 100vh;
   background-color: #051e34;
   background-image: url("../../../../../public/nav_bg.png");
   background-repeat: no-repeat;
+  transition: width 2s !important;
 }
 
 .sidebar .logo-box {
   @apply flex items-center justify-center text-white;
   height: 60px;
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.sidebar .expand-btn {
+  @apply flex items-center justify-center border w-[32px] h-[32px] absolute rounded-full shadow-lg;
+  background: #fff;
+  border-color: #000;
+  right: -20px;
+  color: #000;
+  cursor: pointer;
+}
+
+.sidebar .absolute-menu {
+  display: none;
+  left: 100%;
+  z-index: 999;
+  width: 250px;
+}
+
+.sidebar .expand-items:hover .absolute-menu {
+  display: block;
 }
 
 .menu {

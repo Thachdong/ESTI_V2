@@ -62,7 +62,7 @@ export const ResetPasswordForm: React.FC = () => {
               name: "userName",
               rules: { required: "Phải nhập tên đăng nhập" },
             }}
-            baseProps={{ label: "Tên đăng nhập" }}
+            label="Tên đăng nhập"
           />
 
           <BaseButton type="submit" isSubmitting={isSubmitting}>
