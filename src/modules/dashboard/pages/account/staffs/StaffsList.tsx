@@ -133,7 +133,7 @@ export const StaffsList = () => {
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox handleSearch={(val) => setSearchContent(val)} />
+          <SearchBox />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">

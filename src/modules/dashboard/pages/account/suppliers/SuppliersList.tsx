@@ -1,38 +1,54 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { suppliers } from "src/api";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { suppliers, TSupplier } from "src/api";
 import {
   AddButton,
   DataTable,
+  DeleteButton,
   FilterButton,
   generatePaginationProps,
   SearchBox,
+  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
+import { SupplierDialog } from "~modules-dashboard/components/account";
+import { TDefaultDialogState } from "~types/dialog";
 
-type TFilterParams = {
-  FromDate?: number;
-  ToDate?: number;
-};
-
-export const SuppliersList: React.FC<TFilterParams> = () => {
-  const [filterParams, setFilterPrams] = useState<TFilterParams>();
-
+export const SuppliersList = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const { data, isLoading, isFetching } = useQuery(
+  const [defaultValue, setDefaultValue] = useState<TSupplier>();
+
+  const router = useRouter();
+
+  const { query } = router;
+
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+    router.push({ query: initQuery, ...query });
+  }, [pagination]);
+
+  const onDialogClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "Suppliers",
       "loading",
       {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-        searchContent,
-        ...filterParams,
+        query,
       },
     ],
     () =>
@@ -40,8 +56,7 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
-          ...filterParams,
+          query,
         })
         .then((res) => res.data),
     {
@@ -51,7 +66,34 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
     }
   );
 
-  const columns: GridColDef[] = [
+  // DATA TABLE
+  const onUpdate = useCallback(
+    (row: TSupplier) => {
+      setDialog({ open: true, type: "View" });
+
+      setDefaultValue(row);
+    },
+    [setDefaultValue]
+  );
+
+  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
+    onError: (error: any) => {
+      toast.error(error?.resultMessage);
+    },
+    onSuccess: (data) => {
+      toast.success(data.resultMessage);
+
+      refetch();
+    },
+  });
+
+  const onDelete = useCallback(async (supplier: TSupplier) => {
+    if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
+      await mutateDelete.mutateAsync(supplier.id as string);
+    }
+  }, []);
+
+  const columns: GridColDef<TSupplier>[] = [
     {
       field: "created",
       headerName: "Ngày tạo",
@@ -68,7 +110,22 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
     { field: "curatorPhone", headerName: "Số điện thoại" },
     { field: "curatorEmail", headerName: "Email" },
     { field: "CreatedBy", headerName: "Người tạo" },
-    { field: "action", headerName: "Thao tác" },
+    {
+      field: "action",
+      headerName: "Thao tác",
+      renderCell: (record) => (
+        <>
+          <ViewButton
+            className="min-h-[40px] min-w-[40px]"
+            onClick={() => onUpdate(record.row)}
+          />
+          <DeleteButton
+            onClick={() => onDelete(record.row)}
+            className="min-h-[40px] min-w-[40px]"
+          />
+        </>
+      ),
+    },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -77,11 +134,15 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox handleSearch={(val) => setSearchContent(val)} />
+          <SearchBox />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" className="mr-3">
+          <AddButton
+            variant="contained"
+            className="mr-3"
+            onClick={() => setDialog({ open: true, type: "Add" })}
+          >
             Tạo nhà cung cấp
           </AddButton>
           <FilterButton variant="contained">Lọc</FilterButton>
@@ -95,6 +156,14 @@ export const SuppliersList: React.FC<TFilterParams> = () => {
           loading: isLoading || isFetching,
           ...paginationProps,
         }}
+      />
+
+      <SupplierDialog
+        onClose={onDialogClose}
+        open={dialog.open}
+        type={dialog.type}
+        refetch={refetch}
+        defaultValue={defaultValue as any}
       />
     </>
   );

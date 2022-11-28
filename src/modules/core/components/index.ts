@@ -8,3 +8,4 @@ export * from "./SearchBox";
 export * from "./buttons";
 export * from "./Dialog";
 export * from "./form-hooks/FormAvatar";
+export * from "./tabpanel-contain-form";

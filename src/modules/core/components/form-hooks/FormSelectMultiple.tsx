@@ -4,7 +4,7 @@ import { TFormSelect } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormSelectBase } from "../form-bases";
 
-export const FormSelect: React.FC<TFormSelect> = (props) => {
+export const FormSelectMultiple: React.FC<TFormSelect> = (props) => {
   const { selectShape = {valueKey: "id", labelKey: "name"}} = props;
 
   const {controlProps, label, ...selectProps} = props;
@@ -31,8 +31,9 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       ),
       error: !!error,
       selectShape: selectShape,
-      value: value || "",
+      value: value as [] || [],
       label: updateLabel,
+      SelectProps: {multiple: true},
       ...restField,
       ...selectProps,
     };
