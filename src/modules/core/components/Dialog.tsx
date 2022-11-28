@@ -13,7 +13,7 @@ export const Dialog: React.FC<TDialog> = (props) => {
     props;
 
   return (
-    <MuiDialog open={open} maxWidth="sm" fullWidth={true} PaperProps={{sx: {height: "100%"}}} {...remainProps}>
+    <MuiDialog open={open} maxWidth="sm" fullWidth={true} {...remainProps}>
       <DialogTitle className="flex items-center text-black px-0">
         <Typography variant="h5" component="div" className="flex-grow text-center font-medium">
           {title?.toUpperCase()}

@@ -215,7 +215,7 @@ export const SupplierDialog: React.FC<TDialog> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" title={title}>
+    <Dialog open={open} onClose={onClose} maxWidth="lg" title={title} PaperProps={{sx: {height: "100%"}}}>
       <FormProvider {...methods}>
         <Box component="form" className="grid grid-cols-5 gap-4">
           <Box className="">
