@@ -2,7 +2,8 @@ import { MenuItem, TextField } from "@mui/material";
 import { TFormSelectBase } from "~types/form-controlled/form-select";
 
 export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
-  const { options, label, selectShape, callback, ...restProps } = props;
+  const { options, label, selectShape, callback, ...restProps } =
+    props;    
 
   const renderOptions = () => {
     if (options.length === 0) {
@@ -21,7 +22,14 @@ export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
   };
 
   return (
-    <TextField fullWidth size="small" select label={label} {...restProps}>
+    <TextField
+      fullWidth
+      SelectProps={{ ...props.SelectProps }}
+      size="small"
+      select
+      label={label}
+      {...restProps}
+    >
       {renderOptions()}
     </TextField>
   );

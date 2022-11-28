@@ -44,7 +44,7 @@ export const StaffDialog: React.FC<TDialog> = ({
       ? "Tạo nhân viên"
       : type === "View" && isUpdate
       ? "Cập nhật nhân viên"
-      : "Thông nhân viên";
+      : "Thông tin nhân viên";
       
   useEffect(() => {
     if (type === "Add") {
@@ -186,7 +186,7 @@ export const StaffDialog: React.FC<TDialog> = ({
 
   return (
     <Dialog onClose={onClose} open={open} maxWidth="lg" title={title}>
-      <Box className="grid grid-cols-3 gap-4">
+      <Box className="grid grid-cols-3 gap-">
         <Box>
           <Box className="flex justify-center mb-3">
             <FormAvatar
