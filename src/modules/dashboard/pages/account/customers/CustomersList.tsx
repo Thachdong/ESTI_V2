@@ -84,7 +84,6 @@ export const CustomersList = () => {
           <AddButton variant="contained" className="mr-3">
             Tạo khách hàng
           </AddButton>
-          <FilterButton variant="contained">Lọc</FilterButton>
         </div>
       </div>
 

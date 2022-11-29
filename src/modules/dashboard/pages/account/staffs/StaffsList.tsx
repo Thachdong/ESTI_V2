@@ -144,7 +144,6 @@ export const StaffsList = () => {
           >
             Tạo nhà nhân viên
           </AddButton>
-          <FilterButton variant="contained">Lọc</FilterButton>
         </div>
       </div>
 
