@@ -145,7 +145,6 @@ export const SuppliersList = () => {
           >
             Tạo nhà cung cấp
           </AddButton>
-          <FilterButton variant="contained">Lọc</FilterButton>
         </div>
       </div>
 

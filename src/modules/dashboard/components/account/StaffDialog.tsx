@@ -12,7 +12,9 @@ import {
   FormInput,
   FormInputPassword,
   FormSelect,
+  FormSelectAsync,
 } from "~modules-core/components";
+import { FormSelectAsyncBase } from "~modules-core/components/form-bases/FormSelectAsyncBase";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -27,7 +29,7 @@ export const StaffDialog: React.FC<TDialog> = ({
 
   const { control, handleSubmit, reset, setError, watch } = useForm<TStaff>({
     mode: "onBlur",
-  });  
+  });
 
   const { data: branchsList } = useQuery(["branchsList"], () =>
     branchs
@@ -45,7 +47,7 @@ export const StaffDialog: React.FC<TDialog> = ({
       : type === "View" && isUpdate
       ? "Cập nhật nhân viên"
       : "Thông tin nhân viên";
-      
+
   useEffect(() => {
     if (type === "Add") {
       reset({});
@@ -110,7 +112,7 @@ export const StaffDialog: React.FC<TDialog> = ({
   };
 
   const handleUpdateStaff = async (data: TStaff) => {
-    const {birthday} = data;
+    const { birthday } = data;
 
     const momentBirthday = moment(birthday);
 
@@ -126,7 +128,7 @@ export const StaffDialog: React.FC<TDialog> = ({
       ...data,
       birthday: momentBirthday.valueOf(),
     });
-  }
+  };
 
   const renderButtons = () => {
     switch (true) {

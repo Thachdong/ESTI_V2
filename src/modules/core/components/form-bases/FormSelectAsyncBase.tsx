@@ -1,61 +1,109 @@
-import { Autocomplete, TextField } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
-import { defaultPagination } from "~modules-core/constance";
 import {
-  TFormSelectAsyncBase,
-} from "~types/form-controlled/form-select";
-
-const PAGE_SIZE = 25;
-
-const dummyData = Array.from({ length: 10000 }, (_, idx) => `Item ${idx + 1}`);
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  CircularProgress,
+} from "@mui/material";
+import { useQuery } from "react-query";
+import { useState, UIEvent } from "react";
+import { defaultPagination } from "~modules-core/constance";
+import _ from "lodash";
+import { TFormSelectAsyncBase } from "~types/form-controlled/form-select";
 
 export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
-  const { getListApi, label, selectShape, callback, size = "small", ...restProps } = props;
+  // PROPS EXTRACTING
+  const {
+    fetcher,
+    label,
+    queryKey,
+    selectShape = { valueKey: "id", labelKey: "name" },
+    formControlProps,
+    inputLabelProps,
+    ...selectProps
+  } = props;
 
-  console.log(props);
-  
-
+  // STATE DECLARATIONS
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const menuRef = useRef<any>();
+  const [options, setOptions] = useState<any[]>([]);
 
-  const {data} = useQuery([""])
+  // OPTIONS FETCHER
+  const { isLoading, isFetching } = useQuery(
+    [queryKey, { ...pagination }],
+    () =>
+      fetcher({
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      }).then(res => res.data),
+    {
+      onSuccess: (data) => {        
+        if (data.totalItem === 0) return;
 
-  const [page, setPage] = useState(1);
-  const options = dummyData.slice(0, page * PAGE_SIZE);
+        const updateOptions = _.uniqBy(
+          [...options, ...data.items],
+          (item) => item.id
+        );
 
-  useEffect(() => {
-    const { current } = menuRef;
+        setOptions(updateOptions);
 
-    if (current) {
-      const itemsLength = current?.childNodes?.length;
-
-      current?.childNodes[itemsLength - 25]?.scrollIntoView();
+        setPagination({ ...pagination, total: data.totalItem });
+      },
     }
-  }, [page]);
+  );
+
+  // MENU PROPS
+  const PaperProps = {
+    // LOADING MORE OPTIONS WHEN USER SCROLL REACHED BOTTOM
+    onScroll: (event: UIEvent<HTMLDivElement>) => {
+      const menuEement = event?.currentTarget;
+
+      if (!menuEement) return;
+
+      const scrollTop = menuEement.scrollTop;
+      const scrollHeight = menuEement.scrollHeight;
+      const clientHeight = menuEement.clientHeight;
+      const threshold = 5;
+
+      const isBottomReached =
+        scrollTop + clientHeight + threshold >= scrollHeight;
+      const isOptionsRemain = pagination.total > options.length;
+
+      if (isBottomReached && isOptionsRemain) {
+        setPagination((old) => ({ ...old, pageIndex: old.pageIndex + 1 }));
+      }
+    },
+  };
 
   return (
-    <Autocomplete
-      options={options}
-      ListboxProps={{
-        onScroll: (event) => {
-          const menuEement = event?.currentTarget;
+    <FormControl fullWidth size="small" {...formControlProps}>
+      <InputLabel {...inputLabelProps}>{label}</InputLabel>
 
-          if (!menuEement) return;
+      <Select
+        MenuProps={{
+          PaperProps,
+          sx: { maxHeight: 325 },
+        }}
+        input={<OutlinedInput label={label} />}
+        disabled={isLoading || isFetching}
+        {...selectProps}
+      >
+        {options.map((opt: any) => (
+          <MenuItem
+            key={opt?.[selectShape.valueKey]}
+            value={opt?.[selectShape.valueKey]}
+          >
+            {opt?.[selectShape.labelKey]}
+          </MenuItem>
+        ))}
 
-          const scrollTop = menuEement.scrollTop;
-          const scrollHeight = menuEement.scrollHeight;
-          const clientHeight = menuEement.clientHeight;
-          const threshold = 5;
-
-          scrollTop + clientHeight + threshold >= scrollHeight &&
-            setPage((page) => page + 1);
-        },
-      }}
-      renderInput={(props) => <TextField {...props} size={size} variant="outlined" placeholder="ádf" />}
-      renderOption={(props, option) => <li {...props}>{option}</li>}
-      ListboxComponent={(props) => <ul {...props} ref={menuRef} />}
-    />
+        {(isLoading || isFetching) && (
+          <MenuItem className="flex justify-center">
+            <CircularProgress size={22} color="inherit" />
+          </MenuItem>
+        )}
+      </Select>
+    </FormControl>
   );
 };

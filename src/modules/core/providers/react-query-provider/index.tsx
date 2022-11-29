@@ -5,7 +5,6 @@ import {
   QueryClientProvider,
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { toast } from "~modules-core/toast";
 
 const CATCHE_TIME_IN_MILISECONDS = 30000;
 const REFETCH_INTERVAL_IN_MILISECONDS = 30000;
