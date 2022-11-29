@@ -1,4 +1,9 @@
-import { TextFieldProps, AutocompleteProps } from "@mui/material";
+import {
+  TextFieldProps,
+  SelectProps,
+  FormControlProps,
+  InputLabelProps,
+} from "@mui/material";
 import { TControllerProps } from "~types/react-hook-form";
 
 type TFormSelectBase = TextFieldProps & {
@@ -15,14 +20,16 @@ type TFormSelect = TFormSelectBase & {
   controlProps: TControllerProps;
 };
 
-type TFormSelectAsyncBase = AutocompleteProps & {
-  getListApi?: (params?: any) => any;
-  label?: string;
+type TFormSelectAsyncBase = SelectProps & {
+  fetcher: (params: any) => Promise<TBaseResponse<TPaginationResponse<any>>>;
+  queryKey?: string;
   selectShape?: {
-    labelKey: string;
     valueKey: string;
+    labelKey: string;
   };
   callback?: (option: any) => void;
+  formControlProps?: FormControlProps;
+  inputLabelProps?: InputLabelProps;
 };
 
 type TFromSelectAsync = TFormSelectAsyncBase & {

@@ -22,7 +22,6 @@
     "@mui/x-data-grid": "^5.17.8",
     "@mui/x-date-pickers": "^5.0.5",
     "@tanstack/react-query": "^4.12.0",
-    "@types/react-select": "^5.0.1",
     "axios": "^1.1.2",
     "clsx": "^1.2.1",
     "lodash": "^4.17.21",
@@ -36,8 +35,6 @@
     "react-lottie": "^1.2.3",
     "react-number-format": "^4.9.3",
     "react-query": "^3.39.2",
-    "react-select": "^5.6.1",
-    "react-select-async-paginate": "^0.7.0",
     "react-toastify": "^9.0.8"
   },
   "devDependencies": {
