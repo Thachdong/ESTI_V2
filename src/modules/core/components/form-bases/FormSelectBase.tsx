@@ -6,7 +6,7 @@ export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
     props;    
 
   const renderOptions = () => {
-    if (options.length === 0) {
+    if (options?.length === 0 || !Array.isArray(options)) {
       return <MenuItem className="text-center">Không có dữ liệu</MenuItem>;
     } else {
       return options.map((option: any) => (

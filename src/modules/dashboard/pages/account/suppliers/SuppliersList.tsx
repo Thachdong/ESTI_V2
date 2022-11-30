@@ -8,7 +8,6 @@ import {
   AddButton,
   DataTable,
   DeleteButton,
-  FilterButton,
   generatePaginationProps,
   SearchBox,
   ViewButton,
@@ -18,7 +17,7 @@ import { toast } from "~modules-core/toast";
 import { SupplierDialog } from "~modules-dashboard/components/account";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const SuppliersList = () => {
+export const SuppliersList = () => {  
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -29,6 +28,7 @@ export const SuppliersList = () => {
 
   const { query } = router;
 
+  // PUSH PAGINATION QUERY
   useEffect(() => {
     const initQuery = {
       pageIndex: pagination.pageIndex,
@@ -37,10 +37,12 @@ export const SuppliersList = () => {
     router.push({ query: initQuery, ...query });
   }, [pagination]);
 
+  // DIALOG METHODS
   const onDialogClose = useCallback(() => {
     setDialog({ open: false });
   }, []);
 
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "Suppliers",
