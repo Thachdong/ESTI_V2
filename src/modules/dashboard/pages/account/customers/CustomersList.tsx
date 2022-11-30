@@ -1,38 +1,44 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { customer } from "src/api";
+import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { customer, suppliers } from "src/api";
 import {
   AddButton,
   DataTable,
-  FilterButton,
+  DeleteButton,
   generatePaginationProps,
   SearchBox,
+  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
-
-type TFilterParams = {
-  FromDate?: number;
-  ToDate?: number;
-};
+import { toast } from "~modules-core/toast";
+import { CustomerDialog } from "~modules-dashboard/components";
+import { TDefaultDialogState } from "~types/dialog";
 
 export const CustomersList = () => {
-  const [filterParams, setFilterPrams] = useState<TFilterParams>();
+  const { query } = useRouter();
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const { data, isLoading, isFetching } = useQuery(
+  const [defaultValue, setDefaultValue] = useState<any>();
+
+  // DIALOG METHODS
+  const onDialogClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  // DATA FETCHING
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "customersList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
-        ...filterParams,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -40,8 +46,7 @@ export const CustomersList = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
-          ...filterParams,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -50,6 +55,33 @@ export const CustomersList = () => {
       },
     }
   );
+
+  // DATA TABLE
+  const onUpdate = useCallback(
+    (row: any) => {
+      setDialog({ open: true, type: "View" });
+
+      setDefaultValue(row);
+    },
+    [setDefaultValue]
+  );
+
+  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
+    onError: (error: any) => {
+      toast.error(error?.resultMessage);
+    },
+    onSuccess: (data) => {
+      toast.success(data.resultMessage);
+
+      refetch();
+    },
+  });
+
+  const onDelete = useCallback(async (supplier: any) => {
+    if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
+      await mutateDelete.mutateAsync(supplier.id as string);
+    }
+  }, []);
 
   const columns: GridColDef[] = [
     {
@@ -68,7 +100,23 @@ export const CustomersList = () => {
     { field: "companyTaxCode", headerName: "Mã số thuế" },
     { field: "salesCode", headerName: "Ngành nghề" },
     { field: "preOrderStatusName", headerName: "Trạng thái" },
-    { field: "action", headerName: "Người tạo" },
+    { field: "createdByName", headerName: "Người tạo" },
+    {
+      field: "action",
+      headerName: "Thao tác",
+      renderCell: (record) => (
+        <>
+          <ViewButton
+            className="min-h-[40px] min-w-[40px]"
+            onClick={() => onUpdate(record.row)}
+          />
+          <DeleteButton
+            onClick={() => onDelete(record.row)}
+            className="min-h-[40px] min-w-[40px]"
+          />
+        </>
+      ),
+    },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -81,7 +129,7 @@ export const CustomersList = () => {
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" className="mr-3">
+          <AddButton onClick={() => setDialog({ open: true, type: "Add" })} variant="contained" className="mr-3">
             Tạo khách hàng
           </AddButton>
         </div>
@@ -94,6 +142,14 @@ export const CustomersList = () => {
           loading: isLoading || isFetching,
           ...paginationProps,
         }}
+      />
+
+      <CustomerDialog
+        onClose={onDialogClose}
+        open={dialog.open}
+        type={dialog.type}
+        refetch={refetch}
+        defaultValue={defaultValue as any}
       />
     </>
   );
