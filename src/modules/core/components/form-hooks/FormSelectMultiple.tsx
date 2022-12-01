@@ -13,8 +13,7 @@ export const FormSelectMultiple: React.FC<TFormSelect> = (props) => {
     field: {ref, value, ...restField}, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
-  }: TRenderControllerParams) => {
-    
+  }: TRenderControllerParams) => {    
     const {name} = controlProps;
 
     const rules = controlProps.rules || {};

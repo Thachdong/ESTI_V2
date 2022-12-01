@@ -1,9 +1,9 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { suppliers, TSupplier } from "src/api";
+import { customer, suppliers } from "src/api";
 import {
   AddButton,
   DataTable,
@@ -14,28 +14,17 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { SupplierDialog } from "~modules-dashboard/components/account";
+import { CustomerDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const SuppliersList = () => {  
+export const CustomersPage = () => {
+  const { query } = useRouter();
+
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<TSupplier>();
-
-  const router = useRouter();
-
-  const { query } = router;
-
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-    router.push({ query: initQuery, ...query });
-  }, [pagination]);
+  const [defaultValue, setDefaultValue] = useState<any>();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -45,20 +34,19 @@ export const SuppliersList = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "Suppliers",
+      "customersList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        query,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
-      suppliers
+      customer
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          query,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -70,7 +58,7 @@ export const SuppliersList = () => {
 
   // DATA TABLE
   const onUpdate = useCallback(
-    (row: TSupplier) => {
+    (row: any) => {
       setDialog({ open: true, type: "View" });
 
       setDefaultValue(row);
@@ -89,13 +77,13 @@ export const SuppliersList = () => {
     },
   });
 
-  const onDelete = useCallback(async (supplier: TSupplier) => {
+  const onDelete = useCallback(async (supplier: any) => {
     if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
       await mutateDelete.mutateAsync(supplier.id as string);
     }
   }, []);
 
-  const columns: GridColDef<TSupplier>[] = [
+  const columns: GridColDef[] = [
     {
       field: "created",
       headerName: "Ngày tạo",
@@ -105,13 +93,14 @@ export const SuppliersList = () => {
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "supplierCode", headerName: "Mã NCC" },
-    { field: "supplierName", headerName: "Tên NCC" },
-    { field: "curatorName", headerName: "Tên người liên hệ" },
-    { field: "curatorPositionName", headerName: "Chức vụ" },
-    { field: "curatorPhone", headerName: "Số điện thoại" },
-    { field: "curatorEmail", headerName: "Email" },
-    { field: "CreatedBy", headerName: "Người tạo" },
+    { field: "branchCode", headerName: "Chi nhánh" },
+    { field: "customerCode", headerName: "Sale phụ trách" },
+    { field: "companyProfessionId", headerName: "Mã KH" },
+    { field: "companyName", headerName: "Tên KH" },
+    { field: "companyTaxCode", headerName: "Mã số thuế" },
+    { field: "salesCode", headerName: "Ngành nghề" },
+    { field: "preOrderStatusName", headerName: "Trạng thái" },
+    { field: "createdByName", headerName: "Người tạo" },
     {
       field: "action",
       headerName: "Thao tác",
@@ -136,16 +125,12 @@ export const SuppliersList = () => {
     <>
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox />
+          <SearchBox label="Tìm kiếm sale phụ trách" />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton
-            variant="contained"
-            className="mr-3"
-            onClick={() => setDialog({ open: true, type: "Add" })}
-          >
-            Tạo nhà cung cấp
+          <AddButton onClick={() => setDialog({ open: true, type: "Add" })} variant="contained" className="mr-3">
+            Tạo khách hàng
           </AddButton>
         </div>
       </div>
@@ -159,7 +144,7 @@ export const SuppliersList = () => {
         }}
       />
 
-      <SupplierDialog
+      <CustomerDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

@@ -1,7 +1,7 @@
-import { CustomersList } from "~modules-dashboard/pages";
+import { CustomersPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <CustomersList />
+const Index: TNextPageWithLayout = () => <CustomersPage />
 
 Index.displayName = "Danh sách khách hàng";
 

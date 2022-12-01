@@ -3,6 +3,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import "nprogress/nprogress.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "~styles/globals.css";
 
 import Head from "next/head";

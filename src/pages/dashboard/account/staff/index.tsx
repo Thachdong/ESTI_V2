@@ -1,7 +1,7 @@
-import { StaffsList } from "~modules-dashboard/pages";
+import { StaffsPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-export const Index: TNextPageWithLayout = () => <StaffsList />
+export const Index: TNextPageWithLayout = () => <StaffsPage />
 
 Index.displayName = "Danh sách nhân viên";
 
