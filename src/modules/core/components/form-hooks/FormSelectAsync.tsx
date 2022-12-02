@@ -22,8 +22,6 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
       ? `${label} *`
       : label;
       
-      console.log(value)
-
       const cleanValue = multiple ? (value as [] || []) : (value || "")
 
     const defaultBaseProps = {

@@ -23,7 +23,29 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
         multiple={true}
       />
 
-      <FormTextEditor />
+      <FormTextEditor
+        controlProps={{
+          control,
+          name: "shortDescript",
+        }}
+        label="Mô tả ngắn:"
+      />
+
+      <FormTextEditor
+        controlProps={{
+          control,
+          name: "detail",
+        }}
+        label="Mô tả sản phẩm:"
+      />
+
+      <FormTextEditor
+        controlProps={{
+          control,
+          name: "technicalSpect",
+        }}
+        label="Thông số kĩ thuật:"
+      />
     </Box>
   );
 };

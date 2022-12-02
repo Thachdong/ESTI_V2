@@ -22,10 +22,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     formControlProps,
     inputLabelProps,
     ...selectProps
-  } = props;
-
-  console.log(props?.multiple);
-  
+  } = props;  
 
   // STATE DECLARATIONS
   const [pagination, setPagination] = useState(defaultPagination);
