@@ -26,7 +26,7 @@ type TDialog = {
   type?: "View" | "Add";
 };
 
-export const StaffsList = () => {
+export const StaffsPage = () => {
   const [filterParams, setFilterPrams] = useState<TFilterParams>();
 
   const [pagination, setPagination] = useState(defaultPagination);

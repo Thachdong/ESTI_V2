@@ -1,9 +1,11 @@
+import { Checkbox } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { customer, suppliers } from "src/api";
+import { suppliers } from "src/api";
+import { products } from "src/api/products";
 import {
   AddButton,
   DataTable,
@@ -14,17 +16,27 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { CustomerDialog } from "~modules-dashboard/components";
+import { ProductsDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const CustomersList = () => {
-  const { query } = useRouter();
+export const ProductsPage = () => {
+  const router = useRouter();
+  const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [defaultValue, setDefaultValue] = useState<any>();
+
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+    router.push({ query: initQuery, ...query });
+  }, [pagination]);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -34,7 +46,7 @@ export const CustomersList = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "customersList",
+      "productsList",
       "loading",
       {
         ...pagination,
@@ -42,7 +54,7 @@ export const CustomersList = () => {
       },
     ],
     () =>
-      customer
+      products
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -83,6 +95,13 @@ export const CustomersList = () => {
     }
   }, []);
 
+  const handleChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+
+    if (confirm(`Cập nhật ${isChecked ? "hiển thị" : "ẩn"} sp trên website?`)) {
+    }
+  };
+
   const columns: GridColDef[] = [
     {
       field: "created",
@@ -93,14 +112,24 @@ export const CustomersList = () => {
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "customerCode", headerName: "Sale phụ trách" },
-    { field: "companyProfessionId", headerName: "Mã KH" },
-    { field: "companyName", headerName: "Tên KH" },
-    { field: "companyTaxCode", headerName: "Mã số thuế" },
-    { field: "salesCode", headerName: "Ngành nghề" },
-    { field: "preOrderStatusName", headerName: "Trạng thái" },
+    { field: "productGroupName", headerName: "Nhóm SP" },
+    { field: "productCode", headerName: "Mã SP" },
+    { field: "productName", headerName: "Mô tả SP" },
+    { field: "manufactor", headerName: "Hãng sản xuất" },
+    { field: "origin", headerName: "Xuất xứ" },
+    { field: "specs", headerName: "Quy cách" },
+    { field: "unitName", headerName: "ĐVT" },
+    { field: "casCode", headerName: "Mã CAS" },
+    { field: "chemicalName", headerName: "Công thức hóa học" },
     { field: "createdByName", headerName: "Người tạo" },
+    {
+      field: "websiteInfo",
+      headerName: "Website",
+      renderCell: ({ row }) => (
+        <Checkbox value={row.websiteInfo} onChange={handleChangeStatus} />
+      ),
+    },
+    { field: "numberOfReviews", headerName: "Đánh giá mới" },
     {
       field: "action",
       headerName: "Thao tác",
@@ -129,8 +158,20 @@ export const CustomersList = () => {
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton onClick={() => setDialog({ open: true, type: "Add" })} variant="contained" className="mr-3">
-            Tạo khách hàng
+          <AddButton
+            onClick={() => setDialog({ open: true, type: "Add" })}
+            variant="contained"
+            className="mr-3"
+          >
+            Thêm sản phẩm
+          </AddButton>
+
+          <AddButton
+            // onClick={() => setDialog({ open: true, type: "Add" })}
+            variant="contained"
+            className="mr-3"
+          >
+            Thêm file excel
           </AddButton>
         </div>
       </div>
@@ -140,11 +181,12 @@ export const CustomersList = () => {
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,
+          sx: { width: "1600px" },
           ...paginationProps,
         }}
       />
 
-      <CustomerDialog
+      <ProductsDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

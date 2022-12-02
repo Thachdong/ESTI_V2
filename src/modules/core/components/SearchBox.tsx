@@ -31,7 +31,7 @@ export const SearchBox: React.FC<TSearchBox> = ({
   };
 
   const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.code === "Enter") {
+    if (e.code.includes("Enter")) {
       router.push({ query: { ...query, searchContent: content } });
     }
   };

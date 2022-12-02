@@ -59,11 +59,11 @@ export const menu = [
     childrens: [
       {
         title: "Xuất kho",
-        link: "warehouse/warehouse-export",
+        link: "warehouse/export",
       },
       {
         title: "Nhập kho",
-        link: "warehouse/warehouse-import",
+        link: "warehouse/import",
       },
     ],
   },
@@ -73,6 +73,10 @@ export const menu = [
     icon: <ProductionIcon />,
     childrens: [
       {
+        title: "Danh sách sản phẩm",
+        link: "product-manage/products",
+      },
+      {
         title: "Tra cứu vị trí",
         link: "products/tracking",
       },
@@ -81,7 +85,7 @@ export const menu = [
         link: "products/info",
       },
       {
-        title: "Danh sách sản phẩm",
+        title: "Danh mục sản phẩm",
         link: "products",
       },
       {
@@ -91,10 +95,6 @@ export const menu = [
       {
         title: "Tài liệu sản phẩm",
         link: "products/documentation",
-      },
-      {
-        title: "Danh mục sản phẩm",
-        link: "products/category",
       },
       {
         title: "Loại tài liệu",

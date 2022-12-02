@@ -18,10 +18,13 @@ import ArrowRight from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 import ArrowLeft from "@mui/icons-material/KeyboardDoubleArrowLeftOutlined";
 import { ExpandedMenu } from "./ExpandedMenu";
 
-export const Sidebar: React.FC = () => {
-  const [collapses, setCollapses] = useState<string[]>([]);
+type TProps = {
+  expand: boolean;
+  setExpand: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-  const [expand, setEpand] = useState(false);
+export const Sidebar: React.FC<TProps> = ({expand, setExpand}) => {
+  const [collapses, setCollapses] = useState<string[]>([]);
 
   const { pathname } = useRouter();
 
@@ -48,12 +51,12 @@ export const Sidebar: React.FC = () => {
   return (
     <Box
       className={styles["sidebar"]}
-      sx={{ width: expand ? "'250px" : "75px" }}
+      sx={{ width: expand ? "250px" : "75px" }}
     >
       <Box className={styles["logo-box"]}>
         <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
         <div
-          onClick={() => setEpand(!expand)}
+          onClick={() => setExpand(!expand)}
           className={clsx(styles["expand-btn"])}
         >
           {expand ? <ArrowLeft /> : <ArrowRight />}

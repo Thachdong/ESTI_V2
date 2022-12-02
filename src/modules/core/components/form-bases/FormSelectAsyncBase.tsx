@@ -22,7 +22,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     formControlProps,
     inputLabelProps,
     ...selectProps
-  } = props;
+  } = props;  
 
   // STATE DECLARATIONS
   const [pagination, setPagination] = useState(defaultPagination);
@@ -39,7 +39,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       }).then(res => res.data),
     {
       onSuccess: (data) => {        
-        if (data.totalItem === 0) return;
+        if (data.totalItem === 0 || !Array.isArray(data.items)) return;
 
         const updateOptions = _.uniqBy(
           [...options, ...data.items],

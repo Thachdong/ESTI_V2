@@ -1,9 +1,5 @@
-import { LinearProgress } from "@mui/material";
-import {
-  DataGrid,
-  DataGridProps,
-  viVN,
-} from "@mui/x-data-grid";
+import { Box, LinearProgress } from "@mui/material";
+import { DataGrid, DataGridProps, viVN } from "@mui/x-data-grid";
 import { TDataGrid } from "~types/data-grid";
 import { NoRowsOverlay } from "./NoRowsOverlay";
 import { generateColumn } from "./utility";
@@ -16,7 +12,7 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   filterMode: "server",
   paginationMode: "server",
   autoHeight: true,
-  headerHeight: 42
+  headerHeight: 42,
 };
 
 export const DataTable: React.FC<TDataGrid> = ({
@@ -24,15 +20,17 @@ export const DataTable: React.FC<TDataGrid> = ({
   rows,
   gridProps,
 }) => {
+  const fullColumns = columns?.map((col) => generateColumn(col));
 
-  const fullColumns = columns?.map(col => generateColumn(col))
-  
   return (
-    <DataGrid
-      {...defaultDataGridProps}
-      {...gridProps}
-      rows={rows || []}
-      columns={fullColumns}
-    />
+    <Box className="w-full overflow-x-auto">
+      <DataGrid
+        {...defaultDataGridProps}
+        {...gridProps}
+        rows={rows || []}
+        columns={fullColumns}
+        className="h-100"
+      />
+    </Box>
   );
 };
