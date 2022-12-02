@@ -5,7 +5,7 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormSelectAsyncBase } from "../form-bases";
 
 export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
-  const { controlProps, label, ...selectProps } = props;
+  const { controlProps, label, multiple, ...selectProps } = props;
 
   const renderController = ({
     // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs.
@@ -21,6 +21,8 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
     const updateLabel = Object.keys(rules).includes("required")
       ? `${label} *`
       : label;
+      
+      const cleanValue = multiple ? (value as [] || []) : (value || "")
 
     const defaultBaseProps = {
       helperText: (
@@ -31,9 +33,11 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
         />
       ),
       error: !!error,
-      value: value || "",
+      value: cleanValue,
+      // value: value || "",
       label: updateLabel,
       queryKey: props?.queryKey || name,
+      multiple,
       ...restField,
       ...selectProps,
     };
