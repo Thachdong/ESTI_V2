@@ -5,7 +5,7 @@
   background-color: #051e34;
   background-image: url("../../../../../public/nav_bg.png");
   background-repeat: no-repeat;
-  transition: width .5s;
+  transition: all .5s;
 }
 
 .sidebar .logo-box {

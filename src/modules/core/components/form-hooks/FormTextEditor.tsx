@@ -56,7 +56,7 @@ export const FormTextEditor: React.FC<TFormEditor> = (props) => {
       >
         <legend>{updateLabel}</legend>
         <Editor
-          apiKey={process.env.TINYMCE_API_KEY}
+          apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
           init={initEditorProps}
           onEditorChange={onChange}
           value={value}

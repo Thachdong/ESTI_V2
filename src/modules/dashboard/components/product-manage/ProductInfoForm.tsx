@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import { suppliers, units } from "src/api";
 import { products } from "src/api/products";
 import {
+  FormImageGallery,
   FormInput,
   FormSelect,
   FormSelectAsync,
@@ -11,9 +12,9 @@ import {
 
 type TProps = {
   isDisable: boolean;
-}
+};
 
-export const ProductInfoForm: React.FC<TProps> = ({isDisable}) => {
+export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const { control } = useFormContext();
 
   const { data: productGroups } = useQuery(["productGroups"], () =>
@@ -25,7 +26,7 @@ export const ProductInfoForm: React.FC<TProps> = ({isDisable}) => {
       <FormInput
         controlProps={{
           control,
-          name: "name",
+          name: "productName",
           rules: { required: "Phải nhập tên SP" },
         }}
         label="Tên SP"
@@ -35,7 +36,7 @@ export const ProductInfoForm: React.FC<TProps> = ({isDisable}) => {
       <FormInput
         controlProps={{
           control,
-          name: "code",
+          name: "productCode",
           rules: { required: "Phải nhập mã SP" },
         }}
         label="Mã SP"
@@ -46,7 +47,7 @@ export const ProductInfoForm: React.FC<TProps> = ({isDisable}) => {
         options={productGroups}
         controlProps={{
           control,
-          name: "productGroupName",
+          name: "productGroup",
           rules: { required: "Phải chọn nhóm SP" },
         }}
         label="Nhóm sản phẩm"
@@ -123,6 +124,15 @@ export const ProductInfoForm: React.FC<TProps> = ({isDisable}) => {
         label="Quy cách"
         disabled={isDisable}
       />
+      <Box className="grid-col-2">
+        <FormImageGallery
+          loader={products.uploadImage}
+          controlProps={{ control, name: "image" }}
+          title="Ảnh đại diện của sản phẩm"
+          imageListProps={{ cols: 1, rowHeight: 150 }}
+          inputProps={{ multiple: false }}
+        />
+      </Box>
     </Box>
   );
 };

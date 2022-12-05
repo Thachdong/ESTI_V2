@@ -9,17 +9,14 @@ import { ErrorMessage } from "@hookform/error-message";
 import { Controller } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
-import { staff } from "src/api";
 import { toast } from "~modules-core/toast";
 
 export const FormAvatar: React.FC<TFormAvatar> = (props) => {
-  const { controlProps, avatarProps, label, ...textFieldProps } = props;
+  const { controlProps, avatarProps, label, loader, ...textFieldProps } = props;
 
   const [loading, setLoading] = useState(false);
 
-  const mutateAdd = useMutation((formData: FormData) =>
-    staff.uploadAvatar(formData)
-  );
+  const mutateAdd = useMutation((formData: FormData) => loader(formData));
 
   const renderController = ({
     field: { value, onChange },

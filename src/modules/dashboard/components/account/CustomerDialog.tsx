@@ -3,7 +3,7 @@ import { Box, Tab, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { suppliers, TSupplier } from "src/api";
+import { customer, suppliers, TSupplier } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -12,10 +12,8 @@ import {
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
-import { CuratorInfoForm } from "./CuratorInfoForm";
 import { CustomerInfoForm } from "./CustomerInfoForm";
 import { ReveiveInfoForm } from "./ReceiveInfoForm";
-import { SupplierInfoForm } from "./SupplierInfoForm";
 
 const curatorFields = [
   "curatorPosition",
@@ -235,6 +233,7 @@ export const CustomerDialog: React.FC<TDialog> = ({
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar
+                loader={customer.uploadAvatar}
                 controlProps={{ control, name: "avatar" }}
                 label="Ảnh đại diện của nhà cung cấp"
               />

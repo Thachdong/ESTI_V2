@@ -1,9 +1,9 @@
-import { AvatarProps, TextFieldProps } from "@mui/material";
+import { TextFieldProps, ImageListProps } from "@mui/material";
 import {TControllerProps} from "../react-hook-form";
 
-type TFormAvatar = TextFieldProps & {
+type TFormImageGallery = TextFieldProps & {
     loader: (file: FormData) => Promise<TBaseResponse<string>>;
     controlProps: TControllerProps;
-    avatarProps?: AvatarProps;
     title?: string;
+    imageListProps?: Partia<ImageListProps>
 }
