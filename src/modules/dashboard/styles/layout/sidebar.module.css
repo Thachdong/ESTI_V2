@@ -5,21 +5,21 @@
   background-color: #051e34;
   background-image: url("../../../../../public/nav_bg.png");
   background-repeat: no-repeat;
-  transition: width .5s;
+  transition: width 0.3s;
 }
 
 .sidebar .logo-box {
   @apply flex items-center justify-center text-white;
   height: 60px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 0.5px solid #4e4d4d;
   position: relative;
 }
 
 .sidebar .expand-btn {
-  @apply flex items-center justify-center border w-[32px] h-[32px] absolute rounded-full shadow-lg;
-  background: #fff;
-  border-color: #000;
-  right: -20px;
+  @apply flex items-center justify-center h-[32px] absolute;
+  /* background: #fff; */
+  /* border-color: #000; */
+  right: -45px;
   color: #000;
   cursor: pointer;
 }
@@ -37,13 +37,13 @@
 
 .menu {
   overflow-y: auto;
-  height: calc(100vh - 60px);
+  /* height: calc(100vh - 60px); */
   color: #fff;
 }
 /* SCROLLBAR STYLING */
 /* width */
 .menu::-webkit-scrollbar {
-  width: 7px;
+  width: 4px;
 }
 
 /* Track */
@@ -53,7 +53,7 @@
 
 /* Handle */
 .menu::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgb(223, 223, 223);
   border-radius: 10px;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .parent-menu-items {
-  border-bottom: 1px solid rgba(72,94,144,.16);
+  border-bottom: 1px solid rgba(72, 94, 144, 0.16);
 }
 
 .menu-items:hover {

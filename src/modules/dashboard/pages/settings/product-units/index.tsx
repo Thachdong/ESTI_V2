@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
@@ -71,20 +72,20 @@ export const UnitsPage: React.FC = () => {
 
   const mutateDelete = useMutation((id: string) => units.delete(id), {
     onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
+      toast.error(error?.resultMessage);
+    },
+    onSuccess: (data) => {
+      toast.success(data?.resultMessage);
 
-        refetch?.();
-      },
+      refetch?.();
+    },
   });
 
-  const onDelete = useCallback(async(unit: TUnit) => {
+  const onDelete = useCallback(async (unit: TUnit) => {
     if (confirm("Xác nhận xóa đơn vị: " + unit.unitName)) {
-        await mutateDelete.mutateAsync(unit.id)
+      await mutateDelete.mutateAsync(unit.id);
     }
-  }, [])
+  }, []);
 
   const columns: GridColDef<TUnit>[] = [
     { field: "unitName", headerName: "TÊN ĐƠN VỊ" },
@@ -105,7 +106,10 @@ export const UnitsPage: React.FC = () => {
             className="min-h-[40px] min-w-[40px]"
             onClick={() => onUpdate(record.row)}
           />
-          <DeleteButton onClick={() => onDelete(record.row)} className="min-h-[40px] min-w-[40px]" />
+          <DeleteButton
+            onClick={() => onDelete(record.row)}
+            className="min-h-[40px] min-w-[40px]"
+          />
         </>
       ),
     },
@@ -114,7 +118,7 @@ export const UnitsPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <>
+    <Paper className="p-2 w-full h-full shadow">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm tên đơn vị" />
@@ -143,6 +147,6 @@ export const UnitsPage: React.FC = () => {
         refetch={refetch}
         defaultValue={defaultValue as any}
       />
-    </>
+    </Paper>
   );
 };

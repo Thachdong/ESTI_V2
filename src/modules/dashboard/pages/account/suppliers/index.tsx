@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -17,7 +18,7 @@ import { toast } from "~modules-core/toast";
 import { SupplierDialog } from "~modules-dashboard/components/account";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const SuppliersPage = () => {  
+export const SuppliersPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -133,7 +134,7 @@ export const SuppliersPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <>
+    <Paper className="p-2 w-full h-full shadow">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox />
@@ -166,6 +167,6 @@ export const SuppliersPage = () => {
         refetch={refetch}
         defaultValue={defaultValue as any}
       />
-    </>
+    </Paper>
   );
 };

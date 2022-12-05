@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
@@ -84,7 +85,7 @@ export const WarehouseConfigPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <>
+    <Paper className="p-2 w-full h-full shadow">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm" />
@@ -113,6 +114,6 @@ export const WarehouseConfigPage: React.FC = () => {
         refetch={refetch}
         defaultValue={defaultValue as any}
       />
-    </>
+    </Paper>
   );
 };

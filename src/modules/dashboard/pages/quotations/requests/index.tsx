@@ -1,12 +1,10 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { qouteRequest } from "src/api/qoute-request";
-import {
-  DataTable,
-  generatePaginationProps,
-} from "~modules-core/components";
+import { DataTable, generatePaginationProps } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 
 type TFilterParams = {
@@ -23,14 +21,18 @@ export const QuotationsRequests = () => {
     [
       "qouteRequestsList",
       "loading",
-      { pageIndex: pagination.pageIndex, pageSize: pagination.pageSize, ...filterParams },
+      {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        ...filterParams,
+      },
     ],
     () =>
       qouteRequest
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          ...filterParams
+          ...filterParams,
         })
         .then((res) => res.data),
     {
@@ -63,13 +65,15 @@ export const QuotationsRequests = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <DataTable
-      rows={data?.items}
-      columns={columns}
-      gridProps={{
-        loading: isLoading || isFetching,
-        ...paginationProps,
-      }}
-    />
+    <Paper className="p-2 w-full h-full shadow">
+      <DataTable
+        rows={data?.items}
+        columns={columns}
+        gridProps={{
+          loading: isLoading || isFetching,
+          ...paginationProps,
+        }}
+      />
+    </Paper>
   );
 };

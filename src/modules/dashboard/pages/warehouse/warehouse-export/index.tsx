@@ -1,10 +1,16 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { exportWarehouse, TWarehouseExport } from "src/api";
-import { DataTable, generatePaginationProps } from "~modules-core/components";
+import {
+  AddButton,
+  DataTable,
+  generatePaginationProps,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { _format } from "~modules-core/utility/fomat";
 
 export const WarehouseExportPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
@@ -24,8 +30,12 @@ export const WarehouseExportPage: React.FC = () => {
     { field: "warehouseSessionCode", headerName: "MÃ XUẤT KHO" },
     { field: "customerCode", headerName: "MÃ KH" },
     { field: "companyName", headerName: "TÊN KHÁCH HÀNG" },
-    { field: "totalPrice", headerName: "GIÁ TRỊ XUẤT KHO" },
-    { field: "deliveryNote", headerName: "GIAO NHẬN" },
+    {
+      field: "totalPrice",
+      headerName: "GIÁ TRỊ XUẤT KHO",
+      renderCell: (params) => _format.getVND(params.row.totalPrice),
+    },
+    { field: "deliveryCode", headerName: "GIAO NHẬN" },
     { field: "exportStatusName", headerName: "TRẠNG THÁI" },
   ];
 
@@ -54,20 +64,27 @@ export const WarehouseExportPage: React.FC = () => {
     }
   );
 
-  console.log("exportwarehouse", data);
+  // console.log("exportwarehouse", data);
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <div>
-      <DataTable
-        rows={data?.items}
-        columns={columns}
-        gridProps={{
-          loading: isLoading || isFetching,
-          ...paginationProps,
-        }}
-      />
-    </div>
+    <Paper className="p-2 w-full h-full shadow">
+      <div className="mb-2">
+        <AddButton variant="contained" onClick={() => console.log("ahhaaa")}>
+          Tạo phiếu xuất kho
+        </AddButton>
+      </div>
+      <div>
+        <DataTable
+          rows={data?.items}
+          columns={columns}
+          gridProps={{
+            loading: isLoading || isFetching,
+            ...paginationProps,
+          }}
+        />
+      </div>
+    </Paper>
   );
 };

@@ -38,7 +38,7 @@ function MyApp({
       <ReactQueryProvider>
         <MuiProvider emotionCache={emotionCache}>
           <Head>
-            <link rel="icon" type="image/png" href="/logo-full.png" />
+            <link rel="icon" type="image/png" href="/logo-small.png" />
             <title>{loading ? "Đang chuyển hướng..." : displayName}</title>
           </Head>
 

@@ -10,7 +10,7 @@ export const menu = [
   {
     id: "menu_parent_1",
     title: "Báo giá",
-    icon: <QuoteIcon />,
+    icon: <QuoteIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Đơn yêu cầu",
@@ -25,7 +25,7 @@ export const menu = [
   {
     id: "menu_parent_2",
     title: "Đơn hàng",
-    icon: <OrderIcon />,
+    icon: <OrderIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Đơn đặt hàng",
@@ -40,7 +40,7 @@ export const menu = [
   {
     id: "menu_parent_3",
     title: "Đơn mua hàng",
-    icon: <ReceiptIcon />,
+    icon: <ReceiptIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Sản phẩm cần mua",
@@ -55,22 +55,22 @@ export const menu = [
   {
     id: "menu_parent_4",
     title: "Quản lý kho",
-    icon: <WarehouseIcon />,
+    icon: <WarehouseIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Xuất kho",
-        link: "warehouse/export",
+        link: "warehouse/warehouse-export",
       },
       {
         title: "Nhập kho",
-        link: "warehouse/import",
+        link: "warehouse/warehouse-import",
       },
     ],
   },
   {
     id: "menu_parent_5",
     title: "Quản lý sản phẩm",
-    icon: <ProductionIcon />,
+    icon: <ProductionIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Danh sách sản phẩm",
@@ -109,7 +109,7 @@ export const menu = [
   {
     id: "menu_parent_6",
     title: "Tài khoản",
-    icon: <AccountIcon />,
+    icon: <AccountIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Danh sách nhà cung cấp",
@@ -128,7 +128,7 @@ export const menu = [
   {
     id: "menu_parent_7",
     title: "Cấu hình",
-    icon: <SettingsIcon />,
+    icon: <SettingsIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
         title: "Cấu hình đơn vị",

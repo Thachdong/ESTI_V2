@@ -18,16 +18,28 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
         <React.Fragment key={index}>
           <ListItem
             disablePadding
-            className={clsx(styles["menu-items"], styles["expand-items"], "relative h-[52px]")}
+            className={clsx(
+              styles["menu-items"],
+              styles["expand-items"],
+              "relative h-[52px]"
+            )}
           >
-            <ListItemButton className="ml-1">
+            <ListItemButton className="">
               <ListItemIcon className="text-white">{item.icon}</ListItemIcon>
             </ListItemButton>
 
             {
-              <List className={clsx(styles["absolute-menu"], "absolute bg-white shadow-lg rounded")}>
-                <ListItem className="font-bold" sx={{borderBottom: "1px solid rgba(72,94,144,.16)"}}>
-                    {item?.title}
+              <List
+                className={clsx(
+                  styles["absolute-menu"],
+                  "absolute bg-white shadow-lg rounded"
+                )}
+              >
+                <ListItem
+                  className="font-bold"
+                  sx={{ borderBottom: "1px solid rgba(72,94,144,.16)" }}
+                >
+                  {item?.title}
                 </ListItem>
                 {item.childrens.map((child: any) => (
                   <ListItem
