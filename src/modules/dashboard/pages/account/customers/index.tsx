@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -122,14 +123,18 @@ export const CustomersPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <>
+    <Paper className="p-2 w-full h-full shadow">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm sale phụ trách" />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">
-          <AddButton onClick={() => setDialog({ open: true, type: "Add" })} variant="contained" className="mr-3">
+          <AddButton
+            onClick={() => setDialog({ open: true, type: "Add" })}
+            variant="contained"
+            className="mr-3"
+          >
             Tạo khách hàng
           </AddButton>
         </div>
@@ -151,6 +156,6 @@ export const CustomersPage = () => {
         refetch={refetch}
         defaultValue={defaultValue as any}
       />
-    </>
+    </Paper>
   );
 };

@@ -15,15 +15,15 @@ import { menu } from "~modules-dashboard/layouts/data";
 import Image from "next/image";
 import clsx from "clsx";
 import ArrowRight from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
-import ArrowLeft from "@mui/icons-material/KeyboardDoubleArrowLeftOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
 
 type TProps = {
   expand: boolean;
-  setExpand: React.Dispatch<React.SetStateAction<boolean>>
-}
+  setExpand: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export const Sidebar: React.FC<TProps> = ({expand, setExpand}) => {
+export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
   const [collapses, setCollapses] = useState<string[]>([]);
 
   const { pathname } = useRouter();
@@ -51,15 +51,20 @@ export const Sidebar: React.FC<TProps> = ({expand, setExpand}) => {
   return (
     <Box
       className={styles["sidebar"]}
-      sx={{ width: expand ? "250px" : "75px" }}
+      sx={{ width: expand ? "250px" : "60px" }}
     >
       <Box className={styles["logo-box"]}>
-        <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
+        {!expand ? (
+          <Image src="/logo-small.png" alt="Esti" width={40} height={40} />
+        ) : (
+          <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
+        )}
+
         <div
           onClick={() => setExpand(!expand)}
           className={clsx(styles["expand-btn"])}
         >
-          {expand ? <ArrowLeft /> : <ArrowRight />}
+          <MenuIcon className="w-[30px] h-[40px]" />
         </div>
       </Box>
       {!expand ? (
@@ -76,7 +81,7 @@ export const Sidebar: React.FC<TProps> = ({expand, setExpand}) => {
                 disablePadding
               >
                 <ListItemButton onClick={() => handleCollapse(item.id)}>
-                  <ListItemIcon className="text-white min-w-[32px]">
+                  <ListItemIcon className="text-white min-w-[32px] w-8">
                     {item.icon}
                   </ListItemIcon>
 
@@ -109,7 +114,7 @@ export const Sidebar: React.FC<TProps> = ({expand, setExpand}) => {
                       sx={{
                         background:
                           pathname === `/dashboard/${child.link}`
-                            ? "#e1e1e166 !important"
+                            ? "#2D3748 !important"
                             : "",
                       }}
                     >

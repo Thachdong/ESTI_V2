@@ -28,11 +28,11 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         display: "grid",
         gridTemplateColumns: expand
           ? "250px calc(100% - 250px)"
-          : "75px calc(100% - 75px)",
+          : "60px calc(100% - 60px)",
         height: "100vh",
         width: "100vw",
         overflow: "hidden",
-        transition: "all .5s",
+        transition: "all 0.5s",
       }}
     >
       <Sidebar expand={expand} setExpand={setExpand} />
@@ -41,7 +41,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         <Header title={title} />
 
         <Box
-          className="bg-[#f3f6f9] flex-grow relative  overflow-y-auto p-3"
+          className="bg-[#e9ecf0] flex-grow relative  overflow-y-auto"
           component="main"
         >
           {!!isFetching && (
@@ -49,15 +49,9 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
               <Loading />
             </div>
           )}
-          <Paper
-            elevation={3}
-            className={clsx(
-              styles["layout"],
-              "relative bg-white w-full h-full"
-            )}
-          >
+          <div className={clsx(styles["layout"], "relative w-full h-full")}>
             <Page />
-          </Paper>
+          </div>
         </Box>
         <Footer />
       </Box>

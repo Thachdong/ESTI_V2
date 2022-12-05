@@ -108,6 +108,10 @@
   margin-left: 0.5rem;
 }
 
+.bgContainer {
+  @apply p-2 w-full h-full shadow;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

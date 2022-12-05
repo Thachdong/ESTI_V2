@@ -12,16 +12,21 @@ type TProps = {
 export const Header: React.FC<TProps> = ({ title }) => {
   return (
     <Box className={clsx(styles["header"])}>
-      <Typography component="h1" variant="h5" className="flex-grow pl-4">
+      <Typography
+        component="h1"
+        variant="h5"
+        className="flex-grow pl-12 text-xl font-medium"
+      >
         {title}
       </Typography>
 
       <LoadingButton
-        sx={{ height: "32px" }}
+        sx={{ height: "34px " }}
         variant="contained"
         color="error"
         startIcon={<PowerSettingsNewRoundedIcon />}
         onClick={() => signOut()}
+        className="shadow bg-[#E53E3E] font-semibold text-sm p-3"
       >
         Đăng xuất
       </LoadingButton>

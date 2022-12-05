@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import React, { useCallback, useState } from "react";
@@ -81,12 +82,12 @@ export const StaffsPage = () => {
     },
     onSuccess: (data) => {
       toast.success(data.resultMessage);
-    }
-  })
+    },
+  });
 
   const onDelete = useCallback(async (staff: TStaff) => {
     if (confirm("Xác nhận nhân viên: " + staff.username)) {
-      await mutateDelete.mutateAsync(staff.id)
+      await mutateDelete.mutateAsync(staff.id);
     }
   }, []);
 
@@ -130,7 +131,7 @@ export const StaffsPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <>
+    <Paper className="p-2 w-full h-full shadow">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox />
@@ -162,6 +163,6 @@ export const StaffsPage = () => {
         type={dialog.type}
         defaultValue={defaultValue as any}
       />
-    </>
+    </Paper>
   );
 };
