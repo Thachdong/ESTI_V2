@@ -1,15 +1,19 @@
 import { request } from "../method";
 
-export type TProductWebsitePayload = {
+export type TProductWebsite = {
   productId: string;
   description: string;
   summary: string;
   videoUrl: string;
-  gallery: string;
+  gallery: string[];
   specifications: string;
-  documents: string;
-  categorys: string;
+  categorys: string[];
 };
+
+export type TProductWebsitePayload = Omit<TProductWebsite, "gallery" | "categorys"> & {
+  gallery: string;
+  categorys: string;
+}
 
 const BASE_URL = "ProductWebsite";
 

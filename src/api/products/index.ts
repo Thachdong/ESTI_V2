@@ -1,6 +1,6 @@
 import { request } from "../method";
 
-export type TProductPayload = {
+export type TProduct = {
   productName: string;
   productCode: string;
   manufactor: string;
@@ -8,12 +8,15 @@ export type TProductPayload = {
   specs: string;
   unitId: string;
   image: string;
-  imageThumbnail: string;
-  suppliers: string;
+  suppliers: string[];
   productGroup: string;
-  productGroupName: string;
   casCode: string;
   chemicalName: string;
+  id?: string;
+};
+
+export type TProductPayload = Omit<TProduct, "suppliers"> & {
+  suppliers: string;
 };
 
 const BASE_URL = "Product";
@@ -25,4 +28,5 @@ export const products = {
     request.post<FormData, string>(BASE_URL + "/upload-image", file),
   create: (payload: TProductPayload) =>
     request.post<TProductPayload, any>(BASE_URL, payload),
+  delete: (id: string) => request.delete(BASE_URL + "/" + id),
 };

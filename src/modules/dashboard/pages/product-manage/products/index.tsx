@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { suppliers } from "src/api";
-import { products } from "src/api/products";
+import { products, TProduct } from "src/api/products";
 import {
   AddButton,
   DataTable,
@@ -78,7 +78,7 @@ export const ProductsPage = () => {
     [setDefaultValue]
   );
 
-  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
+  const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
     },
@@ -89,9 +89,9 @@ export const ProductsPage = () => {
     },
   });
 
-  const onDelete = useCallback(async (supplier: any) => {
-    if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
-      await mutateDelete.mutateAsync(supplier.id as string);
+  const onDelete = useCallback(async (product: TProduct) => {
+    if (confirm("Xác nhận xóa SP: " + product.productName)) {
+      await mutateDelete.mutateAsync(product.id as string);
     }
   }, []);
 

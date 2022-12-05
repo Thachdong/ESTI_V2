@@ -96,6 +96,7 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Nhà cung cấp"
         selectShape={{ valueKey: "id", labelKey: "supplierName" }}
         disabled={isDisable}
+        multiple={true}
       />
 
       <FormInput
@@ -124,14 +125,6 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Quy cách"
         disabled={isDisable}
       />
-      <Box className="grid-col-2">
-        <FormImageGallery
-          loader={products.uploadImage}
-          controlProps={{ control, name: "image" }}
-          title="Ảnh đại diện của sản phẩm"
-          inputProps={{ multiple: false }}
-        />
-      </Box>
     </Box>
   );
 };

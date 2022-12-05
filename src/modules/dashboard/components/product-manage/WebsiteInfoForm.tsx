@@ -13,7 +13,7 @@ type TProps = {
   isDisable: boolean;
 };
 
-export const WebsiteInfoForm: React.FC<TProps> = () => {
+export const WebsiteInfoForm: React.FC<TProps> = ({isDisable}) => {
   const { control } = useFormContext();
 
   return (
@@ -27,6 +27,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
         }}
         label="Danh mục sản phẩm"
         multiple={true}
+        disabled={isDisable}
       />
 
       <FormInput
@@ -35,6 +36,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
           name: "videoUrl",
         }}
         label="Video url:"
+        disabled={isDisable}
       />
 
       <FormTextEditor
@@ -44,6 +46,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
         }}
         label="Mô tả ngắn:"
         className="col-span-2"
+        editorProps={{disabled: isDisable}}
       />
 
       <FormTextEditor
@@ -53,6 +56,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
         }}
         label="Mô tả sản phẩm:"
         className="col-span-2"
+        editorProps={{disabled: isDisable}}
       />
 
       <FormTextEditor
@@ -62,6 +66,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
         }}
         label="Thông số kĩ thuật:"
         className="col-span-2"
+        editorProps={{disabled: isDisable}}
       />
 
       <Box className="col-span-2">
@@ -69,6 +74,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
           loader={products.uploadImage}
           controlProps={{ control, name: "gallery" }}
           title="Tải ảnh sản phẩm"
+          disabled={isDisable}
         />
       </Box>
     </Box>
