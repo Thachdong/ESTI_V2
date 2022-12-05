@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 import { menu } from "~modules-dashboard/layouts/data";
 import Image from "next/image";
 import clsx from "clsx";
-import ArrowRight from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
 

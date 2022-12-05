@@ -32,7 +32,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         height: "100vh",
         width: "100vw",
         overflow: "hidden",
-        transition: "all 0.5s",
+        transition: "all 0.3s",
       }}
     >
       <Sidebar expand={expand} setExpand={setExpand} />

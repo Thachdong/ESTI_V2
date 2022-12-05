@@ -37,7 +37,7 @@
 
 .menu {
   overflow-y: auto;
-  /* height: calc(100vh - 60px); */
+  height: calc(100vh - 60px);
   color: #fff;
 }
 /* SCROLLBAR STYLING */
