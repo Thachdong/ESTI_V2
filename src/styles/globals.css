@@ -1,4 +1,4 @@
+@import "./Home.module.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./Home.module.css";
