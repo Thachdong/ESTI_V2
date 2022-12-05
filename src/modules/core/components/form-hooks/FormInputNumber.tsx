@@ -1,14 +1,15 @@
 import { ErrorMessage } from "@hookform/error-message";
+import clsx from "clsx";
 import { Controller } from "react-hook-form";
 import { TFormInputNumberProps } from "~types/form-controlled/form-input-number";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputNumberBase } from "../form-bases";
 
 export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
-  const {controlProps, ...baseProps} = props;
+  const { controlProps, ...baseProps } = props;
 
   const renderController = ({
-    field: {ref, ...restField},
+    field: { ref, ...restField },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -25,7 +26,15 @@ export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
       ...baseProps,
     };
 
-    return <FormInputNumberBase {...defaultProps} />;
+    return (
+      <FormInputNumberBase
+        {...defaultProps}
+        className={clsx(
+          defaultProps.disabled == true && "bg-[#f0f0f0]",
+          "!h-[40px]"
+        )}
+      />
+    );
   };
 
   return <Controller {...controlProps} render={renderController} />;

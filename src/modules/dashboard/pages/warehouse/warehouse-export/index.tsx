@@ -1,6 +1,7 @@
 import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
+import router from "next/router";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { exportWarehouse, TWarehouseExport } from "src/api";
@@ -71,7 +72,12 @@ export const WarehouseExportPage: React.FC = () => {
   return (
     <Paper className="p-2 w-full h-full shadow">
       <div className="mb-2">
-        <AddButton variant="contained" onClick={() => console.log("ahhaaa")}>
+        <AddButton
+          variant="contained"
+          onClick={() =>
+            router.push("/dashboard/warehouse/create-warehouse-export")
+          }
+        >
           Tạo phiếu xuất kho
         </AddButton>
       </div>
