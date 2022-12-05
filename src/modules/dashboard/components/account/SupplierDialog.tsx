@@ -94,7 +94,7 @@ export const SupplierDialog: React.FC<TDialog> = ({
     if (type === "View" && defaultValue) {
       const productSupply = defaultValue?.productSupply || "";
 
-      reset({...defaultValue, productSupply: productSupply.split(", ")});
+      reset({ ...defaultValue, productSupply: productSupply.split(", ") });
     }
   }, [type, defaultValue]);
 
@@ -126,7 +126,10 @@ export const SupplierDialog: React.FC<TDialog> = ({
   const handleAddSupplier = async (payload: TSupplier) => {
     const productSupply = payload.productSupply as number[];
 
-    await mutationAdd.mutateAsync({...payload, productSupply: productSupply?.join(", ")});
+    await mutationAdd.mutateAsync({
+      ...payload,
+      productSupply: productSupply?.join(", "),
+    });
   };
 
   const mutateUpdate = useMutation(
@@ -148,7 +151,10 @@ export const SupplierDialog: React.FC<TDialog> = ({
   const handleUpdateSupplier = async (data: TSupplier) => {
     const productSupply = data.productSupply as number[];
 
-    await mutateUpdate.mutateAsync({...data, productSupply: productSupply?.join(", ")});
+    await mutateUpdate.mutateAsync({
+      ...data,
+      productSupply: productSupply?.join(", "),
+    });
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE
@@ -215,12 +221,19 @@ export const SupplierDialog: React.FC<TDialog> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="lg" title={title} PaperProps={{sx: {height: "100%"}}}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="lg"
+      title={title}
+      PaperProps={{ sx: { height: "100%" } }}
+    >
       <FormProvider {...methods}>
         <Box component="form" className="grid grid-cols-5 gap-4">
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar
+                loader={suppliers.uploadAvatar}
                 controlProps={{ control, name: "avatar" }}
                 label="Ảnh đại diện của nhà cung cấp"
               />

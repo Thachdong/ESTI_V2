@@ -192,6 +192,7 @@ export const StaffDialog: React.FC<TDialog> = ({
         <Box>
           <Box className="flex justify-center mb-3">
             <FormAvatar
+              loader={staff.uploadAvatar}
               controlProps={{
                 control,
                 name: "avatar",

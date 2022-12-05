@@ -4,15 +4,39 @@ import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { suppliers, TSupplier } from "src/api";
+import { products } from "src/api/products";
 import {
   BaseButton,
   Dialog,
-  FormImageGallery,
   TabPanelContainForm,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { ProductInfoForm } from "./ProductInfoForm";
 import { WebsiteInfoForm } from "./WebsiteInfoForm";
+
+const infoFields = [
+  "productName",
+  "productCode",
+  "manufactor",
+  "origin",
+  "specs",
+  "unitId",
+  "image",
+  "suppliers",
+  "productGroup",
+  "casCode",
+  "chemicalName",
+];
+
+const websiteFields = [
+  "description",
+  "summary",
+  "videoUrl",
+  "gallery",
+  "specifications",
+  "documents",
+  "categorys",
+];
 
 export const ProductsDialog: React.FC<any> = ({
   onClose,
@@ -36,7 +60,6 @@ export const ProductsDialog: React.FC<any> = ({
   });
 
   const {
-    control,
     handleSubmit,
     formState: { errors, isDirty },
     reset,
@@ -45,35 +68,32 @@ export const ProductsDialog: React.FC<any> = ({
   // ERRORS CATCHING
   const errorKeys = Object.keys(errors);
 
-  //   const isCuratorFieldError = !!errorKeys.find((err: string) =>
-  //     curatorFields.join().includes(err)
-  //   );
+    const infoFieldsError = !!errorKeys.find((err: string) =>
+      infoFields.join().includes(err)
+    );
 
-  //   const isSupplierFieldError = !!errorKeys.find((err: string) =>
-  //     supplierFields.join().includes(err)
-  //   );
-
-  let isCuratorFieldError = false;
-  let isSupplierFieldError = false;
+    const websiteFieldsError = !!errorKeys.find((err: string) =>
+    websiteFields.join().includes(err)
+    );
 
   //   SIDE EFFECTS
   useEffect(() => {
-    isCuratorFieldError && setTab("2");
+    websiteFieldsError && setTab("2");
 
-    isSupplierFieldError && setTab("1");
-  }, [isCuratorFieldError, isSupplierFieldError]);
+    infoFieldsError && setTab("1");
+  }, [websiteFieldsError, infoFieldsError]);
 
-  useEffect(() => {
-    if (type === "Add") {
-      reset({});
-    }
+  // useEffect(() => {
+  //   if (type === "Add") {
+  //     reset({});
+  //   }
 
-    if (type === "View" && defaultValue) {
-      const productSupply = defaultValue?.productSupply || "";
+  //   if (type === "View" && defaultValue) {
+  //     const productSupply = defaultValue?.productSupply || "";
 
-      reset({ ...defaultValue, productSupply: productSupply.split(", ") });
-    }
-  }, [type, defaultValue]);
+  //     reset({ ...defaultValue, productSupply: productSupply.split(", ") });
+  //   }
+  // }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
@@ -85,7 +105,7 @@ export const ProductsDialog: React.FC<any> = ({
 
   // DIALOG MUTATION DECLARATIONS
   const mutationAdd = useMutation(
-    (payload: TSupplier) => suppliers.create(payload),
+    (payload: any) => products.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data?.resultMessage);
@@ -100,13 +120,30 @@ export const ProductsDialog: React.FC<any> = ({
     }
   );
 
-  const handleAddSupplier = async (payload: TSupplier) => {
-    const productSupply = payload.productSupply as number[];
+  const handleAddProduct = async (payload: any) => {
+    const productPayload: any = {};
+    const websitePayload: any = {};
 
-    await mutationAdd.mutateAsync({
-      ...payload,
-      productSupply: productSupply?.join(", "),
+    infoFields.map(field => {
+      productPayload[field] = payload[field];
     });
+
+    websiteFields.map(field => {
+      websitePayload[field] = payload[field];
+    });
+
+    const createdProduct = await mutationAdd.mutateAsync(productPayload).then(res => res.data);
+
+    console.log(createdProduct);
+    
+
+    
+    // const productSupply = payload.productSupply as number[];
+
+    // await mutationAdd.mutateAsync({
+    //   ...payload,
+    //   productSupply: productSupply?.join(", "),
+    // });
   };
 
   const mutateUpdate = useMutation(
@@ -141,7 +178,7 @@ export const ProductsDialog: React.FC<any> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit(handleAddSupplier)}
+              onClick={handleSubmit(handleAddProduct)}
               className="w-full mb-3"
               disabled={!isDirty}
             >
@@ -207,16 +244,8 @@ export const ProductsDialog: React.FC<any> = ({
     >
       <FormProvider {...methods}>
         <Box component="form" className="grid grid-cols-5 gap-4">
-          <Box>
-            <Box className="flex justify-center mb-5">
-              <FormImageGallery
-                controlProps={{ control, name: "avatar" }}
-                label="Ảnh đại diện của sản phẩm"
-              />
-            </Box>
-            <Box className="flex flex-col items-center justify-center">
-              {renderButtons()}
-            </Box>
+          <Box className="flex flex-col items-center justify-center mt-4">
+            {renderButtons()}
           </Box>
 
           <TabContext value={tab}>
@@ -226,7 +255,7 @@ export const ProductsDialog: React.FC<any> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isSupplierFieldError ? "red" : "ỉnherit" }}
+                        sx={{ color: infoFieldsError ? "red" : "ỉnherit" }}
                       >
                         Thông tin sản phẩm
                       </Typography>
@@ -236,7 +265,7 @@ export const ProductsDialog: React.FC<any> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isCuratorFieldError ? "red" : "ỉnherit" }}
+                        sx={{ color: websiteFieldsError ? "red" : "ỉnherit" }}
                       >
                         Thông tin hiển thị website
                       </Typography>
@@ -248,11 +277,10 @@ export const ProductsDialog: React.FC<any> = ({
 
               <Box className="tabpanel-container relative py-4">
                 <TabPanelContainForm value="1" index={"1"}>
-                  {/* <CustomerInfoForm isDisable={type === "View" && !isUpdate} /> */}
                   <ProductInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
+
                 <TabPanelContainForm value="2" index={"2"}>
-                  {/* <ReveiveInfoForm isDisable={type === "View" && !isUpdate} /> */}
                   <WebsiteInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
               </Box>

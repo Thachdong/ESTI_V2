@@ -29,9 +29,10 @@ const BASE_URL = "Supplier";
 
 export const suppliers = {
   getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
-  uploadAvatar: (payload: string) =>
-    request.post(`${BASE_URL}/upload-image`, payload),
-  create: (payload: TSupplier) => request.post<TSupplier, null>(BASE_URL, payload),
+  uploadAvatar: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
+  create: (payload: TSupplier) =>
+    request.post<TSupplier, null>(BASE_URL, payload),
   delete: (supplierId: string) => request.delete(`${BASE_URL}/${supplierId}`),
-  update: (payload: TSupplier) => request.put(BASE_URL, payload)
+  update: (payload: TSupplier) => request.put(BASE_URL, payload),
 };
