@@ -67,7 +67,7 @@ export const WebsiteInfoForm: React.FC<TProps> = () => {
       <Box className="col-span-2">
         <FormImageGallery
           loader={products.uploadImage}
-          controlProps={{ control, name: "categorys" }}
+          controlProps={{ control, name: "gallery" }}
           title="Tải ảnh sản phẩm"
         />
       </Box>

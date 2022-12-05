@@ -129,7 +129,6 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
           loader={products.uploadImage}
           controlProps={{ control, name: "image" }}
           title="Ảnh đại diện của sản phẩm"
-          imageListProps={{ cols: 1, rowHeight: 150 }}
           inputProps={{ multiple: false }}
         />
       </Box>

@@ -3,8 +3,14 @@ import { Box, Tab, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { suppliers, TSupplier } from "src/api";
-import { products } from "src/api/products";
+import {
+  products,
+  productsWebsite,
+  suppliers,
+  TProductPayload,
+  TProductWebsitePayload,
+  TSupplier,
+} from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -13,6 +19,12 @@ import {
 import { toast } from "~modules-core/toast";
 import { ProductInfoForm } from "./ProductInfoForm";
 import { WebsiteInfoForm } from "./WebsiteInfoForm";
+
+type THookForm = TProductPayload &
+  TProductWebsitePayload & {
+    gallery: string[];
+    categorys: string[];
+  };
 
 const infoFields = [
   "productName",
@@ -53,7 +65,7 @@ export const ProductsDialog: React.FC<any> = ({
     setTab(newValue);
   };
 
-  const methods = useForm<TSupplier>({
+  const methods = useForm<THookForm>({
     mode: "onBlur",
     shouldUnregister: false,
     reValidateMode: "onSubmit",
@@ -68,13 +80,13 @@ export const ProductsDialog: React.FC<any> = ({
   // ERRORS CATCHING
   const errorKeys = Object.keys(errors);
 
-    const infoFieldsError = !!errorKeys.find((err: string) =>
-      infoFields.join().includes(err)
-    );
+  const infoFieldsError = !!errorKeys.find((err: string) =>
+    infoFields.join().includes(err)
+  );
 
-    const websiteFieldsError = !!errorKeys.find((err: string) =>
+  const websiteFieldsError = !!errorKeys.find((err: string) =>
     websiteFields.join().includes(err)
-    );
+  );
 
   //   SIDE EFFECTS
   useEffect(() => {
@@ -104,8 +116,8 @@ export const ProductsDialog: React.FC<any> = ({
       : "Thông tin sản phẩm";
 
   // DIALOG MUTATION DECLARATIONS
-  const mutationAdd = useMutation(
-    (payload: any) => products.create(payload),
+  const mutationAddProduct = useMutation(
+    (payload: TProductPayload) => products.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data?.resultMessage);
@@ -120,30 +132,53 @@ export const ProductsDialog: React.FC<any> = ({
     }
   );
 
-  const handleAddProduct = async (payload: any) => {
-    const productPayload: any = {};
-    const websitePayload: any = {};
+  const mutationAddProductWebsite = useMutation(
+    (payload: TProductWebsitePayload) => productsWebsite.create(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data?.resultMessage);
 
-    infoFields.map(field => {
-      productPayload[field] = payload[field];
+        refetch?.();
+
+        onClose();
+      },
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+    }
+  );
+
+  const handleAddProduct = async (payload: THookForm) => {
+    // CREATE PRODUCT
+    const productPayload: Partial<TProductPayload> = {};
+
+    infoFields.map((field) => {
+      productPayload[field as keyof TProductPayload] =
+        payload[field as keyof THookForm];
     });
 
-    websiteFields.map(field => {
-      websitePayload[field] = payload[field];
+    const productId = await mutationAddProduct
+      .mutateAsync(productPayload as TProductPayload)
+      .then((res) => res.data);
+
+    // CREATE PRODUCT WEBSITE
+    const websitePayload: Partial<TProductWebsitePayload> = {
+      productId,
+    };
+
+    websiteFields.map((field) => {
+      websitePayload[field as keyof TProductWebsitePayload] =
+        payload[field as keyof THookForm];
     });
 
-    const createdProduct = await mutationAdd.mutateAsync(productPayload).then(res => res.data);
+    const gallery = payload.gallery?.join(", ");
+    const categorys = payload.categorys?.join(", ");
 
-    console.log(createdProduct);
-    
-
-    
-    // const productSupply = payload.productSupply as number[];
-
-    // await mutationAdd.mutateAsync({
-    //   ...payload,
-    //   productSupply: productSupply?.join(", "),
-    // });
+    await mutationAddProductWebsite.mutateAsync({
+      ...websitePayload,
+      gallery,
+      categorys,
+    } as TProductWebsitePayload);
   };
 
   const mutateUpdate = useMutation(
@@ -216,7 +251,7 @@ export const ProductsDialog: React.FC<any> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit(handleUpdateSupplier)}
+              // onClick={handleSubmit(handleUpdateSupplier)}
               className="w-full mb-3"
               disabled={!isDirty}
             >
