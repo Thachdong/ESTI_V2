@@ -41,7 +41,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         <Header title={title} />
 
         <Box
-          className="bg-[#e9ecf0] flex-grow relative  overflow-y-auto"
+          className="bg-[#f5f8fb] flex-grow relative  overflow-y-auto"
           component="main"
         >
           {!!isFetching && (
@@ -49,7 +49,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
               <Loading />
             </div>
           )}
-          <div className={clsx(styles["layout"], "relative w-full h-full")}>
+          <div className={clsx(styles["layout"], "relative w-full h-full ")}>
             <Page />
           </div>
         </Box>

@@ -1,25 +1,27 @@
 import { ErrorMessage } from "@hookform/error-message";
+import clsx from "clsx";
 import { Controller } from "react-hook-form";
 import { TFormSelect } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormSelectBase } from "../form-bases";
 
 export const FormSelect: React.FC<TFormSelect> = (props) => {
-  const { selectShape = {valueKey: "id", labelKey: "name"}} = props;
+  const { selectShape = { valueKey: "id", labelKey: "name" } } = props;
 
-  const {controlProps, label, ...selectProps} = props;
+  const { controlProps, label, ...selectProps } = props;
 
   const renderController = ({
-    field: {ref, value, ...restField}, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+    field: { ref, value, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    
-    const {name} = controlProps;
+    const { name } = controlProps;
 
     const rules = controlProps.rules || {};
 
-    const updateLabel = Object.keys(rules).includes("required") ? `${label} *` : label;
+    const updateLabel = Object.keys(rules).includes("required")
+      ? `${label} *`
+      : label;
 
     const defaultBaseProps = {
       helperText: (
@@ -37,7 +39,15 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       ...selectProps,
     };
 
-    return <FormSelectBase {...defaultBaseProps} />;
+    return (
+      <FormSelectBase
+        {...defaultBaseProps}
+        className={clsx(
+          defaultBaseProps.disabled == true && "bg-[#f0f0f0]",
+          "!h-[40px]"
+        )}
+      />
+    );
   };
 
   return <Controller {...controlProps} render={renderController} />;

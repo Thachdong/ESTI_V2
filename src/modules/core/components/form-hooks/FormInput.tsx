@@ -3,18 +3,21 @@ import { ErrorMessage } from "@hookform/error-message";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 import { FormInputBase } from "~modules-core/components/form-bases";
+import clsx from "clsx";
 
 export const FormInput: React.FC<TFormInputProps> = (props) => {
-  const {controlProps, label, ...textFieldProps} = props;
-  
+  const { controlProps, label, ...textFieldProps } = props;
+
   const renderController = ({
-    field: {value, ref, ...restField},
+    field: { value, ref, ...restField },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
     const rules = controlProps.rules || {};
 
-    const updateLabel = Object.keys(rules).includes("required") ? `${label} *` : label;
+    const updateLabel = Object.keys(rules).includes("required")
+      ? `${label} *`
+      : label;
 
     const defaultProps = {
       helperText: (
@@ -31,7 +34,15 @@ export const FormInput: React.FC<TFormInputProps> = (props) => {
       ...textFieldProps,
     };
 
-    return <FormInputBase {...defaultProps} />;
+    return (
+      <FormInputBase
+        {...defaultProps}
+        className={clsx(
+          defaultProps.disabled == true && "bg-[#f0f0f0]",
+          "!h-[40px]"
+        )}
+      />
+    );
   };
 
   return <Controller {...controlProps} render={renderController} />;
