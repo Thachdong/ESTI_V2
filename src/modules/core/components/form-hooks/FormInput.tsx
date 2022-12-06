@@ -34,15 +34,7 @@ export const FormInput: React.FC<TFormInputProps> = (props) => {
       ...textFieldProps,
     };
 
-    return (
-      <FormInputBase
-        {...defaultProps}
-        className={clsx(
-          defaultProps.disabled == true && "bg-[#f0f0f0]",
-          "!h-[40px]"
-        )}
-      />
-    );
+    return <FormInputBase {...defaultProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

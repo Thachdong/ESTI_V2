@@ -1,4 +1,5 @@
 import { MenuItem, TextField } from "@mui/material";
+import clsx from "clsx";
 import { TFormSelectBase } from "~types/form-controlled/form-select";
 
 export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
@@ -21,10 +22,19 @@ export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
     }
   };
 
+  const inputProps = {
+    ...props.inputProps,
+    className: clsx(
+      props.disabled && "bg-[#f0f0f0]",
+      props?.inputProps?.className
+    ),
+  };
+
   return (
     <TextField
       fullWidth
       SelectProps={{ ...props.SelectProps }}
+      inputProps={inputProps}
       size="small"
       select
       label={label}

@@ -1,4 +1,5 @@
-import { TextField, TextFieldProps, FormHelperText } from "@mui/material";
+import { TextField, TextFieldProps } from "@mui/material";
+import clsx from "clsx";
 
 export const FormInputBase: React.FC<TextFieldProps> = (props) => {
   const defaultProps: TextFieldProps = {
@@ -8,5 +9,13 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     ...props,
   };
 
-  return <TextField {...defaultProps} />;
+  const inputProps = {
+    ...defaultProps.inputProps,
+    className: clsx(
+      props.disabled && "bg-[#f0f0f0]",
+      props?.inputProps?.className
+    ),
+  };
+
+  return <TextField {...defaultProps} inputProps={inputProps} />;
 };
