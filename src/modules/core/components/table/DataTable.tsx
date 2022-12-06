@@ -18,7 +18,7 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   paginationMode: "server",
   sortingMode: "server",
   autoHeight: true,
-  headerHeight: 96,
+  headerHeight: 36,
   showColumnRightBorder: true,
   showCellRightBorder: true,
 };
