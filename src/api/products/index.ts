@@ -29,4 +29,5 @@ export const products = {
   create: (payload: TProductPayload) =>
     request.post<TProductPayload, any>(BASE_URL, payload),
   delete: (id: string) => request.delete(BASE_URL + "/" + id),
+  importExcel: (file: FormData) => request.post<FormData, any>(BASE_URL + "/" + "import-excel", file)
 };

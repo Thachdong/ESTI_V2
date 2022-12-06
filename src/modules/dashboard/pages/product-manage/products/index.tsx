@@ -1,15 +1,15 @@
-import { Checkbox, Paper } from "@mui/material";
+import { Checkbox, InputLabel, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { suppliers } from "src/api";
 import { products, TProduct } from "src/api/products";
 import {
   AddButton,
   DataTable,
   DeleteButton,
+  FormInputBase,
   generatePaginationProps,
   SearchBox,
   ViewButton,
@@ -18,6 +18,22 @@ import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
+
+const excelEstensions = [
+  "xlsx",
+  "xls",
+  "xlsm",
+  "xlsb",
+  "xltx",
+  "xltm",
+  "xlt",
+  "xls",
+  "xml",
+  "xlam",
+  "xla",
+  "xlw",
+  "xlr",
+];
 
 export const ProductsPage = () => {
   const router = useRouter();
@@ -88,6 +104,39 @@ export const ProductsPage = () => {
       refetch();
     },
   });
+
+  const mutateImportExcel = useMutation(
+    (file: FormData) => products.importExcel(file),
+    {
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleImportExcel = async (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
+  ) => {
+    const file = e.target.files?.[0];
+
+    const fileExtension = file?.name?.split(".").pop();
+
+    if (!excelEstensions.includes(fileExtension)) {
+      toast.error(`File ${file.name} không đúng định dạng!`);
+
+      return;
+    }
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    await mutateImportExcel.mutateAsync(formData);
+  };
 
   const onDelete = useCallback(async (product: TProduct) => {
     if (confirm("Xác nhận xóa SP: " + product.productName)) {
@@ -166,12 +215,16 @@ export const ProductsPage = () => {
             Thêm sản phẩm
           </AddButton>
 
-          <AddButton
-            // onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Thêm file excel
+          <AddButton variant="contained" className="mr-3">
+            <InputLabel htmlFor="product-file" className="text-white">
+              Thêm file excel
+              <FormInputBase
+                id="product-file"
+                className="hidden"
+                type="file"
+                onChange={handleImportExcel}
+              />
+            </InputLabel>
           </AddButton>
         </div>
       </div>
