@@ -30,7 +30,7 @@ export const WarehouseExportPage: React.FC = () => {
     { field: "mainOrderCode", headerName: "MÃ ĐƠN HÀNG" },
     { field: "warehouseSessionCode", headerName: "MÃ XUẤT KHO" },
     { field: "customerCode", headerName: "MÃ KH" },
-    { field: "companyName", headerName: "TÊN KHÁCH HÀNG" },
+    { field: "companyName", headerName: "TÊN KHÁCH HÀNG", flex: 3 },
     {
       field: "totalPrice",
       headerName: "GIÁ TRỊ XUẤT KHO",

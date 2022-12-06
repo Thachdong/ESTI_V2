@@ -8,44 +8,40 @@ import {
   FormSelect,
 } from "~modules-core/components";
 import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
+import AddIcon from "@mui/icons-material/Add";
 
-export const WarehouseImportForm = () => {
-  const { control, handleSubmit, reset } = useForm<TWarehouseExport>({
-    mode: "onBlur",
-  });
+export const WarehouseImportForm: React.FC<{
+  control: any;
+  checkExport: boolean;
+}> = ({ control, checkExport }) => {
   return (
     <div>
-      <div>
-        <FormCheckbox
-          label={"Xuất bỏ sản phẩm"}
-          controlProps={{
-            name: "ExportDelete",
-            control: control,
-            rules: undefined,
-          }}
-        />
-      </div>
       <div className="bg-white w-full rounded-sm grid grid-cols-2 p-3 gap-y-2 gap-x-4 mb-4">
         <div className="col-span-2">
           <p className="m-0 text-sm font-medium">THÔNG TIN CHUNG</p>
         </div>
-        <div className="flex items-center">
-          <div className="w-[25%] text-sm font-semibold">
-            <span>Đơn mua hàng: </span>
-          </div>
-          <div className="w-[75%]">
-            <FormSelect
-              options={[]}
-              controlProps={{
-                control,
-                name: "saleAdminId",
-                rules: { required: false },
-              }}
-              label=""
-              // disabled={fa}
-            />
-          </div>
-        </div>
+        {!checkExport && (
+          <>
+            <div className="flex items-center">
+              <div className="w-[25%] text-sm font-semibold">
+                <span>Đơn mua hàng: </span>
+              </div>
+              <div className="w-[75%]">
+                <FormSelect
+                  options={[]}
+                  controlProps={{
+                    control,
+                    name: "saleAdminId",
+                    rules: { required: true },
+                  }}
+                  label=""
+                  // disabled={fa}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
         <div className="flex items-center">
           <div className="w-[25%] text-sm font-semibold">
             <span>Mã chi nhánh: </span>
@@ -56,47 +52,52 @@ export const WarehouseImportForm = () => {
               controlProps={{
                 control,
                 name: "saleAdminId",
-                rules: { required: false },
+                rules: { required: true },
               }}
               label=""
               // disabled={fa}
             />
           </div>
         </div>
-        <div className="flex items-center">
-          <div className="w-[25%] text-sm font-semibold">
-            <span>Admin phụ trách: </span>
-          </div>
-          <div className="w-[75%]">
-            <FormSelect
-              options={[]}
-              controlProps={{
-                control,
-                name: "saleAdminId",
-                rules: { required: false },
-              }}
-              label=""
-              disabled={true}
-            />
-          </div>
-        </div>
-        <div className="flex items-center">
-          <div className="w-[25%] text-sm font-semibold">
-            <span>Ngày tạo: </span>
-          </div>
-          <div className="w-[75%]">
-            <FormInput
-              controlProps={{
-                control,
-                name: "created",
-                rules: { required: false },
-              }}
-              label=""
-              value={"dd/mm/yyyy"}
-              disabled={true}
-            />
-          </div>
-        </div>
+        {!checkExport && (
+          <>
+            <div className="flex items-center">
+              <div className="w-[25%] text-sm font-semibold">
+                <span>Admin phụ trách: </span>
+              </div>
+              <div className="w-[75%]">
+                <FormSelect
+                  options={[]}
+                  controlProps={{
+                    control,
+                    name: "saleAdminId",
+                    rules: { required: false },
+                  }}
+                  label=""
+                  disabled={true}
+                />
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="w-[25%] text-sm font-semibold">
+                <span>Ngày tạo: </span>
+              </div>
+              <div className="w-[75%]">
+                <FormInput
+                  controlProps={{
+                    control,
+                    name: "created",
+                    rules: { required: false },
+                  }}
+                  label=""
+                  value={"dd/mm/yyyy"}
+                  disabled={true}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
         <div className="flex items-center">
           <div className="w-[25%] text-sm font-semibold">
             <span>Giao nhận phụ trách: </span>
@@ -123,7 +124,7 @@ export const WarehouseImportForm = () => {
               controlProps={{
                 control,
                 name: "created",
-                rules: { required: false },
+                rules: { required: true },
               }}
               label=""
               disabled={true}
@@ -156,28 +157,52 @@ export const WarehouseImportForm = () => {
             <div className="w-[25%] text-sm font-semibold">
               <span>Nhà cung cấp: </span>
             </div>
-            <div className="w-[25%] text-sm font-semibold pr-4">
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "customerCode",
-                  rules: { required: false },
-                }}
-                label=""
-                disabled={true}
-              />
-            </div>
-            <div className="w-[50%]">
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "customerName",
-                  rules: { required: false },
-                }}
-                label=""
-                disabled={true}
-              />
-            </div>
+            {(checkExport && (
+              <div className="flex items-center w-[75%] gap-2">
+                <div className="w-full">
+                  <FormSelect
+                    options={[]}
+                    controlProps={{
+                      control,
+                      name: "saleAdminId",
+                      rules: { required: false },
+                    }}
+                    label=""
+                    placeholder="Select..."
+                  />
+                </div>
+                <div className="">
+                  <BaseButton className="bg-main text-white rounded-md !w-[40px] !min-w-[35px] !h-[40px]">
+                    <AddIcon />
+                  </BaseButton>
+                </div>
+              </div>
+            )) || (
+              <>
+                <div className="w-[25%] text-sm font-semibold pr-4">
+                  <FormInput
+                    controlProps={{
+                      control,
+                      name: "customerCode",
+                      rules: { required: false },
+                    }}
+                    label=""
+                    disabled={true}
+                  />
+                </div>
+                <div className="w-[50%]">
+                  <FormInput
+                    controlProps={{
+                      control,
+                      name: "customerName",
+                      rules: { required: false },
+                    }}
+                    label=""
+                    disabled={true}
+                  />
+                </div>
+              </>
+            )}
           </div>
           <div className="flex items-center">
             <div className="w-[25%] text-sm font-semibold">
@@ -250,7 +275,7 @@ export const WarehouseImportForm = () => {
           </div>
           <div className="flex items-center">
             <div className="w-[25%] text-sm font-semibold">
-              <span>Email</span>
+              <span>Email:</span>
             </div>
             <div className="w-[75%]">
               <FormInput
@@ -265,21 +290,6 @@ export const WarehouseImportForm = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="p-4 bg-white rounded-sm mt-4">
-        <div className="text-sm font-medium mb-2">
-          <span>SẢN PHẨM</span>
-        </div>
-        <div>danh sách sản phẩm</div>
-      </div>
-      <div className="flex justify-end">
-        <BaseButton
-          type="button"
-          className="bg-info my-4"
-          onClick={() => console.log("Xuất kho")}
-        >
-          Lưu
-        </BaseButton>
       </div>
     </div>
   );

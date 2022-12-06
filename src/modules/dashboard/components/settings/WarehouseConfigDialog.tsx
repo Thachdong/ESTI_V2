@@ -137,7 +137,7 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
 
   return (
     <Dialog onClose={onClose} open={open} title={title}>
-      <Box component="form" onSubmit={(e) => e.preventDefault()}>
+      <Box component="form" onSubmit={(e: any) => e.preventDefault()}>
         <FormInput
           controlProps={{
             name: "code",
