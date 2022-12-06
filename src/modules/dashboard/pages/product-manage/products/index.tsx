@@ -4,6 +4,7 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
+import { productsWebsite } from "src/api";
 import { products, TProduct } from "src/api/products";
 import {
   AddButton,
@@ -85,6 +86,7 @@ export const ProductsPage = () => {
   );
 
   // DATA TABLE
+  // OPEN VIEW DETAIL DIALOG
   const onUpdate = useCallback(
     (row: any) => {
       setDialog({ open: true, type: "View" });
@@ -94,6 +96,7 @@ export const ProductsPage = () => {
     [setDefaultValue]
   );
 
+  // MUTATION DECLERATIONS
   const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
@@ -107,6 +110,20 @@ export const ProductsPage = () => {
 
   const mutateImportExcel = useMutation(
     (file: FormData) => products.importExcel(file),
+    {
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const mutateStatus = useMutation(
+    (id: string) => productsWebsite.display(id),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -138,16 +155,28 @@ export const ProductsPage = () => {
     await mutateImportExcel.mutateAsync(formData);
   };
 
-  const onDelete = useCallback(async (product: TProduct) => {
+  const handleDelete = useCallback(async (product: TProduct) => {
     if (confirm("Xác nhận xóa SP: " + product.productName)) {
       await mutateDelete.mutateAsync(product.id as string);
     }
   }, []);
 
-  const handleChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeStatus = async (
+    e: ChangeEvent<HTMLInputElement>,
+    product: TProduct
+  ) => {
     const isChecked = e.target.checked;
 
-    if (confirm(`Cập nhật ${isChecked ? "hiển thị" : "ẩn"} sp trên website?`)) {
+    const { productName } = product || {};
+
+    if (
+      confirm(
+        `Cập nhật ${
+          isChecked ? "hiển thị" : "ẩn"
+        } sản phẩm ${productName} trên website?`
+      )
+    ) {
+      await mutateStatus.mutateAsync(product?.id as string);
     }
   };
 
@@ -175,7 +204,11 @@ export const ProductsPage = () => {
       field: "websiteInfo",
       headerName: "Website",
       renderCell: ({ row }) => (
-        <Checkbox value={row.websiteInfo} onChange={handleChangeStatus} />
+        <Checkbox
+          checked={row.websiteInfo}
+          value={row.websiteInfo}
+          onChange={(e) => handleChangeStatus(e, row)}
+        />
       ),
     },
     { field: "numberOfReviews", headerName: "Đánh giá mới" },
@@ -189,7 +222,7 @@ export const ProductsPage = () => {
             onClick={() => onUpdate(record.row)}
           />
           <DeleteButton
-            onClick={() => onDelete(record.row)}
+            onClick={() => handleDelete(record.row)}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
