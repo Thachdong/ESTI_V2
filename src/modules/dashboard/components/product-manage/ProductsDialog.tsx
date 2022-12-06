@@ -102,11 +102,13 @@ export const ProductsDialog: React.FC<any> = ({
     if (type === "View" && defaultValue) {
       const { suppliers, gallery, categorys, image } = defaultValue;
 
+      const parsedSuppliers = JSON.parse(suppliers).map((supplier: any) => supplier.id)
+
       const cleanValue = {
         ...defaultValue,
         image: image ? [image] : [],
-        suppliers: suppliers?.split(", ") || [],
         gallery: gallery?.split(", ") || [],
+        suppliers: parsedSuppliers,
         categorys: categorys?.split(", ") || [],
       };
       reset(cleanValue);
