@@ -201,12 +201,12 @@ export const ProductsPage = () => {
     { field: "chemicalName", headerName: "Công thức hóa học" },
     { field: "createdByName", headerName: "Người tạo" },
     {
-      field: "websiteInfo",
+      field: "deleted",
       headerName: "Website",
       renderCell: ({ row }) => (
         <Checkbox
-          checked={row.websiteInfo}
-          value={row.websiteInfo}
+          checked={row.deleted}
+          value={row.deleted}
           onChange={(e) => handleChangeStatus(e, row)}
         />
       ),

@@ -1,11 +1,8 @@
-import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import CloseIcon from "@mui/icons-material/Close";
-import {
-  Box,
-  Popper,
-} from "@mui/material";
-import { ReactNode, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import { GridColDef } from "@mui/x-data-grid";
+import { FormInputBase } from "../form-bases";
+import styles from "~modules-core/styles/data-table.module.css";
+import clsx from "clsx";
 
 const defaultColumnProps: Partial<GridColDef> = {
   flex: 1,
@@ -14,11 +11,22 @@ const defaultColumnProps: Partial<GridColDef> = {
   // If `true`, the column is filterable.
   hideSortIcons: true,
   // Toggle the visibility of the sort icons.
-  disableColumnMenu: true,
+  disableColumnMenu: false,
   //If `true`, the column menu is disabled for this column.
   sortable: false,
   // If `true`, the column is sortable.
-  headerClassName: "bg-main text-white text-sm !font-normal",
+  // headerClassName: "bg-main !text-white text-sm !font-normal",
+  headerClassName: "h-full !p-0",
+  renderHeader: (props: any) => {
+    const { type, headerName } = props?.colDef || {};
+    // console.log(type, headerName);
+    return (
+      <Box className={clsx(styles["filterable-header"], "flex flex-col")}>
+        <Typography className="h-1/2">{headerName}</Typography>
+        <FormInputBase className={clsx(styles["search-box"])} variant="standard" />
+      </Box>
+    );
+  },
 };
 
 export const generateColumn = (props: GridColDef) => ({
@@ -42,36 +50,3 @@ export const generatePaginationProps = (
   onPageSizeChange: (newPageSize: number) =>
     setPagination((old) => ({ ...old, pageSize: newPageSize })),
 });
-
-// export const renderFilterHeader = (
-//   data: GridColumnHeaderParams<any, any, any>,
-//   Component: ReactNode
-// ) => {
-//   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-//   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-//     setAnchorEl(anchorEl ? null : event.currentTarget);
-//   };
-
-//   const open = Boolean(anchorEl);
-
-//   return (
-//     <div className="flex items-center">
-//       <span className="mr-2">{data.colDef.headerName}</span>
-
-//       <button
-//         type="button"
-//         onClick={handleClick}
-//         className="border-0"
-//       >
-//         {open ? <CloseIcon /> : <FilterListIcon />}
-//       </button>
-
-//       <Popper open={open} anchorEl={anchorEl} sx={{ p: 1, background: "#fff", boxShadow: 2,  borderRadius: "8px"}}>
-//         <Box>
-//           {Component}
-//         </Box>
-//       </Popper>
-//     </div>
-//   );
-// };

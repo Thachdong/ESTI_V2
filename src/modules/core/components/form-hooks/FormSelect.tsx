@@ -39,15 +39,7 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       ...selectProps,
     };
 
-    return (
-      <FormSelectBase
-        {...defaultBaseProps}
-        className={clsx(
-          defaultBaseProps.disabled == true && "bg-[#f0f0f0]",
-          "!h-[40px]"
-        )}
-      />
-    );
+    return <FormSelectBase {...defaultBaseProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

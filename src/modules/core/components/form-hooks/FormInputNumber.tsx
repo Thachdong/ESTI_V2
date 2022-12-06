@@ -26,15 +26,7 @@ export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
       ...baseProps,
     };
 
-    return (
-      <FormInputNumberBase
-        {...defaultProps}
-        className={clsx(
-          defaultProps.disabled == true && "bg-[#f0f0f0]",
-          "!h-[40px]"
-        )}
-      />
-    );
+    return <FormInputNumberBase {...defaultProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;
