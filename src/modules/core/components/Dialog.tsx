@@ -17,9 +17,9 @@ export const Dialog: React.FC<TDialog> = (props) => {
       <MuiDialog open={open} maxWidth="sm" fullWidth={true} {...remainProps}>
         <DialogTitle className="flex items-center text-black px-0">
           <Typography
-            variant="h5"
+            variant="h6"
             component="div"
-            className="flex-grow text-center font-medium"
+            className="flex-grow text-left font-medium px-6"
           >
             {title?.toUpperCase()}
           </Typography>
