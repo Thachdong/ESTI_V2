@@ -70,26 +70,38 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       onChange(updatedValue);
     };
 
+    const renderImageList = () => {
+      if (!Array.isArray(value) || value?.length === 0) return <></>;
+
+      return (
+        <ImageList
+          className="w-full py-4 pr-4"
+          cols={3}
+          gap={8}
+          {...imageListProps}
+        >
+          {value.map((item: string) => (
+            <ImageListItem key={item} className="relative">
+              <ClearIcon
+                onClick={() => handleRemoveImg(item)}
+                className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"
+              />
+
+              <img
+                src={`${item}?w=164&fit=crop&auto=format`}
+                srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                alt={item}
+                loading="lazy"
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      );
+    };
+
     return (
       <Box>
-        <ImageList className="w-full py-4 pr-4" cols={3} gap={8} {...imageListProps}>
-          {Array.isArray(value) &&
-            value.map((item: string) => (
-              <ImageListItem key={item} className="relative">
-                <ClearIcon
-                  onClick={() => handleRemoveImg(item)}
-                  className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"
-                />
-
-                <img
-                  src={`${item}?w=164&fit=crop&auto=format`}
-                  srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                  alt={item}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-        </ImageList>
+        {renderImageList()}
 
         <Button className={clsx(className, "bg-main-2")}>
           <InputLabel

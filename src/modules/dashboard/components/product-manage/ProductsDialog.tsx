@@ -3,16 +3,25 @@ import { Box, Tab, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { suppliers, TSupplier } from "src/api";
-import { products } from "src/api/products";
+import {
+  products,
+  productsWebsite,
+  TProduct,
+  TProductPayload,
+  TProductWebsite,
+  TProductWebsitePayload,
+} from "src/api";
 import {
   BaseButton,
   Dialog,
+  FormImageGallery,
   TabPanelContainForm,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { ProductInfoForm } from "./ProductInfoForm";
 import { WebsiteInfoForm } from "./WebsiteInfoForm";
+
+type THookForm = TProduct & TProductWebsite;
 
 const infoFields = [
   "productName",
@@ -53,7 +62,7 @@ export const ProductsDialog: React.FC<any> = ({
     setTab(newValue);
   };
 
-  const methods = useForm<TSupplier>({
+  const methods = useForm<THookForm>({
     mode: "onBlur",
     shouldUnregister: false,
     reValidateMode: "onSubmit",
@@ -63,18 +72,20 @@ export const ProductsDialog: React.FC<any> = ({
     handleSubmit,
     formState: { errors, isDirty },
     reset,
+    control,
+    watch,
   } = methods;
 
   // ERRORS CATCHING
   const errorKeys = Object.keys(errors);
 
-    const infoFieldsError = !!errorKeys.find((err: string) =>
-      infoFields.join().includes(err)
-    );
+  const infoFieldsError = !!errorKeys.find((err: string) =>
+    infoFields.join().includes(err)
+  );
 
-    const websiteFieldsError = !!errorKeys.find((err: string) =>
+  const websiteFieldsError = !!errorKeys.find((err: string) =>
     websiteFields.join().includes(err)
-    );
+  );
 
   //   SIDE EFFECTS
   useEffect(() => {
@@ -83,17 +94,26 @@ export const ProductsDialog: React.FC<any> = ({
     infoFieldsError && setTab("1");
   }, [websiteFieldsError, infoFieldsError]);
 
-  // useEffect(() => {
-  //   if (type === "Add") {
-  //     reset({});
-  //   }
+  useEffect(() => {
+    if (type === "Add") {
+      reset({});
+    }
 
-  //   if (type === "View" && defaultValue) {
-  //     const productSupply = defaultValue?.productSupply || "";
+    if (type === "View" && defaultValue) {
+      const { suppliers, gallery, categorys, image } = defaultValue;
 
-  //     reset({ ...defaultValue, productSupply: productSupply.split(", ") });
-  //   }
-  // }, [type, defaultValue]);
+      const parsedSuppliers = JSON.parse(suppliers).map((supplier: any) => supplier.id)
+
+      const cleanValue = {
+        ...defaultValue,
+        image: image ? [image] : [],
+        gallery: gallery?.split(", ") || [],
+        suppliers: parsedSuppliers,
+        categorys: categorys?.split(", ") || [],
+      };
+      reset(cleanValue);
+    }
+  }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
@@ -104,8 +124,8 @@ export const ProductsDialog: React.FC<any> = ({
       : "Thông tin sản phẩm";
 
   // DIALOG MUTATION DECLARATIONS
-  const mutationAdd = useMutation(
-    (payload: any) => products.create(payload),
+  const mutationAddProduct = useMutation(
+    (payload: TProductPayload) => products.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data?.resultMessage);
@@ -120,55 +140,54 @@ export const ProductsDialog: React.FC<any> = ({
     }
   );
 
-  const handleAddProduct = async (payload: any) => {
-    const productPayload: any = {};
-    const websitePayload: any = {};
-
-    infoFields.map(field => {
-      productPayload[field] = payload[field];
-    });
-
-    websiteFields.map(field => {
-      websitePayload[field] = payload[field];
-    });
-
-    const createdProduct = await mutationAdd.mutateAsync(productPayload).then(res => res.data);
-
-    console.log(createdProduct);
-    
-
-    
-    // const productSupply = payload.productSupply as number[];
-
-    // await mutationAdd.mutateAsync({
-    //   ...payload,
-    //   productSupply: productSupply?.join(", "),
-    // });
-  };
-
-  const mutateUpdate = useMutation(
-    (data: TSupplier) => suppliers.update(data),
+  const mutationAddProductWebsite = useMutation(
+    (payload: TProductWebsitePayload) => productsWebsite.create(payload),
     {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
       onError: (error: any) => {
         toast.error(error?.resultMessage);
       },
     }
   );
 
-  const handleUpdateSupplier = async (data: TSupplier) => {
-    const productSupply = data.productSupply as number[];
+  const handleAddProduct = async (payload: THookForm) => {
+    // CREATE PRODUCT
+    let productPayload: any = {};
 
-    await mutateUpdate.mutateAsync({
-      ...data,
-      productSupply: productSupply?.join(", "),
+    infoFields.map((field) => {
+      productPayload[field as keyof TProduct] =
+        payload[field as keyof THookForm];
     });
+
+    const image = payload.image as any;
+
+    const suppliers = payload.suppliers.join(", ");
+
+    const productId = await mutationAddProduct
+      .mutateAsync({
+        ...productPayload,
+        suppliers,
+        image: image?.join?.(", "),
+      } as TProductPayload)
+      .then((res) => res.data);
+
+    // CREATE PRODUCT WEBSITE
+    const websitePayload: any = {
+      productId,
+    };
+
+    websiteFields.map((field) => {
+      websitePayload[field as keyof TProductWebsitePayload] =
+        payload[field as keyof THookForm];
+    });
+
+    const gallery = payload.gallery?.join(", ");
+    const categorys = payload.categorys?.join(", ");
+
+    await mutationAddProductWebsite.mutateAsync({
+      ...websitePayload,
+      gallery,
+      categorys,
+    } as TProductWebsitePayload);
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE
@@ -216,7 +235,7 @@ export const ProductsDialog: React.FC<any> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit(handleUpdateSupplier)}
+              // onClick={handleSubmit(handleUpdateSupplier)}
               className="w-full mb-3"
               disabled={!isDirty}
             >
@@ -245,6 +264,22 @@ export const ProductsDialog: React.FC<any> = ({
       <FormProvider {...methods}>
         <Box component="form" className="grid grid-cols-5 gap-4">
           <Box className="flex flex-col items-center justify-center mt-4">
+            <Box className="w-full">
+              {!watch("image") && (
+                <img src="/no-image.jpg" alt="no-image" width="100%" />
+              )}
+
+              <FormImageGallery
+                loader={products.uploadImage}
+                controlProps={{ control, name: "image" }}
+                title="Tải ảnh"
+                inputProps={{ multiple: false }}
+                disabled={type === "View" && !isUpdate}
+                className="w-full mb-3"
+                imageListProps={{cols: 1}}
+              />
+            </Box>
+
             {renderButtons()}
           </Box>
 

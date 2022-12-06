@@ -1,4 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "./Home.module.css";
+
+.bgContainer {
+  @apply p-2 w-full h-full shadow;
+}

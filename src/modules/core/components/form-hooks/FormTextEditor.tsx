@@ -38,7 +38,7 @@ const initEditorProps  = {
 };
 
 export const FormTextEditor: React.FC<TFormEditor> = (props) => {
-  const {controlProps, label, ...restProps} = props;
+  const {controlProps, label, editorProps, ...restProps} = props;
 
   const renderController = ({
     field: {value, onChange},
@@ -60,6 +60,7 @@ export const FormTextEditor: React.FC<TFormEditor> = (props) => {
           init={initEditorProps}
           onEditorChange={onChange}
           value={value}
+          {...editorProps}
         />
         {
           !!errors && <ErrorMessage

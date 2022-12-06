@@ -1,15 +1,16 @@
-import { Checkbox, Paper } from "@mui/material";
+import { Checkbox, InputLabel, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { suppliers } from "src/api";
-import { products } from "src/api/products";
+import { productsWebsite } from "src/api";
+import { products, TProduct } from "src/api/products";
 import {
   AddButton,
   DataTable,
   DeleteButton,
+  FormInputBase,
   generatePaginationProps,
   SearchBox,
   ViewButton,
@@ -18,6 +19,22 @@ import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
+
+const excelEstensions = [
+  "xlsx",
+  "xls",
+  "xlsm",
+  "xlsb",
+  "xltx",
+  "xltm",
+  "xlt",
+  "xls",
+  "xml",
+  "xlam",
+  "xla",
+  "xlw",
+  "xlr",
+];
 
 export const ProductsPage = () => {
   const router = useRouter();
@@ -69,6 +86,7 @@ export const ProductsPage = () => {
   );
 
   // DATA TABLE
+  // OPEN VIEW DETAIL DIALOG
   const onUpdate = useCallback(
     (row: any) => {
       setDialog({ open: true, type: "View" });
@@ -78,7 +96,8 @@ export const ProductsPage = () => {
     [setDefaultValue]
   );
 
-  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
+  // MUTATION DECLERATIONS
+  const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
     },
@@ -89,16 +108,75 @@ export const ProductsPage = () => {
     },
   });
 
-  const onDelete = useCallback(async (supplier: any) => {
-    if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
-      await mutateDelete.mutateAsync(supplier.id as string);
+  const mutateImportExcel = useMutation(
+    (file: FormData) => products.importExcel(file),
+    {
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const mutateStatus = useMutation(
+    (id: string) => productsWebsite.display(id),
+    {
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleImportExcel = async (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
+  ) => {
+    const file = e.target.files?.[0];
+
+    const fileExtension = file?.name?.split(".").pop();
+
+    if (!excelEstensions.includes(fileExtension)) {
+      toast.error(`File ${file.name} không đúng định dạng!`);
+
+      return;
+    }
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    await mutateImportExcel.mutateAsync(formData);
+  };
+
+  const handleDelete = useCallback(async (product: TProduct) => {
+    if (confirm("Xác nhận xóa SP: " + product.productName)) {
+      await mutateDelete.mutateAsync(product.id as string);
     }
   }, []);
 
-  const handleChangeStatus = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeStatus = async (
+    e: ChangeEvent<HTMLInputElement>,
+    product: TProduct
+  ) => {
     const isChecked = e.target.checked;
 
-    if (confirm(`Cập nhật ${isChecked ? "hiển thị" : "ẩn"} sp trên website?`)) {
+    const { productName } = product || {};
+
+    if (
+      confirm(
+        `Cập nhật ${
+          isChecked ? "hiển thị" : "ẩn"
+        } sản phẩm ${productName} trên website?`
+      )
+    ) {
+      await mutateStatus.mutateAsync(product?.id as string);
     }
   };
 
@@ -126,7 +204,11 @@ export const ProductsPage = () => {
       field: "websiteInfo",
       headerName: "Website",
       renderCell: ({ row }) => (
-        <Checkbox value={row.websiteInfo} onChange={handleChangeStatus} />
+        <Checkbox
+          checked={row.websiteInfo}
+          value={row.websiteInfo}
+          onChange={(e) => handleChangeStatus(e, row)}
+        />
       ),
     },
     { field: "numberOfReviews", headerName: "Đánh giá mới" },
@@ -140,7 +222,7 @@ export const ProductsPage = () => {
             onClick={() => onUpdate(record.row)}
           />
           <DeleteButton
-            onClick={() => onDelete(record.row)}
+            onClick={() => handleDelete(record.row)}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
@@ -166,12 +248,16 @@ export const ProductsPage = () => {
             Thêm sản phẩm
           </AddButton>
 
-          <AddButton
-            // onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Thêm file excel
+          <AddButton variant="contained" className="mr-3">
+            <InputLabel htmlFor="product-file" className="text-white">
+              Thêm file excel
+              <FormInputBase
+                id="product-file"
+                className="hidden"
+                type="file"
+                onChange={handleImportExcel}
+              />
+            </InputLabel>
           </AddButton>
         </div>
       </div>
