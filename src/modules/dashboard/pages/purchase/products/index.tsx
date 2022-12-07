@@ -1,20 +1,24 @@
 import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import router from "next/router";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { exportWarehouse, TWarehouseExport } from "src/api";
+import { useForm } from "react-hook-form";
+import { TWarehouseExport } from "src/api";
 import {
   AddButton,
   DataTable,
   generatePaginationProps,
+  SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { PurchaseDialog } from "~modules-dashboard/components";
+import SearchIcon from "@mui/icons-material/Search";
 
 export const ProductsToBuyPage: React.FC = () => {
+  const { control, handleSubmit } = useForm<any>({
+    mode: "onBlur",
+  });
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [searchContent, setSearchContent] = useState("");
@@ -44,10 +48,15 @@ export const ProductsToBuyPage: React.FC = () => {
 
   return (
     <Paper className="p-2 w-full h-full shadow">
-      <div className="mb-2">
-        <AddButton variant="contained" onClick={() => setModal(true)}>
-          MUA SẢN PHẨM NHẬP KHO
-        </AddButton>
+      <div className="flex gap-4 items-center mb-2">
+        <div>
+          <AddButton variant="contained" onClick={() => setModal(true)}>
+            MUA SẢN PHẨM NHẬP KHO
+          </AddButton>
+        </div>
+        <div className="w-[400px]">
+          <SearchBox />
+        </div>
       </div>
       <div>
         <DataTable
