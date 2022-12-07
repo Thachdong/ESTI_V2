@@ -39,7 +39,9 @@ export const SearchBox: React.FC<TSearchBox> = ({
   const endAdornment = (
     <InputAdornment
       position="end"
-      onClick={() =>  router.push({ query: { ...query, searchContent: content } })}
+      onClick={() =>
+        router.push({ query: { ...query, searchContent: content } })
+      }
       className="cursor-pointer"
     >
       <SearchRoundedIcon />
