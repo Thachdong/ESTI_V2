@@ -29,11 +29,11 @@ export const menu = [
     childrens: [
       {
         title: "Đơn đặt hàng",
-        link: "order/requets",
+        link: "orders/order-request",
       },
       {
         title: "hóa đơn",
-        link: "order/invoices",
+        link: "orders/bill-list",
       },
     ],
   },

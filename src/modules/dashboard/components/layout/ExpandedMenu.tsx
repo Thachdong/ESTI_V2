@@ -21,7 +21,7 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
             className={clsx(
               styles["menu-items"],
               styles["expand-items"],
-              "relative h-[52px]"
+              "relative h-[52px] shadow-lg !border !border-[#8c8888]"
             )}
           >
             <ListItemButton className="">
@@ -36,7 +36,7 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
                 )}
               >
                 <ListItem
-                  className="font-bold"
+                  className="font-bold "
                   sx={{ borderBottom: "1px solid rgba(72,94,144,.16)" }}
                 >
                   {item?.title}
