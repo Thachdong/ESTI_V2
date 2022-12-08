@@ -40,8 +40,18 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
     const currentSort = query.order || 0;
 
-    if (+currentSort !== sortAscValue && +currentSort !== sortDescValue) {
-      setSortMode(null);
+    switch(true) {
+      case (+currentSort !== sortAscValue && +currentSort !== sortDescValue):
+        setSortMode(null);
+        break;
+      case +currentSort === sortAscValue:
+        setSortMode("asc");
+        break;
+      case +currentSort === sortDescValue:
+        setSortMode("desc");
+        break;
+      default:
+        break;
     }
   }, [query]);
 

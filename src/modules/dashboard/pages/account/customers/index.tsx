@@ -124,7 +124,7 @@ export const CustomersPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm sale phụ trách" />

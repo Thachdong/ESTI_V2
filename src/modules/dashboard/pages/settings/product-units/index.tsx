@@ -99,9 +99,8 @@ export const UnitsPage: React.FC = () => {
     {
       field: "action",
       headerName: "",
-      flex: 0,
       width: 100,
-      flex: 1,
+      flex: 0,
       renderCell: (record) => (
         <>
           <ViewButton
@@ -120,7 +119,7 @@ export const UnitsPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm tên đơn vị" />
