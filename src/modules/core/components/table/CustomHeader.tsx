@@ -1,6 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import clsx from "clsx";
 import { TGridColDef } from "~types/data-grid";
 import { useRouter } from "next/router";
@@ -97,7 +102,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // IMPLEMENT FILTER OPERATIONS
   const [filterData, setFilterData] = useState<any>({ type, isCheck: false });
 
-  const handleFilter = (value: string) => {
+  const handleFilter = (value: string | number) => {
     const updateQuery = {
       ...query,
       [filterKey]: value,
@@ -128,50 +133,46 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     [filterData, query]
   );
 
-  const debounceFilter = debounce(function (value: string) {
+  const debounceFilter = debounce(function (value: string | number) {
     handleFilter(value);
   }, 700);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    //2. update search term state
+    //1. update search term state
     setFilterData({ ...filterData, searchTerm: value });
-    //1. isCheck => handle filter
+    //2. isCheck => handle filter
     if (filterData.isCheck) {
       debounceFilter(value);
     }
   };
 
   const renderFilterBox = useCallback(() => {
-    switch (true) {
-      case !isFilter || field === "action":
-        return <></>;
-      case type?.toLowerCase().includes("time"):
-        return <Box></Box>;
-      default:
-        return (
-          <>
-            <input
-              id={field + "_checkbox"}
-              type="checkbox"
-              onChange={handleCheckbox}
-              checked={filterData.isCheck}
-            />
-            <input
-              id={field + "_searchbox"}
-              onChange={handleInputChange}
-              value={filterData.searchTerm}
-              type={type}
-              className="w-10/12 border-0"
-            />
-          </>
-        );
-    }
+
+    if (!isFilter || field === "action") return <></>;
+
+    return (
+      <>
+        <input
+          id={field + "_checkbox"}
+          type="checkbox"
+          onChange={handleCheckbox}
+          checked={filterData.isCheck}
+        />
+        <input
+          type={type?.toLowerCase().includes("date") ? "date" : "text"}
+          id={field + "_searchbox"}
+          onChange={handleInputChange}
+          value={filterData.searchTerm}
+          className="w-10/12 border-0"
+        />
+      </>
+    );
   }, [isFilter, type, filterData]);
 
   return (
     <Box className="w-full h-[64px]">
-      <Box className="flex items-center bg-main text-[#fff] h-[32px] px-1">
+      <Box className="flex items-center bg-main text-[#fff] h-[32px] pl-1 pr-3">
         <Typography className="uppercase text-sm mr-1">
           {colDef.headerName}
         </Typography>

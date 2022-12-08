@@ -68,11 +68,11 @@ export const BranchsPage: React.FC = () => {
   );
 
   const columns: GridColDef<TBranch>[] = [
-    { field: "code", headerName: "MÃ CN" },
-    { field: "name", headerName: "TÊN CN" },
-    { field: "address", headerName: "ĐỊA CHỈ", flex: 2 },
-    { field: "phone", headerName: "SỐ ĐIỆN THOẠI" },
-    { field: "email", headerName: "EMAIL" },
+    { field: "code", headerName: "MÃ CN", flex: 1 },
+    { field: "name", headerName: "TÊN CN", flex: 2 },
+    { field: "address", headerName: "ĐỊA CHỈ", flex: 1 },
+    { field: "phone", headerName: "SỐ ĐIỆN THOẠI", flex: 1 },
+    { field: "email", headerName: "EMAIL", flex: 1 },
     {
       field: "action",
       headerName: "CHI TIẾT",

@@ -33,7 +33,7 @@ export const DataTable: React.FC<TDataGrid> = ({
   const fullColumns = columns?.map((col) => generateColumn(col));
 
   return (
-    <Box className={clsx("w-full overflow-x-auto")}>
+    <Box className={clsx("w-full overflow-auto")}>
       <DataGrid
         {...defaultDataGridProps}
         {...gridProps}

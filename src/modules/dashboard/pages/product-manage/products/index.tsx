@@ -191,6 +191,7 @@ export const ProductsPage = () => {
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
+      width: 150,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
@@ -202,6 +203,7 @@ export const ProductsPage = () => {
       sortAscValue: 14,
       sortDescValue: 2,
       filterKey: "productGroup",
+      flex: 1
     },
     {
       field: "productCode",
@@ -223,6 +225,7 @@ export const ProductsPage = () => {
       sortAscValue: 17,
       sortDescValue: 5,
       filterKey: "manufactor",
+      width: 150
     },
     {
       field: "origin",
@@ -258,6 +261,7 @@ export const ProductsPage = () => {
       sortAscValue: 22,
       sortDescValue: 10,
       filterKey: "chemicalName",
+      width: 180
     },
     {
       field: "createdByName",
@@ -265,6 +269,7 @@ export const ProductsPage = () => {
       sortAscValue: 23,
       sortDescValue: 11,
       filterKey: "createdBy",
+      width: 120
     },
     {
       isSort: false,
@@ -334,7 +339,7 @@ export const ProductsPage = () => {
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,
-          sx: { width: "1600px" },
+          sx: { width: "1700px" },
           ...paginationProps,
         }}
       />

@@ -89,19 +89,20 @@ export const CustomersPage = () => {
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
+      width: 125,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "customerCode", headerName: "Sale phụ trách" },
+    { field: "branchCode", headerName: "Chi nhánh", flex: 1 },
+    { field: "customerCode", headerName: "Sale phụ trách", width: 150 },
     { field: "companyProfessionId", headerName: "Mã KH" },
     { field: "companyName", headerName: "Tên KH" },
-    { field: "companyTaxCode", headerName: "Mã số thuế" },
-    { field: "salesCode", headerName: "Ngành nghề" },
-    { field: "preOrderStatusName", headerName: "Trạng thái" },
-    { field: "createdByName", headerName: "Người tạo" },
+    { field: "companyTaxCode", headerName: "Mã số thuế", width: 125 },
+    { field: "salesCode", headerName: "Ngành nghề", width: 125 },
+    { field: "preOrderStatusName", headerName: "Trạng thái", width: 125 },
+    { field: "createdByName", headerName: "Người tạo", width: 125 },
     {
       field: "action",
       headerName: "Thao tác",

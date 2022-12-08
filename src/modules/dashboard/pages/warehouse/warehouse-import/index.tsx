@@ -26,7 +26,7 @@ export const WarehouseImportPage: React.FC = () => {
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "branchCode", headerName: "CHI NHÁNH" },
+    { field: "branchCode", headerName: "CHI NHÁNH", flex: 1 },
     { field: "productOrderCode", headerName: "MÃ ĐƠN MUA HÀNG" },
     { field: "warehouseSessionCode", headerName: "MÃ NHẬP KHO" },
     { field: "supplierCode", headerName: "MÃ NCC" },

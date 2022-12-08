@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .bgContainer {
-  @apply p-2 w-full h-full shadow;
+  @apply p-2 w-full h-full shadow overflow-y-auto;
 }
 
 .MuiDataGrid-columnHeaderTitleContainerContent {

@@ -35,6 +35,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         transition: "all 0.3s",
       }}
     >
+      {/* height: 60px */}
       <Sidebar expand={expand} setExpand={setExpand} />
 
       <Box className="flex flex-col">
@@ -43,6 +44,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         <Box
           className="bg-[#f5f8fb] flex-grow relative  overflow-y-auto"
           component="main"
+          sx={{height: "calc(100vh - 60px - 45px)"}}
         >
           {!!isFetching && (
             <div className="absolute w-full">
@@ -53,6 +55,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
             <Page />
           </div>
         </Box>
+        {/* height: 45px */}
         <Footer />
       </Box>
     </Box>

@@ -7,7 +7,7 @@ import { CustomHeader } from "./CustomHeader";
 // filterable, disableColumnMenu, sortable, disableColumnMenu
 // MANY THANKS!
 const defaultColumnProps: Partial<TGridColDef> = {
-  flex: 1,
+  // flex: 0.5,
   // it indicates that a column has fluid width. Range [0, ∞).
   filterable: false,
   // If `true`, the column is filterable.
