@@ -68,9 +68,9 @@ export const WarehouseConfigPage: React.FC = () => {
   );
 
   const columns: GridColDef<TBranch>[] = [
-    { field: "code", headerName: "MÃ KHO" },
-    { field: "branchCode", headerName: "MÃ CN" },
-    { field: "position", headerName: "SỐ VỊ TRÍ" },
+    { field: "code", headerName: "MÃ KHO", flex: 1 },
+    { field: "branchCode", headerName: "MÃ CN",  flex: 1 },
+    { field: "position", headerName: "SỐ VỊ TRÍ",  flex: 1 },
     {
       field: "action",
       headerName: "CHI TIẾT",

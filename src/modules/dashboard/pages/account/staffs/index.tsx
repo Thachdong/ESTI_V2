@@ -96,16 +96,17 @@ export const StaffsPage = () => {
       field: "code",
       headerName: "Mã",
     },
-    { field: "username", headerName: "Tên tài khoản" },
-    { field: "fullName", headerName: "Tên nhân viên" },
-    { field: "roleCode", headerName: "Chức vụ" },
-    { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "phone", headerName: "Số điện thoại" },
-    { field: "address", headerName: "Địa chỉ" },
-    { field: "email", headerName: "Email" },
+    { field: "username", headerName: "Tên tài khoản", width: 150 },
+    { field: "fullName", headerName: "Tên nhân viên", width: 150 },
+    { field: "roleCode", headerName: "Chức vụ", width: 150 },
+    { field: "branchCode", headerName: "Chi nhánh", width: 150 },
+    { field: "phone", headerName: "Số điện thoại", width: 150 },
+    { field: "address", headerName: "Địa chỉ", width: 150 },
+    { field: "email", headerName: "Email", width: 150 },
     {
       field: "birthday",
       headerName: "Ngày sinh",
+      width: 150,
       renderCell: ({ row }) =>
         row.birthday ? moment(row.birthday).format("DD/MM/YYYY") : "__",
     },
@@ -113,6 +114,7 @@ export const StaffsPage = () => {
     {
       field: "action",
       headerName: "Thao tác",
+      width: 150,
       renderCell: (record) => (
         <>
           <ViewButton
@@ -131,7 +133,7 @@ export const StaffsPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox />

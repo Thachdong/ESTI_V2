@@ -88,18 +88,20 @@ export const UnitsPage: React.FC = () => {
   }, []);
 
   const columns: GridColDef<TUnit>[] = [
-    { field: "unitName", headerName: "TÊN ĐƠN VỊ" },
+    { field: "unitName", headerName: "TÊN ĐƠN VỊ", flex: 1 },
     {
       field: "created",
       headerName: "NGÀY TẠO",
       renderCell: (record) => moment(record.value).format("DD/MM/YYYY"),
+      flex: 1
     },
-    { field: "createdByName", headerName: "NGƯỜI TẠO" },
+    { field: "createdByName", headerName: "NGƯỜI TẠO",  flex: 1 },
     {
       field: "action",
       headerName: "",
       flex: 0,
       width: 100,
+      flex: 1,
       renderCell: (record) => (
         <>
           <ViewButton

@@ -101,18 +101,19 @@ export const SuppliersPage = () => {
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
+      width: 125,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "supplierCode", headerName: "Mã NCC" },
-    { field: "supplierName", headerName: "Tên NCC" },
-    { field: "curatorName", headerName: "Tên người liên hệ" },
-    { field: "curatorPositionName", headerName: "Chức vụ" },
-    { field: "curatorPhone", headerName: "Số điện thoại" },
-    { field: "curatorEmail", headerName: "Email" },
-    { field: "CreatedBy", headerName: "Người tạo" },
+    { field: "supplierCode", headerName: "Mã NCC", flex: 1 },
+    { field: "supplierName", headerName: "Tên NCC", flex: 1 },
+    { field: "curatorName", headerName: "Tên người liên hệ", flex: 1 },
+    { field: "curatorPositionName", headerName: "Chức vụ", flex: 1 },
+    { field: "curatorPhone", headerName: "Số điện thoại", flex: 1 },
+    { field: "curatorEmail", headerName: "Email", flex: 1 },
+    { field: "CreatedBy", headerName: "Người tạo", flex: 1 },
     {
       field: "action",
       headerName: "Thao tác",

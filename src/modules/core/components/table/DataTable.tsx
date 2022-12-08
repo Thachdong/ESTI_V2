@@ -1,10 +1,11 @@
+import clsx from "clsx";
+import React from "react";
 import { Box, LinearProgress } from "@mui/material";
 import { DataGrid, DataGridProps, viVN } from "@mui/x-data-grid";
 import { TDataGrid } from "~types/data-grid";
 import { NoRowsOverlay } from "./NoRowsOverlay";
 import { generateColumn } from "./utility";
-import styles from "~modules-core/styles/data-table.module.css";
-import clsx from "clsx";
+import "~modules-core/styles/data-table.module.css";
 
 const defaultDataGridProps: Partial<DataGridProps> = {
   rowsPerPageOptions: [5, 10, 20, 50, 100],
@@ -12,13 +13,14 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   components: {
     LoadingOverlay: LinearProgress,
     NoRowsOverlay: NoRowsOverlay,
+    ColumnsPanel: () => <Box>ColumnsPanel</Box>
   },
   disableSelectionOnClick: true,
   filterMode: "server",
   paginationMode: "server",
   sortingMode: "server",
   autoHeight: true,
-  headerHeight: 36,
+  headerHeight: 64,
   showColumnRightBorder: true,
   showCellRightBorder: true,
 };
@@ -31,14 +33,13 @@ export const DataTable: React.FC<TDataGrid> = ({
   const fullColumns = columns?.map((col) => generateColumn(col));
 
   return (
-    <Box className={clsx(styles["data-table"], "w-full overflow-x-auto")}>
+    <Box className={clsx("w-full overflow-auto")}>
       <DataGrid
         {...defaultDataGridProps}
         {...gridProps}
         rows={rows || []}
         columns={fullColumns}
         className="h-100"
-        onSortModelChange={(props) => console.log(props)}
       />
     </Box>
   );

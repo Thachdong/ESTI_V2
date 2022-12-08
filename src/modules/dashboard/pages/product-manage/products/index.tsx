@@ -1,7 +1,7 @@
 import { Checkbox, InputLabel, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { productsWebsite } from "src/api";
@@ -18,6 +18,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
+import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
 const excelEstensions = [
@@ -51,9 +52,11 @@ export const ProductsPage = () => {
     const initQuery = {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
+      ...query,
     };
-    router.push({ query: initQuery, ...query });
-  }, [pagination]);
+    
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -180,27 +183,96 @@ export const ProductsPage = () => {
     }
   };
 
-  const columns: GridColDef[] = [
+  const columns: TGridColDef[] = [
     {
+      sortAscValue: 13,
+      sortDescValue: 1,
+      filterKey: "createdDate",
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
+      width: 150,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "productGroupName", headerName: "Nhóm SP" },
-    { field: "productCode", headerName: "Mã SP" },
-    { field: "productName", headerName: "Mô tả SP" },
-    { field: "manufactor", headerName: "Hãng sản xuất" },
-    { field: "origin", headerName: "Xuất xứ" },
-    { field: "specs", headerName: "Quy cách" },
-    { field: "unitName", headerName: "ĐVT" },
-    { field: "casCode", headerName: "Mã CAS" },
-    { field: "chemicalName", headerName: "Công thức hóa học" },
-    { field: "createdByName", headerName: "Người tạo" },
     {
+      field: "productGroupName",
+      headerName: "Nhóm SP",
+      sortAscValue: 14,
+      sortDescValue: 2,
+      filterKey: "productGroup",
+      flex: 1
+    },
+    {
+      field: "productCode",
+      headerName: "Mã SP",
+      sortAscValue: 15,
+      sortDescValue: 3,
+      filterKey: "code",
+    },
+    {
+      field: "productName",
+      headerName: "Mô tả SP",
+      sortAscValue: 16,
+      sortDescValue: 4,
+      filterKey: "name",
+    },
+    {
+      field: "manufactor",
+      headerName: "Hãng sản xuất",
+      sortAscValue: 17,
+      sortDescValue: 5,
+      filterKey: "manufactor",
+      width: 150
+    },
+    {
+      field: "origin",
+      headerName: "Xuất xứ",
+      sortAscValue: 18,
+      sortDescValue: 6,
+      filterKey: "origin",
+    },
+    {
+      field: "specs",
+      headerName: "Quy cách",
+      sortAscValue: 19,
+      sortDescValue: 7,
+      filterKey: "specs",
+    },
+    {
+      field: "unitName",
+      headerName: "ĐVT",
+      sortAscValue: 20,
+      sortDescValue: 8,
+      filterKey: "unitName",
+    },
+    {
+      field: "casCode",
+      headerName: "Mã CAS",
+      sortAscValue: 21,
+      sortDescValue: 9,
+      filterKey: "casCode",
+    },
+    {
+      field: "chemicalName",
+      headerName: "Công thức hóa học",
+      sortAscValue: 22,
+      sortDescValue: 10,
+      filterKey: "chemicalName",
+      width: 180
+    },
+    {
+      field: "createdByName",
+      headerName: "Người tạo",
+      sortAscValue: 23,
+      sortDescValue: 11,
+      filterKey: "createdBy",
+      width: 120
+    },
+    {
+      isSort: false,
       field: "deleted",
       headerName: "Website",
       renderCell: ({ row }) => (
@@ -211,7 +283,7 @@ export const ProductsPage = () => {
         />
       ),
     },
-    { field: "numberOfReviews", headerName: "Đánh giá mới" },
+    { field: "numberOfReviews", headerName: "Đánh giá mới", isSort: false },
     {
       field: "action",
       headerName: "Thao tác",
@@ -267,7 +339,7 @@ export const ProductsPage = () => {
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,
-          sx: { width: "1600px" },
+          sx: { width: "1700px" },
           ...paginationProps,
         }}
       />
