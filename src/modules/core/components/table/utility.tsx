@@ -1,17 +1,30 @@
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
+import clsx from "clsx";
+import { TGridColDef } from "~types/data-grid";
+import { CustomHeader } from "./CustomHeader";
 
-const defaultColumnProps: Partial<GridColDef> = {
+// CHÚ Ý: KHÔNG TỰ Ý ĐỔI GIÁ TRỊ CÁC TRƯỜNG:
+// filterable, disableColumnMenu, sortable, disableColumnMenu
+// MANY THANKS!
+const defaultColumnProps: Partial<TGridColDef> = {
   flex: 1,
   // it indicates that a column has fluid width. Range [0, ∞).
   filterable: false,
   // If `true`, the column is filterable.
-  hideSortIcons: false,
+  hideSortIcons: true,
   // Toggle the visibility of the sort icons.
-  disableColumnMenu: false,
+  disableColumnMenu: true,
   //If `true`, the column menu is disabled for this column.
   sortable: false,
   // If `true`, the column is sortable.
-  headerClassName: "bg-main !text-white text-sm !font-normal",
+  // headerClassName: "bg-main !text-white text-sm !font-normal",
+  // headerClassName: clsx(styles["data-table-header"], "bg-main text-white p-0"),
+  headerClassName: clsx("p-0"),
+  isFilter: true,
+  isSort: true,
+  renderHeader: (params: GridColumnHeaderParams) => (
+    <CustomHeader params={params} />
+  ),
 };
 
 export const generateColumn = (props: GridColDef) => ({

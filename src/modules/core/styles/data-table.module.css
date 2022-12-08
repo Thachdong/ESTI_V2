@@ -1,0 +1,10 @@
+.MuiDataGrid-menuIcon svg,
+.MuiIconButton-root svg {
+  color: #fff;
+}
+
+.MuiDataGrid-columnHeaderTitleContainer,
+.MuiDataGrid-columnHeaderTitleContainerContent {
+  width: 100% !important;
+  min-width: 100%;
+}
