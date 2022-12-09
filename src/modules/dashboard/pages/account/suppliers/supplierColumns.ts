@@ -30,6 +30,7 @@ export const supplierColumns: TGridColDef<TSupplier>[] = [
     sortAscValue: 10,
     sortDescValue: 2,
     filterKey: "name",
+    flex: 1
   },
   {
     field: "curatorName",

@@ -148,7 +148,7 @@ export const StaffsPage = () => {
       <ContextMenuWrapper
         menuId="product_table_menu"
         menuComponent={
-          <Menu id="product_table_menu">
+          <Menu className="p-0" id="product_table_menu">
             <Item
               id="view-product"
               onClick={() => setDialog({ open: true, type: "View" })}

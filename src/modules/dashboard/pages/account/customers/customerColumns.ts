@@ -46,6 +46,7 @@ export const CustomerColumns: TGridColDef[] = [
     filterKey: "companyName",
     sortDescValue: 4,
     sortAscValue: 13,
+    flex: 1
   },
   {
     field: "companyTaxCode",
