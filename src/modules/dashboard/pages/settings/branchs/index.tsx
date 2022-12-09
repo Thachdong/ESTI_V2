@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import React, { useCallback, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { branchs, TBranch } from "src/api";
 import {
@@ -12,11 +12,15 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { BranchsDialog } from "~modules-dashboard/components";
+import { TGridColDef } from "~types/data-grid";
+import { branchColumns } from "./branchColumns";
 
 export const BranchsPage: React.FC = () => {
-  const [pagination, setPagination] = useState(defaultPagination);
+  const router = useRouter();
 
-  const [searchContent, setSearchContent] = useState("");
+  const { query } = router;
+
+  const [pagination, setPagination] = useState(defaultPagination);
 
   const [defaultValue, setDefaultValue] = useState<TBranch | null>();
 
@@ -25,6 +29,18 @@ export const BranchsPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+      ...query,
+    };
+
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
+
+  // DIALOG METHODS
   const onClose = useCallback(() => setDialog({ open: false }), []);
 
   const onUpdate = useCallback(
@@ -42,14 +58,14 @@ export const BranchsPage: React.FC = () => {
     setDefaultValue(null);
   }, [setDefaultValue]);
 
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "customersList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -57,7 +73,7 @@ export const BranchsPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -67,12 +83,9 @@ export const BranchsPage: React.FC = () => {
     }
   );
 
-  const columns: GridColDef<TBranch>[] = [
-    { field: "code", headerName: "MÃ CN", flex: 1 },
-    { field: "name", headerName: "TÊN CN", flex: 2 },
-    { field: "address", headerName: "ĐỊA CHỈ", flex: 1 },
-    { field: "phone", headerName: "SỐ ĐIỆN THOẠI", flex: 1 },
-    { field: "email", headerName: "EMAIL", flex: 1 },
+  // DATA TABLE
+  const columns: TGridColDef<TBranch>[] = [
+    ...branchColumns,
     {
       field: "action",
       headerName: "CHI TIẾT",
@@ -87,7 +100,7 @@ export const BranchsPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm" />
@@ -101,7 +114,7 @@ export const BranchsPage: React.FC = () => {
       </div>
 
       <DataTable
-        rows={data?.items}
+        rows={data?.items as []}
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,

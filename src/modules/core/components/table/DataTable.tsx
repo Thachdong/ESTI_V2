@@ -1,7 +1,11 @@
 import clsx from "clsx";
 import React from "react";
 import { Box, LinearProgress } from "@mui/material";
-import { DataGrid, DataGridProps, viVN } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  DataGridProps,
+  viVN,
+} from "@mui/x-data-grid";
 import { TDataGrid } from "~types/data-grid";
 import { NoRowsOverlay } from "./NoRowsOverlay";
 import { generateColumn } from "./utility";
@@ -13,7 +17,6 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   components: {
     LoadingOverlay: LinearProgress,
     NoRowsOverlay: NoRowsOverlay,
-    ColumnsPanel: () => <Box>ColumnsPanel</Box>
   },
   disableSelectionOnClick: true,
   filterMode: "server",
@@ -29,6 +32,7 @@ export const DataTable: React.FC<TDataGrid> = ({
   columns,
   rows,
   gridProps,
+  ...props
 }) => {
   const fullColumns = columns?.map((col) => generateColumn(col));
 
@@ -37,6 +41,7 @@ export const DataTable: React.FC<TDataGrid> = ({
       <DataGrid
         {...defaultDataGridProps}
         {...gridProps}
+        {...props}
         rows={rows || []}
         columns={fullColumns}
         className="h-100"

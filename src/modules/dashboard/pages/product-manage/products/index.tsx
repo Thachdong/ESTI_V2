@@ -1,13 +1,13 @@
 import { Checkbox, InputLabel, Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
-import { Router, useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ChangeEvent, useCallback, useEffect, useState, MouseEvent  } from "react";
+import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productsWebsite } from "src/api";
 import { products, TProduct } from "src/api/products";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
   DeleteButton,
   FormInputBase,
@@ -20,6 +20,7 @@ import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
+import { productColumns } from "./productColumns";
 
 const excelEstensions = [
   "xlsx",
@@ -39,6 +40,7 @@ const excelEstensions = [
 
 export const ProductsPage = () => {
   const router = useRouter();
+
   const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -54,7 +56,7 @@ export const ProductsPage = () => {
       pageSize: pagination.pageSize,
       ...query,
     };
-    
+
     router.push({ query: initQuery });
   }, [pagination, router.isReady]);
 
@@ -89,17 +91,6 @@ export const ProductsPage = () => {
   );
 
   // DATA TABLE
-  // OPEN VIEW DETAIL DIALOG
-  const onUpdate = useCallback(
-    (row: any) => {
-      setDialog({ open: true, type: "View" });
-
-      setDefaultValue(row);
-    },
-    [setDefaultValue]
-  );
-
-  // MUTATION DECLERATIONS
   const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
@@ -158,9 +149,9 @@ export const ProductsPage = () => {
     await mutateImportExcel.mutateAsync(formData);
   };
 
-  const handleDelete = useCallback(async (product: TProduct) => {
-    if (confirm("Xác nhận xóa SP: " + product.productName)) {
-      await mutateDelete.mutateAsync(product.id as string);
+  const handleDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
+      await mutateDelete.mutateAsync(defaultValue.id as string);
     }
   }, []);
 
@@ -184,93 +175,7 @@ export const ProductsPage = () => {
   };
 
   const columns: TGridColDef[] = [
-    {
-      sortAscValue: 13,
-      sortDescValue: 1,
-      filterKey: "createdDate",
-      field: "created",
-      headerName: "Ngày tạo",
-      type: "dateTime",
-      width: 150,
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
-    },
-    {
-      field: "productGroupName",
-      headerName: "Nhóm SP",
-      sortAscValue: 14,
-      sortDescValue: 2,
-      filterKey: "productGroup",
-      flex: 1
-    },
-    {
-      field: "productCode",
-      headerName: "Mã SP",
-      sortAscValue: 15,
-      sortDescValue: 3,
-      filterKey: "code",
-    },
-    {
-      field: "productName",
-      headerName: "Mô tả SP",
-      sortAscValue: 16,
-      sortDescValue: 4,
-      filterKey: "name",
-    },
-    {
-      field: "manufactor",
-      headerName: "Hãng sản xuất",
-      sortAscValue: 17,
-      sortDescValue: 5,
-      filterKey: "manufactor",
-      width: 150
-    },
-    {
-      field: "origin",
-      headerName: "Xuất xứ",
-      sortAscValue: 18,
-      sortDescValue: 6,
-      filterKey: "origin",
-    },
-    {
-      field: "specs",
-      headerName: "Quy cách",
-      sortAscValue: 19,
-      sortDescValue: 7,
-      filterKey: "specs",
-    },
-    {
-      field: "unitName",
-      headerName: "ĐVT",
-      sortAscValue: 20,
-      sortDescValue: 8,
-      filterKey: "unitName",
-    },
-    {
-      field: "casCode",
-      headerName: "Mã CAS",
-      sortAscValue: 21,
-      sortDescValue: 9,
-      filterKey: "casCode",
-    },
-    {
-      field: "chemicalName",
-      headerName: "Công thức hóa học",
-      sortAscValue: 22,
-      sortDescValue: 10,
-      filterKey: "chemicalName",
-      width: 180
-    },
-    {
-      field: "createdByName",
-      headerName: "Người tạo",
-      sortAscValue: 23,
-      sortDescValue: 11,
-      filterKey: "createdBy",
-      width: 120
-    },
+    ...productColumns,
     {
       isSort: false,
       field: "deleted",
@@ -283,18 +188,17 @@ export const ProductsPage = () => {
         />
       ),
     },
-    { field: "numberOfReviews", headerName: "Đánh giá mới", isSort: false },
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: (record) => (
+      renderCell: () => (
         <>
           <ViewButton
             className="min-h-[40px] min-w-[40px]"
-            onClick={() => onUpdate(record.row)}
+            onClick={() => setDialog({ open: true, type: "View" })}
           />
           <DeleteButton
-            onClick={() => handleDelete(record.row)}
+            onClick={handleDelete}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
@@ -302,10 +206,18 @@ export const ProductsPage = () => {
     },
   ];
 
+  const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item) => item.id === id);
+
+    setDefaultValue(currentRow);
+  };
+
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm sale phụ trách" />
@@ -334,15 +246,37 @@ export const ProductsPage = () => {
         </div>
       </div>
 
-      <DataTable
-        rows={data?.items}
-        columns={columns}
-        gridProps={{
-          loading: isLoading || isFetching,
-          sx: { width: "1700px" },
-          ...paginationProps,
-        }}
-      />
+      <ContextMenuWrapper
+        menuId="product_table_menu"
+        menuComponent={
+          <Menu className="p-0" id="product_table_menu">
+            <Item
+              id="view-product"
+              onClick={() => setDialog({ open: true, type: "View" })}
+            >
+              Xem chi tiết
+            </Item>
+            <Item id="delete-product" onClick={handleDelete}>
+              Xóa
+            </Item>
+          </Menu>
+        }
+      >
+        <DataTable
+          rows={data?.items as []}
+          columns={columns}
+          gridProps={{
+            loading: isLoading || isFetching,
+            sx: { width: "1700px" },
+            ...paginationProps,
+          }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
+        />
+      </ContextMenuWrapper>
 
       <ProductsDialog
         onClose={onDialogClose}

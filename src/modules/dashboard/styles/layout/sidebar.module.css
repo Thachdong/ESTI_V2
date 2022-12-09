@@ -15,6 +15,10 @@
   position: relative;
 }
 
+.sidebar .logo-box img {
+  transition: all 0.3s;
+}
+
 .sidebar .expand-btn {
   @apply flex items-center justify-center h-[32px] absolute;
   /* background: #fff; */

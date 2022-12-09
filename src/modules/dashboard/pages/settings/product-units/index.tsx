@@ -1,7 +1,6 @@
 import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
-import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { TUnit, units } from "src/api";
 import {
@@ -15,11 +14,15 @@ import { ViewButton } from "~modules-core/components/buttons/ViewButton";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { UnitDialog } from "~modules-dashboard/components";
+import { TGridColDef } from "~types/data-grid";
+import { productColumns } from "./unitColumns";
 
 export const UnitsPage: React.FC = () => {
+  const router = useRouter();
+  
+  const { query } = router;
+  
   const [pagination, setPagination] = useState(defaultPagination);
-
-  const [searchContent, setSearchContent] = useState("");
 
   const [defaultValue, setDefaultValue] = useState<TUnit | null>();
 
@@ -28,6 +31,18 @@ export const UnitsPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+      ...query,
+    };
+
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
+
+  // DIALOG METHODS
   const onClose = useCallback(() => setDialog({ open: false }), []);
 
   const onUpdate = useCallback(
@@ -45,14 +60,14 @@ export const UnitsPage: React.FC = () => {
     setDefaultValue(null);
   }, [setDefaultValue]);
 
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "unitsList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
+        ...pagination,
+        ...query
       },
     ],
     () =>
@@ -60,7 +75,7 @@ export const UnitsPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query
         })
         .then((res) => res.data),
     {
@@ -70,6 +85,8 @@ export const UnitsPage: React.FC = () => {
     }
   );
 
+  // DATA TABLE
+  // MUTATION DECLERATIONS
   const mutateDelete = useMutation((id: string) => units.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
@@ -87,21 +104,13 @@ export const UnitsPage: React.FC = () => {
     }
   }, []);
 
-  const columns: GridColDef<TUnit>[] = [
-    { field: "unitName", headerName: "TÊN ĐƠN VỊ", flex: 1 },
-    {
-      field: "created",
-      headerName: "NGÀY TẠO",
-      renderCell: (record) => moment(record.value).format("DD/MM/YYYY"),
-      flex: 1
-    },
-    { field: "createdByName", headerName: "NGƯỜI TẠO",  flex: 1 },
+  const columns: TGridColDef<TUnit>[] = [
+    ...productColumns,
     {
       field: "action",
       headerName: "",
-      flex: 0,
       width: 100,
-      flex: 1,
+      flex: 0,
       renderCell: (record) => (
         <>
           <ViewButton
@@ -120,7 +129,7 @@ export const UnitsPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
+    <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
           <SearchBox label="Tìm kiếm tên đơn vị" />
@@ -134,7 +143,7 @@ export const UnitsPage: React.FC = () => {
       </div>
 
       <DataTable
-        rows={data?.items}
+        rows={data?.items as []}
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,
