@@ -83,7 +83,7 @@ export const WarehouseExportPage: React.FC = () => {
       </div>
       <div>
         <DataTable
-          rows={data?.items}
+          rows={data?.items as []}
           columns={columns}
           gridProps={{
             loading: isLoading || isFetching,
