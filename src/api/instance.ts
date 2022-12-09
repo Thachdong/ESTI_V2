@@ -1,4 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { signOut } from "next-auth/react";
+import { toast } from "~modules-core/toast";
 
 const TIMEOUT_IN_MILISECOND = 10000;
 
@@ -57,9 +59,12 @@ const useResponseError = (error: AxiosError) => {
     );
 
     switch (status) {
-      case 401: {
-        // TRIGGER TOKEN ROTATION HERE
+      case 401:
+      case 408: {
+        // TRIGGER TOKEN ROTATION | SIGNOUT HERE
+        signOut();
         // TOAST statusText
+        toast.error("Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !")
         break;
       }
       default:
