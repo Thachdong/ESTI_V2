@@ -28,6 +28,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   const { isSort, isFilter, sortAscValue, sortDescValue, type } = colDef;
 
+  const isDate = type?.toLocaleLowerCase().includes("date");
+
   const filterKey = colDef.filterKey as string;
 
   // SYNC QUERY VS LOCAL FILTER DATA
@@ -110,12 +112,14 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   }, [isSort, sortMode]);
 
   // IMPLEMENT FILTER OPERATIONS
-  const [filterData, setFilterData] = useState<any>({ type, isCheck: false });
+  const [filterData, setFilterData] = useState<any>({ isCheck: false });
 
   const handleFilter = (value: string | number) => {
+    const miliseconds = new Date(value).getTime();
+
     const updateQuery = {
       ...query,
-      [filterKey]: value,
+      [filterKey]: isDate ? miliseconds : value,
     };
 
     !value && delete updateQuery[filterKey];
@@ -143,8 +147,14 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     [filterData, query]
   );
 
-  const debounceFilter = debounce(function (value: string | number) {
-    handleFilter(value);
+  const debounceFilter = debounce(function (value: string | number) {    
+    if (isDate) {
+      const miliseconds = new Date(value).getTime();
+
+      handleFilter(miliseconds);
+    } else {
+      handleFilter(value);
+    }
   }, 700);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +165,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     if (filterData.isCheck) {
       debounceFilter(value);
     }
-  };
+  };  
 
   const renderFilterBox = useCallback(() => {
 

@@ -1,6 +1,6 @@
 import { DataGridProps, GridColDef } from "@mui/x-data-grid";
 
-type TDataGrid = {
+type TDataGrid = DataGridProps & {
   rows?: any[];
   columns: any[];
   gridProps?: Partial<DataGridProps>;

@@ -47,6 +47,7 @@ export const QuotationsRequests = () => {
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
+      flex: 1,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")

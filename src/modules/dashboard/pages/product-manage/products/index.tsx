@@ -1,13 +1,14 @@
-import { Checkbox, InputLabel, Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import { Box, Checkbox, InputLabel, Paper } from "@mui/material";
 import moment from "moment";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { Item, Menu, useContextMenu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productsWebsite } from "src/api";
 import { products, TProduct } from "src/api/products";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
   DeleteButton,
   FormInputBase,
@@ -54,7 +55,7 @@ export const ProductsPage = () => {
       pageSize: pagination.pageSize,
       ...query,
     };
-    
+
     router.push({ query: initQuery });
   }, [pagination, router.isReady]);
 
@@ -89,16 +90,6 @@ export const ProductsPage = () => {
   );
 
   // DATA TABLE
-  // OPEN VIEW DETAIL DIALOG
-  const onUpdate = useCallback(
-    (row: any) => {
-      setDialog({ open: true, type: "View" });
-
-      setDefaultValue(row);
-    },
-    [setDefaultValue]
-  );
-
   // MUTATION DECLERATIONS
   const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
@@ -158,9 +149,9 @@ export const ProductsPage = () => {
     await mutateImportExcel.mutateAsync(formData);
   };
 
-  const handleDelete = useCallback(async (product: TProduct) => {
-    if (confirm("Xác nhận xóa SP: " + product.productName)) {
-      await mutateDelete.mutateAsync(product.id as string);
+  const handleDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
+      await mutateDelete.mutateAsync(defaultValue.id as string);
     }
   }, []);
 
@@ -203,7 +194,7 @@ export const ProductsPage = () => {
       sortAscValue: 14,
       sortDescValue: 2,
       filterKey: "productGroup",
-      flex: 1
+      flex: 1,
     },
     {
       field: "productCode",
@@ -225,7 +216,7 @@ export const ProductsPage = () => {
       sortAscValue: 17,
       sortDescValue: 5,
       filterKey: "manufactor",
-      width: 150
+      width: 150,
     },
     {
       field: "origin",
@@ -261,7 +252,7 @@ export const ProductsPage = () => {
       sortAscValue: 22,
       sortDescValue: 10,
       filterKey: "chemicalName",
-      width: 180
+      width: 180,
     },
     {
       field: "createdByName",
@@ -269,7 +260,7 @@ export const ProductsPage = () => {
       sortAscValue: 23,
       sortDescValue: 11,
       filterKey: "createdBy",
-      width: 120
+      width: 120,
     },
     {
       isSort: false,
@@ -291,16 +282,24 @@ export const ProductsPage = () => {
         <>
           <ViewButton
             className="min-h-[40px] min-w-[40px]"
-            onClick={() => onUpdate(record.row)}
+            onClick={() => setDialog({ open: true, type: "View" })}
           />
           <DeleteButton
-            onClick={() => handleDelete(record.row)}
+            onClick={handleDelete}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
       ),
     },
   ];
+
+  const onMouseEnterRow = (e: any) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item) => item.id === id);
+
+    setDefaultValue(currentRow);
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
@@ -334,15 +333,37 @@ export const ProductsPage = () => {
         </div>
       </div>
 
-      <DataTable
-        rows={data?.items}
-        columns={columns}
-        gridProps={{
-          loading: isLoading || isFetching,
-          sx: { width: "1700px" },
-          ...paginationProps,
-        }}
-      />
+      <ContextMenuWrapper
+        menuId="product_table_menu"
+        menuComponent={
+          <Menu id="product_table_menu">
+            <Item
+              id="view-product"
+              onClick={() => setDialog({ open: true, type: "View" })}
+            >
+              Xem chi tiết
+            </Item>
+            <Item id="delete-product" onClick={handleDelete}>
+              Xóa
+            </Item>
+          </Menu>
+        }
+      >
+        <DataTable
+          rows={data?.items as []}
+          columns={columns}
+          gridProps={{
+            loading: isLoading || isFetching,
+            sx: { width: "1700px" },
+            ...paginationProps,
+          }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
+        />
+      </ContextMenuWrapper>
 
       <ProductsDialog
         onClose={onDialogClose}
