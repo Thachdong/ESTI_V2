@@ -1,6 +1,7 @@
 import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { TBranch, warehouseConfig } from "src/api";
 import {
@@ -12,11 +13,14 @@ import {
 import { ViewButton } from "~modules-core/components/buttons/ViewButton";
 import { defaultPagination } from "~modules-core/constance";
 import { WarehouseConfigDialog } from "~modules-dashboard/components/settings/WarehouseConfigDialog";
+import { warehouseColumns } from "./warehouseColumns";
 
 export const WarehouseConfigPage: React.FC = () => {
-  const [pagination, setPagination] = useState(defaultPagination);
+  const router = useRouter();
 
-  const [searchContent, setSearchContent] = useState("");
+  const { query } = router;
+
+  const [pagination, setPagination] = useState(defaultPagination);
 
   const [defaultValue, setDefaultValue] = useState<TBranch | null>();
 
@@ -25,6 +29,18 @@ export const WarehouseConfigPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+      ...query,
+    };
+
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
+
+  // DIALOG METHODS
   const onClose = useCallback(() => setDialog({ open: false }), []);
 
   const onUpdate = useCallback(
@@ -42,14 +58,14 @@ export const WarehouseConfigPage: React.FC = () => {
     setDefaultValue(null);
   }, [setDefaultValue]);
 
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "customersList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -57,7 +73,7 @@ export const WarehouseConfigPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -67,10 +83,10 @@ export const WarehouseConfigPage: React.FC = () => {
     }
   );
 
+  // DATA TABLE
+  // MUTATION DECLERATIONS
   const columns: GridColDef<TBranch>[] = [
-    { field: "code", headerName: "MÃ KHO", flex: 1 },
-    { field: "branchCode", headerName: "MÃ CN",  flex: 1 },
-    { field: "position", headerName: "SỐ VỊ TRÍ",  flex: 1 },
+    ...warehouseColumns,
     {
       field: "action",
       headerName: "CHI TIẾT",
@@ -99,7 +115,7 @@ export const WarehouseConfigPage: React.FC = () => {
       </div>
 
       <DataTable
-        rows={data?.items}
+        rows={data?.items as []}
         columns={columns}
         gridProps={{
           loading: isLoading || isFetching,

@@ -1,14 +1,16 @@
 import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState, MouseEvent } from "react";
+import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { staff, TStaff } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
   DeleteButton,
-  FilterButton,
   generatePaginationProps,
   SearchBox,
   ViewButton,
@@ -16,11 +18,8 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { StaffDialog } from "~modules-dashboard/components/account";
-
-type TFilterParams = {
-  FromDate?: number;
-  ToDate?: number;
-};
+import { TGridColDef } from "~types/data-grid";
+import { staffColumns } from "./staffColumns";
 
 type TDialog = {
   open: boolean;
@@ -28,34 +27,40 @@ type TDialog = {
 };
 
 export const StaffsPage = () => {
-  const [filterParams, setFilterPrams] = useState<TFilterParams>();
+  const router = useRouter();
+
+  const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);
-
-  const [searchContent, setSearchContent] = useState("");
 
   const [dialog, setDialog] = useState<TDialog>({ open: false });
 
   const [defaultValue, setDefaultValue] = useState<TStaff>();
 
-  const onUpdate = useCallback(
-    (row: any) => {
-      setDialog({ open: true, type: "View" });
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+      ...query,
+    };
 
-      setDefaultValue(row);
-    },
-    [setDefaultValue]
-  );
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
 
+  // DIALOG METHODS
+  const onUpdate = useCallback(() => {
+    setDialog({ open: true, type: "View" });
+  }, []);
+
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "staffsList",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
-        ...filterParams,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -63,8 +68,7 @@ export const StaffsPage = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
-          ...filterParams,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -74,6 +78,7 @@ export const StaffsPage = () => {
     }
   );
 
+  // DATA TABLE
   const mutateDelete = useMutation((id: string) => staff.deleteStaff(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
@@ -85,50 +90,40 @@ export const StaffsPage = () => {
     },
   });
 
-  const onDelete = useCallback(async (staff: TStaff) => {
-    if (confirm("Xác nhận nhân viên: " + staff.username)) {
-      await mutateDelete.mutateAsync(staff.id);
+  const onDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa nhân viên: " + defaultValue?.username)) {
+      await mutateDelete.mutateAsync(defaultValue?.id as string);
     }
-  }, []);
+  }, [defaultValue]);
 
-  const columns: GridColDef[] = [
-    {
-      field: "code",
-      headerName: "Mã",
-    },
-    { field: "username", headerName: "Tên tài khoản", width: 150 },
-    { field: "fullName", headerName: "Tên nhân viên", width: 150 },
-    { field: "roleCode", headerName: "Chức vụ", width: 150 },
-    { field: "branchCode", headerName: "Chi nhánh", width: 150 },
-    { field: "phone", headerName: "Số điện thoại", width: 150 },
-    { field: "address", headerName: "Địa chỉ", width: 150 },
-    { field: "email", headerName: "Email", width: 150 },
-    {
-      field: "birthday",
-      headerName: "Ngày sinh",
-      width: 150,
-      renderCell: ({ row }) =>
-        row.birthday ? moment(row.birthday).format("DD/MM/YYYY") : "__",
-    },
-    { field: "statusName", headerName: "Trạng thái" },
+  const columns: TGridColDef[] = [
+    ...staffColumns,
     {
       field: "action",
       headerName: "Thao tác",
-      width: 150,
-      renderCell: (record) => (
+      width: 100,
+      renderCell: () => (
         <>
           <ViewButton
             className="min-h-[40px] min-w-[40px]"
-            onClick={() => onUpdate(record.row)}
+            onClick={onUpdate}
           />
           <DeleteButton
-            onClick={() => onDelete(record.row)}
+            onClick={onDelete}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
       ),
     },
   ];
+
+  const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item) => item.id === id);
+
+    setDefaultValue(currentRow);
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
@@ -150,14 +145,36 @@ export const StaffsPage = () => {
         </div>
       </div>
 
-      <DataTable
-        rows={data?.items}
-        columns={columns}
-        gridProps={{
-          loading: isLoading || isFetching,
-          ...paginationProps,
-        }}
-      />
+      <ContextMenuWrapper
+        menuId="product_table_menu"
+        menuComponent={
+          <Menu id="product_table_menu">
+            <Item
+              id="view-product"
+              onClick={() => setDialog({ open: true, type: "View" })}
+            >
+              Xem chi tiết
+            </Item>
+            <Item id="delete-product" onClick={onDelete}>
+              Xóa
+            </Item>
+          </Menu>
+        }
+      >
+        <DataTable
+          rows={data?.items as []}
+          columns={columns}
+          gridProps={{
+            loading: isLoading || isFetching,
+            ...paginationProps,
+          }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
+        />
+      </ContextMenuWrapper>
 
       <StaffDialog
         onClose={() => setDialog({ open: false })}

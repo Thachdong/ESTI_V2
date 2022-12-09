@@ -1,4 +1,3 @@
-import { Moment } from "moment";
 import { request } from "../method";
 
 export type TStaff = {

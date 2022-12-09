@@ -6,7 +6,7 @@ type TDataGrid = DataGridProps & {
   gridProps?: Partial<DataGridProps>;
 };
 
-type TGridColDef = GridColDef & {
+type TGridColDef<TData = any> = GridColDef<TData> & {
   isSort?: boolean;
   sortAscValue?: number | string;
   sortDescValue?: number | string;

@@ -37,7 +37,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     const searchTerm = query[filterKey];
 
     if (searchTerm) {
-      setFilterData({ ...filterData, searchTerm, isCheck: true });
+      const value = isDate ? new Date(+searchTerm.toString()) : searchTerm;
+      setFilterData({ ...filterData, searchTerm: value, isCheck: true });
     }
 
     const currentSort = query.order || 0;
@@ -55,7 +56,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
       default:
         break;
     }
-  }, [query]);
+  }, [router.isReady]);
 
   // IMPLEMENT SORT OPERATIONS
   const [sortMode, setSortMode] = useState<"asc" | "desc" | null>(null);

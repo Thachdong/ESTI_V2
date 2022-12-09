@@ -1,12 +1,12 @@
 import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, MouseEvent } from "react";
+import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { suppliers, TSupplier } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
   DeleteButton,
   generatePaginationProps,
@@ -16,7 +16,9 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { SupplierDialog } from "~modules-dashboard/components/account";
+import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
+import { supplierColumns } from "./supplierColumns";
 
 export const SuppliersPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
@@ -34,13 +36,18 @@ export const SuppliersPage = () => {
     const initQuery = {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
+      ...query,
     };
-    router.push({ query: initQuery, ...query });
-  }, [pagination]);
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
     setDialog({ open: false });
+  }, []);
+
+  const onUpdate = useCallback(() => {
+    setDialog({ open: true, type: "View" });
   }, []);
 
   // DATA FETCHING
@@ -49,9 +56,8 @@ export const SuppliersPage = () => {
       "Suppliers",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        query,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -59,7 +65,7 @@ export const SuppliersPage = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          query,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -70,15 +76,6 @@ export const SuppliersPage = () => {
   );
 
   // DATA TABLE
-  const onUpdate = useCallback(
-    (row: TSupplier) => {
-      setDialog({ open: true, type: "View" });
-
-      setDefaultValue(row);
-    },
-    [setDefaultValue]
-  );
-
   const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
@@ -90,47 +87,39 @@ export const SuppliersPage = () => {
     },
   });
 
-  const onDelete = useCallback(async (supplier: TSupplier) => {
-    if (confirm("Xác nhận nhân viên: " + supplier.supplierName)) {
-      await mutateDelete.mutateAsync(supplier.id as string);
+  const onDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa nhà cung cấp: " + defaultValue?.supplierName)) {
+      await mutateDelete.mutateAsync(defaultValue?.id as string);
     }
-  }, []);
+  }, [defaultValue]);
 
-  const columns: GridColDef<TSupplier>[] = [
-    {
-      field: "created",
-      headerName: "Ngày tạo",
-      type: "dateTime",
-      width: 125,
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
-    },
-    { field: "supplierCode", headerName: "Mã NCC", flex: 1 },
-    { field: "supplierName", headerName: "Tên NCC", flex: 1 },
-    { field: "curatorName", headerName: "Tên người liên hệ", flex: 1 },
-    { field: "curatorPositionName", headerName: "Chức vụ", flex: 1 },
-    { field: "curatorPhone", headerName: "Số điện thoại", flex: 1 },
-    { field: "curatorEmail", headerName: "Email", flex: 1 },
-    { field: "CreatedBy", headerName: "Người tạo", flex: 1 },
+  const columns: TGridColDef<TSupplier>[] = [
+    ...supplierColumns,
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: (record) => (
+      renderCell: () => (
         <>
           <ViewButton
             className="min-h-[40px] min-w-[40px]"
-            onClick={() => onUpdate(record.row)}
+            onClick={onUpdate}
           />
           <DeleteButton
-            onClick={() => onDelete(record.row)}
+            onClick={onDelete}
             className="min-h-[40px] min-w-[40px]"
           />
         </>
       ),
     },
   ];
+
+  const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item) => item.id === id);
+
+    setDefaultValue(currentRow);
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
@@ -152,14 +141,36 @@ export const SuppliersPage = () => {
         </div>
       </div>
 
-      <DataTable
-        rows={data?.items}
-        columns={columns}
-        gridProps={{
-          loading: isLoading || isFetching,
-          ...paginationProps,
-        }}
-      />
+      <ContextMenuWrapper
+        menuId="suppliers_table_menu"
+        menuComponent={
+          <Menu id="suppliers_table_menu">
+            <Item
+              id="view-product"
+              onClick={() => setDialog({ open: true, type: "View" })}
+            >
+              Xem chi tiết
+            </Item>
+            <Item id="delete-product" onClick={onDelete}>
+              Xóa
+            </Item>
+          </Menu>
+        }
+      >
+        <DataTable
+          rows={data?.items as []}
+          columns={columns}
+          gridProps={{
+            loading: isLoading || isFetching,
+            ...paginationProps,
+          }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
+        />
+      </ContextMenuWrapper>
 
       <SupplierDialog
         onClose={onDialogClose}
