@@ -105,7 +105,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
 
         <Button className={clsx(className, "bg-main-2")}>
           <InputLabel
-            className="flex items-center justify-center text-[#fff]"
+            className="flex items-center justify-center text-[#fff] cursor-pointer"
             htmlFor={controlProps.name}
           >
             <CameraIcon className="mr-2" />

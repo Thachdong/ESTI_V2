@@ -20,5 +20,6 @@ const BASE_URL = "ProductWebsite";
 export const productsWebsite = {
   create: (payload: TProductWebsitePayload) =>
     request.post<TProductWebsitePayload, null>(BASE_URL, payload),
-  display: (id: string) => request.post(`${BASE_URL}/isHide?productId=${id}`, {})
+  display: (id: string) => request.post(`${BASE_URL}/isHide?productId=${id}`, {}),
+  getList: (params: any) => request.getPagination(BASE_URL, {...params})
 };

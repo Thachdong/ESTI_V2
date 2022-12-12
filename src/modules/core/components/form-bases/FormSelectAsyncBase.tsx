@@ -11,6 +11,7 @@ import { useState, UIEvent } from "react";
 import { defaultPagination } from "~modules-core/constance";
 import _ from "lodash";
 import { TFormSelectAsyncBase } from "~types/form-controlled/form-select";
+import clsx from "clsx";
 
 export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   // PROPS EXTRACTING
@@ -85,7 +86,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
           PaperProps,
           sx: { maxHeight: 325 },
         }}
-        input={<OutlinedInput label={label} />}
+        input={<OutlinedInput className={clsx(props.disabled && "disable-form-input")} label={label} />}
         disabled={isLoading || isFetching}
         {...selectProps}
       >

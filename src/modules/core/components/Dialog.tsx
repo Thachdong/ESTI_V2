@@ -8,6 +8,7 @@ import { TDialog } from "~types/dialog";
 import ClearIcon from "@mui/icons-material/Clear";
 import { BaseButton } from "./buttons";
 import { ReactQueryProvider } from "~modules-core/providers";
+import clsx from "clsx";
 
 export const Dialog: React.FC<TDialog> = (props) => {
   const { onClose, title, open, ...remainProps } = props;
@@ -19,7 +20,7 @@ export const Dialog: React.FC<TDialog> = (props) => {
           <Typography
             variant="h6"
             component="div"
-            className="flex-grow text-left font-medium px-6"
+            className={clsx("flex-grow text-left font-medium px-6", props.titleClassName)}
           >
             {title?.toUpperCase()}
           </Typography>

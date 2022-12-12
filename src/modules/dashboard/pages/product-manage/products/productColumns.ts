@@ -21,7 +21,7 @@ export const productColumns: TGridColDef[] = [
     sortAscValue: 14,
     sortDescValue: 2,
     filterKey: "productGroup",
-    flex: 1,
+    width: 150,
   },
   {
     field: "productCode",
@@ -32,10 +32,11 @@ export const productColumns: TGridColDef[] = [
   },
   {
     field: "productName",
-    headerName: "Mô tả SP",
+    headerName: "Tên SP",
     sortAscValue: 16,
     sortDescValue: 4,
     filterKey: "name",
+    minWidth: 150,
   },
   {
     field: "manufactor",
@@ -89,5 +90,5 @@ export const productColumns: TGridColDef[] = [
     filterKey: "createdBy",
     width: 120,
   },
-  { field: "numberOfReviews", headerName: "Đánh giá mới", isSort: false },
+  { field: "numberOfReviews", headerName: "Đánh giá mới", isSort: false, width: 120, },
 ];

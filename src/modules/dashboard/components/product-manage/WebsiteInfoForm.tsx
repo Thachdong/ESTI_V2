@@ -35,7 +35,7 @@ export const WebsiteInfoForm: React.FC<TProps> = ({isDisable}) => {
           control,
           name: "videoUrl",
         }}
-        label="Video url:"
+        label="Video url"
         disabled={isDisable}
       />
 
