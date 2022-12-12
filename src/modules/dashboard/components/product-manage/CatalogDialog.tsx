@@ -200,7 +200,7 @@ export const CatalogDialog: React.FC<any> = ({
         >
           <legend>
             Ảnh banner *{" "}
-            <a href={productTemplates[template - 1].url} target="_blank">
+            <a href={productTemplates[template - 1].url} target="_blank" rel="noopener noreferrer">
               Xem mẫu
             </a>
           </legend>
