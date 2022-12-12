@@ -8,7 +8,6 @@ export const supplierColumns: TGridColDef<TSupplier>[] = [
     isFilter: false,
     field: "created",
     headerName: "Ngày tạo",
-    type: "dateTime",
     width: 125,
     renderCell: (params) =>
       params.row.created

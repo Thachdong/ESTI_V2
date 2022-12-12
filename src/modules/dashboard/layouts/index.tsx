@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import clsx from "clsx";
 import { useState } from "react";
 import { useIsFetching } from "react-query";
@@ -24,15 +24,11 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
 
   return (
     <Box
+      className={clsx(styles["dashboard-layout"])}
       sx={{
-        display: "grid",
         gridTemplateColumns: expand
-          ? "250px calc(100% - 250px)"
-          : "60px calc(100% - 60px)",
-        height: "100vh",
-        width: "100vw",
-        overflow: "hidden",
-        transition: "all 0.3s",
+          ? "250px calc(100vw - 250px)"
+          : "60px calc(100vw - 60px)",
       }}
     >
       {/* height: 60px */}
@@ -44,16 +40,16 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         <Box
           className="bg-[#f5f8fb] flex-grow relative  overflow-y-auto"
           component="main"
-          sx={{height: "calc(100vh - 60px - 45px)"}}
+          sx={{ height: "calc(100vh - 60px - 45px)" }}
         >
           {!!isFetching && (
-            <div className="absolute w-full">
+            <Box className="absolute w-full">
               <Loading />
-            </div>
+            </Box>
           )}
-          <div className={clsx(styles["layout"], "relative w-full h-full ")}>
+          <Box className={clsx(styles["page"], "relative w-full h-full")}>
             <Page />
-          </div>
+          </Box>
         </Box>
         {/* height: 45px */}
         <Footer />

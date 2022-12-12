@@ -1,6 +1,12 @@
-import { Checkbox, InputLabel, Paper } from "@mui/material";
+import { Box, Checkbox, InputLabel, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEvent, useCallback, useEffect, useState, MouseEvent  } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useState,
+  MouseEvent,
+} from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productsWebsite } from "src/api";
@@ -217,13 +223,11 @@ export const ProductsPage = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox label="Tìm kiếm sale phụ trách" />
-        </div>
+    <Paper className="bgContainer flex flex-col">
+      <Box className="grid grid-cols-2 mb-3">
+        <SearchBox label="Tìm kiếm sale phụ trách" />
 
-        <div className="w-1/2 flex items-center justify-end">
+        <Box className="flex items-center justify-end">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
@@ -243,8 +247,8 @@ export const ProductsPage = () => {
               />
             </InputLabel>
           </AddButton>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="product_table_menu"
@@ -267,7 +271,6 @@ export const ProductsPage = () => {
           columns={columns}
           gridProps={{
             loading: isLoading || isFetching,
-            sx: { width: "1700px" },
             ...paginationProps,
           }}
           componentsProps={{
