@@ -1,50 +1,18 @@
-import { Box, Checkbox, InputLabel, Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useState,
-  MouseEvent,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { productsWebsite } from "src/api";
-import { products, TProduct } from "src/api/products";
-import {
-  AddButton,
-  ContextMenuWrapper,
-  DataTable,
-  DeleteButton,
-  FormInputBase,
-  generatePaginationProps,
-  SearchBox,
-  ViewButton,
-} from "~modules-core/components";
+import { category, TCategory } from "src/api";
+import { AddButton, ContextMenuWrapper, DataTable, DeleteButton, generatePaginationProps, SearchBox, ViewButton } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { ProductsDialog } from "~modules-dashboard/components";
+import { CatalogDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { productColumns } from "./productColumns";
+import { categoryColumns } from "./categoryColumns";
 
-const excelEstensions = [
-  "xlsx",
-  "xls",
-  "xlsm",
-  "xlsb",
-  "xltx",
-  "xltm",
-  "xlt",
-  "xls",
-  "xml",
-  "xlam",
-  "xla",
-  "xlw",
-  "xlr",
-];
-
-export const ProductsPage = () => {
+export const CategoryPage: React.FC = () => {
   const router = useRouter();
 
   const { query } = router;
@@ -74,7 +42,7 @@ export const ProductsPage = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "productsList",
+      "categoryList",
       "loading",
       {
         ...pagination,
@@ -82,7 +50,7 @@ export const ProductsPage = () => {
       },
     ],
     () =>
-      products
+      category
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -96,8 +64,9 @@ export const ProductsPage = () => {
     }
   );
 
-  // DATA TABLE
-  const mutateDelete = useMutation((id: string) => products.delete(id), {
+  // TABLE DATA
+  // 1. DELETE ROW
+  const mutateDelete = useMutation((id: string) => category.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
     },
@@ -108,92 +77,14 @@ export const ProductsPage = () => {
     },
   });
 
-  const mutateImportExcel = useMutation(
-    (file: FormData) => products.importExcel(file),
-    {
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch();
-      },
-    }
-  );
-
-  const mutateStatus = useMutation(
-    (id: string) => productsWebsite.display(id),
-    {
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch();
-      },
-    }
-  );
-
-  const handleImportExcel = async (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | any>
-  ) => {
-    const file = e.target.files?.[0];
-
-    const fileExtension = file?.name?.split(".").pop();
-
-    if (!excelEstensions.includes(fileExtension)) {
-      toast.error(`File ${file.name} không đúng định dạng!`);
-
-      return;
-    }
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    await mutateImportExcel.mutateAsync(formData);
-  };
-
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    if (confirm("Xác nhận xóa Danh mục: " + defaultValue?.name)) {
+      await mutateDelete.mutateAsync(defaultValue?.id as string);
     }
-  }, []);
+  }, [defaultValue]);
 
-  const handleChangeStatus = async (
-    e: ChangeEvent<HTMLInputElement>,
-    product: TProduct
-  ) => {
-    const isChecked = e.target.checked;
-
-    const { productName } = product || {};
-
-    if (
-      confirm(
-        `Cập nhật ${
-          isChecked ? "hiển thị" : "ẩn"
-        } sản phẩm ${productName} trên website?`
-      )
-    ) {
-      await mutateStatus.mutateAsync(product?.id as string);
-    }
-  };
-
-  const columns: TGridColDef[] = [
-    ...productColumns,
-    {
-      isSort: false,
-      field: "deleted",
-      headerName: "Website",
-      renderCell: ({ row }) => (
-        <Checkbox
-          checked={row.deleted}
-          value={row.deleted}
-          onChange={(e) => handleChangeStatus(e, row)}
-        />
-      ),
-    },
+  const columns: TGridColDef<TCategory>[] = [
+    ...categoryColumns,
     {
       field: "action",
       headerName: "Thao tác",
@@ -212,7 +103,7 @@ export const ProductsPage = () => {
     },
   ];
 
-  const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
+  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
     const currentRow = data?.items.find((item) => item.id === id);
@@ -233,19 +124,7 @@ export const ProductsPage = () => {
             variant="contained"
             className="mr-3"
           >
-            Thêm sản phẩm
-          </AddButton>
-
-          <AddButton variant="contained" className="mr-3">
-            <InputLabel htmlFor="product-file" className="cursor-pointer text-white">
-              Thêm file excel
-              <FormInputBase
-                id="product-file"
-                className="hidden"
-                type="file"
-                onChange={handleImportExcel}
-              />
-            </InputLabel>
+            Thêm danh mục SP
           </AddButton>
         </Box>
       </Box>
@@ -281,7 +160,7 @@ export const ProductsPage = () => {
         />
       </ContextMenuWrapper>
 
-      <ProductsDialog
+      <CatalogDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

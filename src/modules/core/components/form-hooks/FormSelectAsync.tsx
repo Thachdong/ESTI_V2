@@ -21,8 +21,8 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
     const updateLabel = Object.keys(rules).includes("required")
       ? `${label} *`
       : label;
-      
-      const cleanValue = multiple ? (value as [] || []) : (value || "")
+
+    const cleanValue = multiple ? (value as []) || [] : value || "";       
 
     const defaultBaseProps = {
       helperText: (
@@ -34,7 +34,6 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
       ),
       error: !!error,
       value: cleanValue,
-      // value: value || "",
       label: updateLabel,
       queryKey: props?.queryKey || name,
       multiple,

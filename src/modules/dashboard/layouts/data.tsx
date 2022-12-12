@@ -77,16 +77,16 @@ export const menu = [
         link: "product-manage/products",
       },
       {
+        title: "Danh mục sản phẩm",
+        link: "product-manage/category",
+      },
+      {
         title: "Tra cứu vị trí",
         link: "products/tracking",
       },
       {
         title: "Tra cứu sản phẩm",
         link: "products/info",
-      },
-      {
-        title: "Danh mục sản phẩm",
-        link: "products",
       },
       {
         title: "Nhãn sản phẩm",

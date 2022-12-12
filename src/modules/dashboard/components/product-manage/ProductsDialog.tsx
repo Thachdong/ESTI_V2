@@ -102,7 +102,9 @@ export const ProductsDialog: React.FC<any> = ({
     if (type === "View" && defaultValue) {
       const { suppliers, gallery, categorys, image } = defaultValue;
 
-      const parsedSuppliers = JSON.parse(suppliers).map((supplier: any) => supplier.id)
+      const parsedSuppliers = JSON.parse(suppliers).map(
+        (supplier: any) => supplier.id
+      );
 
       const cleanValue = {
         ...defaultValue,
@@ -276,7 +278,7 @@ export const ProductsDialog: React.FC<any> = ({
                 inputProps={{ multiple: false }}
                 disabled={type === "View" && !isUpdate}
                 className="w-full mb-3"
-                imageListProps={{cols: 1}}
+                imageListProps={{ cols: 1 }}
               />
             </Box>
 

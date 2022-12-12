@@ -7,12 +7,12 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     variant: "outlined",
     size: "small",
     ...props,
-  };
+  };  
 
   const inputProps = {
     ...defaultProps.inputProps,
     className: clsx(
-      props.disabled && "bg-[#f0f0f0]",
+      props.disabled && "disable-form-input",
       props?.inputProps?.className
     ),
   };

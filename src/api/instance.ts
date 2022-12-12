@@ -5,7 +5,7 @@ import { toast } from "~modules-core/toast";
 const TIMEOUT_IN_MILISECOND = 10000;
 
 export const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL + "api/",
   timeout: TIMEOUT_IN_MILISECOND,
 });
 

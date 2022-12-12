@@ -55,6 +55,7 @@ export const DataTable: React.FC<TDataGrid> = ({
         {...props}
         rows={rows || []}
         columns={fullColumns}
+        scrollbarSize={5}
       />
     </Box>
   );

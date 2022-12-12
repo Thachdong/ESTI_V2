@@ -54,6 +54,7 @@ export const SearchBox: React.FC<TSearchBox> = ({
       onChange={handleChange}
       onKeyPress={handleEnter}
       label={label}
+      className="pr-3"
     />
   );
 };

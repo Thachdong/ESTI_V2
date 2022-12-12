@@ -40,10 +40,16 @@ export const curatorDepartments = [
   {id: 3, name: "Phòng QC"},
   {id: 4, name: "Phòng QA"},
   {id: 5, name: "Phòng ban khác"},
-]
+];
 
 export const curatorPositions = [
   {id: 1, name: 'Giám đốc'},
   {id: 2, name: 'Kế toán'},
   {id: 3, name: 'Nhân viên bán hàng'},
+];
+
+export const productTemplates = [
+  {id: 1, name: "Template 1", url: "https://estiweb.monamedia.net/template/sanpham-1.html"},
+  {id: 2, name: "Template 2", url: "https://estiweb.monamedia.net/template/sanpham-2.html"},
+  {id: 3, name: "Template 3", url: ""},
 ]

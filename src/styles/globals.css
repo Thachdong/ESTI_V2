@@ -9,3 +9,8 @@
 .MuiDataGrid-columnHeaderTitleContainerContent {
   width: 100%;
 }
+
+.disable-form-input {
+  background: #f0f0f0;
+  cursor: not-allowed !important;
+}

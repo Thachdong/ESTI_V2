@@ -25,7 +25,7 @@ export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
   const inputProps = {
     ...props.inputProps,
     className: clsx(
-      props.disabled && "bg-[#f0f0f0]",
+      props.disabled && "disable-form-input",
       props?.inputProps?.className
     ),
   };
