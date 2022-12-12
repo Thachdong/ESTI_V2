@@ -1,3 +1,8 @@
-.layout {
+.dashboard-layout {
+  @apply grid h-screen w-screen overflow-hidden;
+  transition: all 0.3s;
+}
+
+.dashboard-layout .page {
   @apply flex-grow overflow-x-hidden overflow-y-auto p-2;
 }

@@ -12,4 +12,5 @@ type TGridColDef<TData = any> = GridColDef<TData> & {
   sortDescValue?: number | string;
   isFilter?: boolean;
   filterKey?: string;
+  options?: {value: string | number, label: string}[];
 }

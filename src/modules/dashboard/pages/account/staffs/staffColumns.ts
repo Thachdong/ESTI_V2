@@ -7,7 +7,7 @@ export const staffColumns: TGridColDef[] = [
     headerName: "Mã",
     width: 150,
     filterKey: "code",
-    sortDescValue: 2,
+    sortDescValue: 0,
     sortAscValue: 13,
   },
   {
@@ -68,7 +68,7 @@ export const staffColumns: TGridColDef[] = [
   },
   {
     field: "birthday",
-    type: "dateTime",
+    type: "date",
     headerName: "Ngày sinh",
     width: 150,
     filterKey: "birthDate",
@@ -84,5 +84,10 @@ export const staffColumns: TGridColDef[] = [
     filterKey: "status",
     sortDescValue: 10,
     sortAscValue: 21,
+    type: "select",
+    options: [
+      {value: 1, label: "Chưa kích hoạt"},
+      {value: 2, label: "Đã kích hoạt"},
+    ]
   },
 ];

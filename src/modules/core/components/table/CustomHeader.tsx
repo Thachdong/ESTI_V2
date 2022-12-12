@@ -1,16 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { TGridColDef } from "~types/data-grid";
 import { useRouter } from "next/router";
 import "~modules-core/styles/data-table.module.css";
 import { debounce } from "lodash";
+import moment from "moment";
 
 type TProps = {
   params: GridColumnHeaderParams;
@@ -26,9 +22,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   const colDef = params.colDef as TGridColDef;
 
-  const { isSort, isFilter, sortAscValue, sortDescValue, type } = colDef;
-
-  const isDate = type?.toLocaleLowerCase().includes("date");
+  const { isSort, isFilter, sortAscValue, sortDescValue, type, options } =
+    colDef;
 
   const filterKey = colDef.filterKey as string;
 
@@ -37,14 +32,23 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     const searchTerm = query[filterKey];
 
     if (searchTerm) {
-      const value = isDate ? new Date(+searchTerm.toString()) : searchTerm;
+      const value = type === "date"
+        ? moment(+searchTerm).format("YYYY-MM-DD")
+        : searchTerm;
+
       setFilterData({ ...filterData, searchTerm: value, isCheck: true });
     }
+  }, [router.isReady]);
 
+  // SYNC QUERY VS LOCAL SORT DATA
+  useEffect(() => {
     const currentSort = query.order || 0;
 
-    switch(true) {
-      case (+currentSort !== sortAscValue && +currentSort !== sortDescValue):
+    switch (true) {
+      case !currentSort:
+        setSortMode(null);
+        break;
+      case +currentSort !== sortAscValue && +currentSort !== sortDescValue:
         setSortMode(null);
         break;
       case +currentSort === sortAscValue:
@@ -56,7 +60,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
       default:
         break;
     }
-  }, [router.isReady]);
+  }, [router]);
 
   // IMPLEMENT SORT OPERATIONS
   const [sortMode, setSortMode] = useState<"asc" | "desc" | null>(null);
@@ -66,15 +70,21 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
       switch (true) {
         case mode === sortMode: {
           setSortMode(null);
-          router.push({ query: { ...query, order: 0 } });
+
+          delete query["order"];
+
+          router.push({ query });
+
           return;
         }
         case mode === "asc": {
           router.push({ query: { ...query, order: sortAscValue } });
+
           break;
         }
         case mode === "desc": {
           router.push({ query: { ...query, order: sortDescValue } });
+
           break;
         }
       }
@@ -90,7 +100,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           <span
             onClick={() => handleSort("asc")}
             className={clsx(
-              sortMode === "asc" ? "text-[#fff]" : "text-[#a1a1a1]",
+              sortMode === "asc" && sortMode !== null
+                ? "text-[#fff]"
+                : "text-[#a1a1a1]",
               "cursor-pointer !font-bold mr-1"
             )}
           >
@@ -99,7 +111,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           <span
             onClick={() => handleSort("desc")}
             className={clsx(
-              sortMode === "desc" ? "text-[#fff]" : "text-[#a1a1a1]",
+              sortMode === "desc" && sortMode !== null
+                ? "text-[#fff]"
+                : "text-[#a1a1a1]",
               "cursor-pointer"
             )}
           >
@@ -120,7 +134,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
     const updateQuery = {
       ...query,
-      [filterKey]: isDate ? miliseconds : value,
+      [filterKey]: type === "date" ? miliseconds : value,
     };
 
     !value && delete updateQuery[filterKey];
@@ -148,8 +162,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     [filterData, query]
   );
 
-  const debounceFilter = debounce(function (value: string | number) {    
-    if (isDate) {
+  const debounceFilter = debounce(function (value: string | number) {
+    if (type === "date") {
       const miliseconds = new Date(value).getTime();
 
       handleFilter(miliseconds);
@@ -158,7 +172,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     }
   }, 700);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const value = e.target.value;
     //1. update search term state
     setFilterData({ ...filterData, searchTerm: value });
@@ -166,11 +182,25 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     if (filterData.isCheck) {
       debounceFilter(value);
     }
-  };  
+  };
 
   const renderFilterBox = useCallback(() => {
-
     if (!isFilter || field === "action") return <></>;
+
+    const selectTag = (
+      <select
+        id={field + "_searchbox"}
+        onChange={handleInputChange}
+        value={filterData.searchTerm}
+        className="w-10/12 border-0"
+      >
+        {options?.map(({ value, label }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
+    );
 
     return (
       <>
@@ -180,13 +210,17 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           onChange={handleCheckbox}
           checked={filterData.isCheck}
         />
-        <input
-          type={type?.toLowerCase().includes("date") ? "date" : "text"}
-          id={field + "_searchbox"}
-          onChange={handleInputChange}
-          value={filterData.searchTerm}
-          className="w-10/12 border-0"
-        />
+        {type === "select" ? (
+          selectTag
+        ) : (
+          <input
+            type={type?.toLowerCase().includes("date") ? "date" : "text"}
+            id={field + "_searchbox"}
+            onChange={handleInputChange}
+            value={filterData.searchTerm}
+            className="w-10/12 border-0"
+          />
+        )}
       </>
     );
   }, [isFilter, type, filterData]);

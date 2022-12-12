@@ -59,7 +59,6 @@ const useResponseError = (error: AxiosError) => {
     );
 
     switch (status) {
-      case 401:
       case 408: {
         // TRIGGER TOKEN ROTATION | SIGNOUT HERE
         signOut();

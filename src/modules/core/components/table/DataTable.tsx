@@ -5,11 +5,14 @@ import {
   DataGrid,
   DataGridProps,
   viVN,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
 } from "@mui/x-data-grid";
 import { TDataGrid } from "~types/data-grid";
 import { NoRowsOverlay } from "./NoRowsOverlay";
 import { generateColumn } from "./utility";
 import "~modules-core/styles/data-table.module.css";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const defaultDataGridProps: Partial<DataGridProps> = {
   rowsPerPageOptions: [5, 10, 20, 50, 100],
@@ -17,12 +20,16 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   components: {
     LoadingOverlay: LinearProgress,
     NoRowsOverlay: NoRowsOverlay,
+    // Toolbar: () => (
+    //   <GridToolbarContainer>
+    //     <GridToolbarColumnsButton startIcon={<SettingsIcon />} />
+    //   </GridToolbarContainer>
+    // ),
   },
   disableSelectionOnClick: true,
   filterMode: "server",
   paginationMode: "server",
   sortingMode: "server",
-  autoHeight: true,
   headerHeight: 64,
   showColumnRightBorder: true,
   showCellRightBorder: true,
@@ -37,14 +44,17 @@ export const DataTable: React.FC<TDataGrid> = ({
   const fullColumns = columns?.map((col) => generateColumn(col));
 
   return (
-    <Box className={clsx("w-full overflow-auto")}>
+    <Box className={clsx("w-full overflow-auto flex-grow h-full")}>
       <DataGrid
         {...defaultDataGridProps}
+        // localeText={{
+        //   ...defaultDataGridProps.localeText,
+        //   toolbarColumns: "Cài đặt",
+        // }}
         {...gridProps}
         {...props}
         rows={rows || []}
         columns={fullColumns}
-        className="h-100"
       />
     </Box>
   );

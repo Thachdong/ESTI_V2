@@ -8,7 +8,7 @@ export const productColumns: TGridColDef[] = [
     filterKey: "createdDate",
     field: "created",
     headerName: "Ngày tạo",
-    type: "dateTime",
+    type: "date",
     width: 150,
     renderCell: (params) =>
       params.row.created

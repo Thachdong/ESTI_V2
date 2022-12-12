@@ -13,7 +13,7 @@ export const productColumns: TGridColDef<TUnit>[] = [
       },
       {
         field: "created",
-        type: "dateTime",
+        type: "date",
         headerName: "NGÀY TẠO",
         renderCell: (record) => moment(record.value).format("DD/MM/YYYY"),
         flex: 1,

@@ -5,7 +5,7 @@ export const CustomerColumns: TGridColDef[] = [
   {
     field: "created",
     headerName: "Ngày tạo",
-    type: "dateTime",
+    type: "date",
     width: 125,
     renderCell: (params) =>
       params.row.created
@@ -42,7 +42,7 @@ export const CustomerColumns: TGridColDef[] = [
   {
     field: "companyName",
     headerName: "Tên KH",
-    width: 150,
+    minWidth: 150,
     filterKey: "companyName",
     sortDescValue: 4,
     sortAscValue: 13,
