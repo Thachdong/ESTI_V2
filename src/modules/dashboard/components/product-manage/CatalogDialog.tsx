@@ -238,7 +238,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
       maxWidth="lg"
       title={title}
       PaperProps={{ sx: { height: "90%" } }}
-      titleClassName="text-center"
+      headerClassName="text-center"
     >
       <Box component="form">
         <Box className="grid grid-cols-2 gap-4">
@@ -249,7 +249,6 @@ export const CatalogDialog: React.FC<TDialog> = ({
               rules: { required: "Phải nhập tên danh mục" },
             }}
             label="Tên danh mục"
-            required
             disabled={type === "View" && !isUpdate}
           />
 

@@ -10,7 +10,7 @@ import { BaseButton } from "./buttons";
 import clsx from "clsx";
 
 export const Dialog: React.FC<TDialog> = (props) => {
-  const { onClose, title, open, ...remainProps } = props;
+  const { onClose, title, open, headerClassName, ...remainProps } = props;
 
   return (
     <MuiDialog open={open} maxWidth="sm" fullWidth={true} {...remainProps}>
@@ -20,7 +20,7 @@ export const Dialog: React.FC<TDialog> = (props) => {
           component="div"
           className={clsx(
             "flex-grow text-left font-medium px-6",
-            props.titleClassName
+            headerClassName
           )}
         >
           {title?.toUpperCase()}

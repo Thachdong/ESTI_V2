@@ -161,7 +161,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
       onClose={onClose}
       maxWidth="md"
       title={title}
-      titleClassName="text-center"
+      headerClassName="text-center"
     >
       <Box component="form">
         <Box className="grid grid-cols-2 gap-4">
