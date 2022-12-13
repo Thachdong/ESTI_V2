@@ -80,8 +80,8 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
           gap={8}
           {...imageListProps}
         >
-          {value.map((item: string) => (
-            <ImageListItem key={item} className="relative">
+          {value.map((item: string, index: number) => (
+            <ImageListItem key={index} className="relative">
               <ClearIcon
                 onClick={() => handleRemoveImg(item)}
                 className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"

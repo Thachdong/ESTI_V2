@@ -6,7 +6,7 @@ export type TDocument = {
   lotNumber: string;
   documentType: string;
   documentCareer: string;
-  attachFile: string;
+  attachFiles: string;
   thumbnail: string;
   id: string;
   created: number;

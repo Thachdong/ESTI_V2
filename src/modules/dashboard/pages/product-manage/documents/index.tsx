@@ -103,7 +103,7 @@ export const DocumentsPage: React.FC = () => {
       ...documentColumns[0]
     },
     {
-      field: "CategoryName",
+      field: "categoryName",
       headerName: "Nhóm SP",
       sortAscValue: 9,
       sortDescValue: 1,

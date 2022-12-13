@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -34,10 +34,11 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
     formState: { isDirty },
     reset,
     control,
-    watch,
   } = useForm<any>({
     mode: "onBlur",
   });
+
+  const disabled = type === "View" && !isUpdate;
 
   // DATA FETCHING
   const { data: documentTypes } = useQuery(["DocumentType"], () =>
@@ -49,6 +50,17 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   );
 
   // SIDE EFFECTS
+  useEffect(() => {
+    if (type === "Add") {
+      reset({});
+    }
+
+    if (type === "View" && defaultValue) {
+      console.log(defaultValue);
+      
+      reset(defaultValue);
+    }
+  }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
@@ -78,7 +90,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   const handleAddDocument = async (data: any) => {
     const payload = {
       ...data,
-      attachFile: data?.attachFile?.join(", "),
+      attachFiles: data?.attachFiles?.join(", "),
       thumbnail: data?.thumbnail?.join(", ")
     }
     
@@ -162,7 +174,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Mã sản phẩm"
             selectShape={{ valueKey: "id", labelKey: "productCode" }}
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelectAsync
@@ -174,7 +186,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Tên sản phẩm"
             selectShape={{ valueKey: "id", labelKey: "productName" }}
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelectAsync
@@ -187,7 +199,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Nhóm SP"
             selectShape={{ valueKey: "id", labelKey: "name" }}
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormInput
@@ -197,7 +209,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải nhập LOT#" },
             }}
             label="LOT#"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelect
@@ -208,7 +220,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải chọn tài liệu chuyên ngành" },
             }}
             label="Tài liệu chuyên ngành"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelect
@@ -219,7 +231,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải chọn kiểu tài liệu" },
             }}
             label="Kiểu tài liệu"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <Box
@@ -229,9 +241,9 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             <legend>File đính kèm *</legend>
             <FormUploadfiles
               loader={productDocument.uploadFile}
-              controlProps={{ control, name: "attachFile" }}
+              controlProps={{ control, name: "attachFiles" }}
               title="Tải file"
-              disabled={type === "View" && !isUpdate}
+              disabled={disabled}
               className="mb-3"
             />
           </Box>
@@ -243,9 +255,9 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             <legend>Thumbnail *</legend>
             <FormImageGallery
               loader={productDocument.uploadFile}
-              controlProps={{ control, name: "thumbnail" }}
+              controlProps={{ control, name: "thumbnails" }}
               title="Tải ảnh"
-              disabled={type === "View" && !isUpdate}
+              disabled={disabled}
               className="mb-3"
             />
           </Box>

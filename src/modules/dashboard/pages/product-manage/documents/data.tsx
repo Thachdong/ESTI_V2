@@ -18,7 +18,7 @@ export const documentColumns: TGridColDef<TDocument>[] = [
         : "__",
   },
   {
-    field: "ProductCode",
+    field: "productCode",
     headerName: "Mã SP",
     sortAscValue: 10,
     sortDescValue: 2,
@@ -26,7 +26,7 @@ export const documentColumns: TGridColDef<TDocument>[] = [
     width: 150,
   },
   {
-    field: "ProductName",
+    field: "productName",
     headerName: "Tên SP",
     sortAscValue: 11,
     sortDescValue: 3,
@@ -34,7 +34,7 @@ export const documentColumns: TGridColDef<TDocument>[] = [
     width: 150,
   },
   {
-    field: "ProductManufactor",
+    field: "productManufactor",
     headerName: "Nhà sản xuất",
     sortAscValue: 12,
     sortDescValue: 4,
@@ -42,7 +42,7 @@ export const documentColumns: TGridColDef<TDocument>[] = [
     width: 150,
   },
   {
-    field: "LotNumber",
+    field: "lotNumber",
     headerName: "LOT#",
     sortAscValue: 13,
     sortDescValue: 5,
@@ -63,15 +63,17 @@ export const documentColumns: TGridColDef<TDocument>[] = [
     sortAscValue: 15,
     sortDescValue: 7,
     filterKey: "careerSlug",
-    width: 150,
+    width: 200,
   },
   {
-    field: "AttachFile",
+    field: "attachFile",
     headerName: "File",
-    width: 150,
+    isFilter: false,
+    isSort: false,
+    width: 125,
     renderCell: ({ row }) => (
       <Button variant="text">
-        <a href={row.attachFile} target="_blank" rel="noopener noreferrer">
+        <a href={row.attachFiles?.[0]} target="_blank" rel="noopener noreferrer">
           Xem chi tiết
         </a>
       </Button>
