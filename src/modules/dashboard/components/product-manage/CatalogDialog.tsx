@@ -20,8 +20,9 @@ import {
 } from "~modules-core/components";
 import { productTemplates } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
+import { TDialog } from "~types/dialog";
 
-export const CatalogDialog: React.FC<any> = ({
+export const CatalogDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,
