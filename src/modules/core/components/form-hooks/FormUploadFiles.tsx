@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  ImageList,
-  ImageListItem,
   InputLabel,
   LinearProgress,
   List,
@@ -13,7 +11,6 @@ import { Controller } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { ErrorMessage } from "@hookform/error-message";
-import ClearIcon from "@mui/icons-material/HighlightOffOutlined";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import { FormInputBase } from "../form-bases";
@@ -57,7 +54,6 @@ export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
       setLoading(true);
 
       const urls = await Promise.all(promises);
-      console.log(urls);
 
       const currentVal = Array.isArray(value) ? value : [];
 

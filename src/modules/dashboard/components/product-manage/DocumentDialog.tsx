@@ -19,6 +19,7 @@ import {
   FormSelectAsync,
   FormUploadfiles,
 } from "~modules-core/components";
+import { parentCategoryId } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -178,7 +179,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
 
           <FormSelectAsync
             fetcher={category.getList}
-            fetcherParams={{parentId: "00000000-0000-0000-0000-000000000000"}}
+            fetcherParams={{parentId: parentCategoryId}}
             controlProps={{
               control,
               name: "categoryId",

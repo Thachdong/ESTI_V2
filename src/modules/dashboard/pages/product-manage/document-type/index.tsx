@@ -3,30 +3,25 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { category, productDocument, TDocument } from "src/api";
+import { documentType, TDocumentType } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
   DeleteButton,
-  generatePaginationProps,
   SearchBox,
   ViewButton,
 } from "~modules-core/components";
-import { defaultPagination, parentCategoryId } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { DocumentDialog } from "~modules-dashboard/components";
+import { DocumentTypeDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { documentColumns } from "./data";
 
-export const DocumentsPage: React.FC = () => {
+export const DocumentTypesPage = () => {
   // EXTRACT PROPS
   const router = useRouter();
 
   const { query } = router;
-
-  const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -35,14 +30,8 @@ export const DocumentsPage: React.FC = () => {
   // SIDE EFFECTS
   // PUSH PAGINATION QUERY
   useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      ...query,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+    router.push({ query });
+  }, [router.isReady]);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -52,67 +41,24 @@ export const DocumentsPage: React.FC = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "product-documents",
+      "document-types",
       "loading",
       {
-        ...pagination,
         ...query,
       },
     ],
-    () =>
-      productDocument
-        .getList({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          ...query,
-        })
-        .then((res) => res.data),
-    {
-      onSuccess: (data) => {
-        setPagination({ ...pagination, total: data.totalItem });
-      },
-    }
-  );
-
-  const { data: parentCategorys } = useQuery(["parentCategorys"], () =>
-    category
-      .getList({ pageIndex: 1, pageSize: 50, parentId: parentCategoryId })
-      .then((res) => res.data.items.map(item => ({value: item.id, label: item.name})))
+    () => documentType.getList({ ...query }).then((res) => res.data)
   );
 
   // DATA TABLE
-  const mutateDelete = useMutation((id: string) => productDocument.delete(id), {
-    onError: (error: any) => {
-      toast.error(error?.resultMessage);
-    },
-    onSuccess: (data) => {
-      toast.success(data.resultMessage);
-
-      refetch();
-    },
-  });
-
-  const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa tài liệu SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
-    }
-  }, [defaultValue]);
-
-  const columns: TGridColDef<TDocument>[] = [
+  const columns: TGridColDef[] = [
     {
-      ...documentColumns[0]
+      field: "name",
+      headerName: "Loại tài liệu",
+      isFilter: false,
+      isSort: false,
+      flex: 1,
     },
-    {
-      field: "CategoryName",
-      headerName: "Nhóm SP",
-      sortAscValue: 9,
-      sortDescValue: 1,
-      filterKey: "category",
-      type: "select",
-      options: parentCategorys,
-      width: 150,
-    },
-    ...documentColumns.slice(1),
     {
       field: "action",
       headerName: "Thao tác",
@@ -131,15 +77,30 @@ export const DocumentsPage: React.FC = () => {
     },
   ];
 
+  const mutateDelete = useMutation((id: string) => documentType.delete(id), {
+    onError: (error: any) => {
+      toast.error(error?.resultMessage);
+    },
+    onSuccess: (data) => {
+      toast.success(data.resultMessage);
+
+      refetch();
+    },
+  });
+
+  const handleDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa loại tài liệu: " + defaultValue.name)) {
+      await mutateDelete.mutateAsync(defaultValue.id as string);
+    }
+  }, [defaultValue]);
+
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.find((item: any) => item.id === id);
 
     setDefaultValue(currentRow);
   };
-
-  const paginationProps = generatePaginationProps(pagination, setPagination);
 
   // DOM RENDER
   return (
@@ -175,21 +136,22 @@ export const DocumentsPage: React.FC = () => {
         }
       >
         <DataTable
-          rows={data?.items as []}
+          rows={data || []}
           columns={columns}
           gridProps={{
             loading: isLoading || isFetching,
-            ...paginationProps,
           }}
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          hideSearchbar={true}
+          hideFooterPagination={true}
         />
       </ContextMenuWrapper>
 
-      <DocumentDialog
+      <DocumentTypeDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}
