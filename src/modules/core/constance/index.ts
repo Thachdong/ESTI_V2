@@ -53,3 +53,13 @@ export const productTemplates = [
   {id: 2, name: "Template 2", url: "https://estiweb.monamedia.net/template/sanpham-2.html"},
   {id: 3, name: "Template 3", url: ""},
 ]
+
+
+export const parentCategoryId = "00000000-0000-0000-0000-000000000000";
+
+export const searchParams = [
+  {id: 1, name: "Mã sản phẩm"},
+  {id: 2, name: "Tên sản phẩm"},
+  {id: 3, name: "Nhà sản xuất"},
+  {id: 4, name: "Lô sản xuất"},
+]

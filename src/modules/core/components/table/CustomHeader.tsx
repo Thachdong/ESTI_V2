@@ -12,7 +12,7 @@ type TProps = {
   params: GridColumnHeaderParams;
 };
 
-export const CustomHeader: React.FC<TProps> = ({ params }) => {
+export const CustomHeader: React.FC<TProps> = ({ params }) => {  
   // EXTRACT PROPS
   const router = useRouter();
 

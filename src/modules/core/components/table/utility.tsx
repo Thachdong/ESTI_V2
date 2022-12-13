@@ -17,8 +17,6 @@ const defaultColumnProps: Partial<TGridColDef> = {
   //If `true`, the column menu is disabled for this column.
   sortable: false,
   // If `true`, the column is sortable.
-  // headerClassName: "bg-main !text-white text-sm !font-normal",
-  // headerClassName: clsx(styles["data-table-header"], "bg-main text-white p-0"),
   headerClassName: clsx("p-0"),
   isFilter: true,
   isSort: true,

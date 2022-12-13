@@ -22,6 +22,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     selectShape = { valueKey: "id", labelKey: "name" },
     formControlProps,
     inputLabelProps,
+    fetcherParams,
     ...selectProps
   } = props;  
 
@@ -37,6 +38,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       fetcher({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
+        ...fetcherParams
       }).then(res => res.data),
     {
       onSuccess: (data) => {        

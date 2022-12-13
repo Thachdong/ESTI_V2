@@ -4,6 +4,7 @@ type TDataGrid = DataGridProps & {
   rows?: any[];
   columns: any[];
   gridProps?: Partial<DataGridProps>;
+  hideSearchbar?: boolean;
 };
 
 type TGridColDef<TData = any> = GridColDef<TData> & {

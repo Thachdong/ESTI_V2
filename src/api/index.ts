@@ -11,3 +11,6 @@ export * from "./warehouse";
 export * from "./product-website";
 export * from "./products";
 export * from "./category";
+export * from "./document";
+export * from "./documentCareer";
+export * from "./documentType";

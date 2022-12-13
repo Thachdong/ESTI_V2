@@ -1,23 +1,23 @@
 import {
   Box,
   Button,
-  ImageList,
-  ImageListItem,
   InputLabel,
   LinearProgress,
+  List,
+  ListItem,
 } from "@mui/material";
 import clsx from "clsx";
 import { Controller } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { ErrorMessage } from "@hookform/error-message";
-import ClearIcon from "@mui/icons-material/HighlightOffOutlined";
-import CameraIcon from "@mui/icons-material/CameraEnhanceOutlined";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+
 import { FormInputBase } from "../form-bases";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { TFormImageGallery } from "~types/form-controlled/form-image-gallery";
 
-export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
+export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
   const {
     controlProps,
     loader,
@@ -62,7 +62,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       setLoading(false);
     };
 
-    const handleRemoveImg = (url: string) => {
+    const handleRemoveFile = (url: string) => {
       if (!Array.isArray(value)) return;
 
       const updatedValue = value.filter((vl) => vl !== url);
@@ -70,45 +70,39 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       onChange(updatedValue);
     };
 
-    const renderImageList = () => {
-      if (!Array.isArray(value) || value?.length === 0) return <></>;
-
-      return (
-        <ImageList
-          className="w-full py-4 pr-4"
-          cols={3}
-          gap={8}
-          {...imageListProps}
-        >
-          {value.map((item: string, index: number) => (
-            <ImageListItem key={index} className="relative">
-              <ClearIcon
-                onClick={() => handleRemoveImg(item)}
-                className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"
-              />
-
-              <img
-                src={`${item}?w=164&fit=crop&auto=format`}
-                srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                alt={item}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      );
+    const renderFiles = () => {
+      if (Array.isArray(value)) {
+        return value.map((val: string, index: number) => (
+          <ListItem key={index}>
+            <a
+              href={val}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {val}
+            </a>
+            <Button
+              onClick={() => handleRemoveFile(val)}
+              variant="text"
+              className="underline text-warning"
+            >
+              Xóa
+            </Button>
+          </ListItem>
+        ));
+      }
     };
 
     return (
       <Box>
-        {renderImageList()}
+        <List>{renderFiles()}</List>
 
         <Button className={clsx(className, "bg-main-2")}>
           <InputLabel
             className="flex items-center justify-center text-[#fff] cursor-pointer"
             htmlFor={controlProps.name}
           >
-            <CameraIcon className="mr-2" />
+            <UploadFileIcon className="mr-2" />
             <span>{title || "Tải ảnh"}</span>
           </InputLabel>
         </Button>

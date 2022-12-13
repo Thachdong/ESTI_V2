@@ -81,6 +81,14 @@ export const menu = [
         link: "product-manage/category",
       },
       {
+        title: "Tài liệu sản phẩm",
+        link: "product-manage/documents",
+      },
+      {
+        title: "Loại tài liệu",
+        link: "product-manage/document-type",
+      },
+      {
         title: "Tra cứu vị trí",
         link: "products/tracking",
       },
@@ -91,14 +99,6 @@ export const menu = [
       {
         title: "Nhãn sản phẩm",
         link: "products/label",
-      },
-      {
-        title: "Tài liệu sản phẩm",
-        link: "products/documentation",
-      },
-      {
-        title: "Loại tài liệu",
-        link: "products/document-type",
       },
       {
         title: "Tài liệu theo ngành",

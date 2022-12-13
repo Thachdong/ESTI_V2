@@ -22,6 +22,7 @@ type TFormSelect = TFormSelectBase & {
 
 type TFormSelectAsyncBase = SelectProps & {
   fetcher: (params: any) => Promise<TBaseResponse<TPaginationResponse<any>>>;
+  fetcherParams?: object;
   queryKey?: string;
   selectShape?: {
     valueKey: string;
