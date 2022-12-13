@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import {
+  category,
   documentCareer,
   documentType,
   productDocument,
@@ -176,15 +177,16 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
           />
 
           <FormSelectAsync
-            fetcher={products.getList}
+            fetcher={category.getList}
+            fetcherParams={{parentId: "00000000-0000-0000-0000-000000000000"}}
             controlProps={{
               control,
-              name: "productId",
-              rules: { required: "Phải chọn tên SP" },
+              name: "categoryId",
+              rules: { required: "Phải chọn nhóm SP" },
             }}
-            label="Tên sản phẩm"
-            selectShape={{ valueKey: "id", labelKey: "productGroupName" }}
-            disabled={true}
+            label="Nhóm SP"
+            selectShape={{ valueKey: "id", labelKey: "name" }}
+            disabled={type === "View" && !isUpdate}
           />
 
           <FormInput

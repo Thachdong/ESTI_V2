@@ -37,6 +37,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       fetcher({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
+        ...props.fetcherParams
       }).then(res => res.data),
     {
       onSuccess: (data) => {        
