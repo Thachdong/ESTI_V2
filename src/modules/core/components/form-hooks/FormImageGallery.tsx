@@ -55,10 +55,16 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       setLoading(true);
 
       const urls = await Promise.all(promises);
-
+      
       const currentVal = Array.isArray(value) ? value : [];
 
-      onChange([...currentVal, ...urls]);
+      const multiple = textFieldProps.inputProps?.multiple;
+
+      if (multiple === false) {
+        onChange([...urls]);
+      } else {
+        onChange([...currentVal, ...urls]);
+      }
 
       setLoading(false);
     };

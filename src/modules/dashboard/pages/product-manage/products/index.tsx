@@ -184,12 +184,12 @@ export const ProductsPage = () => {
     ...productColumns,
     {
       isSort: false,
-      field: "deleted",
+      field: "deletedProductWebsite",
       headerName: "Website",
       renderCell: ({ row }) => (
         <Checkbox
-          checked={row.deleted}
-          value={row.deleted}
+          checked={row.deletedProductWebsite}
+          value={row.deletedProductWebsite}
           onChange={(e) => handleChangeStatus(e, row)}
         />
       ),

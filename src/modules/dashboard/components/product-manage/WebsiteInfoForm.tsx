@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 import { category } from "src/api/category";
 import { products } from "src/api/products";
@@ -13,11 +14,11 @@ type TProps = {
   isDisable: boolean;
 };
 
-export const WebsiteInfoForm: React.FC<TProps> = ({isDisable}) => {
+export const WebsiteInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const { control } = useFormContext();
 
   return (
-    <Box className="grid grid-cols-2 gap-4">
+    <Box className="grid grid-cols-2 gap-4 py-3">
       <FormSelectAsync
         fetcher={category.getList}
         controlProps={{
@@ -42,38 +43,41 @@ export const WebsiteInfoForm: React.FC<TProps> = ({isDisable}) => {
       <FormTextEditor
         controlProps={{
           control,
-          name: "shortDescript",
+          name: "description",
         }}
         label="Mô tả ngắn:"
         className="col-span-2"
-        editorProps={{disabled: isDisable}}
+        editorProps={{ disabled: isDisable }}
       />
 
       <FormTextEditor
         controlProps={{
           control,
-          name: "detail",
+          name: "summary",
         }}
         label="Mô tả sản phẩm:"
         className="col-span-2"
-        editorProps={{disabled: isDisable}}
+        editorProps={{ disabled: isDisable }}
       />
 
       <FormTextEditor
         controlProps={{
           control,
-          name: "technicalSpect",
+          name: "specifications",
         }}
         label="Thông số kĩ thuật:"
         className="col-span-2"
-        editorProps={{disabled: isDisable}}
+        editorProps={{ disabled: isDisable }}
       />
 
-      <Box className="col-span-2">
+      <Box
+        component="fieldset"
+        className={clsx("!border-grey-2 !rounded-[4px] col-span-2 mb-4")}
+      >
+        <legend>Ảnh sản phẩm</legend>
         <FormImageGallery
           loader={products.uploadImage}
           controlProps={{ control, name: "gallery" }}
-          title="Tải ảnh sản phẩm"
           disabled={isDisable}
         />
       </Box>

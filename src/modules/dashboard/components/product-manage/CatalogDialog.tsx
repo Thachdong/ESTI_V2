@@ -45,6 +45,8 @@ export const CatalogDialog: React.FC<TDialog> = ({
 
   const disabled = type === "View" && !isUpdate;
 
+  console.log(defaultValue);
+  
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
@@ -60,7 +62,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
         template: defaultValue.template,
         templateBanner: [defaultValue.templateBanner],
         parentId: defaultValue.parentId,
-        templateProductIds: [defaultValue.templateProductIds],
+        templateProductId: defaultValue.templateProductId,
         productIds: defaultValue.productIds?.split(", "),
       };
 
@@ -223,7 +225,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
           fetcher={products.getList}
           controlProps={{
             control,
-            name: "templateProductIds",
+            name: "templateProductId",
             rules: { required: "Phải chọn sản phẩm đại diện" },
           }}
           label="Sản phẩm đại diện"
