@@ -22,9 +22,8 @@ export const TabPanelContainForm: React.FC<TabPanelProps> = (props) => {
     <div
       role="tabpanel"
       style={{
-        visibility: value === tabId ? "visible" : "hidden",
-        position: "absolute",
-        width: "100%",
+        height: value === tabId ? "auto" : "0" ,
+        overflow: "hidden"
       }}
       {...other}
     >

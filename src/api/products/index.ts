@@ -1,16 +1,16 @@
 import { request } from "../method";
 
-type TWebsiteInfo = {
-  description: string
-  summary: string
-  videoUrl: string
-  gallery: string
-  specifications: string
-  documents: string
-  categorys: string
-}
+export type ProductWebsiteCreate = {
+  description: string;
+  summary: string;
+  videoUrl: string;
+  gallery: string;
+  specifications: string;
+  categorys: string;
+};
 
 export type TProduct = {
+  id: string;
   productName: string;
   productCode: string;
   manufactor: string;
@@ -18,20 +18,20 @@ export type TProduct = {
   specs: string;
   unitId: string;
   image: string;
-  suppliers: string[];
+  suppliers: string;
   productGroup: string;
   casCode: string;
   chemicalName: string;
-  id: string;
-  productWebsiteCreate:TWebsiteInfo
+  productWebsiteCreate: ProductWebsiteCreate;
 };
 
-export type TProductPayload = Omit<TProduct, "id">
+export type TProductPayload = Omit<TProduct, "id">;
 
 const BASE_URL = "Product";
 
 export const products = {
-  getList: (params: any) => request.getPagination<TProduct>(BASE_URL, { ...params }),
+  getList: (params: any) =>
+    request.getPagination<TProduct>(BASE_URL, { ...params }),
   getById: (id: string) => request.get<TProduct>(`${BASE_URL}/${id}`),
   getProductGroups: () => request.get<any>(BASE_URL + "/ProductGroupList"),
   uploadImage: (file: FormData) =>
@@ -39,5 +39,7 @@ export const products = {
   create: (payload: TProductPayload) =>
     request.post<TProductPayload, any>(BASE_URL, payload),
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
-  importExcel: (file: FormData) => request.post<FormData, any>(`${BASE_URL}/import-excel`, file)
+  importExcel: (file: FormData) =>
+    request.post<FormData, any>(`${BASE_URL}/import-excel`, file),
+    update: (payload: TProduct) => request.put<TProduct, any>(BASE_URL, payload)
 };

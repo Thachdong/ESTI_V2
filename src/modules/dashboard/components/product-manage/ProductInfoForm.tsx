@@ -1,4 +1,6 @@
 import { Box } from "@mui/material";
+import clsx from "clsx";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { suppliers, units } from "src/api";
@@ -21,8 +23,13 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
     products.getProductGroups().then((res) => res.data)
   );
 
+  useEffect(() => {
+    console.log("component mounted");
+    
+  }, [])
+
   return (
-    <Box className="grid grid-cols-2 gap-4">
+    <Box className="grid grid-cols-2 gap-4 py-3">
       <FormInput
         controlProps={{
           control,
@@ -125,6 +132,21 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Quy cách"
         disabled={isDisable}
       />
+
+      <Box
+        component="fieldset"
+        className={clsx("!border-grey-2 !rounded-[4px] col-span-2 mb-4")}
+      >
+        <legend>Ảnh sản phẩm</legend>
+        <FormImageGallery
+          loader={products.uploadImage}
+          controlProps={{ control, name: "image" }}
+          title="Tải ảnh"
+          inputProps={{ multiple: false }}
+          disabled={isDisable}
+          imageListProps={{ cols: 1 }}
+        />
+      </Box>
     </Box>
   );
 };
