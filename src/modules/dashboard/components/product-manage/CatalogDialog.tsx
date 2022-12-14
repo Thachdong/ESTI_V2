@@ -1,14 +1,10 @@
+// NOTE:
+// SP NỔI BẬT VÀ SP ĐẠI DIỆN LẤY TỪ API PRODUCTWEBSITE
 import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  category,
-  products,
-  productsWebsite,
-  TCategory,
-  TProductPayload,
-} from "src/api";
+import { category, productsWebsite, TCategory } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -18,7 +14,7 @@ import {
   FormSelectAsync,
   FormTextEditor,
 } from "~modules-core/components";
-import { productTemplates } from "~modules-core/constance";
+import { parentCategoryId, productTemplates } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -45,8 +41,6 @@ export const CatalogDialog: React.FC<TDialog> = ({
 
   const disabled = type === "View" && !isUpdate;
 
-  console.log(defaultValue);
-  
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
@@ -54,17 +48,19 @@ export const CatalogDialog: React.FC<TDialog> = ({
     }
 
     if (type === "View" && defaultValue) {
+      const productIds = defaultValue?.productIds || "[]";
+      
       const defaultCategory = {
         id: defaultValue.id,
         name: defaultValue.name,
         description: defaultValue.description,
-        thumbnail: defaultValue.thumbnail?.split(", "),
+        thumbnail: defaultValue.thumbnail?.split(","),
         template: defaultValue.template,
         templateBanner: [defaultValue.templateBanner],
         parentId: defaultValue.parentId,
         templateProductId: defaultValue.templateProductId,
-        productIds: defaultValue.productIds?.split(", "),
-      };
+        productIds: JSON.parse(productIds)?.map((product: any) => product?.id)
+      };      
 
       reset(defaultCategory);
     }
@@ -96,14 +92,14 @@ export const CatalogDialog: React.FC<TDialog> = ({
   );
 
   const handleValidation = (payload: any) => {
-    const { productIds, templateBanner, thumbnail } = payload;
+    const { productIds, templateBanner, thumbnail } = payload;    
 
-    payload.thumbnail = thumbnail?.join(", ");
+    payload.thumbnail = thumbnail?.join(",");
 
     if (template === 3) {
       delete payload["templateBanner"];
 
-      payload.productIds = productIds?.join(", ");
+      payload.productIds = productIds?.join(",");
     } else {
       delete payload["productIds"];
 
@@ -205,7 +201,11 @@ export const CatalogDialog: React.FC<TDialog> = ({
         >
           <legend>
             Ảnh banner *{" "}
-            <a href={productTemplates[template - 1].url} target="_blank" rel="noopener noreferrer">
+            <a
+              href={productTemplates[template - 1].url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Xem mẫu
             </a>
           </legend>
@@ -219,17 +219,18 @@ export const CatalogDialog: React.FC<TDialog> = ({
         </Box>
       );
 
-    if (template === 3)
+    if (template === 3 && type !== "Add")
       return (
         <FormSelectAsync
-          fetcher={products.getList}
+          fetcher={productsWebsite.getList}
+          fetcherParams={{ categoryId: defaultValue?.id }}
           controlProps={{
             control,
             name: "templateProductId",
             rules: { required: "Phải chọn sản phẩm đại diện" },
           }}
           label="Sản phẩm đại diện"
-          selectShape={{ valueKey: "id", labelKey: "productName" }}
+          selectShape={{ valueKey: "productId", labelKey: "title" }}
           disabled={disabled}
         />
       );
@@ -258,6 +259,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
 
           <FormSelectAsync
             fetcher={category.getList}
+            fetcherParams={{ parentId: parentCategoryId }}
             controlProps={{
               control,
               name: "parentId",
@@ -268,17 +270,20 @@ export const CatalogDialog: React.FC<TDialog> = ({
             disabled={disabled}
           />
 
-          <FormSelectAsync
-            fetcher={productsWebsite.getList}
-            controlProps={{
-              control,
-              name: "productIds",
-            }}
-            label="Sản phẩm nổi bật"
-            selectShape={{ valueKey: "id", labelKey: "title" }}
-            disabled={disabled}
-            multiple={true}
-          />
+          {type !== "Add" && (
+            <FormSelectAsync
+              fetcher={productsWebsite.getList}
+              fetcherParams={{ categoryId: defaultValue?.id }}
+              controlProps={{
+                control,
+                name: "productIds",
+              }}
+              label="Sản phẩm nổi bật"
+              selectShape={{ valueKey: "productId", labelKey: "title" }}
+              disabled={disabled}
+              multiple={true}
+            />
+          )}
 
           <FormSelect
             options={productTemplates}
@@ -315,7 +320,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
             }}
             label={"Chú thích"}
             className="col-span-2"
-            editorProps={{disabled}}
+            editorProps={{ disabled }}
           />
         </Box>
 

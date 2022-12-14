@@ -188,7 +188,7 @@ export const ProductsPage = () => {
       headerName: "Website",
       renderCell: ({ row }) => (
         <Checkbox
-          checked={row.deletedProductWebsite}
+          checked={!row.deletedProductWebsite}
           value={row.deletedProductWebsite}
           onChange={(e) => handleChangeStatus(e, row)}
         />
