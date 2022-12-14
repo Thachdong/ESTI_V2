@@ -24,6 +24,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
     title,
     imageListProps,
     className,
+    disabled,
     ...textFieldProps
   } = props;
 
@@ -82,10 +83,12 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
         >
           {value.map((item: string, index: number) => (
             <ImageListItem key={index} className="relative">
-              <ClearIcon
-                onClick={() => handleRemoveImg(item)}
-                className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"
-              />
+              {!disabled && (
+                <ClearIcon
+                  onClick={() => handleRemoveImg(item)}
+                  className="absolute -right-2 -top-2 hover:shadow-inner rounded-full cursor-pointer text-error text-base"
+                />
+              )}
 
               <img
                 src={`${item}?w=164&fit=crop&auto=format`}
@@ -103,9 +106,15 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       <Box>
         {renderImageList()}
 
-        <Button className={clsx(className, "bg-main-2")}>
+        <Button
+          disabled={disabled}
+          className={clsx(
+            className,
+            disabled ? "disable-form-input" : "bg-main-2",
+          )}
+        >
           <InputLabel
-            className="flex items-center justify-center text-[#fff] cursor-pointer"
+            className="flex items-center justify-center text-white cursor-pointer"
             htmlFor={controlProps.name}
           >
             <CameraIcon className="mr-2" />

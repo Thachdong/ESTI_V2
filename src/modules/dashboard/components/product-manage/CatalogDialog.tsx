@@ -43,6 +43,8 @@ export const CatalogDialog: React.FC<TDialog> = ({
 
   const template = watch("template");
 
+  const disabled = type === "View" && !isUpdate;
+
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
@@ -209,7 +211,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
             loader={category.uploadImage}
             controlProps={{ control, name: "templateBanner" }}
             title="Tải ảnh"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
             className="mb-3"
           />
         </Box>
@@ -226,7 +228,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
           }}
           label="Sản phẩm đại diện"
           selectShape={{ valueKey: "id", labelKey: "productName" }}
-          disabled={type === "View" && !isUpdate}
+          disabled={disabled}
         />
       );
   };
@@ -249,7 +251,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
               rules: { required: "Phải nhập tên danh mục" },
             }}
             label="Tên danh mục"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelectAsync
@@ -261,7 +263,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
             }}
             label="Nhóm cha"
             selectShape={{ valueKey: "id", labelKey: "name" }}
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           <FormSelectAsync
@@ -272,7 +274,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
             }}
             label="Sản phẩm nổi bật"
             selectShape={{ valueKey: "id", labelKey: "title" }}
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
             multiple={true}
           />
 
@@ -284,7 +286,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
               rules: { required: "Phải chọn template" },
             }}
             label="Chọn template"
-            disabled={type === "View" && !isUpdate}
+            disabled={disabled}
           />
 
           {renderTemplate()}
@@ -298,7 +300,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
               loader={category.uploadImage}
               controlProps={{ control, name: "thumbnail" }}
               title="Tải ảnh"
-              disabled={type === "View" && !isUpdate}
+              disabled={disabled}
               className="mb-3"
             />
           </Box>
@@ -311,7 +313,7 @@ export const CatalogDialog: React.FC<TDialog> = ({
             }}
             label={"Chú thích"}
             className="col-span-2"
-            editorProps={undefined}
+            editorProps={{disabled}}
           />
         </Box>
 
