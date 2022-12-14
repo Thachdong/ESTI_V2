@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bgContainer {
+  @apply flex flex-col w-full h-full shadow overflow-y-auto p-2;
+}
+
+.MuiDataGrid-columnHeaderTitleContainerContent {
+  width: 100%;
+}
+
+.disable-form-input {
+  background: #f0f0f0;
+  cursor: not-allowed !important;
+}

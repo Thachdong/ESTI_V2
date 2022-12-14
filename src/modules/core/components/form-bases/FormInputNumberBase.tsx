@@ -1,8 +1,10 @@
 import { TextField, TextFieldProps } from "@mui/material";
+import clsx from "clsx";
 import NumberFormat, { NumberFormatProps } from "react-number-format";
-import { TFormInputNumberBaseProps } from "~types/form-controlled/form-input-number";
 
-export const FormInputNumberBase: React.FC<TFormInputNumberBaseProps> = ({ baseProps }) => {
+export const FormInputNumberBase: React.FC<
+  NumberFormatProps<TextFieldProps>
+> = (props) => {
   const defaultProps: NumberFormatProps<TextFieldProps> = {
     allowLeadingZeros: false,
     required: true,
@@ -10,7 +12,7 @@ export const FormInputNumberBase: React.FC<TFormInputNumberBaseProps> = ({ baseP
     thousandSeparator: true,
     decimalSeparator: ".",
     decimalScale: 0,
-    ...baseProps,
+    ...props,
   };
 
   return (
@@ -18,6 +20,7 @@ export const FormInputNumberBase: React.FC<TFormInputNumberBaseProps> = ({ baseP
       {...defaultProps}
       customInput={TextField}
       variant="outlined"
+      className={clsx(props.disabled && "bg-[#f0f0f0]", props.className)}
     />
   );
 };

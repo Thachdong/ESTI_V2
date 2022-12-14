@@ -7,4 +7,10 @@ type TDialog = DialogProps & {
     type?: string;
     title?: string;
     refetch?: () => void;
+    headerClassName?: string;
+}
+
+type TDefaultDialogState = {
+    open: boolean;
+    type?: string;
 }

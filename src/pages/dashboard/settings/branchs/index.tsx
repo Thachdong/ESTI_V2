@@ -1,4 +1,4 @@
-import { BranchsPage } from "~modules-dashboard/pages";
+import { BranchsPage } from "~modules-dashboard/pages/settings/branchs";
 import { TNextPageWithLayout } from "~types/_app";
 
 const Index: TNextPageWithLayout = () => <BranchsPage />

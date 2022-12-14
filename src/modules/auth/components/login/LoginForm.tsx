@@ -57,8 +57,8 @@ export function LoginForm() {
 
       const { error, ok, url } = response || {};
 
-      if (ok) {
-        router.push(url || "/dashboard/qoutation/requests");
+      if (ok) {        
+        router.push(callbackUrl as string || "/dashboard/quotations/requests");
 
         toast.success("Đăng nhập thành công!");
 
@@ -100,7 +100,7 @@ export function LoginForm() {
               name: "username",
               rules: { required: "Phải nhập tên đăng nhập" },
             }}
-            baseProps={{ label: "Tên đăng nhập" }}
+            label="Tên đăng nhập"
           />
 
           <FormInputPassword

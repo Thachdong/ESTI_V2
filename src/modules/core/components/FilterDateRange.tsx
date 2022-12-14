@@ -1,7 +1,14 @@
-import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Stack,
+  TextFieldProps,
+  Typography,
+} from "@mui/material";
 import { FormDatepickerBase } from "./form-bases";
 import ArrowForwardSharpIcon from "@mui/icons-material/ArrowForwardSharp";
-import { useState } from "react";
+import { JSXElementConstructor, ReactElement, useState } from "react";
 import { Moment } from "moment";
 
 type TProps = {
@@ -22,7 +29,7 @@ export const FilterDateRange: React.FC<TProps> = ({
     setToDate(null);
 
     handleClear();
-  }
+  };
   return (
     <Box sx={{ width: "450px" }}>
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
@@ -35,6 +42,11 @@ export const FilterDateRange: React.FC<TProps> = ({
           <FormDatepickerBase
             value={FromDate}
             onChange={(val: any) => setFromDate(val)}
+            renderInput={function (
+              props: TextFieldProps
+            ): ReactElement<any, string | JSXElementConstructor<any>> {
+              throw new Error("Function not implemented.");
+            }}
           />
         </Box>
 
@@ -51,7 +63,11 @@ export const FilterDateRange: React.FC<TProps> = ({
           <FormDatepickerBase
             value={ToDate}
             onChange={(val: any) => setToDate(val)}
-            pickerProps={{}}
+            renderInput={function (
+              props: TextFieldProps
+            ): ReactElement<any, string | JSXElementConstructor<any>> {
+              throw new Error("Function not implemented.");
+            }}
           />
         </Box>
       </Stack>
@@ -70,7 +86,9 @@ export const FilterDateRange: React.FC<TProps> = ({
         >
           Lọc
         </Button>
-        <Button color="error" onClick={handleReset}>Bỏ lọc</Button>
+        <Button color="error" onClick={handleReset}>
+          Bỏ lọc
+        </Button>
       </ButtonGroup>
     </Box>
   );

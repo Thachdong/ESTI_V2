@@ -7,10 +7,9 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputBase } from "../form-bases";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 
-export const FormInputPassword: React.FC<TFormInputProps> = ({
-  baseProps,
-  controlProps,
-}) => {
+export const FormInputPassword: React.FC<TFormInputProps> = (props) => {
+  const {controlProps, ...inputProps} = props;
+
   const [showPassword, setShowPassword] = useState(false);
 
   const endAdornment = (
@@ -26,7 +25,7 @@ export const FormInputPassword: React.FC<TFormInputProps> = ({
   );
 
   const renderController = ({
-    field,
+    field: {ref, ...restField},
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -43,11 +42,11 @@ export const FormInputPassword: React.FC<TFormInputProps> = ({
       ),
       InputProps: { endAdornment },
       error: !!error,
-      ...baseProps,
-      ...field,
+      ...inputProps,
+      ...restField,
     };
 
-    return <FormInputBase baseProps={defaultProps} />;
+    return <FormInputBase {...defaultProps} />;
   };
 
   return (

@@ -1,7 +1,7 @@
-import { QuotationsRequests } from "~modules-dashboard/pages";
+import { QuotationRequestsPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <QuotationsRequests />;
+const Index: TNextPageWithLayout = () => <QuotationRequestsPage />;
 
 Index.displayName = "Yêu cầu báo giá";
 

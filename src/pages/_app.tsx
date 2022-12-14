@@ -3,6 +3,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import "nprogress/nprogress.css";
+import 'react-contexify/ReactContexify.css';
 import "~styles/globals.css";
 
 import Head from "next/head";
@@ -38,7 +39,7 @@ function MyApp({
       <ReactQueryProvider>
         <MuiProvider emotionCache={emotionCache}>
           <Head>
-            <link rel="icon" type="image/png" href="/logo-full.png" />
+            <link rel="icon" type="image/png" href="/logo-small.png" />
             <title>{loading ? "Đang chuyển hướng..." : displayName}</title>
           </Head>
 

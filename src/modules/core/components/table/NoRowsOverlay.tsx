@@ -1,28 +1,28 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
 
-const StyledGridOverlay = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  '& .ant-empty-img-1': {
-    fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
+const StyledGridOverlay = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100%",
+  "& .ant-empty-img-1": {
+    fill: theme.palette.mode === "light" ? "#aeb8c2" : "#262626",
   },
-  '& .ant-empty-img-2': {
-    fill: theme.palette.mode === 'light' ? '#f5f5f7' : '#595959',
+  "& .ant-empty-img-2": {
+    fill: theme.palette.mode === "light" ? "#f5f5f7" : "#595959",
   },
-  '& .ant-empty-img-3': {
-    fill: theme.palette.mode === 'light' ? '#dce0e6' : '#434343',
+  "& .ant-empty-img-3": {
+    fill: theme.palette.mode === "light" ? "#dce0e6" : "#434343",
   },
-  '& .ant-empty-img-4': {
-    fill: theme.palette.mode === 'light' ? '#fff' : '#1c1c1c',
+  "& .ant-empty-img-4": {
+    fill: theme.palette.mode === "light" ? "#fff" : "#1c1c1c",
   },
-  '& .ant-empty-img-5': {
-    fillOpacity: theme.palette.mode === 'light' ? '0.8' : '0.08',
-    fill: theme.palette.mode === 'light' ? '#f5f5f5' : '#fff',
+  "& .ant-empty-img-5": {
+    fillOpacity: theme.palette.mode === "light" ? "0.8" : "0.08",
+    fill: theme.palette.mode === "light" ? "#f5f5f5" : "#fff",
   },
 }));
 
@@ -35,6 +35,7 @@ export const NoRowsOverlay = () => {
         viewBox="0 0 184 152"
         aria-hidden
         focusable="false"
+        style={{ padding: 10 }}
       >
         <g fill="none" fillRule="evenodd">
           <g transform="translate(24 31.67)">
@@ -68,7 +69,7 @@ export const NoRowsOverlay = () => {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 2 }}>Không có dữ liệu</Box>
+      <Box sx={{ my: 2 }}>Không có dữ liệu</Box>
     </StyledGridOverlay>
   );
-}
+};

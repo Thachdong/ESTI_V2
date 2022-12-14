@@ -1,6 +1,7 @@
+import { WarehouseConfigPage } from "~modules-dashboard/pages/settings";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <div>Warehouses list</div>
+const Index: TNextPageWithLayout = () => <WarehouseConfigPage />
 
 Index.displayName = "Danh sách kho";
 

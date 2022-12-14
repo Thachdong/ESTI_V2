@@ -1,7 +1,17 @@
-import { DataGridProps } from "@mui/x-data-grid";
+import { DataGridProps, GridColDef } from "@mui/x-data-grid";
 
-type TDataGrid = {
-    rows?: any[];
-    columns: any[];
-    gridProps?: Partial<DataGridProps>
+type TDataGrid = DataGridProps & {
+  rows?: any[];
+  columns: any[];
+  gridProps?: Partial<DataGridProps>;
+  hideSearchbar?: boolean;
+};
+
+type TGridColDef<TData = any> = GridColDef<TData> & {
+  isSort?: boolean;
+  sortAscValue?: number | string;
+  sortDescValue?: number | string;
+  isFilter?: boolean;
+  filterKey?: string;
+  options?: {value: string | number, label: string}[];
 }

@@ -1,7 +1,7 @@
-import { SuppliersList } from "~modules-dashboard/pages";
+import { SuppliersPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <SuppliersList />
+const Index: TNextPageWithLayout = () => <SuppliersPage />
 
 Index.displayName = "Danh sách nhà cung cấp";
 

@@ -4,15 +4,20 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 import { FormInputBase } from "~modules-core/components/form-bases";
 
-export const FormInput: React.FC<TFormInputProps> = ({
-  baseProps,
-  controlProps,
-}) => {
+export const FormInput: React.FC<TFormInputProps> = (props) => {
+  const { controlProps, label, ...textFieldProps } = props;
+
   const renderController = ({
-    field: {value, ...restField},
+    field: { value, ref, ...restField },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
+    const rules = controlProps.rules || {};
+
+    const updateLabel = Object.keys(rules).includes("required")
+      ? `${label} *`
+      : label;      
+
     const defaultProps = {
       helperText: (
         <ErrorMessage
@@ -23,11 +28,12 @@ export const FormInput: React.FC<TFormInputProps> = ({
       ),
       error: !!error,
       value: value || "",
+      label: updateLabel,
       ...restField,
-      ...baseProps,
-    };    
+      ...textFieldProps,
+    };
 
-    return <FormInputBase baseProps={defaultProps} />;
+    return <FormInputBase {...defaultProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

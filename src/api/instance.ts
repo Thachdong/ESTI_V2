@@ -1,14 +1,16 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { signOut } from "next-auth/react";
+import { toast } from "~modules-core/toast";
 
 const TIMEOUT_IN_MILISECOND = 10000;
 
 export const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL + "api/",
   timeout: TIMEOUT_IN_MILISECOND,
 });
 
-export const setBearerToken = (token: string) => (instance.defaults.headers.common["Authorization"] = "Bearer " + token)
-  
+export const setBearerToken = (token: string) =>
+  (instance.defaults.headers.common["Authorization"] = "Bearer " + token);
 
 const getUrlFromConfig = (config: AxiosRequestConfig) => {
   const { baseURL, url } = config;
@@ -18,12 +20,12 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 
 const useRequestCongif = (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
-  
-  // console.log(
-  //   `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
-  //   "color: #0086b3; font-weight: bold",
-  //   { params, data }
-  // );
+
+  console.log(
+    `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
+    "color: #0086b3; font-weight: bold",
+    { params, data }
+  );
 
   return config;
 };
@@ -35,11 +37,11 @@ instance.interceptors.request.use(useRequestCongif, useRequestConfigError);
 const useResponseSuccess = (response: AxiosResponse) => {
   const { data, status, config } = response || {};
 
-  // console.log(
-  //   `%c ${status} - ${getUrlFromConfig(config)}:`,
-  //   "color: #008000; font-weight: bold",
-  //   data
-  // );
+  console.log(
+    `%c ${status} - ${getUrlFromConfig(config)}:`,
+    "color: #008000; font-weight: bold",
+    data
+  );
 
   return response;
 };
@@ -57,9 +59,11 @@ const useResponseError = (error: AxiosError) => {
     );
 
     switch (status) {
-      case 401: {
-        // TRIGGER TOKEN ROTATION HERE
+      case 408: {
+        // TRIGGER TOKEN ROTATION | SIGNOUT HERE
+        signOut();
         // TOAST statusText
+        toast.error("Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !")
         break;
       }
       default:
