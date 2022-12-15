@@ -30,16 +30,21 @@ export type TProductPayload = Omit<TProduct, "id">;
 const BASE_URL = "Product";
 
 export const products = {
+  // PRODUCT CRUD OPERATORS
   getList: (params: any) =>
     request.getPagination<TProduct>(BASE_URL, { ...params }),
-  getById: (id: string) => request.get<TProduct>(`${BASE_URL}/${id}`),
-  getProductGroups: () => request.get<any>(BASE_URL + "/ProductGroupList"),
-  uploadImage: (file: FormData) =>
-    request.post<FormData, string>(BASE_URL + "/upload-image", file),
   create: (payload: TProductPayload) =>
     request.post<TProductPayload, any>(BASE_URL, payload),
+  update: (payload: TProduct) => request.put<TProduct, any>(BASE_URL, payload),
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+  getById: (id: string) => request.get<TProduct>(`${BASE_URL}/${id}`),
+
+  // DANH SÁCH NHÓM SẢN PHẨM
+  getProductGroups: () => request.get<any>(BASE_URL + "/ProductGroupList"),
+  // UPLOAD HÌNH ẢNH SẢN PHẨM (1 HÌNH)
+  uploadImage: (file: FormData) =>
+    request.post<FormData, string>(BASE_URL + "/upload-image", file),
+  // UPLOAD FILE EXCEL
   importExcel: (file: FormData) =>
     request.post<FormData, any>(`${BASE_URL}/import-excel`, file),
-    update: (payload: TProduct) => request.put<TProduct, any>(BASE_URL, payload)
 };

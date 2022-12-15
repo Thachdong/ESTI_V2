@@ -14,3 +14,4 @@ export * from "./category";
 export * from "./document";
 export * from "./documentCareer";
 export * from "./documentType";
+export * from "./product-manage";

@@ -56,19 +56,19 @@ export const QuotationRequestsPage = () => {
       field: "created",
       headerName: "Ngày tạo",
       type: "dateTime",
-      flex: 1,
+      width: 125,
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
     },
-    { field: "preOrderCode", headerName: "Mã yêu cầu" },
-    { field: "customerCode", headerName: "Mã KH" },
-    { field: "companyName", headerName: "Tên KH" },
-    { field: "customerStatusName", headerName: "Tài khoản" },
-    { field: "branchCode", headerName: "Chi nhánh" },
-    { field: "salesCode", headerName: "Nhân viên sale" },
-    { field: "preOrderStatusName", headerName: "Trạng thái YC" },
+    { field: "preOrderCode", headerName: "Mã yêu cầu", width: 125, },
+    { field: "customerCode", headerName: "Mã KH", width: 125, },
+    { field: "companyName", headerName: "Tên KH", flex: 1, minWidth: 125 },
+    { field: "customerStatusName", headerName: "Tài khoản", minWidth: 125 },
+    { field: "branchCode", headerName: "Chi nhánh", minWidth: 125 },
+    { field: "salesCode", headerName: "Nhân viên sale", minWidth: 150 },
+    { field: "preOrderStatusName", headerName: "Trạng thái YC", minWidth: 150 },
     { field: "action", headerName: "Thao tác" },
   ];
 
