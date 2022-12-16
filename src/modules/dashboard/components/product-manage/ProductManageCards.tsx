@@ -8,14 +8,6 @@ export const ProductManageCards = () => {
     productManage.statistics().then((res) => res.data)
   );
 
-  const warehouses = data?.stockLikst?.map((list: any) => list?.tenKho);
-
-  const closeToDate = data?.stockLikst?.map((list: any) => list?.giaTriCanDate);
-
-  const inventory = data?.stockLikst?.map((list: any) => list?.giaTriKho);
-
-  const importNo = data?.stockLikst?.map((list: any) => list?.slCanNhapKho);
-
   return (
     <Box className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
       <Card className="bg-[#48BB78] rounded-sm text-white">
@@ -26,14 +18,14 @@ export const ProductManageCards = () => {
 
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold" component="span">
+              <Typography className="text-2xl font-bold truncate" component="span">
                 {list?.tenKho}:
               </Typography>
               <Typography
                 className="flex-grow text-right text-2xl font-bold"
                 component="span"
               >
-                {_format.getVND(list?.giaTriKho)} VND
+                {_format.getVND(list?.giaTriKho)} Đ
               </Typography>
             </Box>
           ))}
@@ -47,14 +39,14 @@ export const ProductManageCards = () => {
           </Typography>
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold" component="span">
+              <Typography className="text-2xl font-bold truncate" component="span">
                 {list?.tenKho}:
               </Typography>
               <Typography
                 className="flex-grow text-right text-2xl font-bold"
                 component="span"
               >
-                {_format.getVND(list?.giaTriCanDate)} VND
+                {_format.getVND(list?.giaTriCanDate)} Đ
               </Typography>
             </Box>
           ))}
@@ -69,7 +61,7 @@ export const ProductManageCards = () => {
 
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold" component="span">
+              <Typography className="text-2xl font-bold truncate" component="span">
                 {list?.tenKho}:
               </Typography>
               <Typography

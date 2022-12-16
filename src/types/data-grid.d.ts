@@ -2,7 +2,7 @@ import { DataGridProps, GridColDef } from "@mui/x-data-grid";
 
 type TDataGrid = DataGridProps & {
   rows?: any[];
-  columns: any[];
+  columns?: any[];
   gridProps?: Partial<DataGridProps>;
   hideSearchbar?: boolean;
 };

@@ -5,16 +5,21 @@ import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productManage, products } from "src/api";
 import {
-  AddButton,
   ContextMenuWrapper,
   DataTable,
+  DeleteButton,
+  DownloadButton,
   generatePaginationProps,
   SearchBox,
+  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { ProductsDialog } from "~modules-dashboard/components";
-import { productManageColumns } from "~modules-dashboard/pages/product-manage/product-manage/data";
+import { ProductManageDialog } from "~modules-dashboard/components";
+import {
+  columnGroupingModel,
+  productManageColumns,
+} from "~modules-dashboard/pages/product-manage/product-manage/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
@@ -30,11 +35,11 @@ export const ProductManageTable = () => {
   const [defaultValue, setDefaultValue] = useState<any>();
 
   // PUSH PAGINATION QUERY
-  useEffect(() => {
+  useEffect(() => {    
     const initQuery = {
+      ...query,
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
-      ...query,
     };
 
     router.push({ query: initQuery });
@@ -46,30 +51,39 @@ export const ProductManageTable = () => {
   }, []);
 
   // DATA FETCHING
-  const { data, isLoading, isFetching, refetch } = useQuery(
+  const { data, refetch } = useQuery(
     [
       "productsList",
-      "loading",
       {
-        ...pagination,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
         ...query,
       },
     ],
     () =>
-        productManage
+      productManage
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           ...query,
         })
-        .then((res) => res.data),
+        .then((res) => {
+          const { items } = res.data;
+          // ADD ID TO EACH ITEM
+          const updatedItems = items?.map((item, index) => ({
+            ...item,
+            rowId: "row_id_" + index,
+          }));
+
+          return { ...res.data, items: updatedItems };
+        }),
     {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data.totalItem });
       },
     }
   );
-  
+
   // DATA TABLE
   const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
@@ -83,19 +97,35 @@ export const ProductManageTable = () => {
   });
 
   const columns: TGridColDef[] = [
-    ...productManageColumns
-  ]
+    ...productManageColumns,
+    {
+      field: "action",
+      headerName: "Thao tác",
+      renderCell: () => (
+        <>
+          <ViewButton
+            className="min-h-[40px] min-w-[40px]"
+            onClick={() => setDialog({ open: true, type: "View" })}
+          />
+          <DeleteButton
+            onClick={handleDelete}
+            className="min-h-[40px] min-w-[40px]"
+          />
+        </>
+      ),
+    },
+  ];
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    if (confirm("Xác nhận xóa SP: " + defaultValue?.productName)) {
+      await mutateDelete.mutateAsync(defaultValue?.id as string);
     }
   }, [defaultValue]);
 
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.items.find((item) => item.rowId === id);
 
     setDefaultValue(currentRow);
   };
@@ -105,16 +135,18 @@ export const ProductManageTable = () => {
   return (
     <Paper className="bgContainer flex flex-col">
       <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
+        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
 
         <Box className="flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
+          <DownloadButton
+            onClick={() =>
+              productManage.downloadAllProduct({ pageSize: 9999, pageIndex: 1 })
+            }
             variant="contained"
             className="mr-3"
           >
-            Thêm sản phẩm
-          </AddButton>
+            Tải file excel
+          </DownloadButton>
         </Box>
       </Box>
 
@@ -126,20 +158,20 @@ export const ProductManageTable = () => {
               id="view-product"
               onClick={() => setDialog({ open: true, type: "View" })}
             >
-              Xem chi tiết
+              Xem chi tiết SP
             </Item>
             <Item id="delete-product" onClick={handleDelete}>
-              Xóa
+              Xóa SP
             </Item>
           </Menu>
         }
       >
         <DataTable
-          rows={[]}
-          // rows={data?.items as []}
+          experimentalFeatures={{ columnGrouping: true }}
+          columnGroupingModel={columnGroupingModel}
+          rows={data?.items as []}
           columns={columns}
           gridProps={{
-            loading: isLoading || isFetching,
             ...paginationProps,
           }}
           componentsProps={{
@@ -147,10 +179,12 @@ export const ProductManageTable = () => {
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          getRowId={(row) => row.rowId}
+          className="grouping-column"
         />
       </ContextMenuWrapper>
 
-      <ProductsDialog
+      <ProductManageDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

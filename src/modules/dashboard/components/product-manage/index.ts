@@ -4,3 +4,4 @@ export * from "./DocumentDialog";
 export * from "./DocumentTypeDialog";
 export * from "./ProductManageTable";
 export * from "./ProductManageCards";
+export * from "./ProductManageDialog";

@@ -36,9 +36,9 @@ export const DocumentsPage: React.FC = () => {
   // PUSH PAGINATION QUERY
   useEffect(() => {
     const initQuery = {
+      ...query,
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
-      ...query,
     };
 
     router.push({ query: initQuery });
