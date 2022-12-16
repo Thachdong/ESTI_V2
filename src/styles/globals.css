@@ -14,3 +14,35 @@
   background: #f0f0f0;
   cursor: not-allowed !important;
 }
+
+/* GROUPING COLUMN STYLES */
+.grouping-column .MuiDataGrid-columnHeaderTitleContainerContent {
+  @apply flex justify-center;
+}
+
+.grouping-column .css-f3jnds-MuiDataGrid-columnHeaders {
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+}
+
+.grouping-column
+  .MuiDataGrid-columnHeaders
+  .css-yrdy0g-MuiDataGrid-columnHeaderRow:first-child {
+  height: 32px !important;
+  line-height: 32px !important;
+  border-bottom: 1px solid #fff;
+  @apply text-white bg-main;
+}
+
+.grouping-column
+  .MuiDataGrid-columnHeaders
+  .css-yrdy0g-MuiDataGrid-columnHeaderRow:first-child
+  .MuiDataGrid-columnHeader {
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.grouping-column .MuiDataGrid-virtualScroller {
+  transform: translateY(-32px);
+}
