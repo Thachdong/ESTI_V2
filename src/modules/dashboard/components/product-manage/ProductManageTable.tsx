@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { productManage, products } from "src/api";
+import { productManage, products, warehouseConfig } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
@@ -35,7 +35,7 @@ export const ProductManageTable = () => {
   const [defaultValue, setDefaultValue] = useState<any>();
 
   // PUSH PAGINATION QUERY
-  useEffect(() => {    
+  useEffect(() => {
     const initQuery = {
       ...query,
       pageIndex: pagination.pageIndex,
@@ -84,6 +84,17 @@ export const ProductManageTable = () => {
     }
   );
 
+  const { data: warehouseIds } = useQuery(["warehouseIds"], () =>
+  warehouseConfig
+      .getList({ pageIndex: 1, pageSize: 999 })
+      .then((res) =>
+        res.data?.items?.map((item: any) => ({
+          value: item?.id,
+          label: item?.code,
+        }))
+      )
+  );
+
   // DATA TABLE
   const mutateDelete = useMutation((id: string) => products.delete(id), {
     onError: (error: any) => {
@@ -97,6 +108,17 @@ export const ProductManageTable = () => {
   });
 
   const columns: TGridColDef[] = [
+    {
+      field: "warehouseConfigCode",
+      headerName: "Mã Kho",
+      sortAscValue: 7,
+      sortDescValue: 0,
+      filterKey: "warehouseConfigId",
+      minWidth: 150,
+      flex: 1,
+      type: "select",
+      options: warehouseIds as []
+    },
     ...productManageColumns,
     {
       field: "action",
