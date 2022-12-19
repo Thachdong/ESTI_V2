@@ -31,7 +31,7 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
           name={name as any}
           render={({ message }) => message}
         />
-      ),
+      ) as any,
       error: !!error,
       value: cleanValue,
       label: updateLabel,

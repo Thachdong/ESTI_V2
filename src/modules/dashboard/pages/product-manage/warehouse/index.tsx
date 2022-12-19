@@ -1,11 +1,12 @@
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import _ from "lodash";
 import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { position } from "src/api";
+import { position, TPosition } from "src/api";
 import { AddButton } from "~modules-core/components";
 import {
-  DocumentDialog,
+  CreatePositionDialog,
+  PositionDialog,
   PositionList,
   PositionStatus,
 } from "~modules-dashboard/components";
@@ -15,9 +16,17 @@ export const WarehousePage: React.FC = () => {
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
+  const [defaultValue, setDefaultValue] = useState<TPosition>();
+
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
     setDialog({ open: false });
+  }, []);
+
+  const onDialogOpen = useCallback((type: string, data: TPosition) => {
+    setDialog({ open: true, type });
+
+    setDefaultValue(data);
   }, []);
 
   // DATA FETCHING
@@ -53,8 +62,6 @@ export const WarehousePage: React.FC = () => {
       })
   );
 
-  console.log(data);
-
   // DOM RENDER
   return (
     <Box>
@@ -74,16 +81,29 @@ export const WarehousePage: React.FC = () => {
 
       <Box className="grid grid-cols-2 gap-4">
         {data?.items.map((item: any) => (
-          <PositionList warehouse={item} key={item?.warehouseConfigID} />
+          <PositionList
+            onDialogOpen={onDialogOpen}
+            warehouse={item}
+            key={item?.warehouseConfigID}
+          />
         ))}
       </Box>
 
-      <DocumentDialog
+      <CreatePositionDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
         defaultValue={{} as any}
+        title="THÊM MỚI VỊ TRÍ"
+      />
+
+      <PositionDialog
+        onClose={onDialogClose}
+        open={dialog.open && dialog.type === "View"}
+        refetch={refetch}
+        defaultValue={defaultValue as any}
+        title="THÔNG TIN VỊ TRÍ LƯU"
       />
     </Box>
   );

@@ -22,7 +22,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   const colDef = params.colDef as TGridColDef;
 
-  const { isSort, isFilter, sortAscValue, sortDescValue, type, options } =
+  const { isSort, isFilter, sortAscValue, sortDescValue, type, options, sortKey = "order" } =
     colDef;
 
   const filterKey = colDef.filterKey as string;
@@ -71,19 +71,19 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
         case mode === sortMode: {
           setSortMode(null);
 
-          delete query["order"];
+          delete query[sortKey];
 
           router.push({ query });
 
           return;
         }
         case mode === "asc": {
-          router.push({ query: { ...query, order: sortAscValue } });
+          router.push({ query: { ...query, [sortKey]: sortAscValue } });
 
           break;
         }
         case mode === "desc": {
-          router.push({ query: { ...query, order: sortDescValue } });
+          router.push({ query: { ...query, [sortKey]: sortDescValue } });
 
           break;
         }

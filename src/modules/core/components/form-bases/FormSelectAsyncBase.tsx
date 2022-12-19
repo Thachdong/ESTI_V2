@@ -5,6 +5,7 @@ import {
   OutlinedInput,
   Select,
   CircularProgress,
+  Box,
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { useState, UIEvent } from "react";
@@ -23,8 +24,9 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     formControlProps,
     inputLabelProps,
     fetcherParams,
+    helperText,
     ...selectProps
-  } = props;  
+  } = props;
 
   // STATE DECLARATIONS
   const [pagination, setPagination] = useState(defaultPagination);
@@ -38,10 +40,10 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       fetcher({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-        ...fetcherParams
-      }).then(res => res.data),
+        ...fetcherParams,
+      }).then((res) => res.data),
     {
-      onSuccess: (data) => {        
+      onSuccess: (data) => {
         if (data.totalItem === 0 || !Array.isArray(data.items)) return;
 
         const updateOptions = _.uniqBy(
@@ -88,7 +90,12 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
           PaperProps,
           sx: { maxHeight: 325 },
         }}
-        input={<OutlinedInput className={clsx(props.disabled && "disable-form-input")} label={label} />}
+        input={
+          <OutlinedInput
+            className={clsx(props.disabled && "disable-form-input")}
+            label={label}
+          />
+        }
         disabled={isLoading || isFetching}
         {...selectProps}
       >
@@ -107,6 +114,10 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
           </MenuItem>
         )}
       </Select>
+
+      {helperText && (
+        <Box className="text-error text-xs ml-3 mt-1">{helperText as string}</Box>
+      )}
     </FormControl>
   );
 };

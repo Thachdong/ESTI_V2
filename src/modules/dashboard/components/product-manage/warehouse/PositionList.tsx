@@ -1,17 +1,19 @@
 import { Box, Button, Typography } from "@mui/material";
 import clsx from "clsx";
 import { useCallback } from "react";
+import { TPosition } from "src/api";
 import styles from "~modules-dashboard/styles/product-manage/warehouse.module.css";
 
 type TProps = {
   warehouse: {
     warehouseConfigID: string;
     warehouseConfigCode: string;
-    positions: any[];
+    positions: TPosition[];
   };
+  onDialogOpen: (type: string, data: TPosition) => void;
 };
 
-export const PositionList: React.FC<TProps> = ({ warehouse }) => {
+export const PositionList: React.FC<TProps> = ({ warehouse, onDialogOpen }) => {
   const getClassByStatus = useCallback(
     (status: number) => {
       switch (status) {
@@ -42,6 +44,7 @@ export const PositionList: React.FC<TProps> = ({ warehouse }) => {
               getClassByStatus(position?.positionStatus),
               "border border-solid border-grey-2 text-center"
             )}
+            onClick={() => onDialogOpen("View", position)}
             key={position?.id}
           >
             {position?.positionName}
