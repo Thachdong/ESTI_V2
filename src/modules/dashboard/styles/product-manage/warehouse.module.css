@@ -1,0 +1,35 @@
+.empty {
+  background: #fff;
+  color: currentColor !important;
+}
+
+.empty:hover {
+  background: rgba(#fff, 0.3);
+}
+
+.available {
+  background: #38a169;
+  color: #fff !important;
+}
+
+.available:hover {
+  background: rgba(56, 161, 105, 0.7);
+}
+
+.nealy-full {
+  background: #ffff00;
+  color: currentColor !important;
+}
+
+.nealy-full:hover {
+    background: rgba(255, 255, 0, 0.3);
+}
+
+.full {
+  background: #ff0000;
+  color: #fff !important;
+}
+
+.full:hover {
+    background: rgba(255, 0, 0, 0.3);
+}

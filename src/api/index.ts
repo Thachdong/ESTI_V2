@@ -15,3 +15,4 @@ export * from "./document";
 export * from "./documentCareer";
 export * from "./documentType";
 export * from "./product-manage";
+export * from "./position";

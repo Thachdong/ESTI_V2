@@ -35,31 +35,57 @@ export const productTypes = [
 ];
 
 export const curatorDepartments = [
-  {id: 1, name: "Phòng hành chánh"},
-  {id: 2, name: "Phòng thu mua"},
-  {id: 3, name: "Phòng QC"},
-  {id: 4, name: "Phòng QA"},
-  {id: 5, name: "Phòng ban khác"},
+  { id: 1, name: "Phòng hành chánh" },
+  { id: 2, name: "Phòng thu mua" },
+  { id: 3, name: "Phòng QC" },
+  { id: 4, name: "Phòng QA" },
+  { id: 5, name: "Phòng ban khác" },
 ];
 
 export const curatorPositions = [
-  {id: 1, name: 'Giám đốc'},
-  {id: 2, name: 'Kế toán'},
-  {id: 3, name: 'Nhân viên bán hàng'},
+  { id: 1, name: "Giám đốc" },
+  { id: 2, name: "Kế toán" },
+  { id: 3, name: "Nhân viên bán hàng" },
 ];
 
 export const productTemplates = [
-  {id: 1, name: "Template 1", url: "https://estiweb.monamedia.net/template/sanpham-1.html"},
-  {id: 2, name: "Template 2", url: "https://estiweb.monamedia.net/template/sanpham-2.html"},
-  {id: 3, name: "Template 3", url: ""},
-]
-
+  {
+    id: 1,
+    name: "Template 1",
+    url: "https://estiweb.monamedia.net/template/sanpham-1.html",
+  },
+  {
+    id: 2,
+    name: "Template 2",
+    url: "https://estiweb.monamedia.net/template/sanpham-2.html",
+  },
+  { id: 3, name: "Template 3", url: "" },
+];
 
 export const parentCategoryId = "00000000-0000-0000-0000-000000000000";
 
 export const searchParams = [
-  {id: 1, name: "Mã sản phẩm"},
-  {id: 2, name: "Tên sản phẩm"},
-  {id: 3, name: "Nhà sản xuất"},
-  {id: 4, name: "Lô sản xuất"},
-]
+  { id: 1, name: "Mã sản phẩm" },
+  { id: 2, name: "Tên sản phẩm" },
+  { id: 3, name: "Nhà sản xuất" },
+  { id: 4, name: "Lô sản xuất" },
+];
+
+export const positionStatus = [
+  {
+    id: 1,
+    name: "Không có hàng",
+  },
+  {
+    id: 2,
+    name: "Còn trống",
+  },
+  {
+    id: 3,
+    name: "Gần đầy",
+  },
+  {
+    id: 4,
+    name: "Hết chổ",
+  },
+];

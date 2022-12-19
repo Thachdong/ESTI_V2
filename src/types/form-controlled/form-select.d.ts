@@ -31,6 +31,7 @@ type TFormSelectAsyncBase = SelectProps & {
   callback?: (option: any) => void;
   formControlProps?: FormControlProps;
   inputLabelProps?: InputLabelProps;
+  helperText?: string | Element;
 };
 
 type TFromSelectAsync = TFormSelectAsyncBase & {

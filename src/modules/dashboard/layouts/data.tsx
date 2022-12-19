@@ -73,6 +73,10 @@ export const menu = [
     icon: <ProductionIcon className="w-[20px] h-[20px]" />,
     childrens: [
       {
+        title: "Tra cứu vị trí",
+        link: "product-manage/warehouse",
+      },
+      {
         title: "Tra cứu sản phẩm",
         link: "product-manage",
       },
@@ -91,10 +95,6 @@ export const menu = [
       {
         title: "Loại tài liệu",
         link: "product-manage/document-type",
-      },
-      {
-        title: "Tra cứu vị trí",
-        link: "products/tracking",
       },
       {
         title: "Nhãn sản phẩm",
