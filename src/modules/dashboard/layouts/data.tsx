@@ -98,11 +98,11 @@ export const menu = [
       },
       {
         title: "Nhãn sản phẩm",
-        link: "products/label",
+        link: "product-manage/label",
       },
       {
         title: "Tài liệu theo ngành",
-        link: "products/documentary-material",
+        link: "product-manage/technical-documents",
       },
     ],
   },
