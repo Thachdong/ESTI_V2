@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DeleteButton,
+  RefreshButton,
   SearchBox,
   ViewButton,
 } from "~modules-core/components";
@@ -105,18 +106,15 @@ export const DocumentTypesPage = () => {
   // DOM RENDER
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
-
-        <Box className="flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Thêm tài liệu
-          </AddButton>
-        </Box>
+      <Box className="flex justify-end mb-3">
+        <RefreshButton onClick={() => refetch()} />
+        <AddButton
+          onClick={() => setDialog({ open: true, type: "Add" })}
+          variant="contained"
+          className="ml-3"
+        >
+          Thêm tài liệu
+        </AddButton>
       </Box>
 
       <ContextMenuWrapper
