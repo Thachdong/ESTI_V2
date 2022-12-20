@@ -1,6 +1,4 @@
 import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState, MouseEvent } from "react";
 import { Item, Menu } from "react-contexify";
@@ -10,10 +8,9 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
@@ -102,17 +99,21 @@ export const StaffsPage = () => {
       field: "action",
       headerName: "Thao tác",
       width: 100,
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

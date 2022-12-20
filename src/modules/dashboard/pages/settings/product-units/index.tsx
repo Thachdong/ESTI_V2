@@ -6,11 +6,10 @@ import { TUnit, units } from "src/api";
 import {
   AddButton,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
 } from "~modules-core/components";
-import { ViewButton } from "~modules-core/components/buttons/ViewButton";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { UnitDialog } from "~modules-dashboard/components";
@@ -111,18 +110,22 @@ export const UnitsPage: React.FC = () => {
       headerName: "",
       width: 100,
       flex: 0,
-      renderCell: (record) => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => onUpdate(record.row)}
-          />
-          <DeleteButton
-            onClick={() => onDelete(record.row)}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
-      ),
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => onUpdate(row),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: () => onDelete(row),
+              label: "Xóa",
+            },
+          ]}
+        />
+      )
     },
   ];
 
