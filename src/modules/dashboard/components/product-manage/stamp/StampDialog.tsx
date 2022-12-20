@@ -161,8 +161,8 @@ export const StampDialog: React.FC<TDialog> = ({
     const payload = {
       id: data?.id,
       chemicalName: data?.chemicalName,
-      casCode: data?.casCode
-    }
+      casCode: data?.casCode,
+    };
 
     await mutationUpdateStamp.mutateAsync(payload);
   };
@@ -248,77 +248,75 @@ export const StampDialog: React.FC<TDialog> = ({
             label="Nhóm sản phẩm"
             disabled={disabled}
           />
+          <FormSelectAsync
+            fetcher={products.getList}
+            fetcherParams={{ labelType }}
+            queryKey="productOptions_productCode"
+            controlProps={{
+              control,
+              name: "productId",
+              rules: { required: "Phải chọn mã sản phẩm" },
+            }}
+            label="Mã sản phẩm"
+            selectShape={{ valueKey: "id", labelKey: "productCode" }}
+            callback={handleSelectProductCallback}
+            disabled={disabled || !labelType}
+          />
 
-          {labelType && (
-            <>
-              <FormSelectAsync
-                fetcher={products.getList}
-                fetcherParams={{ labelType }}
-                queryKey="productOptions_productCode"
-                controlProps={{
-                  control,
-                  name: "productId",
-                  rules: { required: "Phải chọn mã sản phẩm" },
-                }}
-                label="Mã sản phẩm"
-                selectShape={{ valueKey: "id", labelKey: "productCode" }}
-                callback={handleSelectProductCallback}
-                disabled={disabled || !labelType}
-              />
-
-              <FormSelectAsync
-                fetcher={products.getList}
-                fetcherParams={{ labelType }}
-                queryKey="productOptions_productName"
-                controlProps={{
-                  control,
-                  name: "productId",
-                  rules: { required: "Phải chọn tên sản phẩm" },
-                }}
-                label="Tên sản phẩm"
-                selectShape={{ valueKey: "id", labelKey: "productName" }}
-                callback={handleSelectProductCallback}
-                disabled={disabled || !labelType}
-              />
-
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "manufactor",
-                }}
-                label="Hãng sản xuất"
-                disabled={true}
-              />
-
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "origin",
-                }}
-                label="Xuất xứ"
-                disabled={true}
-              />
-
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "specs",
-                }}
-                label="Quy cách"
-                disabled={true}
-              />
-            </>
-          )}
+          <FormSelectAsync
+            fetcher={products.getList}
+            fetcherParams={{ labelType }}
+            queryKey="productOptions_productName"
+            controlProps={{
+              control,
+              name: "productId",
+              rules: { required: "Phải chọn tên sản phẩm" },
+            }}
+            label="Tên sản phẩm"
+            selectShape={{ valueKey: "id", labelKey: "productName" }}
+            callback={handleSelectProductCallback}
+            disabled={disabled || !labelType}
+          />
 
           <FormInput
             controlProps={{
-              name: "chemicalName",
               control,
-              rules: { required: "Phải nhập công thức hóa học" },
+              name: "manufactor",
             }}
-            label="Công thức hóa học"
-            disabled={disabled && !isUpdate}
+            label="Hãng sản xuất"
+            disabled={true}
           />
+
+          <FormInput
+            controlProps={{
+              control,
+              name: "origin",
+            }}
+            label="Xuất xứ"
+            disabled={true}
+          />
+
+          {labelType !== 3 && (
+            <FormInput
+              controlProps={{
+                control,
+                name: "specs",
+              }}
+              label="Quy cách"
+              disabled={true}
+            />
+          )}
+
+          {labelType === 1 && (
+            <FormInput
+              controlProps={{
+                name: "chemicalName",
+                control,
+              }}
+              label="Công thức hóa học"
+              disabled={disabled && !isUpdate}
+            />
+          )}
 
           <FormInput
             controlProps={{

@@ -10,13 +10,15 @@ import {
   ContextMenuWrapper,
   DataTable,
   DeleteButton,
+  DropdownButton,
   FormSelect,
   generatePaginationProps,
   ViewButton,
 } from "~modules-core/components";
 import { defaultPagination, productTypesStamp } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { ProductsDialog, StampDialog } from "~modules-dashboard/components";
+import { StampDialog } from "~modules-dashboard/components";
+import { StampHistoryDialog } from "~modules-dashboard/components/product-manage/stamp/HistoryDialog";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { stampColumns } from "./data";
@@ -29,6 +31,8 @@ export const StampPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+
+  const [historyDialog, setHistoryDialog] = useState(false);
 
   const [defaultValue, setDefaultValue] = useState<any>();
 
@@ -62,7 +66,7 @@ export const StampPage = () => {
       {
         ...pagination,
         ...query,
-        labelType
+        labelType,
       },
     ],
     () =>
@@ -78,7 +82,7 @@ export const StampPage = () => {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data.totalItem });
       },
-      enabled: Boolean(labelType)
+      enabled: Boolean(labelType),
     }
   );
 
@@ -105,17 +109,25 @@ export const StampPage = () => {
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: () => setHistoryDialog(true),
+              label: "Lịch sử nhãn",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -160,6 +172,12 @@ export const StampPage = () => {
             >
               Xem chi tiết
             </Item>
+            <Item
+              id="view-product"
+              onClick={() => setHistoryDialog(true)}
+            >
+              Lịch sử nhãn
+            </Item>
             <Item id="delete-product" onClick={handleDelete}>
               Xóa
             </Item>
@@ -187,6 +205,12 @@ export const StampPage = () => {
         type={dialog.type}
         refetch={refetch}
         defaultValue={defaultValue as any}
+      />
+
+      <StampHistoryDialog
+        onClose={() => setHistoryDialog(false)}
+        open={historyDialog}
+        title="Lịch sử nhãn"
       />
     </Paper>
   );
