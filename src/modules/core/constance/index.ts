@@ -34,6 +34,12 @@ export const productTypes = [
   { id: 6, name: "Nhóm sản phẩm khác" },
 ];
 
+export const productTypesStamp = [ // USE IN STAMP CONFIG PAGE
+  { id: 1, name: "Thiết bị" },
+  { id: 2, name: "Hóa chất" },
+  { id: 3, name: "Dụng cụ" },
+];
+
 export const curatorDepartments = [
   { id: 1, name: "Phòng hành chánh" },
   { id: 2, name: "Phòng thu mua" },

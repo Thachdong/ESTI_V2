@@ -4,7 +4,7 @@ import { TFormSelectBase } from "~types/form-controlled/form-select";
 
 export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
   const { options, label, selectShape, callback, ...restProps } =
-    props;    
+    props;
 
   const renderOptions = () => {
     if (options?.length === 0 || !Array.isArray(options)) {

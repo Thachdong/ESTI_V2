@@ -16,3 +16,5 @@ export * from "./documentCareer";
 export * from "./documentType";
 export * from "./product-manage";
 export * from "./position";
+export * from "./stamp";
+export * from "./label-history";
