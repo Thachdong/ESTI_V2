@@ -14,6 +14,24 @@ import _ from "lodash";
 import { TFormSelectAsyncBase } from "~types/form-controlled/form-select";
 import clsx from "clsx";
 
+const getOptionsBaseOnFilterParams = (filterParams: any, options: any[]) => {
+  if (!filterParams) return options;
+
+  const filterKeys = Object.keys(filterParams);
+
+  return options.filter(opt => {
+    let result = true;
+
+    filterKeys.map(key => {
+      if (filterParams[key] !== opt[key]) {
+        result = false;
+      }
+    });
+
+    return result;
+  });
+}
+
 export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   // PROPS EXTRACTING
   const {
@@ -52,7 +70,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
           (item) => item.id
         );
 
-        setOptions(updateOptions);
+        setOptions(getOptionsBaseOnFilterParams(fetcherParams, updateOptions));
 
         setPagination({ ...pagination, total: data.totalItem });
       },

@@ -9,6 +9,7 @@ import {
   TCategory,
   TCreateStamp,
   TProduct,
+  TUpdateStamp,
 } from "src/api";
 import {
   BaseButton,
@@ -43,7 +44,7 @@ export const StampDialog: React.FC<TDialog> = ({
     mode: "onBlur",
   });
 
-  const disabled = type === "View" && !isUpdate;
+  const disabled = type === "View";
 
   const labelType = watch("labelType");
 
@@ -54,6 +55,31 @@ export const StampDialog: React.FC<TDialog> = ({
     }
 
     if (type === "View" && defaultValue) {
+      const {
+        id,
+        labelType = 1,
+        productId,
+        productCode,
+        productName,
+        origin,
+        manufactor,
+        specs,
+        chemicalName,
+        casCode,
+      } = defaultValue;
+
+      reset({
+        id,
+        labelType,
+        productId,
+        productCode,
+        productName,
+        origin,
+        manufactor,
+        specs,
+        chemicalName,
+        casCode,
+      });
     }
   }, [type, defaultValue]);
 
@@ -113,13 +139,15 @@ export const StampDialog: React.FC<TDialog> = ({
     await mutationAddStamp.mutateAsync(payload);
   };
 
-  const mutationUpdateCategory = useMutation(
-    (payload: TCategory) => category.update(payload),
+  const mutationUpdateStamp = useMutation(
+    (payload: TUpdateStamp) => stamp.update(payload),
     {
       onSuccess: (data) => {
         toast.success(data?.resultMessage);
 
         refetch?.();
+
+        setIsUpdate(false);
 
         onClose();
       },
@@ -129,8 +157,14 @@ export const StampDialog: React.FC<TDialog> = ({
     }
   );
 
-  const handleUpdateCategory = async (payload: any) => {
-    await mutationUpdateCategory.mutateAsync(payload);
+  const handleUpdateStamp = async (data: any) => {
+    const payload = {
+      id: data?.id,
+      chemicalName: data?.chemicalName,
+      casCode: data?.casCode
+    }
+
+    await mutationUpdateStamp.mutateAsync(payload);
   };
 
   const handleSelectProductCallback = useCallback((option: any) => {
@@ -177,7 +211,7 @@ export const StampDialog: React.FC<TDialog> = ({
         return (
           <>
             <BaseButton
-              onClick={handleSubmit(handleUpdateCategory)}
+              onClick={handleSubmit(handleUpdateStamp)}
               disabled={!isDirty}
             >
               Cập nhật
@@ -275,7 +309,7 @@ export const StampDialog: React.FC<TDialog> = ({
               />
             </>
           )}
-          
+
           <FormInput
             controlProps={{
               name: "chemicalName",
@@ -283,7 +317,7 @@ export const StampDialog: React.FC<TDialog> = ({
               rules: { required: "Phải nhập công thức hóa học" },
             }}
             label="Công thức hóa học"
-            disabled={disabled}
+            disabled={disabled && !isUpdate}
           />
 
           <FormInput
@@ -292,7 +326,7 @@ export const StampDialog: React.FC<TDialog> = ({
               control,
             }}
             label="Mã CAS"
-            disabled={disabled}
+            disabled={disabled && !isUpdate}
           />
         </Box>
 

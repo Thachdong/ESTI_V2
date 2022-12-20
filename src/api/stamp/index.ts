@@ -7,6 +7,12 @@ export type TCreateStamp = {
   casCode: string;
 };
 
+export type TUpdateStamp = {
+  id: string;
+  chemicalName: string;
+  casCode: string;
+}
+
 const BASE_URL = "ProductLabel";
 
 export const stamp = {
@@ -15,6 +21,8 @@ export const stamp = {
 
   create: (payload: TCreateStamp) =>
     request.post<TCreateStamp, any>(BASE_URL, payload),
+
+  update: (payload: TUpdateStamp) => request.put<TUpdateStamp, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
 };
