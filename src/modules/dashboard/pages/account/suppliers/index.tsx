@@ -8,10 +8,9 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
@@ -98,17 +97,21 @@ export const SuppliersPage = () => {
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

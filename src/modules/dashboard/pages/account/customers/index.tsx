@@ -8,10 +8,9 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
@@ -92,24 +91,28 @@ export const CustomersPage = () => {
     if (confirm("Xác nhận xóa khách hàng: " + defaultValue?.companyName)) {
       await mutateDelete.mutateAsync(defaultValue?.id as string);
     }
-  }, []);
+  }, [defaultValue]);
 
   const columns: TGridColDef[] = [
     ...CustomerColumns,
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

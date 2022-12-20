@@ -3,15 +3,13 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { documentType, TDocumentType } from "src/api";
+import { documentType } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   RefreshButton,
-  SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { DocumentTypeDialog } from "~modules-dashboard/components";
@@ -63,17 +61,21 @@ export const DocumentTypesPage = () => {
     {
       field: "action",
       headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

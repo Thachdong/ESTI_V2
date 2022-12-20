@@ -9,11 +9,9 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
   DropdownButton,
   FormSelect,
   generatePaginationProps,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination, productTypesStamp } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
