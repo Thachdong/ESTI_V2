@@ -7,3 +7,4 @@ export * from "./ProductManageCards";
 export * from "./ProductManageDialog";
 export * from "./warehouse";
 export * from "./technical-documents";
+export * from "./stamp";

@@ -89,16 +89,16 @@ export const menu = [
         link: "product-manage/category",
       },
       {
+        title: "Nhãn sản phẩm",
+        link: "product-manage/stamp",
+      },
+      {
         title: "Tài liệu sản phẩm",
         link: "product-manage/documents",
       },
       {
         title: "Loại tài liệu",
         link: "product-manage/document-type",
-      },
-      {
-        title: "Nhãn sản phẩm",
-        link: "product-manage/label",
       },
       {
         title: "Tài liệu theo ngành",

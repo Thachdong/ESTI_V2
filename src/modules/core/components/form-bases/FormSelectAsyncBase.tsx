@@ -25,6 +25,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     inputLabelProps,
     fetcherParams,
     helperText,
+    callback,
     ...selectProps
   } = props;
 
@@ -35,7 +36,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
 
   // OPTIONS FETCHER
   const { isLoading, isFetching } = useQuery(
-    [queryKey, { ...pagination }],
+    [queryKey, { ...pagination, ...fetcherParams }],
     () =>
       fetcher({
         pageIndex: pagination.pageIndex,
@@ -103,6 +104,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
           <MenuItem
             key={opt?.[selectShape.valueKey]}
             value={opt?.[selectShape.valueKey]}
+            onClick={() => callback?.(opt)}
           >
             {opt?.[selectShape.labelKey]}
           </MenuItem>
