@@ -34,7 +34,8 @@ export const productTypes = [
   { id: 6, name: "Nhóm sản phẩm khác" },
 ];
 
-export const productTypesStamp = [ // USE IN STAMP CONFIG PAGE
+export const productTypesStamp = [
+  // USE IN STAMP CONFIG PAGE
   { id: 1, name: "Thiết bị" },
   { id: 2, name: "Hóa chất" },
   { id: 3, name: "Dụng cụ" },
@@ -93,5 +94,20 @@ export const positionStatus = [
   {
     id: 4,
     name: "Hết chổ",
+  },
+];
+
+export const warehouseImportstatus = [
+  {
+    value: 1,
+    label: "Chưa thực hiện",
+  },
+  {
+    value: 2,
+    label: "Đã nhập kho",
+  },
+  {
+    value: 3,
+    label: "Hủy",
   },
 ];

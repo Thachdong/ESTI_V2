@@ -1,2 +1,3 @@
 export * from "./WarehouseExportForm";
-export * from "./WarehouseImportForm";
+export * from "./warehouse-import";
+export * from "./import-detail";

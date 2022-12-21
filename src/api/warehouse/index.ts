@@ -1,4 +1,3 @@
-import { TWarehouseExport } from "../export-warehouse";
 import { request } from "../method";
 
 const BASE_URL = "Warehouse";
@@ -27,6 +26,7 @@ type TWarehouseCreate = {
 export const warehouse = {
   getList: (params?: any) =>
     request.getPagination<any>(BASE_URL, { ...params }),
+
   createWarehouseImport: (payload: TWarehouseCreate) =>
     request.post<TWarehouseCreate, string>(BASE_URL, payload),
 };

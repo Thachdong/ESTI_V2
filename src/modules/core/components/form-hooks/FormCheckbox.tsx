@@ -34,7 +34,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
 
     return (
       <FormControlLabel
-        control={<Checkbox {...defaultProps} />}
+        control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
         {...labelProps}
       />
