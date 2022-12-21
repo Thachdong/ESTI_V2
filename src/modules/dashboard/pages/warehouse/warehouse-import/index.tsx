@@ -1,44 +1,70 @@
-import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import { Box, Paper } from "@mui/material";
 import moment from "moment";
-import router from "next/router";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
-import { exportWarehouse, TWarehouseExport, warehouse } from "src/api";
+import { TWarehouseExport, warehouse } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
+  DropdownButton,
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
+import { TGridColDef } from "~types/data-grid";
+import { importWarehouseColumns } from "./data";
 
 export const WarehouseImportPage: React.FC = () => {
+  const router = useRouter();
+
+  const { query } = router;
+
   const [pagination, setPagination] = useState(defaultPagination);
 
+  const [defaultValue, setDefaultValue] = useState<any>();
+
   const [searchContent, setSearchContent] = useState("");
-  const columns: GridColDef<TWarehouseExport>[] = [
+
+  // PUSH PAGINATION QUERY
+  useEffect(() => {
+    const initQuery = {
+      ...query,
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+
+    router.push({ query: initQuery });
+  }, [pagination, router.isReady]);
+
+  const columns: TGridColDef<TWarehouseExport>[] = [
+    ...importWarehouseColumns,
     {
-      field: "code",
-      headerName: "NGÀY TẠO",
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
+      field: "action",
+      headerName: "Thao tác",
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: () => console.log(""),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: () => console.log(""),
+              label: "Lịch sử nhãn",
+            },
+            {
+              action: () => console.log(""),
+              label: "Xóa",
+            },
+          ]}
+        />
+      ),
     },
-    { field: "branchCode", headerName: "CHI NHÁNH", flex: 1 },
-    { field: "productOrderCode", headerName: "MÃ ĐƠN MUA HÀNG" },
-    { field: "warehouseSessionCode", headerName: "MÃ NHẬP KHO" },
-    { field: "supplierCode", headerName: "MÃ NCC" },
-    { field: "supplierName", headerName: "TÊN NHÀ CUNG CẤP" },
-    {
-      field: "totalPrice",
-      headerName: "GIÁ TRỊ NHẬP KHO",
-      renderCell: (params) => _format.getVND(params.row.totalPrice),
-    },
-    { field: "deliveryCode", headerName: "GIAO NHẬN" },
-    { field: "receiverBillName", headerName: "TRẠNG THÁI HOÁ ĐƠN" },
-    { field: "importStatusName", headerName: "TRẠNG THÁI NHẬP KHO" },
   ];
 
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -46,9 +72,8 @@ export const WarehouseImportPage: React.FC = () => {
       "exportWarehouse",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -56,7 +81,7 @@ export const WarehouseImportPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -66,13 +91,19 @@ export const WarehouseImportPage: React.FC = () => {
     }
   );
 
-  // console.log("exportwarehouse", data);
+  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item) => item.id === id);
+
+    setDefaultValue(currentRow);
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
-      <div className="mb-2">
+    <Paper className="bgContainer flex flex-col">
+      <Box className="text-right mb-2">
         <AddButton
           variant="contained"
           onClick={() =>
@@ -81,8 +112,27 @@ export const WarehouseImportPage: React.FC = () => {
         >
           Tạo phiếu nhập kho
         </AddButton>
-      </div>
-      <div>
+      </Box>
+
+      <ContextMenuWrapper
+        menuId="warehouse_import_menu"
+        menuComponent={
+          <Menu className="p-0" id="warehouse_import_menu">
+            <Item id="view-product" onClick={() => console.log("view-product")}>
+              Xem chi tiết
+            </Item>
+            <Item id="view-product" onClick={() => console.log("view-product")}>
+              Lịch sử nhãn
+            </Item>
+            <Item
+              id="delete-product"
+              onClick={() => console.log("view-product")}
+            >
+              Xóa
+            </Item>
+          </Menu>
+        }
+      >
         <DataTable
           rows={data?.items as []}
           columns={columns}
@@ -90,8 +140,13 @@ export const WarehouseImportPage: React.FC = () => {
             loading: isLoading || isFetching,
             ...paginationProps,
           }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
         />
-      </div>
+      </ContextMenuWrapper>
     </Paper>
   );
 };

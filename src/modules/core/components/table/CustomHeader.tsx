@@ -1,18 +1,26 @@
-import { Box, Typography } from "@mui/material";
+import { Box, TextField, TextFieldProps, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  JSXElementConstructor,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import clsx from "clsx";
 import { TGridColDef } from "~types/data-grid";
 import { useRouter } from "next/router";
 import "~modules-core/styles/data-table.module.css";
 import { debounce } from "lodash";
 import moment from "moment";
+import { FormDatepickerBase } from "../form-bases";
 
 type TProps = {
   params: GridColumnHeaderParams;
 };
 
-export const CustomHeader: React.FC<TProps> = ({ params }) => {  
+export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // EXTRACT PROPS
   const router = useRouter();
 
@@ -22,8 +30,15 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   const colDef = params.colDef as TGridColDef;
 
-  const { isSort, isFilter, sortAscValue, sortDescValue, type, options, sortKey = "order" } =
-    colDef;
+  const {
+    isSort,
+    isFilter,
+    sortAscValue,
+    sortDescValue,
+    type,
+    options,
+    sortKey = "order",
+  } = colDef;
 
   const filterKey = colDef.filterKey as string;
 
@@ -32,9 +47,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     const searchTerm = query[filterKey];
 
     if (searchTerm) {
-      const value = type === "date"
-        ? moment(+searchTerm).format("YYYY-MM-DD")
-        : searchTerm;
+      const value =
+        type === "date" ? moment(+searchTerm).format("YYYY-MM-DD") : searchTerm;
 
       setFilterData({ ...filterData, searchTerm: value, isCheck: true });
     }
@@ -175,32 +189,68 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
+    // let value: number | string;
+
+    // if (type === "date") {
+    //   value = e?.valueOf?.() as number;
+
+    //   if (Number.isNaN(value)) return;      
+    // } else {
+    //   value = e?.target.value
+    // }
+
     const value = e.target.value;
+
     //1. update search term state
     setFilterData({ ...filterData, searchTerm: value });
     //2. isCheck => handle filter
     if (filterData.isCheck) {
-      debounceFilter(value);
+      debounceFilter(value as string);
+    }
+  };
+
+  const renderInputTagBaseOnType = () => {
+    switch (type) {
+      case "select":
+        return (
+          <select
+            id={field + "_searchbox"}
+            onChange={handleInputChange}
+            value={filterData.searchTerm}
+            className="w-10/12 border-0"
+          >
+            {options?.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        );
+      case "date":
+        return (
+          <input
+            type="date"
+            id={field + "_searchbox"}
+            onChange={handleInputChange}
+            value={filterData.searchTerm}
+            className="w-10/12 border-0"
+          />
+        );
+      default:
+        return (
+          <input
+            type="text"
+            id={field + "_searchbox"}
+            onChange={handleInputChange}
+            value={filterData.searchTerm}
+            className="w-10/12 border-0"
+          />
+        );
     }
   };
 
   const renderFilterBox = useCallback(() => {
     if (!isFilter || field === "action") return <></>;
-
-    const selectTag = (
-      <select
-        id={field + "_searchbox"}
-        onChange={handleInputChange}
-        value={filterData.searchTerm}
-        className="w-10/12 border-0"
-      >
-        {options?.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-    );
 
     return (
       <>
@@ -210,17 +260,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           onChange={handleCheckbox}
           checked={filterData.isCheck}
         />
-        {type === "select" ? (
-          selectTag
-        ) : (
-          <input
-            type={type?.toLowerCase().includes("date") ? "date" : "text"}
-            id={field + "_searchbox"}
-            onChange={handleInputChange}
-            value={filterData.searchTerm}
-            className="w-10/12 border-0"
-          />
-        )}
+        {renderInputTagBaseOnType()}
       </>
     );
   }, [isFilter, type, filterData]);
