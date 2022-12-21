@@ -98,7 +98,7 @@ export const ProductsDialog: React.FC<any> = ({
         (supplier: any) => supplier.id
       );
 
-      const parsedCategorys = JSON.parse(categorys).map(
+      const parsedCategorys = JSON.parse(categorys)?.map(
         (category: any) => category.id
       );
 
