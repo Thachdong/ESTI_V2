@@ -13,7 +13,6 @@ export const FormDatepickerBase: React.FC<DateTimePickerProps<any, any>> = (
           size="small"
           inputProps={{ ...params.inputProps, placeholder: "Chọn ngày" }}
           {...params}
-          {...restProps}
         />
       )}
       dayOfWeekFormatter={(day) => `${day}`}
