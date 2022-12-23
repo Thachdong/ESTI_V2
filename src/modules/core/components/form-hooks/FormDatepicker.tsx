@@ -1,5 +1,6 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { DateTimePickerProps } from "@mui/x-date-pickers";
+import moment from "moment";
 import { Controller } from "react-hook-form";
 import { TFormDatepicker } from "~types/form-controlled/form-datepicker";
 import { TRenderControllerParams } from "~types/react-hook-form";
@@ -12,7 +13,17 @@ export const FormDatepicker: React.FC<TFormDatepicker> = (props) => {
     field: { value, ref, ...restField },
     fieldState: { error },
     formState: { errors },
-  }: TRenderControllerParams) => {    
+  }: TRenderControllerParams) => {
+    let safetyValue: any = {};
+
+    if (value !== "invalidDate") {
+      safetyValue.value = moment(value);
+    }
+
+    if (value === undefined) {
+      safetyValue.value = null;
+    }
+
     const defaultProps: DateTimePickerProps<any, any> = {
       helperText: (
         <ErrorMessage
@@ -22,7 +33,7 @@ export const FormDatepicker: React.FC<TFormDatepicker> = (props) => {
         />
       ),
       error: error,
-      value: value || null,
+      ...safetyValue,
       ...restField,
       ...textFieldProps,
     };

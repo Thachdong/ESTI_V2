@@ -1,7 +1,7 @@
-import { CreateWarehouseImportPage } from "~modules-dashboard/pages";
+import { ImportDetailPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <CreateWarehouseImportPage />;
+const Index: TNextPageWithLayout = () => <ImportDetailPage />;
 
 Index.displayName = "Nhập kho";
 

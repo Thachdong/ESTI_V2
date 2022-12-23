@@ -7,7 +7,7 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     variant: "outlined",
     size: "small",
     ...props,
-  };  
+  };
 
   const inputProps = {
     ...defaultProps.inputProps,
@@ -17,5 +17,18 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     ),
   };
 
-  return <TextField {...defaultProps} inputProps={inputProps} />;
+  const forceTriggerLabelShrink = !!props?.value ? {
+    InputLabelProps: {
+      ...props?.InputLabelProps,
+      shrink: true
+    }
+  } : {}
+
+  return (
+    <TextField
+      {...defaultProps}
+      {...forceTriggerLabelShrink}
+      inputProps={inputProps}
+    />
+  );
 };

@@ -5,3 +5,4 @@ export * from "./warehouse";
 export * from "./product-manage";
 export * from "./purchase";
 export * from "./orders";
+export * from "./warehouse";

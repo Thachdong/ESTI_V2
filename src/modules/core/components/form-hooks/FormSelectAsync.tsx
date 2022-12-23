@@ -22,7 +22,14 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
       ? `${label} *`
       : label;
 
-    const cleanValue = multiple ? (value as []) || [] : value || "";       
+    // PREVENT INVALID VALUE ON RUNTIME
+    let safetyValue: any;
+
+    if (multiple) {
+      safetyValue = (value as []) || [];
+    } else {
+      safetyValue = value || "";
+    }
 
     const defaultBaseProps = {
       helperText: (
@@ -33,7 +40,7 @@ export const FormSelectAsync: React.FC<TFromSelectAsync> = (props) => {
         />
       ) as any,
       error: !!error,
-      value: cleanValue,
+      value: safetyValue,
       label: updateLabel,
       queryKey: props?.queryKey || name,
       multiple,
