@@ -26,6 +26,14 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
     staff.getListDeliveryStaff().then((res) => res.data)
   );
 
+  const { data: purchaseList } = useQuery(["PurchaseList"], () =>
+    staff.getListPurchaseStaff().then((res) => res.data)
+  );
+
+  const { data: stockerList } = useQuery(["StockerList"], () =>
+    staff.getListStockerStaff().then((res) => res.data)
+  );
+
   return (
     <Paper className="rounded-sm p-3">
       <Typography className="text-sm font-medium mb-3">
@@ -36,7 +44,7 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
         {!withoutPurchaseInvoice && (
           <FormSelectAsync
             fetcher={orders.getList}
-            fetcherParams={{status: 2}} // Lấy order đang thực hiện
+            fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
             selectShape={{ valueKey: "id", labelKey: "code" }}
             controlProps={{
               control,
@@ -66,6 +74,28 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
             rules: { required: false },
           }}
           label="Giao nhận phụ trách"
+          selectShape={{ valueKey: "id", labelKey: "fullName" }}
+        />
+
+        <FormSelect
+          options={purchaseList}
+          controlProps={{
+            control,
+            name: "purchaseId",
+            rules: { required: "Phải chọn nhân viên mua hàng" },
+          }}
+          label="Nhân viên mua hàng"
+          selectShape={{ valueKey: "id", labelKey: "fullName" }}
+        />
+
+        <FormSelect
+          options={stockerList}
+          controlProps={{
+            control,
+            name: "stockerId",
+            rules: { required: "Phải chọn thủ kho" },
+          }}
+          label="Thủ kho"
           selectShape={{ valueKey: "id", labelKey: "fullName" }}
         />
 

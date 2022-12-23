@@ -17,21 +17,21 @@ export const WarehouseImportCuratorInfo: React.FC<TProps> = ({
       <FormInputBase
         name="name"
         label="Người phụ trách"
-        value={orderDetail?.curatorName}
+        value={orderDetail?.curatorName || ""}
         disabled
       />
 
       <FormInputBase
         name="phone"
         label="Điện thoại"
-        value={orderDetail?.curatorPhone}
+        value={orderDetail?.curatorPhone || ""}
         disabled
       />
 
       <FormInputBase
         name="email"
         label="Email"
-        value={orderDetail?.curatorEmail}
+        value={orderDetail?.curatorEmail || ""}
         disabled
       />
     </Box>

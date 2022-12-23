@@ -38,14 +38,14 @@ export const WarehouseImportSupplierInfo: React.FC<TProps> = ({
         <FormInputBase
           name="address"
           label="Địa chỉ"
-          value={orderDetail?.supplierAddress}
+          value={orderDetail?.supplierAddress || ""}
           disabled
         />
 
         <FormInputBase
           name="taxCode"
           label="Mã số thuế"
-          value={orderDetail?.suppliertaxCode}
+          value={orderDetail?.suppliertaxCode || ""}
           disabled
         />
       </Box>

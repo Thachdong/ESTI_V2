@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { BaseButton } from "~modules-core/components";
 import {
@@ -25,13 +25,30 @@ export const ImportDetailPage = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedOrder, setSelectedOrder] = useState<any>();
 
+  const [selectedSupplier, setSelectedSupplier] = useState<any>();
+
   const router = useRouter();
 
-  const methods = useForm();
+  const methods = useForm<any>({
+    defaultValues: {
+      productList: [],
+    },
+  });
 
   const { watch, setValue, handleSubmit } = methods;
 
   const productOrderId = watch("productOrderId");
+
+  const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
+
+  // RESET DATA WHEN EVER withoutPurchaseInvoice CHANGE
+  useEffect(() => {
+    if (withoutPurchaseInvoice) {
+      methods.reset({productList: [], withoutPurchaseInvoice});
+
+      setSelectedOrder(undefined);
+    }
+  }, [withoutPurchaseInvoice]);
 
   // DATA FETCHING
   useQuery(
@@ -91,7 +108,7 @@ export const ImportDetailPage = () => {
     return messages.length > 0 ? messages : null;
   };
 
-  const handleCreate = async(data: any) => {
+  const handleCreate = async (data: any) => {
     let error: any[] = [];
 
     const productList: TCreateImportWarehouseProduct[] = data?.productList?.map(
@@ -132,11 +149,17 @@ export const ImportDetailPage = () => {
       branchId: data?.branchId,
       deliveryId: data?.deliveryId,
       supplierId: data?.supplierId,
+      purchaseId: data?.purchaseId,
+      stockerId: data?.stockerId,
       warehouseCreate: productList,
     };
 
     await mutateCreate.mutateAsync(payload);
   };
+
+  const setSelectedSupplierCallback = useCallback((option: any) => {
+    setSelectedSupplier(option)
+  }, [])
 
   return (
     <Box>

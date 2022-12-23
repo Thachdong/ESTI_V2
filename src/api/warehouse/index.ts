@@ -19,6 +19,8 @@ export type TCreateImportWarehouse = {
   branchId: string;
   deliveryId: string;
   supplierId: string;
+  stockerId: string;
+  purchaseId: string;
   warehouseCreate: TCreateImportWarehouseProduct[];
 };
 
