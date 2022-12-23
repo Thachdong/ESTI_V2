@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import { toast } from "react-toastify";
 import { TWarehouseExport, warehouse } from "src/api";
 import {
   AddButton,
@@ -82,7 +83,7 @@ export const WarehouseImportPage: React.FC = () => {
               label: "Chi tiết nhập kho",
             },
             {
-              action: () => console.log(""),
+              action: handleDeleteTransaction,
               label: "Hủy nhập kho",
             },
             {
@@ -113,6 +114,25 @@ export const WarehouseImportPage: React.FC = () => {
     });
   }, [defaultValue]);
 
+  const deleteMutation = useMutation(
+    (id: string) => warehouse.deleteTransaction(id),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleDeleteTransaction = useCallback(async () => {
+    if (!defaultValue) return;
+
+    if (confirm("Xác nhận xóa phiên nhập kho " + defaultValue.warehouseSessionCode)) {
+      await deleteMutation.mutateAsync(defaultValue.id)
+    }
+  }, [deleteMutation, defaultValue]);
+
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
@@ -127,14 +147,14 @@ export const WarehouseImportPage: React.FC = () => {
         menuId="warehouse_import_menu"
         menuComponent={
           <Menu className="p-0" id="warehouse_import_menu">
-            <Item id="view-product" onClick={handleRedirectToDetail}>
+            <Item id="view-detail" onClick={handleRedirectToDetail}>
               Chi tiết nhập kho
             </Item>
-            <Item id="view-product" onClick={() => console.log("view-product")}>
+            <Item id="delete-transaction" onClick={handleDeleteTransaction}>
               Hủy nhập kho
             </Item>
             <Item
-              id="delete-product"
+              id="transation-note"
               onClick={() => setDialog({ open: true, type: "note" })}
             >
               Ghi chú

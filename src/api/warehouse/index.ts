@@ -36,4 +36,6 @@ export const warehouse = {
 
   getImportSessionById: (id: string) =>
     request.get<any>(`${BASE_URL}/ImportWarehouse/${id}`),
+
+  deleteTransaction: (id: string) => request.delete(`${BASE_URL}/${id}`),
 };
