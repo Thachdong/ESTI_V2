@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import React, { ReactNode } from "react";
 import {
   QueryClient,
@@ -5,6 +6,7 @@ import {
   QueryClientProvider,
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { toast } from "~modules-core/toast";
 
 const CATCHE_TIME_IN_MILISECONDS = 30000;
 const REFETCH_INTERVAL_IN_MILISECONDS = 30000;
@@ -19,12 +21,19 @@ const queryClientConfig: QueryClientConfig = {
       refetchOnReconnect: "always",
       refetchIntervalInBackground: false,
       suspense: false,
-      staleTime: STALE_TIME_IN_MILISECONDS,
-      cacheTime: CATCHE_TIME_IN_MILISECONDS,
-      refetchInterval: REFETCH_INTERVAL_IN_MILISECONDS,
+      // staleTime: STALE_TIME_IN_MILISECONDS,
+      // cacheTime: CATCHE_TIME_IN_MILISECONDS,
+      // refetchInterval: REFETCH_INTERVAL_IN_MILISECONDS,
     },
     mutations: {
       retry: false,
+      onError(error) {
+        const err = error as any;
+        
+        const resultMessage = err?.resultMessage as string;
+
+        resultMessage && toast.error(resultMessage);
+      },
     },
   },
 };

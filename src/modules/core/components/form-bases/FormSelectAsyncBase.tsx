@@ -8,21 +8,22 @@ import {
   Box,
 } from "@mui/material";
 import { useQuery } from "react-query";
-import { useState, UIEvent } from "react";
+import { useState, UIEvent, useCallback, useEffect } from "react";
 import { defaultPagination } from "~modules-core/constance";
 import _ from "lodash";
 import { TFormSelectAsyncBase } from "~types/form-controlled/form-select";
 import clsx from "clsx";
+import { FormInputBase } from "./FormInputBase";
 
 const getOptionsBaseOnFilterParams = (filterParams: any, options: any[]) => {
   if (!filterParams) return options;
 
   const filterKeys = Object.keys(filterParams);
 
-  return options.filter(opt => {
+  return options.filter((opt) => {
     let result = true;
 
-    filterKeys.map(key => {
+    filterKeys.map((key) => {
       if (filterParams[key] !== opt[key]) {
         result = false;
       }
@@ -30,7 +31,7 @@ const getOptionsBaseOnFilterParams = (filterParams: any, options: any[]) => {
 
     return result;
   });
-}
+};
 
 export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   // PROPS EXTRACTING
@@ -51,6 +52,17 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [options, setOptions] = useState<any[]>([]);
+
+  // TRIGGER CALLBACK WHEN EVER VALUE CHANGE
+  useEffect(() => {
+    if (!!callback && !!selectProps.value) {
+      const selectedOption = options.find(
+        (opt) => opt[selectShape.valueKey] === opt?.[selectShape.valueKey]
+      );
+
+      callback(selectedOption);
+    }
+  }, [selectProps.value, options]);
 
   // OPTIONS FETCHER
   const { isLoading, isFetching } = useQuery(
@@ -100,6 +112,22 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     },
   };
 
+  // RENDER SERCHBOX HAVE MORE THAN ONE PAGE OPTIONS
+  const renderSearchBox = useCallback(() => {
+    if (pagination.total > pagination.pageSize) {
+      return (
+        <FormInputBase
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+          }}
+          placeholder="Tìm kiếm"
+          className="px-3"
+        />
+      );
+    }
+  }, [pagination]);
+
   return (
     <FormControl fullWidth size="small" {...formControlProps}>
       <InputLabel {...inputLabelProps}>{label}</InputLabel>
@@ -115,14 +143,15 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
             label={label}
           />
         }
-        disabled={isLoading || isFetching}
+        // disabled={isLoading || isFetching}
         {...selectProps}
       >
+        {renderSearchBox()}
+
         {options.map((opt: any) => (
           <MenuItem
             key={opt?.[selectShape.valueKey]}
             value={opt?.[selectShape.valueKey]}
-            onClick={() => callback?.(opt)}
           >
             {opt?.[selectShape.labelKey]}
           </MenuItem>
@@ -136,7 +165,9 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       </Select>
 
       {helperText && (
-        <Box className="text-error text-xs ml-3 mt-1">{helperText as string}</Box>
+        <Box className="text-error text-xs ml-3 mt-1">
+          {helperText as string}
+        </Box>
       )}
     </FormControl>
   );

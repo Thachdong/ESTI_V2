@@ -1,11 +1,30 @@
 import { Box, Paper, Typography } from "@mui/material";
+import moment from "moment";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { FormInputBase, FormSelect } from "~modules-core/components";
+import { useQuery } from "react-query";
+import { branchs, orders, staff } from "src/api";
+import {
+  FormInputBase,
+  FormSelect,
+  FormSelectAsync,
+} from "~modules-core/components";
 
-export const WarehouseImportGeneralInfo = () => {
+type TProps = {
+  orderDetail: any;
+};
+
+export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
+  orderDetail,
+}) => {
+  const [selectedBranch, setSelectedBranch] = useState<any>();
   const { control, watch } = useFormContext();
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
+
+  const { data: deliveryList } = useQuery(["DeliveryList"], () =>
+    staff.getListDeliveryStaff().then((res) => res.data)
+  );
 
   return (
     <Paper className="rounded-sm p-3">
@@ -15,42 +34,46 @@ export const WarehouseImportGeneralInfo = () => {
 
       <Box className="grid grid-cols-2 gap-4">
         {!withoutPurchaseInvoice && (
-          <FormSelect
-            options={[]}
+          <FormSelectAsync
+            fetcher={orders.getList}
+            fetcherParams={{status: 2}} // Lấy order đang thực hiện
+            selectShape={{ valueKey: "id", labelKey: "code" }}
             controlProps={{
               control,
-              name: "saleAdminId",
+              name: "productOrderId",
               rules: { required: true },
             }}
             label="Đơn mua hàng"
           />
         )}
 
-        <FormSelect
-          options={[]}
+        <FormSelectAsync
+          fetcher={branchs.getList}
+          callback={(option) => setSelectedBranch(option)}
           controlProps={{
             control,
-            name: "saleAdminId",
+            name: "branchId",
             rules: { required: true },
           }}
           label="Mã chi nhánh"
         />
 
         <FormSelect
-          options={[]}
+          options={deliveryList}
           controlProps={{
             control,
-            name: "saleAdminId",
+            name: "deliveryId",
             rules: { required: false },
           }}
           label="Giao nhận phụ trách"
+          selectShape={{ valueKey: "id", labelKey: "fullName" }}
         />
 
         {!withoutPurchaseInvoice && (
           <FormInputBase
             name="saleAdmin"
             label="Admin phụ trách"
-            value="asdfasdf"
+            value={orderDetail?.salesAdminCode}
             disabled
           />
         )}
@@ -59,14 +82,14 @@ export const WarehouseImportGeneralInfo = () => {
           <FormInputBase
             name="createdAt"
             label="Ngày tạo"
-            value="22/12/2022"
+            value={moment(orderDetail?.created).format("DD/MM/YYYY")}
             disabled
           />
         )}
         <FormInputBase
-          name="warehouseCode"
+          name="warehouseConfigCode"
           label="Mã kho"
-          value="asdf"
+          value={selectedBranch?.warehouseConfigCode}
           disabled
         />
       </Box>
