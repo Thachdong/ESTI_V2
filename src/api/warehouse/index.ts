@@ -3,7 +3,7 @@ import { request } from "../method";
 const BASE_URL = "Warehouse";
 
 export type TCreateImportWarehouseProduct = {
-  productOrderDetailId: string;
+  productOrderDetailId: string | null;
   productId: string;
   lotNumber: string;
   dateManufacture: number;

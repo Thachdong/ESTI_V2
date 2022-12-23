@@ -18,6 +18,7 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
   orderDetail,
 }) => {
   const [selectedBranch, setSelectedBranch] = useState<any>();
+  
   const { control, watch } = useFormContext();
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");

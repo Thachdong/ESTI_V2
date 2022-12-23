@@ -25,7 +25,7 @@ export const ImportDetailPage = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedOrder, setSelectedOrder] = useState<any>();
 
-  const [selectedSupplier, setSelectedSupplier] = useState<any>();
+  const [selectedSupplier, setSelectedSupplier] = useState<any>();  
 
   const router = useRouter();
 
@@ -40,6 +40,10 @@ export const ImportDetailPage = () => {
   const productOrderId = watch("productOrderId");
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
+
+  const orderDetail = selectedOrder?.productOrder?.productOrder;
+
+  const supplierDetail = withoutPurchaseInvoice ? selectedSupplier : orderDetail;
 
   // RESET DATA WHEN EVER withoutPurchaseInvoice CHANGE
   useEffect(() => {
@@ -123,7 +127,7 @@ export const ImportDetailPage = () => {
         }
 
         return {
-          productOrderDetailId: product?.id || null,
+          productOrderDetailId: withoutPurchaseInvoice ? null : product?.id,
           productId: product?.productId,
           lotNumber: product?.lotNumber,
           dateManufacture: product?.dateManufacture,
@@ -159,7 +163,7 @@ export const ImportDetailPage = () => {
 
   const setSelectedSupplierCallback = useCallback((option: any) => {
     setSelectedSupplier(option)
-  }, [])
+  }, []);
 
   return (
     <Box>
@@ -175,16 +179,17 @@ export const ImportDetailPage = () => {
         </Box>
 
         <WarehouseImportGeneralInfo
-          orderDetail={selectedOrder?.productOrder?.productOrder}
+          orderDetail={orderDetail}
         />
 
         <Box className="grid grid-cols-2 gap-4 my-4">
           <WarehouseImportSupplierInfo
-            orderDetail={selectedOrder?.productOrder?.productOrder}
+            orderDetail={supplierDetail}
+            callback={setSelectedSupplierCallback}
           />
 
           <WarehouseImportCuratorInfo
-            orderDetail={selectedOrder?.productOrder?.productOrder}
+            orderDetail={supplierDetail}
           />
         </Box>
 

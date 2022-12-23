@@ -8,10 +8,12 @@ import {
 
 type TProps = {
   orderDetail: any;
+  callback: (supplier: any) => void;
 };
 
 export const WarehouseImportSupplierInfo: React.FC<TProps> = ({
   orderDetail,
+  callback
 }) => {
   const { control, watch } = useFormContext();
 
@@ -33,19 +35,20 @@ export const WarehouseImportSupplierInfo: React.FC<TProps> = ({
           selectShape={{ valueKey: "id", labelKey: "supplierCode" }}
           label="Nhà cung cấp"
           disabled={!withoutPurchaseInvoice}
+          callback={withoutPurchaseInvoice ? callback : undefined}
         />
 
         <FormInputBase
           name="address"
           label="Địa chỉ"
-          value={orderDetail?.supplierAddress || ""}
+          value={orderDetail?.supplierAddress ||orderDetail?.address || ""}
           disabled
         />
 
         <FormInputBase
           name="taxCode"
           label="Mã số thuế"
-          value={orderDetail?.suppliertaxCode || ""}
+          value={orderDetail?.suppliertaxCode || orderDetail?.taxCode || ""}
           disabled
         />
       </Box>

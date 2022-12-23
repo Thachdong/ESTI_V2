@@ -6,6 +6,7 @@ import {
   Select,
   CircularProgress,
   Box,
+  SelectChangeEvent,
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { useState, UIEvent, useCallback, useEffect } from "react";
@@ -57,7 +58,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   useEffect(() => {
     if (!!callback && !!selectProps.value) {
       const selectedOption = options.find(
-        (opt) => opt[selectShape.valueKey] === opt?.[selectShape.valueKey]
+        (opt) => opt[selectShape.valueKey] === selectProps.value
       );
 
       callback(selectedOption);
@@ -143,7 +144,6 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
             label={label}
           />
         }
-        // disabled={isLoading || isFetching}
         {...selectProps}
       >
         {renderSearchBox()}

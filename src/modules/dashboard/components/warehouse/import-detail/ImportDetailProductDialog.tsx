@@ -30,7 +30,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
-  const [selectedProduct, setSelectedProduct] = useState<any>();
+  const [selectedProduct, setSelectedProduct] = useState<any>();  
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
@@ -109,10 +109,11 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
     if (isError) return;
 
     const product = {
-      productOrderDetailId: null,
       positionId: selectedPosition?.id,
       positionName: selectedPosition?.positionName,
       totalPrice: data?.price * data?.quantity,
+      productManufactor: selectedProduct?.manufactor,
+      productSpecs: selectedProduct?.specs,
       ...selectedProduct,
       ...data,
     };
@@ -120,7 +121,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
     addProduct(product);
 
     cleanup();
-  }, []);
+  }, [selectedProduct, selectedPosition]);
 
   const handleUpdateProduct = useCallback((data: any) => {
     if (!data) return;
