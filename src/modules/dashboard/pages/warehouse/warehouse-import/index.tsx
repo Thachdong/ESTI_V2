@@ -1,7 +1,7 @@
 import { Box, Paper } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
 import { TWarehouseExport, warehouse } from "src/api";
@@ -78,7 +78,7 @@ export const WarehouseImportPage: React.FC = () => {
           id={row?.id}
           items={[
             {
-              action: () => console.log(""),
+              action: handleRedirectToDetail,
               label: "Chi tiết nhập kho",
             },
             {
@@ -98,13 +98,22 @@ export const WarehouseImportPage: React.FC = () => {
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.items.find((item: any) => item?.id === id);
 
     setDefaultValue(currentRow);
   };
 
+  const handleRedirectToDetail = useCallback(() => {
+    router.push({
+      pathname: "/dashboard/warehouse/import-detail",
+      query: {
+        type: "update",
+        id: defaultValue?.id,
+      },
+    });
+  }, [defaultValue]);
+
   const paginationProps = generatePaginationProps(pagination, setPagination);
-  // console.log(data?.items);
 
   return (
     <Paper className="bgContainer">
@@ -118,7 +127,7 @@ export const WarehouseImportPage: React.FC = () => {
         menuId="warehouse_import_menu"
         menuComponent={
           <Menu className="p-0" id="warehouse_import_menu">
-            <Item id="view-product" onClick={() => console.log("view-product")}>
+            <Item id="view-product" onClick={handleRedirectToDetail}>
               Chi tiết nhập kho
             </Item>
             <Item id="view-product" onClick={() => console.log("view-product")}>

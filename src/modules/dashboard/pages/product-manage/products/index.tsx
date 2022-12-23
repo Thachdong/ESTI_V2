@@ -218,7 +218,7 @@ export const ProductsPage = () => {
   const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.items.find((item: any) => item.id === id);
 
     setDefaultValue(currentRow);
   };

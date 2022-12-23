@@ -8,6 +8,7 @@ import {
   ViewButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
+import { ProductsDialog } from "~modules-dashboard/components";
 import { productColumns } from "~modules-dashboard/pages/warehouse/import-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
@@ -120,7 +121,12 @@ export const ImportDetailTable = () => {
           >
             Thêm SP
           </AddButton>
-          <AddButton variant="contained">Tạo SP mới</AddButton>
+          <AddButton
+            variant="contained"
+            onClick={() => setDialog({ open: true, type: "CreateProduct" })}
+          >
+            Tạo SP mới
+          </AddButton>
         </Box>
       </Box>
 
@@ -145,6 +151,11 @@ export const ImportDetailTable = () => {
         addProduct={handleAddProduct}
         updateProduct={handleUpdateProduct}
         defaultValue={defaultValue}
+      />
+
+      <ProductsDialog
+        onClose={handleClose}
+        open={dialog?.open && dialog?.type === "CreateProduct"}
       />
     </Paper>
   );

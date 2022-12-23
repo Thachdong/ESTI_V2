@@ -25,9 +25,11 @@ export const ImportDetailPage = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedOrder, setSelectedOrder] = useState<any>();
 
-  const [selectedSupplier, setSelectedSupplier] = useState<any>();  
+  const [selectedSupplier, setSelectedSupplier] = useState<any>();
 
   const router = useRouter();
+
+  const { query } = router;
 
   const methods = useForm<any>({
     defaultValues: {
@@ -35,7 +37,7 @@ export const ImportDetailPage = () => {
     },
   });
 
-  const { watch, setValue, handleSubmit } = methods;
+  const { watch, setValue, handleSubmit, reset } = methods;
 
   const productOrderId = watch("productOrderId");
 
@@ -43,16 +45,9 @@ export const ImportDetailPage = () => {
 
   const orderDetail = selectedOrder?.productOrder?.productOrder;
 
-  const supplierDetail = withoutPurchaseInvoice ? selectedSupplier : orderDetail;
-
-  // RESET DATA WHEN EVER withoutPurchaseInvoice CHANGE
-  useEffect(() => {
-    if (withoutPurchaseInvoice) {
-      methods.reset({productList: [], withoutPurchaseInvoice});
-
-      setSelectedOrder(undefined);
-    }
-  }, [withoutPurchaseInvoice]);
+  const supplierDetail = withoutPurchaseInvoice
+    ? selectedSupplier
+    : orderDetail;
 
   // DATA FETCHING
   useQuery(
@@ -78,6 +73,36 @@ export const ImportDetailPage = () => {
       },
     }
   );
+
+  const { data: transationData } = useQuery(
+    ["ImportWarehouseDetail_" + query?.id, { ...query }],
+    () =>
+      warehouse
+        .getImportSessionById(query?.id as string)
+        .then((res) => res.data),
+    {
+      enabled: !!query.id && query.type === "update",
+    }
+  );
+
+  console.log(transationData);
+
+  // RESET DATA WHEN EVER withoutPurchaseInvoice CHANGE
+  useEffect(() => {
+    if (withoutPurchaseInvoice) {
+      methods.reset({ productList: [], withoutPurchaseInvoice });
+
+      setSelectedOrder(undefined);
+    }
+  }, [withoutPurchaseInvoice]);
+
+  useEffect(() => {
+    if (!!transationData) {
+      const { warehouse, warehouseSession } = transationData;
+
+      reset({ ...warehouseSession, productList: warehouse });
+    }
+  }, [transationData]);
 
   // METHODS
   const mutateCreate = useMutation(
@@ -162,7 +187,7 @@ export const ImportDetailPage = () => {
   };
 
   const setSelectedSupplierCallback = useCallback((option: any) => {
-    setSelectedSupplier(option)
+    setSelectedSupplier(option);
   }, []);
 
   return (
@@ -178,9 +203,7 @@ export const ImportDetailPage = () => {
           />
         </Box>
 
-        <WarehouseImportGeneralInfo
-          orderDetail={orderDetail}
-        />
+        <WarehouseImportGeneralInfo orderDetail={orderDetail} />
 
         <Box className="grid grid-cols-2 gap-4 my-4">
           <WarehouseImportSupplierInfo
@@ -188,23 +211,32 @@ export const ImportDetailPage = () => {
             callback={setSelectedSupplierCallback}
           />
 
-          <WarehouseImportCuratorInfo
-            orderDetail={supplierDetail}
-          />
+          <WarehouseImportCuratorInfo orderDetail={supplierDetail} />
         </Box>
 
         <ImportDetailTable />
       </FormProvider>
 
       <Box className="flex justify-end my-4">
-        <BaseButton
-          type="button"
-          className="bg-[#2eaaa8]"
-          onClick={handleSubmit(handleCreate)}
-        >
-          <SaveIcon className="mr-2" />
-          Lưu
-        </BaseButton>
+        {query.type === "create" ? (
+          <BaseButton
+            type="button"
+            className="bg-[#2eaaa8]"
+            onClick={handleSubmit(handleCreate)}
+          >
+            <SaveIcon className="mr-2" />
+            Lưu
+          </BaseButton>
+        ) : (
+          <BaseButton
+            type="button"
+            className="bg-[#2eaaa8]"
+            // onClick={handleSubmit(handleCreate)}
+          >
+            <SaveIcon className="mr-2" />
+            Cập nhật
+          </BaseButton>
+        )}
       </Box>
     </Box>
   );

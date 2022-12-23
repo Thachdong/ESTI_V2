@@ -29,5 +29,11 @@ export const warehouse = {
     request.getPagination<any>(BASE_URL, { ...params }),
 
   createWarehouseImport: (payload: TCreateImportWarehouse) =>
-    request.post<TCreateImportWarehouse, string>(`${BASE_URL}/ImportWarehouse`, payload),
+    request.post<TCreateImportWarehouse, string>(
+      `${BASE_URL}/ImportWarehouse`,
+      payload
+    ),
+
+  getImportSessionById: (id: string) =>
+    request.get<any>(`${BASE_URL}/ImportWarehouse/${id}`),
 };
