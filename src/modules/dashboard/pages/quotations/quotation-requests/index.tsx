@@ -7,6 +7,7 @@ import { useQuery } from "react-query";
 import { qouteRequest } from "src/api/qoute-request";
 import { DataTable, generatePaginationProps } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 
 export const QuotationRequestsPage = () => {
   const router = useRouter();
@@ -15,16 +16,7 @@ export const QuotationRequestsPage = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DATA FETCHING
   const { data, isLoading, isFetching } = useQuery(

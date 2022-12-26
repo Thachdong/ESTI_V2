@@ -21,6 +21,7 @@ import {
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -54,16 +55,7 @@ export const ProductsPage = () => {
 
   const [defaultValue, setDefaultValue] = useState<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -195,8 +187,9 @@ export const ProductsPage = () => {
     },
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

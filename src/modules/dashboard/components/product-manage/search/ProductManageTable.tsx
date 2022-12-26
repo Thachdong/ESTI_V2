@@ -9,17 +9,19 @@ import {
   DataTable,
   DeleteButton,
   DownloadButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
   ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { ProductManageDialog } from "~modules-dashboard/components";
 import {
   columnGroupingModel,
   productManageColumns,
-} from "~modules-dashboard/pages/product-manage/product-manage/data";
+} from "~modules-dashboard/pages/product-manage/search/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
@@ -34,16 +36,7 @@ export const ProductManageTable = () => {
 
   const [defaultValue, setDefaultValue] = useState<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -85,14 +78,12 @@ export const ProductManageTable = () => {
   );
 
   const { data: warehouseIds } = useQuery(["warehouseIds"], () =>
-  warehouseConfig
-      .getList({ pageIndex: 1, pageSize: 999 })
-      .then((res) =>
-        res.data?.items?.map((item: any) => ({
-          value: item?.id,
-          label: item?.code,
-        }))
-      )
+    warehouseConfig.getList({ pageIndex: 1, pageSize: 999 }).then((res) =>
+      res.data?.items?.map((item: any) => ({
+        value: item?.id,
+        label: item?.code,
+      }))
+    )
   );
 
   // DATA TABLE
@@ -117,23 +108,27 @@ export const ProductManageTable = () => {
       minWidth: 150,
       flex: 1,
       type: "select",
-      options: warehouseIds as []
+      options: warehouseIds as [],
     },
     ...productManageColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

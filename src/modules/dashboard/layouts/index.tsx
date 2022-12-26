@@ -13,7 +13,7 @@ type TProps = {
 };
 
 export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
-  const [expand, setExpand] = useState(false);
+  const [expand, setExpand] = useState(true);
 
   // ADD "loading" TO QUERY KEY TO TRIGGER LOADING EFFECT
   const isFetching = useIsFetching({

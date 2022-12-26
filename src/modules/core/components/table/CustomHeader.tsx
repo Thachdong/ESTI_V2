@@ -184,7 +184,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     } else {
       handleFilter(value);
     }
-  }, 700);
+  }, 300);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>

@@ -14,6 +14,7 @@ import {
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination, productTypesStamp } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { StampDialog } from "~modules-dashboard/components";
 import { StampHistoryDialog } from "~modules-dashboard/components/product-manage/stamp/HistoryDialog";
@@ -40,16 +41,7 @@ export const StampPage = () => {
 
   const labelType = watch("labelType");
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -106,8 +98,9 @@ export const StampPage = () => {
     ...stampColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id}

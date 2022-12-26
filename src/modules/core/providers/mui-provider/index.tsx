@@ -20,21 +20,6 @@ type TProps = {
   children: ReactNode;
 };
 
-// const themeOptions: ThemeOptions = {
-//   palette: {
-//     mode: "light",
-//   },
-//   components: {
-//     MuiTextField: {
-//       styleOverrides: {
-//         root: {
-//           size: 30
-//         }
-//       }
-//     }
-//   },
-// };
-
 const lightTheme = createTheme(
   themeOptions.lightThemeOptions,
   muiViVN,

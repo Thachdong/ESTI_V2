@@ -11,6 +11,7 @@ import {
   ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { BranchsDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { branchColumns } from "./branchColumns";
@@ -29,16 +30,7 @@ export const BranchsPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onClose = useCallback(() => setDialog({ open: false }), []);

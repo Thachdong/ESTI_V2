@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { documentType } from "src/api";
@@ -25,12 +25,6 @@ export const DocumentTypesPage = () => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [defaultValue, setDefaultValue] = useState<any>();
-
-  // SIDE EFFECTS
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    router.push({ query });
-  }, [router.isReady]);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -60,8 +54,9 @@ export const DocumentTypesPage = () => {
     },
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

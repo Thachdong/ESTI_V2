@@ -1,3 +1,7 @@
+// USAGE:
+// 1. LAZY LOAD ON SCROLL DOWN
+// 2. SEARCH OPTIONS BY LABELKEY
+// 3. PASS DEFAULT OPTIONS
 import {
   FormControl,
   InputLabel,
@@ -6,10 +10,9 @@ import {
   Select,
   CircularProgress,
   Box,
-  SelectChangeEvent,
 } from "@mui/material";
 import { useQuery } from "react-query";
-import { useState, UIEvent, useCallback, useEffect } from "react";
+import { useState, UIEvent, useCallback, useEffect, ChangeEvent } from "react";
 import { defaultPagination } from "~modules-core/constance";
 import _ from "lodash";
 import { TFormSelectAsyncBase } from "~types/form-controlled/form-select";
@@ -46,13 +49,23 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
     fetcherParams,
     helperText,
     callback,
+    defaultOption,
     ...selectProps
   } = props;
 
   // STATE DECLARATIONS
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [options, setOptions] = useState<any[]>([]);
+  const [options, setOptions] = useState<any[]>(defaultOption || []);
+
+  const [searchString, setSearchString] = useState("");
+
+  const handleChangeSearchString = _.debounce(
+    (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setSearchString(e.target.value);
+    },
+    500
+  );
 
   // TRIGGER CALLBACK WHEN EVER VALUE CHANGE
   useEffect(() => {
@@ -67,11 +80,12 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
 
   // OPTIONS FETCHER
   const { isLoading, isFetching } = useQuery(
-    [queryKey, { ...pagination, ...fetcherParams }],
+    [queryKey, { ...pagination, ...fetcherParams, searchString }],
     () =>
       fetcher({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
+        [selectShape.labelKey]: searchString,
         ...fetcherParams,
       }).then((res) => res.data),
     {
@@ -115,19 +129,24 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
 
   // RENDER SERCHBOX HAVE MORE THAN ONE PAGE OPTIONS
   const renderSearchBox = useCallback(() => {
-    if (pagination.total > pagination.pageSize) {
+    // if (pagination.total > pagination.pageSize) {
+    if (true) {
       return (
-        <FormInputBase
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-          }}
-          placeholder="Tìm kiếm"
-          className="px-3"
-        />
+
+          <FormInputBase
+            value={searchString}
+            onChange={handleChangeSearchString}
+            variant="standard"
+            InputProps={{
+              disableUnderline: true,
+            }}
+            placeholder="Tìm kiếm"
+            className="px-3"
+          />
+
       );
     }
-  }, [pagination]);
+  }, [pagination, searchString]);
 
   return (
     <FormControl fullWidth size="small" {...formControlProps}>

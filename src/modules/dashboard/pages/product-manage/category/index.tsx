@@ -4,8 +4,16 @@ import { useCallback, useEffect, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { category, TCategory } from "src/api";
-import { AddButton, ContextMenuWrapper, DataTable, DropdownButton, generatePaginationProps, SearchBox } from "~modules-core/components";
+import {
+  AddButton,
+  ContextMenuWrapper,
+  DataTable,
+  DropdownButton,
+  generatePaginationProps,
+  SearchBox,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { CatalogDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -23,16 +31,7 @@ export const CategoryPage: React.FC = () => {
 
   const [defaultValue, setDefaultValue] = useState<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -87,8 +86,9 @@ export const CategoryPage: React.FC = () => {
     ...categoryColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

@@ -55,7 +55,7 @@ export function LoginForm() {
         signInPayload
       );
 
-      const { error, ok, url } = response || {};
+      const { error, ok } = response || {};
 
       if (ok) {        
         router.push(callbackUrl as string || "/dashboard/quotations/requests");

@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState, MouseEvent } from "react";
+import { useCallback, useState, MouseEvent } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { suppliers, TSupplier } from "src/api";
@@ -13,6 +13,7 @@ import {
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { SupplierDialog } from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
@@ -26,19 +27,9 @@ export const SuppliersPage = () => {
 
   const [defaultValue, setDefaultValue] = useState<TSupplier>();
 
-  const router = useRouter();
+  usePathBaseFilter(pagination);
 
-  const { query } = router;
-
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  const { query } = useRouter();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -96,8 +87,9 @@ export const SuppliersPage = () => {
     ...supplierColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

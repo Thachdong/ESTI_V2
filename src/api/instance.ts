@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { signOut } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
+import { getSession, signOut } from "next-auth/react";
 import { toast } from "~modules-core/toast";
 
 const TIMEOUT_IN_MILISECOND = 10000;
@@ -18,8 +19,19 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
   return baseURL ? url?.replace(baseURL, "") : url;
 };
 
-const useRequestCongif = (config: AxiosRequestConfig) => {
+const useRequestCongif = async (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
+
+  const bearerToken = instance.defaults.headers.common["Authorization"];
+
+  // TRY TO GET TOKEN WHEN IT ABSENT FROM HEADER
+  if (!bearerToken) {
+    const { accessToken } = (await getSession()) || {};
+
+    config.headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+  }
 
   console.log(
     `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
@@ -58,12 +70,24 @@ const useResponseError = (error: AxiosError) => {
       data
     );
 
+    // ABORT ALL REQUEST IF 401 | 408 | 403 MEET TWICE
+    if (isAbort) {
+      throw new axios.Cancel("401 trigger more than twice!");
+    }
+
     switch (status) {
+      case 401:
       case 408: {
+        // TURN ON ABORT FLAG
+        isAbort = true;
+
+        // ALERT INFO TO USER
+        window.alert(
+          "Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !"
+        );
+        
         // TRIGGER TOKEN ROTATION | SIGNOUT HERE
         signOut();
-        // TOAST statusText
-        toast.error("Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !")
         break;
       }
       default:
@@ -75,5 +99,8 @@ const useResponseError = (error: AxiosError) => {
 
   return Promise.reject(error);
 };
+
+// THIS FLAG WILL TRIGGER ABORT ALL REQUEST IF 401 | 408 | 403 MEET TWICE
+let isAbort = false;
 
 instance.interceptors.response.use(useResponseSuccess, useResponseError);

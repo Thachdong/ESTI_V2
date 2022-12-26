@@ -114,8 +114,9 @@ export const DocumentsPage: React.FC = () => {
     ...documentColumns.slice(1),
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

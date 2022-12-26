@@ -55,7 +55,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
       setLoading(true);
 
       const urls = await Promise.all(promises);
-      
+
       const currentVal = Array.isArray(value) ? value : [];
 
       const multiple = textFieldProps.inputProps?.multiple;
@@ -99,6 +99,9 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
               <img
                 src={`${item}?w=164&fit=crop&auto=format`}
                 srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                onError={({ currentTarget }) =>
+                  (currentTarget.src = process.env.NEXT_PUBLIC_API_URL + item)
+                }
                 alt={item}
                 loading="lazy"
               />
@@ -116,7 +119,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
           disabled={disabled}
           className={clsx(
             className,
-            disabled ? "disable-form-input" : "bg-main-2",
+            disabled ? "disable-form-input" : "bg-main-2"
           )}
         >
           <InputLabel

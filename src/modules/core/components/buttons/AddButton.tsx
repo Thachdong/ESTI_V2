@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, ButtonProps } from "@mui/material";
 import clsx from "clsx";
 
-export const AddButton: React.FC<ButtonProps> = (props) => {
+export const AddButton: React.FC<ButtonProps> = ({ref, ...props}) => {
   return (
     <Button
       {...props}
