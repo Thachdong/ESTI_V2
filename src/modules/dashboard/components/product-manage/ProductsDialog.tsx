@@ -17,6 +17,7 @@ import {
   TabPanelContainForm,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { TDialog } from "~types/dialog";
 import { ProductInfoForm } from "./ProductInfoForm";
 import { WebsiteInfoForm } from "./WebsiteInfoForm";
 
@@ -43,7 +44,7 @@ const websiteFields = [
   "categorys",
 ];
 
-export const ProductsDialog: React.FC<any> = ({
+export const ProductsDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,

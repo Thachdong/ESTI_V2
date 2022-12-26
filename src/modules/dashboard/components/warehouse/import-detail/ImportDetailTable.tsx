@@ -16,7 +16,7 @@ import { ImportDetailProductDialog } from "./ImportDetailProductDialog";
 
 export const ImportDetailTable = () => {
   // LOCAL STATE AND EXTRACT PROPS
-  const [dialog, setDialog] = useState<TDefaultDialogState>();
+  const [dialog, setDialog] = useState<TDefaultDialogState>({open: false});
 
   const [defaultValue, setDefaultValue] = useState<any>();
 
@@ -146,7 +146,7 @@ export const ImportDetailTable = () => {
 
       <ImportDetailProductDialog
         onClose={handleClose}
-        open={dialog?.open as boolean}
+        open={dialog.open}
         type={dialog?.type}
         addProduct={handleAddProduct}
         updateProduct={handleUpdateProduct}
@@ -155,7 +155,7 @@ export const ImportDetailTable = () => {
 
       <ProductsDialog
         onClose={handleClose}
-        open={dialog?.open && dialog?.type === "CreateProduct"}
+        open={dialog.open && dialog?.type === "CreateProduct"}
       />
     </Paper>
   );
