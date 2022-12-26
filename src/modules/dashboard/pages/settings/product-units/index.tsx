@@ -100,7 +100,7 @@ export const UnitsPage: React.FC = () => {
     {
       field: "action",
       headerName: "",
-      width: 100,
+      width: 50,
       flex: 0,
       align: "center",
       renderCell: ({ row }) => (

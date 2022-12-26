@@ -97,8 +97,9 @@ export const CustomersPage = () => {
     ...CustomerColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id}

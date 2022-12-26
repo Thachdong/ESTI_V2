@@ -89,8 +89,8 @@ export const StaffsPage = () => {
     ...staffColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      width: 100,
+      headerName: "",
+      width: 50,
       align: "center",
       renderCell: ({ row }) => (
         <DropdownButton

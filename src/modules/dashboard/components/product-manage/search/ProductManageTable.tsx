@@ -9,6 +9,7 @@ import {
   DataTable,
   DeleteButton,
   DownloadButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
   ViewButton,
@@ -77,14 +78,12 @@ export const ProductManageTable = () => {
   );
 
   const { data: warehouseIds } = useQuery(["warehouseIds"], () =>
-  warehouseConfig
-      .getList({ pageIndex: 1, pageSize: 999 })
-      .then((res) =>
-        res.data?.items?.map((item: any) => ({
-          value: item?.id,
-          label: item?.code,
-        }))
-      )
+    warehouseConfig.getList({ pageIndex: 1, pageSize: 999 }).then((res) =>
+      res.data?.items?.map((item: any) => ({
+        value: item?.id,
+        label: item?.code,
+      }))
+    )
   );
 
   // DATA TABLE
@@ -109,23 +108,27 @@ export const ProductManageTable = () => {
       minWidth: 150,
       flex: 1,
       type: "select",
-      options: warehouseIds as []
+      options: warehouseIds as [],
     },
     ...productManageColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];

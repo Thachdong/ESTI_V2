@@ -98,8 +98,9 @@ export const StampPage = () => {
     ...stampColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id}

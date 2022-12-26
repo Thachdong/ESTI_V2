@@ -86,8 +86,9 @@ export const CategoryPage: React.FC = () => {
     ...categoryColumns,
     {
       field: "action",
-      headerName: "Thao tác",
+      headerName: "",
       align: "center",
+      width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}
