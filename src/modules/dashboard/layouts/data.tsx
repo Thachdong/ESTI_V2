@@ -8,7 +8,7 @@ import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
 
 export const menu = [
   {
-    id: "menu_parent_1",
+    id: "quotations",
     title: "Báo giá",
     icon: <QuoteIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -23,7 +23,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_2",
+    id: "orders",
     title: "Đơn hàng",
     icon: <OrderIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -38,7 +38,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_3",
+    id: "purchase",
     title: "Đơn mua hàng",
     icon: <ReceiptIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -53,7 +53,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_4",
+    id: "warehouse",
     title: "Quản lý kho",
     icon: <WarehouseIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -68,7 +68,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_5",
+    id: "product-manage",
     title: "Quản lý sản phẩm",
     icon: <ProductionIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -107,7 +107,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_6",
+    id: "account",
     title: "Tài khoản",
     icon: <AccountIcon className="w-[20px] h-[20px]" />,
     childrens: [
@@ -126,7 +126,7 @@ export const menu = [
     ],
   },
   {
-    id: "menu_parent_7",
+    id: "settings",
     title: "Cấu hình",
     icon: <SettingsIcon className="w-[20px] h-[20px]" />,
     childrens: [

@@ -21,9 +21,7 @@
 
 .sidebar .expand-btn {
   @apply flex items-center justify-center h-[32px] absolute;
-  /* background: #fff; */
-  /* border-color: #000; */
-  right: -45px;
+  right: -55px;
   color: #000;
   cursor: pointer;
 }
@@ -37,6 +35,10 @@
 
 .sidebar .expand-items:hover .absolute-menu {
   display: block;
+}
+
+.sidebar .expand-items .absolute-menu > li:hover {
+  color: #fff;
 }
 
 .menu {
@@ -71,5 +73,5 @@
 }
 
 .menu-items:hover {
-  background: #e1e1e166;
+  background: #5d6c79;
 }

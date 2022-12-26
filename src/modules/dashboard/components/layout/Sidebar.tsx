@@ -1,13 +1,15 @@
 import {
   Box,
+  Button,
   Collapse,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,6 +18,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
+import { BaseButton } from "~modules-core/components";
 
 type TProps = {
   expand: boolean;
@@ -23,10 +26,12 @@ type TProps = {
 };
 
 export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
+  // LOCAL STATE AND EXTRACT PROPS
   const [collapses, setCollapses] = useState<string[]>([]);
 
   const { pathname } = useRouter();
 
+  // METHODS
   const handleCollapse = (id: string) => {
     setCollapses((prevCollapse) =>
       prevCollapse.includes(id)
@@ -35,18 +40,78 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
     );
   };
 
-  const handleCollapseBaseOnActiveRoute = (childrens: any[]) => {
-    let isChildVisited = false;
-
-    childrens.map((child) => {
-      if (pathname === `/dashboard/${child.link}`) {
-        isChildVisited = true;
+  const renderActiveStyle = useCallback(
+    (id: string, type: "children" | "parent") => {
+      const pathSlice = pathname.split("/");
+      // [0]: domain;
+      // [1]: dashboard;
+      // [2]: parentUrl;
+      // [3]: childrenUrl
+      
+      if (type === "children") {
+        return `${pathSlice[2]}/${pathSlice[3]}` === id ? { background: "#5d6c79" } : {};
+      } else {
+        return pathSlice[2] === id ? { background: "#5d6c79" } : {};
       }
-    });
+    },
+    [pathname]
+  );
 
-    return isChildVisited;
-  };
+  const renderMenu = useCallback(() => {
+    if (!expand) {
+      return <ExpandedMenu menu={menu} />;
+    }
 
+    return (
+      <List component="nav" className={styles["menu"]}>
+        {menu.map((item, index) => (
+          <React.Fragment key={index}>
+            <ListItem
+              className={clsx(
+                styles["menu-items"],
+                styles["parent-menu-items"]
+              )}
+              disablePadding
+              sx={{ ...renderActiveStyle(item.id, "parent") }}
+            >
+              <ListItemButton onClick={() => handleCollapse(item.id)}>
+                <ListItemIcon className="text-white min-w-[32px] w-8">
+                  {item.icon}
+                </ListItemIcon>
+
+                <span className="flex-grow text-sm py-2">{item.title}</span>
+
+                {collapses.includes(item.id) ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+            </ListItem>
+
+            <Collapse in={collapses.includes(item.id)}>
+              <List>
+                {item.childrens.map((child) => (
+                  <Link href={`/dashboard/${child.link}`} key={child.link}>
+                    <ListItem
+                      disablePadding
+                      className={clsx(
+                        styles["menu-items"],
+                        "text-sm !pl-[32px]"
+                      )}
+                      sx={{ ...renderActiveStyle(child.link, "children") }}
+                    >
+                      <ListItemButton>
+                        <ListItemText>{child.title}</ListItemText>
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
+                ))}
+              </List>
+            </Collapse>
+          </React.Fragment>
+        ))}
+      </List>
+    );
+  }, [expand, menu, styles, collapses, pathname]);
+
+  // DOM RENDERING
   return (
     <Box
       className={styles["sidebar"]}
@@ -59,77 +124,16 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
           <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
         )}
 
-        <div
+        <BaseButton
+          variant="text"
           onClick={() => setExpand(!expand)}
-          className={clsx(styles["expand-btn"])}
+          className={clsx(styles["expand-btn"], "min-w-[32px]")}
         >
           <MenuIcon className="w-[30px] h-[40px]" />
-        </div>
+        </BaseButton>
       </Box>
-      {!expand ? (
-        <ExpandedMenu menu={menu} />
-      ) : (
-        <List component="nav" className={styles["menu"]}>
-          {menu.map((item, index) => (
-            <React.Fragment key={index}>
-              <ListItem
-                className={clsx(
-                  styles["menu-items"],
-                  styles["parent-menu-items"]
-                )}
-                disablePadding
-              >
-                <ListItemButton onClick={() => handleCollapse(item.id)}>
-                  <ListItemIcon className="text-white min-w-[32px] w-8">
-                    {item.icon}
-                  </ListItemIcon>
 
-                  <span className="flex-grow text-sm py-2">{item.title}</span>
-
-                  {collapses.includes(item.id) ||
-                  handleCollapseBaseOnActiveRoute(item.childrens) ? (
-                    <ExpandLess />
-                  ) : (
-                    <ExpandMore />
-                  )}
-                </ListItemButton>
-              </ListItem>
-
-              <Collapse
-                in={
-                  collapses.includes(item.id) ||
-                  handleCollapseBaseOnActiveRoute(item.childrens)
-                }
-              >
-                <List>
-                  {item.childrens.map((child) => (
-                    <ListItem
-                      key={child.link}
-                      disablePadding
-                      className={clsx(
-                        styles["menu-items"],
-                        "text-sm pl-[32px]"
-                      )}
-                      sx={{
-                        background:
-                          pathname === `/dashboard/${child.link}`
-                            ? "#2D3748 !important"
-                            : "",
-                      }}
-                    >
-                      <ListItemButton>
-                        <Link href={`/dashboard/${child.link}`}>
-                          <span className="py-2">{child.title}</span>
-                        </Link>
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
-              </Collapse>
-            </React.Fragment>
-          ))}
-        </List>
-      )}
+      {renderMenu()}
     </Box>
   );
 };
