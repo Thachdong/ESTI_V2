@@ -11,6 +11,7 @@ import {
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { UnitDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -30,16 +31,7 @@ export const UnitsPage: React.FC = () => {
     type?: "Add" | "View";
   }>({ open: false });
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onClose = useCallback(() => setDialog({ open: false }), []);

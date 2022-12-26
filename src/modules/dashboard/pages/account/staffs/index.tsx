@@ -13,6 +13,7 @@ import {
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { StaffDialog } from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
@@ -34,16 +35,7 @@ export const StaffsPage = () => {
 
   const [defaultValue, setDefaultValue] = useState<TStaff>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onUpdate = useCallback(() => {

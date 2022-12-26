@@ -13,6 +13,7 @@ import {
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { NoteDialog } from "~modules-dashboard/components";
@@ -31,16 +32,7 @@ export const WarehouseImportPage: React.FC = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   const { data, isLoading, isFetching, refetch } = useQuery(
     [

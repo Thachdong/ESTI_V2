@@ -1,5 +1,4 @@
 export * from "./ProductsDialog";
-export * from "./CatalogDialog";
 export * from "./DocumentDialog";
 export * from "./DocumentTypeDialog";
 export * from "./ProductManageTable";
@@ -8,3 +7,4 @@ export * from "./ProductManageDialog";
 export * from "./warehouse";
 export * from "./technical-documents";
 export * from "./stamp";
+export * from "./catalog";

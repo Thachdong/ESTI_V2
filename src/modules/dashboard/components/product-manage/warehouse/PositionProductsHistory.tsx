@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { position } from "src/api";
 import { DataTable, RefreshButton } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { positionHistoryColumns } from "~modules-dashboard/pages/product-manage/warehouse/data";
 
 type TProps = {
@@ -24,18 +25,7 @@ export const PositionProductsHistory: React.FC<TProps> = ({
 
   const [searchParams, setSearchParams] = useState<any>({});
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    if (router.isReady) {
-      const initQuery = {
-        ...query,
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-      };
-
-      router.push({ query: initQuery });
-    }
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // WATCHING QUERY AND TRIGGER FETCHING DATA
   useEffect(() => {
