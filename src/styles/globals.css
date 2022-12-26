@@ -52,7 +52,7 @@
 /* CUSTOM ROW HEIGHT TO AUTO */
 .data-table-container .MuiDataGrid-virtualScrollerContent {
   max-height: none !important;
-  min-height: 32px !important;
+  min-height: 40px !important;
   padding-bottom: 20px !important;
 }
 
@@ -60,10 +60,32 @@
   line-height: unset !important;
   max-height: none !important;
   white-space: normal !important;
-  min-height: 32px !important;
+  min-height: 40px !important;
 }
 
 .data-table-container .MuiDataGrid-row {
   max-height: none !important;
-  min-height: 32px !important;
+  min-height: 40px !important;
+}
+
+/* SCROLLBAR STYLING */
+/* width */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar {
+  width: 4px;
+  height: 12px;
+}
+
+/* Track */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
+  background: rgb(223, 223, 223);
+}
+
+/* Handle on hover */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
