@@ -32,6 +32,7 @@ type TFormSelectAsyncBase = SelectProps & {
   formControlProps?: FormControlProps;
   inputLabelProps?: InputLabelProps;
   helperText?: string | Element;
+  defaultOption?: object[];
 };
 
 type TFromSelectAsync = TFormSelectAsyncBase & {
