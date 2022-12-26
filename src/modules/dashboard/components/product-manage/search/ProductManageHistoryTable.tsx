@@ -5,7 +5,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { productManage } from "src/api";
 import { DataTable, generatePaginationProps } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
-import { productHistoryColumns } from "~modules-dashboard/pages/product-manage/product-manage/data";
+import { productHistoryColumns } from "~modules-dashboard/pages/product-manage/search/data";
 
 type TProps = {
   productId: string;

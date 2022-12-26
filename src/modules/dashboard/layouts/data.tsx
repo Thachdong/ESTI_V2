@@ -78,7 +78,7 @@ export const menu = [
       },
       {
         title: "Tra cứu sản phẩm",
-        link: "product-manage",
+        link: "product-manage/search",
       },
       {
         title: "Danh sách sản phẩm",

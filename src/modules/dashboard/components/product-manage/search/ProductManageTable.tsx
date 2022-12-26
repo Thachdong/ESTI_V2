@@ -20,7 +20,7 @@ import { ProductManageDialog } from "~modules-dashboard/components";
 import {
   columnGroupingModel,
   productManageColumns,
-} from "~modules-dashboard/pages/product-manage/product-manage/data";
+} from "~modules-dashboard/pages/product-manage/search/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
