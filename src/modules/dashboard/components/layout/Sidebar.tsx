@@ -47,9 +47,11 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
       // [1]: dashboard;
       // [2]: parentUrl;
       // [3]: childrenUrl
-      
+
       if (type === "children") {
-        return `${pathSlice[2]}/${pathSlice[3]}` === id ? { background: "#5d6c79" } : {};
+        return `${pathSlice[2]}/${pathSlice[3]}` === id
+          ? { background: "#5d6c79" }
+          : {};
       } else {
         return pathSlice[2] === id ? { background: "#5d6c79" } : {};
       }
@@ -91,14 +93,13 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
                   <Link href={`/dashboard/${child.link}`} key={child.link}>
                     <ListItem
                       disablePadding
-                      className={clsx(
-                        styles["menu-items"],
-                        "text-sm !pl-[32px]"
-                      )}
+                      className={clsx(styles["menu-items"])}
                       sx={{ ...renderActiveStyle(child.link, "children") }}
                     >
                       <ListItemButton>
-                        <ListItemText>{child.title}</ListItemText>
+                        <span className="text-sm pl-[32px] py-2">
+                          {child.title}
+                        </span>
                       </ListItemButton>
                     </ListItem>
                   </Link>

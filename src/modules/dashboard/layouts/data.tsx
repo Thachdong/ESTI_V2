@@ -32,7 +32,7 @@ export const menu = [
         link: "orders/order-request",
       },
       {
-        title: "hóa đơn",
+        title: "Hóa đơn",
         link: "orders/bill-list",
       },
     ],
