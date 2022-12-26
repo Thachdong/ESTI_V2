@@ -61,6 +61,7 @@
   max-height: none !important;
   white-space: normal !important;
   min-height: 40px !important;
+  padding: 8px;
 }
 
 .data-table-container .MuiDataGrid-row {
