@@ -85,8 +85,6 @@ export const ImportDetailPage = () => {
     }
   );
 
-  console.log(transationData);
-
   // RESET DATA WHEN EVER withoutPurchaseInvoice CHANGE
   useEffect(() => {
     if (withoutPurchaseInvoice) {

@@ -1,6 +1,6 @@
 import moment from "moment";
 import { TWarehouseExport } from "src/api";
-import { warehouseImportstatus } from "~modules-core/constance";
+import { warehouseImportStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -77,6 +77,6 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
     minWidth: 190,
     filterKey: "importStatus",
     type: "select",
-    options: warehouseImportstatus
+    options: warehouseImportStatus
   },
 ];

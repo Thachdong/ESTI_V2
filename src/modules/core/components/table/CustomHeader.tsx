@@ -35,7 +35,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     sortDescValue,
     type,
     options,
-    sortKey = "order",
+    sortKey = "orderBy",
   } = colDef;
 
   const filterKey = colDef.filterKey as string;
@@ -54,7 +54,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   // SYNC QUERY VS LOCAL SORT DATA
   useEffect(() => {
-    const currentSort = query.order || 0;
+    const currentSort = query[sortKey] || 0;
 
     switch (true) {
       case !currentSort:
