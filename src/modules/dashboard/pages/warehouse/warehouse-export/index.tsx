@@ -122,7 +122,7 @@ export const WarehouseExportPage: React.FC = () => {
         <AddButton
           variant="contained"
           onClick={() =>
-            router.push("/dashboard/warehouse/create-warehouse-export")
+            router.push("/dashboard/warehouse/export-detail")
           }
         >
           Tạo phiếu xuất kho
