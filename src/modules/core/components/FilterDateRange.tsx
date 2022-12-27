@@ -39,7 +39,7 @@ export const FilterDateRange: React.FC<TProps> = ({
           >
             Từ ngày
           </Typography>
-          <FormDatepickerBase
+          {/* <FormDatepickerBase
             value={FromDate}
             onChange={(val: any) => setFromDate(val)}
             renderInput={function (
@@ -47,7 +47,7 @@ export const FilterDateRange: React.FC<TProps> = ({
             ): ReactElement<any, string | JSXElementConstructor<any>> {
               throw new Error("Function not implemented.");
             }}
-          />
+          /> */}
         </Box>
 
         <Box sx={{ marginTop: "1rem !important" }}>
@@ -60,7 +60,7 @@ export const FilterDateRange: React.FC<TProps> = ({
           >
             Đến ngày
           </Typography>
-          <FormDatepickerBase
+          {/* <FormDatepickerBase
             value={ToDate}
             onChange={(val: any) => setToDate(val)}
             renderInput={function (
@@ -68,7 +68,7 @@ export const FilterDateRange: React.FC<TProps> = ({
             ): ReactElement<any, string | JSXElementConstructor<any>> {
               throw new Error("Function not implemented.");
             }}
-          />
+          /> */}
         </Box>
       </Stack>
       <ButtonGroup

@@ -1,9 +1,7 @@
-import { Box, TextField, TextFieldProps, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
 import {
   ChangeEvent,
-  JSXElementConstructor,
-  ReactElement,
   useCallback,
   useEffect,
   useState,
@@ -24,7 +22,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // EXTRACT PROPS
   const router = useRouter();
 
-  const { query } = router;
+  const { query, isReady } = router;
 
   const { field } = params;
 
@@ -37,7 +35,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     sortDescValue,
     type,
     options,
-    sortKey = "order",
+    sortKey = "orderBy",
   } = colDef;
 
   const filterKey = colDef.filterKey as string;
@@ -52,11 +50,11 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
       setFilterData({ ...filterData, searchTerm: value, isCheck: true });
     }
-  }, [router.isReady]);
+  }, [isReady]);
 
   // SYNC QUERY VS LOCAL SORT DATA
   useEffect(() => {
-    const currentSort = query.order || 0;
+    const currentSort = query[sortKey] || 0;
 
     switch (true) {
       case !currentSort:
@@ -74,7 +72,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
       default:
         break;
     }
-  }, [router]);
+  }, [query, sortAscValue, sortDescValue]);
 
   // IMPLEMENT SORT OPERATIONS
   const [sortMode, setSortMode] = useState<"asc" | "desc" | null>(null);
@@ -144,11 +142,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   const [filterData, setFilterData] = useState<any>({ isCheck: false });
 
   const handleFilter = (value: string | number) => {
-    const miliseconds = new Date(value).getTime();
-
     const updateQuery = {
       ...query,
-      [filterKey]: type === "date" ? miliseconds : value,
+      [filterKey]: value,
     };
 
     !value && delete updateQuery[filterKey];
@@ -189,17 +185,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    // let value: number | string;
-
-    // if (type === "date") {
-    //   value = e?.valueOf?.() as number;
-
-    //   if (Number.isNaN(value)) return;      
-    // } else {
-    //   value = e?.target.value
-    // }
-
-    const value = e.target.value;
+    const value = type === "date" ? e : e.target.value;
 
     //1. update search term state
     setFilterData({ ...filterData, searchTerm: value });
@@ -228,12 +214,18 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
         );
       case "date":
         return (
-          <input
-            type="date"
-            id={field + "_searchbox"}
-            onChange={handleInputChange}
-            value={filterData.searchTerm}
-            className="w-10/12 border-0"
+          <FormDatepickerBase
+            value={filterData.searchTerm || null}
+            onChange={(val: any) => val && handleInputChange(val)}
+            renderInputProps={{
+              variant: "standard",
+            }}
+            inputFormat="DD/MM/YYYY"
+            inputProps={{ sx: { fontSize: "14px" } }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+            disableOpenPicker
           />
         );
       default:

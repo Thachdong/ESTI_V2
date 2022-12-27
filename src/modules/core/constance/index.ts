@@ -97,17 +97,17 @@ export const positionStatus = [
   },
 ];
 
-export const warehouseImportstatus = [
+export const warehouseImportStatus = [
   {
-    value: 1,
+    value: 0,
     label: "Chưa thực hiện",
   },
   {
-    value: 2,
+    value: 1,
     label: "Đã nhập kho",
   },
   {
-    value: 3,
+    value: 2,
     label: "Hủy",
   },
 ];
@@ -117,4 +117,31 @@ export const VAT = [
   { id: 5, name: "5%" },
   { id: 8, name: "8%" },
   { id: 10, name: "10%" },
+];
+
+export const warehouseExportStatus = [
+  {
+    value: 0,
+    label: "Chưa thực hiện",
+  },
+  {
+    value: 1,
+    label: "Đang đóng gói",
+  },
+  {
+    value: 2,
+    label: "Đang vận chuyển",
+  },
+  {
+    value: 3,
+    label: "Hoàn thành",
+  },
+  {
+    value: 4,
+    label: "Hủy đơn nháp",
+  },
+  {
+    value: 5,
+    label: "Hủy",
+  },
 ];

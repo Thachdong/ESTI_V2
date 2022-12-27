@@ -8,3 +8,4 @@ export * from "./FormSelectMultiple";
 export * from "./FormImageGallery";
 export * from "./FormTextEditor";
 export * from "./FormUploadFiles";
+export * from "./FormCheckbox";

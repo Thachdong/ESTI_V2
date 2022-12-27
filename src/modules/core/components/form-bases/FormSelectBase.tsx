@@ -13,7 +13,7 @@ export const FormSelectBase: React.FC<TFormSelectBase> = (props) => {
       return options.map((option: any) => (
         <MenuItem
           key={option[selectShape?.valueKey as string]}
-          value={option[selectShape?.valueKey as string]}
+          value={option[selectShape?.valueKey as string | number]}
           onClick={() => callback?.(option)}
         >
           {option[selectShape?.labelKey as string]}

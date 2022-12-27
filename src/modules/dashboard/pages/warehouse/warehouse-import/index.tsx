@@ -1,7 +1,7 @@
 import { Box, Paper } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { TWarehouseExport, warehouse } from "src/api";
