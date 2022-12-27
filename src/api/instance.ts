@@ -1,7 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getToken } from "next-auth/jwt";
 import { getSession, signOut } from "next-auth/react";
-import { toast } from "~modules-core/toast";
 
 const TIMEOUT_IN_MILISECOND = 10000;
 
@@ -22,6 +20,8 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 const useRequestCongif = async (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
 
+  const url = getUrlFromConfig(config);
+
   const bearerToken = instance.defaults.headers.common["Authorization"];
 
   // TRY TO GET TOKEN WHEN IT ABSENT FROM HEADER
@@ -29,12 +29,12 @@ const useRequestCongif = async (config: AxiosRequestConfig) => {
     const { accessToken } = (await getSession()) || {};
 
     config.headers = {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
     };
   }
 
   console.log(
-    `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
+    `%c ${method?.toUpperCase()} - ${url}:`,
     "color: #0086b3; font-weight: bold",
     { params, data }
   );
