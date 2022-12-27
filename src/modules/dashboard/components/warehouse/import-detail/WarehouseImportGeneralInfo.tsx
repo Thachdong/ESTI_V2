@@ -18,7 +18,7 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
   orderDetail,
 }) => {
   const [selectedBranch, setSelectedBranch] = useState<any>();
-  
+
   const { control, watch } = useFormContext();
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
@@ -50,7 +50,6 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
             controlProps={{
               control,
               name: "productOrderId",
-              rules: { required: true },
             }}
             label="Đơn mua hàng"
           />
@@ -62,7 +61,6 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
           controlProps={{
             control,
             name: "branchId",
-            rules: { required: true },
           }}
           label="Mã chi nhánh"
         />
@@ -72,7 +70,6 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
           controlProps={{
             control,
             name: "deliveryId",
-            rules: { required: false },
           }}
           label="Giao nhận phụ trách"
           selectShape={{ valueKey: "id", labelKey: "fullName" }}

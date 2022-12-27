@@ -189,31 +189,29 @@ export const ImportDetailPage = () => {
   }, []);
 
   return (
-    <Box>
-      <FormProvider {...methods}>
-        <Box className="mb-2">
-          <FormCheckbox
-            controlProps={{
-              name: "withoutPurchaseInvoice",
-              control: methods.control,
-            }}
-            label="Nhập hàng không thông qua đơn mua"
-          />
-        </Box>
+    <FormProvider {...methods}>
+      <Box className="mb-2">
+        <FormCheckbox
+          controlProps={{
+            name: "withoutPurchaseInvoice",
+            control: methods.control,
+          }}
+          label="Nhập hàng không thông qua đơn mua"
+        />
+      </Box>
 
-        <WarehouseImportGeneralInfo orderDetail={orderDetail} />
+      <WarehouseImportGeneralInfo orderDetail={orderDetail} />
 
-        <Box className="grid grid-cols-2 gap-4 my-4">
-          <WarehouseImportSupplierInfo
-            orderDetail={supplierDetail}
-            callback={setSelectedSupplierCallback}
-          />
+      <Box className="grid grid-cols-2 gap-4 my-4">
+        <WarehouseImportSupplierInfo
+          orderDetail={supplierDetail}
+          callback={setSelectedSupplierCallback}
+        />
 
-          <WarehouseImportCuratorInfo orderDetail={supplierDetail} />
-        </Box>
+        <WarehouseImportCuratorInfo orderDetail={supplierDetail} />
+      </Box>
 
-        <ImportDetailTable />
-      </FormProvider>
+      <ImportDetailTable />
 
       <Box className="flex justify-end my-4">
         {query.type === "create" ? (
@@ -236,6 +234,6 @@ export const ImportDetailPage = () => {
           </BaseButton>
         )}
       </Box>
-    </Box>
+    </FormProvider>
   );
 };

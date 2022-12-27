@@ -1,7 +1,7 @@
 import { Box, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
 import { exportWarehouse, TWarehouseExport } from "src/api";
@@ -15,6 +15,10 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
+import {
+  WarehouseExportNoteDialog,
+  WarehouseExportStatusDialog,
+} from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 import { warehouseExportColumns } from "./data";
 
@@ -31,6 +35,19 @@ export const WarehouseExportPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   usePathBaseFilter(pagination);
+
+  // DIALOG METHODS
+  const onCloseDialog = useCallback(() => {
+    setDialog({open: false, type: undefined})
+  }, []);
+
+  const onOpenNoteDialog = useCallback(() => {
+    setDialog({open: true, type: "note"})
+  }, []);
+
+  const onOpenStatusDialog = useCallback(() => {
+    setDialog({open: true, type: "status"})
+  }, []);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -76,11 +93,11 @@ export const WarehouseExportPage: React.FC = () => {
               label: "Chi tiết xuất kho",
             },
             {
-              action: () => console.log(""),
+              action: onOpenNoteDialog,
               label: "Ghi chú",
             },
             {
-              action: () => console.log(""),
+              action: onOpenStatusDialog,
               label: "Trạng thái",
             },
           ]}
@@ -117,10 +134,10 @@ export const WarehouseExportPage: React.FC = () => {
         menuComponent={
           <Menu className="p-0" id="warehouse_import_menu">
             <Item id="view-detail">Chi tiết xuất kho</Item>
-            <Item id="delete-transaction">Ghi chú</Item>
+            <Item id="delete-transaction" onClick={onOpenNoteDialog}>Ghi chú</Item>
             <Item
               id="transation-note"
-              onClick={() => setDialog({ open: true, type: "note" })}
+              onClick={onOpenStatusDialog}
             >
               Trạng thái
             </Item>
@@ -141,6 +158,18 @@ export const WarehouseExportPage: React.FC = () => {
           }}
         />
       </ContextMenuWrapper>
+
+      <WarehouseExportNoteDialog
+        onClose={onCloseDialog}
+        open={Boolean(dialog?.open && dialog.type === "note")}
+        defaultValue={defaultValue}
+      />
+
+      <WarehouseExportStatusDialog
+        onClose={onCloseDialog}
+        open={Boolean(dialog?.open && dialog.type === "status")}
+        defaultValue={defaultValue}
+      />
     </Paper>
   );
 };

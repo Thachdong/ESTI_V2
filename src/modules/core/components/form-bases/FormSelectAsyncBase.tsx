@@ -129,8 +129,8 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
 
   // RENDER SERCHBOX HAVE MORE THAN ONE PAGE OPTIONS
   const renderSearchBox = useCallback(() => {
-    // if (pagination.total > pagination.pageSize) {
-    if (true) {
+    if (pagination.total > pagination.pageSize) {
+    // if (true) {
       return (
 
           <FormInputBase

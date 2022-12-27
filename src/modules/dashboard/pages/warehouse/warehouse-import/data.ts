@@ -6,39 +6,47 @@ import { TGridColDef } from "~types/data-grid";
 
 export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
   {
-    field: "code",
+    field: "created",
     headerName: "NGÀY TẠO",
     type: "date",
     minWidth: 150,
     filterKey: "createdDate",
-    renderCell: (params) =>
-      params.row.created
-        ? moment(params.row.created).format("DD/MM/YYYY")
-        : "__",
+    sortAscValue: 12,
+    sortDescValue: 2,
+    renderCell: ({ row }) =>
+      row.created ? moment(row.created).format("DD/MM/YYYY") : "__",
   },
   {
     field: "branchCode",
     headerName: "CHI NHÁNH",
     minWidth: 120,
     filterKey: "branchCode",
+    sortAscValue: 11,
+    sortDescValue: 1,
   },
   {
     field: "productOrderCode",
     headerName: "MÃ ĐƠN MUA HÀNG",
     minWidth: 170,
     filterKey: "productOrderCode",
+    sortAscValue: 13,
+    sortDescValue: 3,
   },
   {
     field: "warehouseSessionCode",
     headerName: "MÃ NHẬP KHO",
     minWidth: 150,
     filterKey: "sessionCode",
+    sortAscValue: 14,
+    sortDescValue: 4,
   },
   {
     field: "supplierCode",
     headerName: "MÃ NCC",
     minWidth: 120,
     filterKey: "supplierCode",
+    sortAscValue: 15,
+    sortDescValue: 5,
   },
   {
     field: "supplierName",
@@ -46,6 +54,8 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
     minWidth: 170,
     flex: 1,
     filterKey: "supplierName",
+    sortAscValue: 16,
+    sortDescValue: 6,
   },
   {
     field: "totalPrice",
@@ -53,12 +63,16 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
     minWidth: 170,
     filterKey: "totalPrice",
     renderCell: (params) => _format.getVND(params.row.totalPrice),
+    sortAscValue: 17,
+    sortDescValue: 7,
   },
   {
     field: "deliveryCode",
     headerName: "GIAO NHẬN",
     minWidth: 120,
     filterKey: "deliveryCode",
+    sortAscValue: 18,
+    sortDescValue: 8,
   },
   {
     field: "receiverBillName",
@@ -70,6 +84,8 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
       { value: "true", label: "Đã nhận" },
       { value: "false", label: "Chưa nhận" },
     ],
+    sortAscValue: 19,
+    sortDescValue: 9,
   },
   {
     field: "importStatusName",
@@ -77,6 +93,7 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
     minWidth: 190,
     filterKey: "importStatus",
     type: "select",
-    options: warehouseImportStatus
+    options: warehouseImportStatus,
+    isSort: false
   },
 ];

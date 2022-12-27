@@ -88,7 +88,7 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
             </ListItem>
 
             <Collapse in={collapses.includes(item.id)}>
-              <List>
+              <List className="p-0">
                 {item.childrens.map((child) => (
                   <Link href={`/dashboard/${child.link}`} key={child.link}>
                     <ListItem

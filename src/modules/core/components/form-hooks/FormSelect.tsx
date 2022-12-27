@@ -1,5 +1,4 @@
 import { ErrorMessage } from "@hookform/error-message";
-import clsx from "clsx";
 import { Controller } from "react-hook-form";
 import { TFormSelect } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
