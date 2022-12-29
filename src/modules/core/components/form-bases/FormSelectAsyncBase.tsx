@@ -28,7 +28,7 @@ const getOptionsBaseOnFilterParams = (filterParams: any, options: any[]) => {
     let result = true;
 
     filterKeys.map((key) => {
-      if (filterParams[key] !== opt[key]) {
+      if (filterParams[key] !== opt?.[key]) {
         result = false;
       }
     });
@@ -65,11 +65,12 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
       setSearchString(e.target.value);
     },
     500
-  );
+  );  
 
   // TRIGGER CALLBACK WHEN EVER VALUE CHANGE
   useEffect(() => {
     if (!!callback && !!selectProps.value) {
+      
       const selectedOption = options.find(
         (opt) => opt[selectShape.valueKey] === selectProps.value
       );
@@ -94,7 +95,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
 
         const updateOptions = _.uniqBy(
           [...options, ...data.items],
-          (item) => item.id
+          (item) => item?.id
         );
 
         setOptions(getOptionsBaseOnFilterParams(fetcherParams, updateOptions));

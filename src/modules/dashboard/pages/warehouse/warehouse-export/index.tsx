@@ -89,7 +89,7 @@ export const WarehouseExportPage: React.FC = () => {
           id={row?.id as string}
           items={[
             {
-              action: () => console.log(""),
+              action: () => router.push("/dashboard/warehouse/export-detail"),
               label: "Chi tiết xuất kho",
             },
             {

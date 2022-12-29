@@ -1,55 +1,102 @@
 import { Box, Paper, Typography } from "@mui/material";
+import { useQuery } from "react-query";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { paymentDocument } from "src/api";
 import {
   FormCheckbox,
   FormDatepicker,
-  FormInputBase,
-  FormSelect,
+  FormInput,
+  FormSelectMultiple,
 } from "~modules-core/components";
 
-export const ExportDetailRecipient = () => {
-  const { control } = useFormContext();
+type TProps = {
+  selectedOrder: any;
+};
+
+export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
+  const { receiverFullName, receiverPhone, receiverAddress } =
+    selectedOrder || {};
+
+  const { control, setValue, watch } = useFormContext();
+
+  const isDefaultReceiver = watch("isDefaultReceiver");
+
+  useEffect(() => {
+    setValue("receiverFullName", receiverFullName);
+
+    setValue("receiverPhone", receiverPhone);
+
+    setValue("receiverAddress", receiverAddress);
+  }, [receiverFullName, receiverPhone, receiverAddress]);
+
+  const { data: paymentOptions } = useQuery(["paymentOptions"], () =>
+    paymentDocument.getList().then((res) => res.data)
+  );
+
   return (
     <Paper className="rounded-sm p-3">
       <Typography className="text-sm font-medium mb-3">
-        THÔNG TIN LIÊN HỆ
+        THÔNG TIN NHẬN HÀNG
       </Typography>
 
       <Box className="grid gap-4">
         <FormCheckbox
           controlProps={{
-            name: "expectedDate",
+            name: "isDefaultReceiver",
             control,
           }}
           label="Sử dụng thông tin trong đơn hàng"
+          defaultChecked
         />
 
-        <FormInputBase
-          value="dfasdf "
-          disabled={true}
+        <FormInput
+          controlProps={{
+            name: "receiverFullName",
+            control,
+            rules: { required: "Phải nhập người nhận hàng" },
+          }}
           label="Người nhận hàng"
+          disabled={isDefaultReceiver}
         />
 
-        <FormInputBase value="dfasdf " disabled={true} label="SĐT" />
+        <FormInput
+          controlProps={{
+            name: "receiverPhone",
+            control,
+            rules: { required: "Phải nhập SĐT" },
+          }}
+          label="SĐT"
+          disabled={isDefaultReceiver}
+        />
 
-        <FormInputBase value="dfasdf " disabled={true} label="Đ/c nhận hàng" />
+        <FormInput
+          controlProps={{
+            name: "receiverAddress",
+            control,
+            rules: { required: "Phải nhập Đ/c nhận hàng" },
+          }}
+          label="Đ/c nhận hàng"
+          disabled={isDefaultReceiver}
+        />
 
         <FormDatepicker
           controlProps={{
-            name: "expectedDate",
+            name: "deliveryDate",
             control,
             rules: { required: "Phải chọn ngày giao dự kiến" },
           }}
           label="Ngày giao dự kiên"
         />
 
-        <FormSelect
+        <FormSelectMultiple
           controlProps={{
-            name: "expectedDate",
+            name: "paymentDocument",
             control,
           }}
           label="Chứng từ thanh toán"
-          options={[]}
+          selectShape={{ valueKey: "id", labelKey: "paymentDocumentName" }}
+          options={paymentOptions || []}
         />
       </Box>
     </Paper>

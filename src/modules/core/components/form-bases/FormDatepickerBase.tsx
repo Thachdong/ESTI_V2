@@ -12,12 +12,15 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
       <TextField
         size="small"
         inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
+        helperText={helperText}
         {...params}
         {...renderInputProps}
+        {...restProps}
       />
     ),
     onChange,
     renderInputProps,
+    helperText,
     ...restProps
   } = props;
 
