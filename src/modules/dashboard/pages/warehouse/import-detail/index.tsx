@@ -104,7 +104,7 @@ export const ImportDetailPage = () => {
 
   // METHODS
   const mutateCreate = useMutation(
-    (data: TCreateImportWarehouse) => warehouse.createWarehouseImport(data),
+    (data: TCreateImportWarehouse) => warehouse.createImportWarehouse(data),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -217,7 +217,6 @@ export const ImportDetailPage = () => {
         {query.type === "create" ? (
           <BaseButton
             type="button"
-            className="bg-[#2eaaa8]"
             onClick={handleSubmit(handleCreate)}
           >
             <SaveIcon className="mr-2" />
@@ -226,7 +225,6 @@ export const ImportDetailPage = () => {
         ) : (
           <BaseButton
             type="button"
-            className="bg-[#2eaaa8]"
             // onClick={handleSubmit(handleCreate)}
           >
             <SaveIcon className="mr-2" />

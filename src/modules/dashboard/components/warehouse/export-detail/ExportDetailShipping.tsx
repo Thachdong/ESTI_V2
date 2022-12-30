@@ -1,6 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormInput, FormInputBase } from "~modules-core/components";
+import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 
 export const ExportDetailShipping = () => {
   const { control } = useFormContext();
@@ -15,7 +16,7 @@ export const ExportDetailShipping = () => {
         <FormInput
           controlProps={{
             control,
-            name: "",
+            name: "deliveryUnit",
           }}
           label="Đơn vị v/c"
         />
@@ -23,28 +24,28 @@ export const ExportDetailShipping = () => {
         <FormInput
           controlProps={{
             control,
-            name: "",
+            name: "codeVD",
           }}
           label="Mã vận đơn"
         />
-        <FormInput
+        <FormInputNumber
           controlProps={{
             control,
-            name: "",
+            name: "packageNumber",
           }}
           label="Số kiện hàng"
         />
         <FormInput
           controlProps={{
             control,
-            name: "",
+            name: "packageWeight",
           }}
           label="Khối lượng"
         />
-        <FormInput
+        <FormInputNumber
           controlProps={{
             control,
-            name: "",
+            name: "shippingFee",
           }}
           label="Cước phí"
         />

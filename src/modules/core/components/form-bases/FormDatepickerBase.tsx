@@ -3,21 +3,17 @@
 // OUTPUT: NUMBER | UNDEFINED
 import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
+import clsx from "clsx";
 import moment from "moment";
 import { TFormDatepickerBase } from "~types/form-controlled/form-datepicker";
 
 export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
   const {
-    renderInput = (params: any) => (
-      <TextField
-        size="small"
-        inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
-        {...params}
-        {...renderInputProps}
-      />
-    ),
+    renderInput,
     onChange,
     renderInputProps,
+    helperText,
+    className,
     ...restProps
   } = props;
 
@@ -36,7 +32,20 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
 
   return (
     <DateTimePicker
-      renderInput={renderInput}
+      renderInput={
+        renderInput
+          ? renderInput
+          : (params: any) => (
+              <TextField
+                size="small"
+                inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
+                helperText={helperText}
+                {...params}
+                {...renderInputProps}
+                {...restProps}
+              />
+            )
+      }
       dayOfWeekFormatter={(day) => `${day}`}
       onChange={handleChange}
       {...restProps}

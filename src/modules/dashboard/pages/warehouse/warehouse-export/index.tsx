@@ -17,6 +17,7 @@ import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
 import {
   WarehouseExportNoteDialog,
+  WarehouseExportStatistical,
   WarehouseExportStatusDialog,
 } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
@@ -38,16 +39,22 @@ export const WarehouseExportPage: React.FC = () => {
 
   // DIALOG METHODS
   const onCloseDialog = useCallback(() => {
-    setDialog({open: false, type: undefined})
+    setDialog({ open: false, type: undefined });
   }, []);
 
   const onOpenNoteDialog = useCallback(() => {
-    setDialog({open: true, type: "note"})
+    setDialog({ open: true, type: "note" });
   }, []);
 
   const onOpenStatusDialog = useCallback(() => {
-    setDialog({open: true, type: "status"})
+    setDialog({ open: true, type: "status" });
   }, []);
+
+  const onNavigationToDetail = useCallback(() => {
+    router.push(
+      `/dashboard/warehouse/export-detail?transactionId=${defaultValue?.id}`
+    );
+  }, [router, defaultValue]);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -89,7 +96,7 @@ export const WarehouseExportPage: React.FC = () => {
           id={row?.id as string}
           items={[
             {
-              action: () => console.log(""),
+              action: onNavigationToDetail,
               label: "Chi tiết xuất kho",
             },
             {
@@ -117,59 +124,65 @@ export const WarehouseExportPage: React.FC = () => {
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="bgContainer">
-      <Box className="text-right mb-2">
-        <AddButton
-          variant="contained"
-          onClick={() =>
-            router.push("/dashboard/warehouse/export-detail")
+    <Box className="h-full">
+      <WarehouseExportStatistical />
+
+      <Paper className="bgContainer">
+        <Box className="text-right mb-2">
+          <AddButton
+            variant="contained"
+            onClick={() =>
+              router.push("/dashboard/warehouse/export-detail")
+            }
+          >
+            Tạo phiếu xuất kho
+          </AddButton>
+        </Box>
+
+        <ContextMenuWrapper
+          menuId="warehouse_import_menu"
+          menuComponent={
+            <Menu className="p-0" id="warehouse_import_menu">
+              <Item id="view-detail" onClick={onNavigationToDetail}>
+                Chi tiết xuất kho
+              </Item>
+              <Item id="delete-transaction" onClick={onOpenNoteDialog}>
+                Ghi chú
+              </Item>
+              <Item id="transation-note" onClick={onOpenStatusDialog}>
+                Trạng thái
+              </Item>
+            </Menu>
           }
         >
-          Tạo phiếu xuất kho
-        </AddButton>
-      </Box>
+          <DataTable
+            rows={data?.items as []}
+            columns={columns}
+            gridProps={{
+              loading: isLoading || isFetching,
+              ...paginationProps,
+            }}
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+          />
+        </ContextMenuWrapper>
 
-      <ContextMenuWrapper
-        menuId="warehouse_import_menu"
-        menuComponent={
-          <Menu className="p-0" id="warehouse_import_menu">
-            <Item id="view-detail">Chi tiết xuất kho</Item>
-            <Item id="delete-transaction" onClick={onOpenNoteDialog}>Ghi chú</Item>
-            <Item
-              id="transation-note"
-              onClick={onOpenStatusDialog}
-            >
-              Trạng thái
-            </Item>
-          </Menu>
-        }
-      >
-        <DataTable
-          rows={data?.items as []}
-          columns={columns}
-          gridProps={{
-            loading: isLoading || isFetching,
-            ...paginationProps,
-          }}
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-            },
-          }}
+        <WarehouseExportNoteDialog
+          onClose={onCloseDialog}
+          open={Boolean(dialog?.open && dialog.type === "note")}
+          defaultValue={defaultValue}
         />
-      </ContextMenuWrapper>
 
-      <WarehouseExportNoteDialog
-        onClose={onCloseDialog}
-        open={Boolean(dialog?.open && dialog.type === "note")}
-        defaultValue={defaultValue}
-      />
-
-      <WarehouseExportStatusDialog
-        onClose={onCloseDialog}
-        open={Boolean(dialog?.open && dialog.type === "status")}
-        defaultValue={defaultValue}
-      />
-    </Paper>
+        <WarehouseExportStatusDialog
+          onClose={onCloseDialog}
+          open={Boolean(dialog?.open && dialog.type === "status")}
+          defaultValue={defaultValue}
+          refetch={refetch}
+        />
+      </Paper>
+    </Box>
   );
 };

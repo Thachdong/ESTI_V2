@@ -47,4 +47,9 @@ export const products = {
   // UPLOAD FILE EXCEL
   importExcel: (file: FormData) =>
     request.post<FormData, any>(`${BASE_URL}/import-excel`, file),
+  // GET LOTS
+  getLot: (productId: string, warehouseConfigId: string) =>
+    request.get<any>(
+      `${BASE_URL}/GetLot?productId=${productId}&warehouseConfigId=${warehouseConfigId}`
+    ),
 };
