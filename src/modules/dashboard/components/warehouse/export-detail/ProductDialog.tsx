@@ -36,7 +36,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const { control, handleSubmit, reset, setError } = useForm();
+  const { control, handleSubmit, reset, setError, watch } = useForm();
 
   const { watch: globalWatch } = useFormContext();
 
@@ -64,7 +64,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
         .getLot(selectedProduct?.productId, warehouseConfigId)
         .then((res) => res.data),
     {
-      enabled: !!selectedProduct && !!warehouseConfigId,
+      // enabled: !!selectedProduct && !!warehouseConfigId,
     }
   );
 

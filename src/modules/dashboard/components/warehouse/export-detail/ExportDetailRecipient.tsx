@@ -9,12 +9,15 @@ import {
   FormInput,
   FormSelectMultiple,
 } from "~modules-core/components";
+import { useRouter } from "next/router";
 
 type TProps = {
   selectedOrder: any;
 };
 
 export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
+  const { transactionId } = useRouter().query;
+
   const { receiverFullName, receiverPhone, receiverAddress } =
     selectedOrder || {};
 
@@ -41,14 +44,16 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
       </Typography>
 
       <Box className="grid gap-4">
-        <FormCheckbox
-          controlProps={{
-            name: "isDefaultReceiver",
-            control,
-          }}
-          label="Sử dụng thông tin trong đơn hàng"
-          defaultChecked
-        />
+        {!transactionId && (
+          <FormCheckbox
+            controlProps={{
+              name: "isDefaultReceiver",
+              control,
+            }}
+            label="Sử dụng thông tin trong đơn hàng"
+            defaultChecked
+          />
+        )}
 
         <FormInput
           controlProps={{
@@ -78,6 +83,8 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
           }}
           label="Đ/c nhận hàng"
           disabled={isDefaultReceiver}
+          multiline
+          minRows={2}
         />
 
         <FormDatepicker
@@ -87,6 +94,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
             rules: { required: "Phải chọn ngày giao dự kiến" },
           }}
           label="Ngày giao dự kiên"
+          disabled={!!transactionId}
         />
 
         <FormSelectMultiple
@@ -97,6 +105,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
           label="Chứng từ thanh toán"
           selectShape={{ valueKey: "id", labelKey: "paymentDocumentName" }}
           options={paymentOptions || []}
+          disabled={!!transactionId}
         />
       </Box>
     </Paper>

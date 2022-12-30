@@ -118,7 +118,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           onClick={onAddDialog}
           variant="contained"
         >
-          Thêm SP
+          Thêm sản phẩm
         </AddButton>
       </Box>
 

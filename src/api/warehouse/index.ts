@@ -65,6 +65,17 @@ export const warehouse = {
       `${BASE_URL}/ExportWarehouse`,
       payload
     ),
+  getExportSessionById: (id: string) =>
+    request.get<any>(`${BASE_URL}/ExportWarehouse/${id}`),
+
+  getExportStatisticalData: () =>
+    request.get<any>(`${BASE_URL}/GetHeaderExportWarehouse`),
+
+  updateExportSessionStatus: (id: string, status: number) =>
+    request.post<any, any>(`${BASE_URL}/UpdateExportStatus`, {
+      warehouseSessionId: id,
+      status,
+    }),
 
   deleteTransaction: (id: string) => request.delete(`${BASE_URL}/${id}`),
 };

@@ -1,14 +1,18 @@
 import { Box, Paper, Typography } from "@mui/material";
 import moment from "moment";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
-import { bookingOrder, branchs, staff } from "src/api";
+import { useMutation, useQuery } from "react-query";
+import { bookingOrder, branchs, staff, warehouse } from "src/api";
 import {
+  BaseButton,
   FormInputBase,
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
+import { warehouseExportStatus } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 
 type TProps = {
   data: any;
@@ -16,17 +20,32 @@ type TProps = {
 };
 
 export const ExportDetailGeneralInfo: React.FC<TProps> = ({
-  data, callback
-}) => {
-  const [selectedBranch, setSelectedBranch] = useState<any>();
-  
-  const { control, watch } = useFormContext();
+  data,
+  callback,
+}) => {  
+  // EXTRACT PROPS
+  const { transactionId } = useRouter().query;
+
+  const { control, watch, setValue } = useFormContext();
 
   const isForDelete = watch("isForDelete");
 
-  const { branchCode, created, deliveryName, warehouseConfigCode } =
-    data || {};
+  const {deliverId} = data || {};
+  
+  const {
+    id,
+    branchCode,
+    created,
+    deliveryName,
+    warehouseConfigCode,
+    mainOrderCode,
+  } = data || {};
 
+  useEffect(() => {
+    deliverId && setValue("deliveryId", deliverId);
+  }, [data])
+
+  // DATA FETCHING
   const { data: deliveryOptions } = useQuery(
     ["deliveryOptions", { isForDelete }],
     () => staff.getListDeliveryStaff().then((res) => res.data),
@@ -35,14 +54,26 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
     }
   );
 
-  return (
-    <Paper className="rounded-sm p-3 mb-4">
-      <Typography className="text-sm font-medium mb-3">
-        THÔNG TIN CHUNG
-      </Typography>
+  const mutateUpdateStatus = useMutation(
+    (payload: any) =>
+      warehouse.updateExportSessionStatus(payload?.id, payload?.status),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+      },
+      onError: (err: any) => {
+        toast.error(err?.resultMessage);
+      },
+    }
+  );
 
-      <Box className="grid grid-cols-2 gap-4">
-        {isForDelete ? (
+  // DOM UTILITIES
+  const renderInputTag = useCallback(() => {
+    switch (true) {
+      case !!transactionId:
+        return <FormInputBase value={mainOrderCode} disabled />;
+      case isForDelete:
+        return (
           <FormSelectAsync
             fetcher={branchs.getList}
             controlProps={{
@@ -53,7 +84,9 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
             callback={callback}
             label="Mã chi nhánh"
           />
-        ) : (
+        );
+      case !isForDelete:
+        return (
           <FormSelectAsync
             fetcher={bookingOrder.getList}
             fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
@@ -65,17 +98,40 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
             }}
             label="Đơn đặt hàng"
           />
-        )}
+        );
+    }
+  }, [transactionId, isForDelete]);
 
-        {/* <FormSelect
+  const renderStatusTag = useCallback(() => {
+    if (!transactionId) return;
+
+    return (
+      <>
+        <FormSelect
           options={warehouseExportStatus}
           controlProps={{
             control,
-            name: "statusId",
+            name: "exportStatus",
           }}
           label="Trạng thái xuất kho"
           selectShape={{ valueKey: "value", labelKey: "label" }}
-        /> */}
+        />
+
+        <Box className="flex justify-end col-span-2">
+          <BaseButton>Cập nhật trạng thái</BaseButton>
+        </Box>
+      </>
+    );
+  }, [transactionId]);
+
+  return (
+    <Paper className="rounded-sm p-3 mb-4">
+      <Typography className="text-sm font-medium mb-3">
+        THÔNG TIN CHUNG
+      </Typography>
+
+      <Box className="grid grid-cols-2 gap-4">
+        {renderInputTag()}
 
         {!isForDelete && (
           <FormInputBase
@@ -85,24 +141,17 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
           />
         )}
 
-        {isForDelete ? (
-          <FormSelect
-            controlProps={{
-              control,
-              name: "deliveryId",
-              rules: { required: "Phải chọn nhân viên giao nhận" },
-            }}
-            label="Nhân viên giao nhận"
-            options={(deliveryOptions as []) || []}
-            selectShape={{ valueKey: "id", labelKey: "fullName" }}
-          />
-        ) : (
-          <FormInputBase
-            value={deliveryName}
-            disabled={true}
-            label="Nhân viên giao nhận"
-          />
-        )}
+        <FormSelect
+          controlProps={{
+            control,
+            name: "deliveryId",
+            rules: { required: "Phải chọn nhân viên giao nhận" },
+          }}
+          label="Nhân viên giao nhận"
+          options={deliveryOptions || []}
+          selectShape={{ valueKey: "id", labelKey: "fullName" }}
+          disabled={!isForDelete}
+        />
 
         {!isForDelete && (
           <FormInputBase
@@ -117,6 +166,8 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
           disabled={true}
           label="Mã kho"
         />
+
+        {renderStatusTag()}
       </Box>
     </Paper>
   );

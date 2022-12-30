@@ -32,21 +32,26 @@ export const ExportDetailPage = () => {
 
   const router = useRouter();
 
+  const { transactionId } = router?.query;
+
   const methods = useForm<any>({
     defaultValues: {
       isDefaultReceiver: true,
     },
   });
 
-  const { watch, handleSubmit, reset } = methods;
+  const { watch, handleSubmit, reset, setValue } = methods;
 
   const isForDelete = watch("isForDelete");
 
   const orderId = watch("mainOrderId");
 
   const warehouseConfigId = isForDelete
-    ? selectedBranch?.warehouseConfigId
+    ? selectedBranch?.warehouseCongifId
     : (selectedOrder?.warehouseConfigId as string);
+
+    console.log(selectedBranch);
+    
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -79,6 +84,25 @@ export const ExportDetailPage = () => {
 
         setProductOptions(productList);
       },
+    }
+  );
+
+  useQuery(
+    ["warehouseExportDetail_" + transactionId],
+    () =>
+      warehouse.getExportSessionById(transactionId as string).then((res) => {
+        const {productOrder, productOrderDetail} = res.data || {};
+
+        setProducts(productOrderDetail);
+
+        setSelectedOrder(productOrder);
+
+        const {exportStatus, mainOrderCode} = productOrder || {};
+
+        setValue("exportStatus", productOrder?.exportStatus)
+      }),
+    {
+      enabled: !!transactionId,
     }
   );
 
@@ -180,11 +204,14 @@ export const ExportDetailPage = () => {
     }
 
     // 2. CALL API
+    const {paymentDocument} = data;
+
     const payload: TCreateExportWarehouse = {
       ...data,
+      paymentDocument: paymentDocument.join(","),
       exportWarehouseCreate: productList,
     };
-
+    
     await createMutation.mutateAsync(payload);
   };
 

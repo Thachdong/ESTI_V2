@@ -10,7 +10,7 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
   const { controlProps, label, ...selectProps } = props;
 
   const renderController = ({
-    field: { ref, value, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+    field: { ref, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -32,7 +32,6 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       ),
       error: !!error,
       selectShape: selectShape,
-      value: value || "",
       label: updateLabel,
       ...restField,
       ...selectProps,
