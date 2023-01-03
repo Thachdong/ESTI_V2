@@ -8,7 +8,7 @@ Index.displayName = "Xuất kho";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  title: "Xuất kho",
+  pageName: "warehouse-export-detail"
 };
 
 export default Index;
