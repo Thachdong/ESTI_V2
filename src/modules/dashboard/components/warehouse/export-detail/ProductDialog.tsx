@@ -169,9 +169,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
               rules: { required: "Phải chọn mã sản phẩm" },
             }}
             options={productOptions}
-            selectShape={{ valueKey: "productId", labelKey: "productCode" }}
             label="Mã sản phẩm"
             callback={(opt) => setSelectedProduct(opt)}
+            getOptionLabel={option => option?.productCode}
           />
         )}
 
@@ -182,9 +182,10 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
             rules: { required: "Phải chọn lot" },
           }}
           options={lotOptions || []}
-          selectShape={{ valueKey: "lotNumber", labelKey: "lotNumber" }}
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
+          getOptionLabel={option => option?.lotNumber}
+          valueKey="lotNumber"
         />
 
         <FormInputBase value={selectedLot?.quantity} label="Tồn kho" disabled />

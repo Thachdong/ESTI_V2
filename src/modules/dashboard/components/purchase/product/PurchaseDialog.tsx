@@ -145,10 +145,10 @@ export const PurchaseDialog: React.FC<TDialog> = ({
                     //   rules: { required: "Phải nhập số vị trí" },
                   }}
                   options={branchsList as []}
-                  selectShape={{ valueKey: "id", labelKey: "code" }}
                   label="Chọn chi nhánh"
                   className="mb-4"
                   // disabled={type === "View" && !isUpdate}
+                  getOptionLabel={option => option?.code}
                 />
               </div>
               <div className="flex items-center w-[60%]">
@@ -190,9 +190,9 @@ export const PurchaseDialog: React.FC<TDialog> = ({
                       control,
                     }}
                     options={branchsList as []}
-                    selectShape={{ valueKey: "id", labelKey: "code" }}
                     label="Chọn chi nhánh"
                     className="mb-4"
+                    getOptionLabel={option => option?.code}
                   />
                 </div>
               </div>
@@ -232,15 +232,16 @@ export const PurchaseDialog: React.FC<TDialog> = ({
                   <span>Nhóm sản phẩm cung cấp :</span>
                 </div>
                 <div className=" w-[75%]">
-                  <FormSelectMultiple
+                  <FormSelect
                     controlProps={{
                       name: "branchId",
                       control,
                     }}
                     options={branchsList as []}
-                    selectShape={{ valueKey: "id", labelKey: "code" }}
                     label="Chọn chi nhánh"
                     className="mb-4"
+                    multiple
+                    getOptionLabel={option => option?.code}
                   />
                 </div>
               </div>
@@ -278,9 +279,9 @@ export const PurchaseDialog: React.FC<TDialog> = ({
                       control,
                     }}
                     options={branchsList as []}
-                    selectShape={{ valueKey: "id", labelKey: "code" }}
                     label=""
                     className="mb-4"
+                    getOptionLabel={option => option?.code}
                   />
                 </div>
               </div>

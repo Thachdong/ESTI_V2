@@ -106,6 +106,7 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
   );
 
   // MENU PROPS
+  // ListboxProps
   const PaperProps = {
     // LOADING MORE OPTIONS WHEN USER SCROLL REACHED BOTTOM
     onScroll: (event: UIEvent<HTMLDivElement>) => {

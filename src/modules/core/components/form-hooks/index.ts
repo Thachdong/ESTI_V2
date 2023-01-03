@@ -1,6 +1,6 @@
 export * from "./FormInputPassword";
 export * from "./FormInput";
-export * from "./FormSelect";
+export * from "./FormSelect2";
 export * from "./FormSelectAsync";
 export * from "./FormDatepicker";
 export * from "./FormAvatar";
@@ -9,3 +9,4 @@ export * from "./FormImageGallery";
 export * from "./FormTextEditor";
 export * from "./FormUploadFiles";
 export * from "./FormCheckbox";
+export * from "./FormSelect";

@@ -71,8 +71,8 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
             control,
             name: "deliveryId",
           }}
+          getOptionLabel={(opt) => opt.fullName}
           label="Giao nhận phụ trách"
-          selectShape={{ valueKey: "id", labelKey: "fullName" }}
         />
 
         <FormSelect
@@ -82,8 +82,8 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
             name: "purchaseId",
             rules: { required: "Phải chọn nhân viên mua hàng" },
           }}
+          getOptionLabel={(opt) => opt.fullName}
           label="Nhân viên mua hàng"
-          selectShape={{ valueKey: "id", labelKey: "fullName" }}
         />
 
         <FormSelect
@@ -93,8 +93,8 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
             name: "stockerId",
             rules: { required: "Phải chọn thủ kho" },
           }}
+          getOptionLabel={(opt) => opt.fullName}
           label="Thủ kho"
-          selectShape={{ valueKey: "id", labelKey: "fullName" }}
         />
 
         {!withoutPurchaseInvoice && (

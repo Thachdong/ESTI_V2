@@ -24,7 +24,6 @@ export const InfoCreateBillForm: React.FC<TProps> = ({ control }) => {
                 control,
               }}
               label=""
-              required
               options={[]}
             />
           </div>

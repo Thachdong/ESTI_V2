@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  redirects: () => ([
+  redirects: async() => ([
     {
       source: '/',
       destination: '/dashboard/quotations/requests',

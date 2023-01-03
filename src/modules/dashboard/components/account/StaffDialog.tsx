@@ -253,9 +253,9 @@ export const StaffDialog: React.FC<TDialog> = ({
                 rules: { required: "Phải chọn chi nhánh" },
               }}
               options={branchsList || []}
-              selectShape={{ valueKey: "id", labelKey: "code" }}
               label="Chọn chi nhánh"
               disabled={type === "View" && !isUpdate}
+              getOptionLabel={option => option?.code}
             />
 
             <FormSelect
@@ -265,7 +265,6 @@ export const StaffDialog: React.FC<TDialog> = ({
                 rules: { required: "Phải chọn chức vụ" },
               }}
               options={(rolesList as []) || []}
-              selectShape={{ valueKey: "code", labelKey: "name" }}
               label="Chọn chức vụ"
               disabled={type === "View" && !isUpdate}
             />

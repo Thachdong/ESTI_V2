@@ -114,7 +114,8 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
             name: "exportStatus",
           }}
           label="Trạng thái xuất kho"
-          selectShape={{ valueKey: "value", labelKey: "label" }}
+          getOptionLabel={option => option?.label}
+          valueKey="value"
         />
 
         <Box className="flex justify-end col-span-2">
@@ -149,8 +150,8 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
           }}
           label="Nhân viên giao nhận"
           options={deliveryOptions || []}
-          selectShape={{ valueKey: "id", labelKey: "fullName" }}
           disabled={!isForDelete}
+          getOptionLabel={option => option?.fullName}
         />
 
         {!isForDelete && (
