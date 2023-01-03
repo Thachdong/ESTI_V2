@@ -23,6 +23,14 @@ type TAutocomplete = TAutocompleteProps & {
   controlProps: TControllerProps;
 };
 
+type TAutocompleteAsync = Omit<TAutocompleteProps, "options"> & {
+  controlProps: TControllerProps;
+  fetcher: (params: any) => Promise<TBaseResponse<TPaginationResponse<any>>>;
+  fetcherParams?: object;
+  defaultOptions?: any[];
+  labelKey?:string;
+}
+
 type TFormSelectBase = TextFieldProps & {
   options: any[];
   label: string;

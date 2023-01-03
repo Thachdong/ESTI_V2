@@ -6,7 +6,6 @@ import {
   FormInput,
   FormSelect,
   FormSelectAsync,
-  FormSelectMultiple,
 } from "~modules-core/components";
 import {
   paymentExpiredIn,
@@ -52,6 +51,8 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Chi nhánh"
           disabled={isDisable}
+          getOptionLabel={option => option?.code}
+          labelKey="code"
         />
 
         <FormSelect

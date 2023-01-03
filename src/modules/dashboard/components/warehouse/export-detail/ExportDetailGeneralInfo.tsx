@@ -90,13 +90,13 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
           <FormSelectAsync
             fetcher={bookingOrder.getList}
             fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
-            selectShape={{ valueKey: "id", labelKey: "mainOrderCode" }}
             controlProps={{
               control,
               name: "mainOrderId",
               rules: { required: "Phải chọn đơn đặt hàng" },
             }}
             label="Đơn đặt hàng"
+            labelKey="mainOrderCode"
           />
         );
     }

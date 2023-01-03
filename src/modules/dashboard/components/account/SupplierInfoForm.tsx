@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import {  useQuery } from "react-query";
 import { staff } from "src/api";
-import { FormInput, FormSelect, FormSelectMultiple } from "~modules-core/components";
+import { FormInput, FormSelect } from "~modules-core/components";
 import {
   paymentExpiredIn,
   paymentTypes,

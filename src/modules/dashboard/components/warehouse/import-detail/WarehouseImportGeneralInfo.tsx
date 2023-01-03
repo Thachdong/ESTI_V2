@@ -46,12 +46,12 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
           <FormSelectAsync
             fetcher={orders.getList}
             fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
-            selectShape={{ valueKey: "id", labelKey: "code" }}
             controlProps={{
               control,
               name: "productOrderId",
             }}
             label="Đơn mua hàng"
+            labelKey="code"
           />
         )}
 

@@ -13,6 +13,7 @@ import {
   FormInputPassword,
   FormSelect,
 } from "~modules-core/components";
+import { AutoCompleteAsyncBase } from "~modules-core/components/form-bases/AutoCompleteAsyncBase";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -255,7 +256,7 @@ export const StaffDialog: React.FC<TDialog> = ({
               options={branchsList || []}
               label="Chọn chi nhánh"
               disabled={type === "View" && !isUpdate}
-              getOptionLabel={option => option?.code}
+              getOptionLabel={(option) => option?.code}
             />
 
             <FormSelect

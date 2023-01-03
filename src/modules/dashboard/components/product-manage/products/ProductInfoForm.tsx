@@ -89,8 +89,8 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
           rules: { required: "Phải chọn đơn vị tính" },
         }}
         label="Đơn vị tính"
-        selectShape={{ valueKey: "id", labelKey: "unitName" }}
         disabled={isDisable}
+        labelKey="unitName"
       />
 
       <FormSelectAsync
@@ -101,9 +101,9 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
           rules: { required: "Phải chọn nhà cung cấp" },
         }}
         label="Nhà cung cấp"
-        selectShape={{ valueKey: "id", labelKey: "supplierName" }}
         disabled={isDisable}
         multiple={true}
+        labelKey="supplierName"
       />
 
       <FormInput

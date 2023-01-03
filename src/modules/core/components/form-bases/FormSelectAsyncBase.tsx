@@ -145,7 +145,6 @@ export const FormSelectAsyncBase: React.FC<TFormSelectAsyncBase> = (props) => {
             placeholder="Tìm kiếm"
             className="px-3"
           />
-
       );
     }
   }, [pagination, searchString]);

@@ -13,9 +13,9 @@ import { staff } from "src/api";
 import { defaultPagination } from "~modules-core/constance";
 import { TAutocompleteAsync } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
-import { AutoCompleteBase } from "../form-bases";
+import { AutoCompleteBase } from "./AutoCompleteBase";
 
-export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
+export const AutoCompleteAsyncBase: React.FC<TAutocompleteAsync> = (props) => {
   // LOCAL STATES AND EXTRACT PROPS
   const {
     controlProps,
@@ -24,7 +24,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     labelKey = "name",
     defaultOptions,
     fetcherParams,
-    fetcher,
     ...restProps
   } = props;
 
@@ -45,11 +44,13 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
       },
     ],
     () =>
-      fetcher({
-        pageSize: pagination.pageSize,
-        pageIndex: pagination.pageIndex,
-        ...filterParams,
-      }).then((res) => res.data),
+      staff
+        .getList({
+          pageSize: pagination.pageSize,
+          pageIndex: pagination.pageIndex,
+          ...filterParams,
+        })
+        .then((res) => res.data),
     {
       onSuccess: (data) => {
         const { items, totalItem, totalPage } = data;
@@ -141,7 +142,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
           className: "h-[325px]",
           onScroll: triggerLoadMoreOptions,
         }}
-        getOptionLabel={option => option?.[labelKey]}
         {...defaultProps}
       />
     );

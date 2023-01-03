@@ -60,7 +60,7 @@ export const CreatePositionDialog: React.FC<TDialog> = ({
               rules: { required: "Phải chọn kho" },
             }}
             label="Kho"
-            selectShape={{ valueKey: "id", labelKey: "code" }}
+            labelKey="code"
           />
 
           <FormInput
