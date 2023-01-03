@@ -37,7 +37,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 options={[]}
               />
             </div>
@@ -55,7 +54,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                 control,
               }}
               label=""
-              required
               options={[]}
             />
           </div>
@@ -79,7 +77,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                     control,
                   }}
                   label=""
-                  required
                   options={[]}
                   disabled
                 />
@@ -134,7 +131,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                       control,
                     }}
                     label=""
-                    required
                     options={[]}
                     disabled
                   />
@@ -192,7 +188,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 options={[]}
                 disabled
               />
@@ -284,7 +279,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 disabled
                 options={[]}
               />
@@ -301,7 +295,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 disabled
                 options={[]}
               />
@@ -354,7 +347,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 options={[]}
                 disabled
               />
@@ -371,7 +363,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 options={[]}
                 disabled
               />
@@ -388,7 +379,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   control,
                 }}
                 label=""
-                required
                 options={[]}
                 disabled
               />

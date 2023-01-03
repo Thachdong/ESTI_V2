@@ -1,12 +1,10 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { Controller } from "react-hook-form";
-import { TFormSelect } from "~types/form-controlled/form-select";
+import { TAutocomplete } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
-import { FormSelectBase } from "../form-bases";
+import { AutoCompleteBase } from "../form-bases/AutoCompleteBase";
 
-export const FormSelect: React.FC<TFormSelect> = (props) => {
-  const { selectShape = { valueKey: "id", labelKey: "name" } } = props;
-
+export const FormSelect: React.FC<TAutocomplete> = (props) => {
   const { controlProps, label, ...selectProps } = props;
 
   const renderController = ({
@@ -31,13 +29,12 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
         />
       ),
       error: !!error,
-      selectShape: selectShape,
       label: updateLabel,
       ...restField,
       ...selectProps,
     };
 
-    return <FormSelectBase {...defaultBaseProps} />;
+    return <AutoCompleteBase {...defaultBaseProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

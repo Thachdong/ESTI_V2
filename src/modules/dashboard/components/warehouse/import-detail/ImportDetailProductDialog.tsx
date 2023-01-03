@@ -159,8 +159,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
             name: "productId",
             rules: { required: "Phải chọn mã SP" },
           }}
-          selectShape={{ valueKey: "id", labelKey: "productCode" }}
           label="Mã SP"
+          labelKey="productCode"
         />
 
         <FormSelectAsync
@@ -171,8 +171,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
             name: "productId",
             rules: { required: "Phải chọn tên SP" },
           }}
-          selectShape={{ valueKey: "id", labelKey: "productName" }}
           label="Tên SP"
+          labelKey="productName"
         />
 
         <FormInputBase
@@ -250,8 +250,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
             name: "positionId",
             rules: { required: "Phải chọn vị trí" },
           }}
-          selectShape={{ valueKey: "id", labelKey: "positionName" }}
           label="Vị trí"
+          labelKey="positionName"
         />
 
         <FormSelect

@@ -54,8 +54,8 @@ export const ReveiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn nhân viên phụ trách" },
           }}
           label="Nhân viên phụ trách"
-          selectShape={{ valueKey: "id", labelKey: "fullName" }}
           disabled={isDisable}
+          getOptionLabel={option => option?.fullName}
         />
 
         <FormSelect

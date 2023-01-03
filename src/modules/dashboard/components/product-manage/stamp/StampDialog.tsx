@@ -251,31 +251,29 @@ export const StampDialog: React.FC<TDialog> = ({
           <FormSelectAsync
             fetcher={products.getList}
             fetcherParams={{ labelType }}
-            queryKey="productOptions_productCode"
             controlProps={{
               control,
               name: "productId",
               rules: { required: "Phải chọn mã sản phẩm" },
             }}
             label="Mã sản phẩm"
-            selectShape={{ valueKey: "id", labelKey: "productCode" }}
             callback={handleSelectProductCallback}
             disabled={disabled || !labelType}
+            labelKey="productCode"
           />
 
           <FormSelectAsync
             fetcher={products.getList}
             fetcherParams={{ labelType }}
-            queryKey="productOptions_productName"
             controlProps={{
               control,
               name: "productId",
               rules: { required: "Phải chọn tên sản phẩm" },
             }}
             label="Tên sản phẩm"
-            selectShape={{ valueKey: "id", labelKey: "productName" }}
             callback={handleSelectProductCallback}
             disabled={disabled || !labelType}
+            labelKey="productName"
           />
 
           <FormInput

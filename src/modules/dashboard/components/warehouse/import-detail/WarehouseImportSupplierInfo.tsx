@@ -32,10 +32,10 @@ export const WarehouseImportSupplierInfo: React.FC<TProps> = ({
             control,
             name: "supplierId",
           }}
-          selectShape={{ valueKey: "id", labelKey: "supplierCode" }}
           label="Nhà cung cấp"
           disabled={!withoutPurchaseInvoice}
           callback={withoutPurchaseInvoice ? callback : undefined}
+          labelKey="supplierCode"
         />
 
         <FormInputBase

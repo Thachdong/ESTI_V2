@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import {  useQuery } from "react-query";
 import { staff } from "src/api";
-import { FormInput, FormSelect, FormSelectMultiple } from "~modules-core/components";
+import { FormInput, FormSelect } from "~modules-core/components";
 import {
   paymentExpiredIn,
   paymentTypes,
@@ -50,11 +50,12 @@ export const SupplierInfoForm: React.FC<TProps> = ({isDisable}) => {
           disabled={isDisable}
         />
 
-        <FormSelectMultiple
+        <FormSelect
           options={productTypes}
           controlProps={{ control, name: "productSupply" }}
           label="Nhóm sản phẩm cung cấp"
           disabled={isDisable}
+          multiple
         />
 
         <FormInput
@@ -147,7 +148,7 @@ export const SupplierInfoForm: React.FC<TProps> = ({isDisable}) => {
             rules: { required: "Phải chọn nhân viên phụ trách" },
           }}
           label="Nhân viên phụ trách"
-          selectShape={{valueKey: "id", labelKey: "fullName"}}
+          getOptionLabel={option => option?.fullName}
           disabled={isDisable}
         />
 
@@ -159,7 +160,7 @@ export const SupplierInfoForm: React.FC<TProps> = ({isDisable}) => {
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
-          selectShape={{valueKey: "id", labelKey: "fullName"}}
+          getOptionLabel={option => option?.fullName}
           disabled={isDisable}
         />
       </Box>

@@ -157,9 +157,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
               name: "productId",
               rules: { required: "Phải chọn mã sản phẩm" },
             }}
-            selectShape={{ valueKey: "id", labelKey: "productCode" }}
             label="Mã sản phẩm"
             callback={(opt) => setSelectedProduct(opt)}
+            labelKey="productCode"
           />
         ) : (
           <FormSelect
@@ -169,9 +169,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
               rules: { required: "Phải chọn mã sản phẩm" },
             }}
             options={productOptions}
-            selectShape={{ valueKey: "productId", labelKey: "productCode" }}
             label="Mã sản phẩm"
             callback={(opt) => setSelectedProduct(opt)}
+            getOptionLabel={option => option?.productCode}
           />
         )}
 
@@ -182,9 +182,10 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
             rules: { required: "Phải chọn lot" },
           }}
           options={lotOptions || []}
-          selectShape={{ valueKey: "lotNumber", labelKey: "lotNumber" }}
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
+          getOptionLabel={option => option?.lotNumber}
+          valueKey="lotNumber"
         />
 
         <FormInputBase value={selectedLot?.quantity} label="Tồn kho" disabled />
@@ -198,11 +199,11 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
           fetcher={position.getProductsByPositionId}
           fetcherParams={{ lotNumber: selectedLot?.lotNumber }}
           callback={(opt) => setSelectedPosition(opt)}
-          selectShape={{ valueKey: "positionId", labelKey: "positionName" }}
           label="Chọn vị trí"
-          defaultOption={
+          defaultOptions={
             type === "Update" ? [defaultValue?.selectedPosition] : []
           }
+          labelKey="positionName"
         />
 
         <FormInputNumber
