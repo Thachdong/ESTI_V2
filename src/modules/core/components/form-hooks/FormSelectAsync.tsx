@@ -1,15 +1,16 @@
 // FEATURES:
 // 1. SELECT OPTION/OPTIONS
-// 2. LOADING SELECT ASYNCHRONOUS AND LOAD MORE ON SCROLL
-// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER
+// 2. ASYNCHRONOUS LOAD OPTIONS AND LOAD MORE ON SCROLL
+
 // 4. SERVER SIDE FILTER OPTIONS ON USER TYPING
+// 5. AUTOMATICALLY LOAD OPTION BASE ON DEFAULT VALUE
+// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER
 
 import { ErrorMessage } from "@hookform/error-message";
 import _ from "lodash";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useQuery } from "react-query";
-import { staff } from "src/api";
 import { defaultPagination } from "~modules-core/constance";
 import { TAutocompleteAsync } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
@@ -34,6 +35,10 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
 
   const [filterParams, setFilterParams] = useState<any>(fetcherParams || {});
 
+  const valueRef = useRef();
+
+  const defaultOptionIndex = options.findIndex(opt => opt?.[valueKey] === valueRef?.current);
+  
   // DATA FETCHING
   const { isLoading, isFetching } = useQuery(
     [
@@ -112,6 +117,8 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
+    valueRef.current = restField.value;
+
     const rules = controlProps.rules || {};
 
     const updateLabel = Object.keys(rules).includes("required")
@@ -138,7 +145,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
         filterOptions={(x) => x}
         onInputChange={onInputChange}
         ListboxProps={{
-          className: "h-[325px]",
+          className: "max-h-[325px]",
           onScroll: triggerLoadMoreOptions,
         }}
         getOptionLabel={option => option?.[labelKey]}

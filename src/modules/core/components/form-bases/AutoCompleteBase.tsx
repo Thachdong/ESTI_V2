@@ -22,6 +22,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
 
   const handleChange = useCallback(
     (_: SyntheticEvent<Element, Event>, value: any | any[]) => {
+      
       callback?.(value);
       
       if (Array.isArray(value)) {
@@ -30,7 +31,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
         onChange(value?.[valueKey]);
       }
     },
-    []
+    [valueKey, onChange, callback]
   );
 
   const renderValue = useCallback(
@@ -41,7 +42,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
         return options.find((opt) => opt[valueKey] === value);
       }
     },
-    [options]
+    [options, value]
   );
 
   const defaultProps: Partial<TAutocompleteProps> = {
@@ -51,14 +52,15 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     getOptionLabel: (option: any) => option?.name,
     ...restProps,
   };
-
+  
   return (
     <Autocomplete
       options={options}
       onChange={handleChange}
       renderInput={(params) => (
-        <TextField {...params} value={renderValue(value)} label={label} />
+        <TextField {...params} label={label} />
       )}
+      value={renderValue(value)}
       {...defaultProps}
     />
   );

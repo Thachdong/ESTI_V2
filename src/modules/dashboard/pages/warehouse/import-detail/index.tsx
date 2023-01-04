@@ -215,10 +215,7 @@ export const ImportDetailPage = () => {
 
       <Box className="flex justify-end my-4">
         {query.type === "create" ? (
-          <BaseButton
-            type="button"
-            onClick={handleSubmit(handleCreate)}
-          >
+          <BaseButton type="button" onClick={handleSubmit(handleCreate)}>
             <SaveIcon className="mr-2" />
             Lưu
           </BaseButton>

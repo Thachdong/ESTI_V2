@@ -8,7 +8,6 @@ Index.displayName = "Nhập kho";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  // title: "NHẬP KHO / TẠO PHIẾU NHẬP KHO",
   pageName: "warehouse-import-detail"
 };
 
