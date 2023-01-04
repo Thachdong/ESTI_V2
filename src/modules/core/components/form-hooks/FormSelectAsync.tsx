@@ -26,6 +26,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     defaultOptions,
     fetcherParams,
     fetcher,
+    inputProps,
     ...restProps
   } = props;
 
@@ -37,8 +38,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
 
   const valueRef = useRef();
 
-  const defaultOptionIndex = options.findIndex(opt => opt?.[valueKey] === valueRef?.current);
-  
   // DATA FETCHING
   const { isLoading, isFetching } = useQuery(
     [
@@ -126,14 +125,17 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
       : label;
 
     const defaultProps = {
-      helperText: (
-        <ErrorMessage
-          errors={errors}
-          name={controlProps.name}
-          render={({ message }) => message}
-        />
-      ),
-      error: !!error,
+      inputProps: {
+        ...inputProps,
+        helperText: (
+          <ErrorMessage
+            errors={errors}
+            name={controlProps.name}
+            render={({ message }) => message}
+          />
+        ),
+        error: !!error,
+      },
       label: updateLabel,
       ...restField,
       ...restProps,
@@ -148,7 +150,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
           className: "max-h-[325px]",
           onScroll: triggerLoadMoreOptions,
         }}
-        getOptionLabel={option => option?.[labelKey]}
+        getOptionLabel={(option) => option?.[labelKey]}
         {...defaultProps}
       />
     );

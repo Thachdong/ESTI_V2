@@ -4,6 +4,7 @@ import {
   FormControlProps,
   InputLabelProps,
   AutocompleteProps,
+  TextFieldProps
 } from "@mui/material";
 import { ReactNode } from "react";
 import { TControllerProps } from "~types/react-hook-form";
@@ -17,6 +18,7 @@ type TAutocompleteProps = Partial<
   onChange?: (val: any | any[]) => void;
   valueKey?: string;
   callback?: (option: any) => void;
+  inputProps?: TextFieldProps;
 };
 
 type TAutocomplete = TAutocompleteProps & {
@@ -30,36 +32,3 @@ type TAutocompleteAsync = Omit<TAutocompleteProps, "options"> & {
   defaultOptions?: any[];
   labelKey?:string;
 }
-
-type TFormSelectBase = TextFieldProps & {
-  options: any[];
-  label: string;
-  selectShape?: {
-    labelKey: string;
-    valueKey: string;
-  };
-  callback?: (option: any) => void;
-};
-
-type TFormSelect = TFormSelectBase & {
-  controlProps: TControllerProps;
-};
-
-type TFormSelectAsyncBase = SelectProps & {
-  fetcher: (params: any) => Promise<TBaseResponse<TPaginationResponse<any>>>;
-  fetcherParams?: object;
-  queryKey?: string;
-  selectShape?: {
-    valueKey: string;
-    labelKey: string;
-  };
-  callback?: (option: any) => void;
-  formControlProps?: FormControlProps;
-  inputLabelProps?: InputLabelProps;
-  helperText?: string | Element;
-  defaultOption?: object[];
-};
-
-type TFromSelectAsync = TFormSelectAsyncBase & {
-  controlProps: TControllerProps;
-};

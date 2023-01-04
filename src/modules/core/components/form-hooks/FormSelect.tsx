@@ -5,7 +5,7 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { AutoCompleteBase } from "../form-bases/AutoCompleteBase";
 
 export const FormSelect: React.FC<TAutocomplete> = (props) => {
-  const { controlProps, label, ...selectProps } = props;
+  const { controlProps, label, inputProps, ...selectProps } = props;
 
   const renderController = ({
     field: { ref, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
@@ -21,14 +21,17 @@ export const FormSelect: React.FC<TAutocomplete> = (props) => {
       : label;
 
     const defaultBaseProps = {
-      helperText: (
-        <ErrorMessage
-          errors={errors}
-          name={name as any}
-          render={({ message }) => message}
-        />
-      ),
-      error: !!error,
+      inputProps: {
+        ...inputProps,
+        helperText: (
+          <ErrorMessage
+            errors={errors}
+            name={controlProps.name}
+            render={({ message }) => message}
+          />
+        ),
+        error: !!error,
+      },
       label: updateLabel,
       ...restField,
       ...selectProps,

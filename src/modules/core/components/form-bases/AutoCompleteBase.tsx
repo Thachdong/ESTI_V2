@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import _ from "lodash";
-import { SyntheticEvent, useCallback } from "react";
+import { SyntheticEvent } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
 
 type TProps = {
@@ -17,33 +17,36 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     valueKey = "id",
     options = [],
     callback,
+    inputProps,
     ...restProps
   } = props;
+  
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: any | any[]
+  ) => {
+    if (Array.isArray(value)) {
+      onChange(value.map((val) => val[valueKey]));
+    } else {
+      onChange(value?.[valueKey]);
+    }
+  };
 
-  const handleChange = useCallback(
-    (_: SyntheticEvent<Element, Event>, value: any | any[]) => {
-      
-      callback?.(value);
-      
-      if (Array.isArray(value)) {
-        onChange(value.map((val) => val[valueKey]));
-      } else {
-        onChange(value?.[valueKey]);
-      }
-    },
-    [valueKey, onChange, callback]
-  );
+  const renderValue = (value: any | any[]) => {
+    if (Array.isArray(value)) {
+      const valueList = value.map((val) => options.find((o) => o[valueKey] === val));
 
-  const renderValue = useCallback(
-    (value: any | any[]) => {
-      if (Array.isArray(value)) {
-        return value.map((val) => options.find((o) => o[valueKey] === val));
-      } else {
-        return options.find((opt) => opt[valueKey] === value);
-      }
-    },
-    [options, value]
-  );
+      callback?.(valueList);
+
+      return valueList;
+    } else {
+      const valueObj = options.find((opt) => opt[valueKey] === value) || null;
+
+      callback?.(valueObj);
+
+      return valueObj;
+    }
+  };
 
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",
@@ -52,15 +55,15 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     getOptionLabel: (option: any) => option?.name,
     ...restProps,
   };
-  
+
   return (
     <Autocomplete
       options={options}
       onChange={handleChange}
-      renderInput={(params) => (
-        <TextField {...params} label={label} />
-      )}
       value={renderValue(value)}
+      renderInput={(params) => (
+        <TextField {...params} {...inputProps} value={renderValue(value)} label={label} />
+      )}
       {...defaultProps}
     />
   );
