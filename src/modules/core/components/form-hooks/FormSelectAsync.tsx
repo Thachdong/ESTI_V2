@@ -8,7 +8,7 @@
 
 import { ErrorMessage } from "@hookform/error-message";
 import _ from "lodash";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { useQuery } from "react-query";
 import { defaultPagination } from "~modules-core/constance";
@@ -35,8 +35,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
   const [options, setOptions] = useState<any[]>(defaultOptions || []);
 
   const [filterParams, setFilterParams] = useState<any>(fetcherParams || {});
-
-  const valueRef = useRef();
 
   // DATA FETCHING
   const { isLoading, isFetching } = useQuery(
@@ -116,13 +114,15 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    valueRef.current = restField.value;
-
     const rules = controlProps.rules || {};
 
     const updateLabel = Object.keys(rules).includes("required")
       ? `${label} *`
       : label;
+
+    if(controlProps.name === "branchId") {
+      console.log(restField.value);
+    }
 
     const defaultProps = {
       inputProps: {

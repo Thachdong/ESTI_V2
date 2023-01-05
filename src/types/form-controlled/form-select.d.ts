@@ -14,11 +14,12 @@ type TAutocompleteProps = Partial<
 > & {
   label: string;
   options: any[];
+  valueKey?: string;
+  labelKey?:string;
+  inputProps?: TextFieldProps;
   getOptionLabel?: (option: any) => string;
   onChange?: (val: any | any[]) => void;
-  valueKey?: string;
   callback?: (option: any) => void;
-  inputProps?: TextFieldProps;
 };
 
 type TAutocomplete = TAutocompleteProps & {
@@ -30,5 +31,4 @@ type TAutocompleteAsync = Omit<TAutocompleteProps, "options"> & {
   fetcher: (params: any) => Promise<TBaseResponse<TPaginationResponse<any>>>;
   fetcherParams?: object;
   defaultOptions?: any[];
-  labelKey?:string;
 }

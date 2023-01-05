@@ -15,6 +15,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     onChange,
     value,
     valueKey = "id",
+    labelKey = "name",
     options = [],
     callback,
     inputProps,
@@ -32,15 +33,17 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     }
   };
 
-  const renderValue = (value: any | any[]) => {
-    if (Array.isArray(value)) {
-      const valueList = value.map((val) => options.find((o) => o[valueKey] === val));
+  const renderValue = (val: any | any[]) => {
+    if (!val) return val;
+
+    if (Array.isArray(val)) {
+      const valueList = val.map((vl) => options.find((o) => o[valueKey] === vl));
 
       callback?.(valueList);
 
       return valueList;
     } else {
-      const valueObj = options.find((opt) => opt[valueKey] === value) || null;
+      const valueObj = options.find((opt) => opt[valueKey] === val) || null;
 
       callback?.(valueObj);
 
@@ -52,7 +55,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     size: "small",
     noOptionsText: "Không có lựa chọn",
     disableCloseOnSelect: restProps.multiple,
-    getOptionLabel: (option: any) => option?.name,
+    getOptionLabel: (option: any) => option?.[labelKey],
     ...restProps,
   };
 
