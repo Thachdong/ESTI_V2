@@ -91,17 +91,19 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
               <List className="p-0">
                 {item.childrens.map((child) => (
                   <Link href={`/dashboard/${child.link}`} key={child.link}>
-                    <ListItem
-                      disablePadding
-                      className={clsx(styles["menu-items"])}
-                      sx={{ ...renderActiveStyle(child.link, "children") }}
-                    >
-                      <ListItemButton>
-                        <span className="text-sm pl-[32px] py-2">
-                          {child.title}
-                        </span>
-                      </ListItemButton>
-                    </ListItem>
+                    <a className="w-full d-block no-underline text-white">
+                      <ListItem
+                        disablePadding
+                        className={clsx(styles["menu-items"])}
+                        sx={{ ...renderActiveStyle(child.link, "children") }}
+                      >
+                        <ListItemButton>
+                          <span className="text-sm pl-[32px] py-2">
+                            {child.title}
+                          </span>
+                        </ListItemButton>
+                      </ListItem>
+                    </a>
                   </Link>
                 ))}
               </List>

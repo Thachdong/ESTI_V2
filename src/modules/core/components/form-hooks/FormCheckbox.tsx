@@ -28,6 +28,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
       // ),
       error: !!error,
       value: value || "",
+      checked: value,
       ...restField,
       ...textFieldProps,
     };

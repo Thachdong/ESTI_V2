@@ -20,8 +20,6 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
     predicate: (query) => query?.queryKey?.includes("loading"),
   });
 
-  const { title } = data || {};
-
   return (
     <Box
       className={clsx(styles["dashboard-layout"])}
@@ -35,7 +33,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
       <Sidebar expand={expand} setExpand={setExpand} />
 
       <Box className="flex flex-col">
-        <Header title={title} />
+        <Header data={data} />
 
         <Box
           className="bg-[#f5f8fb] flex-grow relative  overflow-y-auto"

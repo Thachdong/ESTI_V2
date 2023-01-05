@@ -1,15 +1,16 @@
 // FEATURES:
 // 1. SELECT OPTION/OPTIONS
-// 2. LOADING SELECT ASYNCHRONOUS AND LOAD MORE ON SCROLL
-// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER
+// 2. ASYNCHRONOUS LOAD OPTIONS AND LOAD MORE ON SCROLL
+
 // 4. SERVER SIDE FILTER OPTIONS ON USER TYPING
+// 5. AUTOMATICALLY LOAD OPTION BASE ON DEFAULT VALUE
+// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER
 
 import { ErrorMessage } from "@hookform/error-message";
 import _ from "lodash";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { useQuery } from "react-query";
-import { staff } from "src/api";
 import { defaultPagination } from "~modules-core/constance";
 import { TAutocompleteAsync } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
@@ -25,6 +26,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     defaultOptions,
     fetcherParams,
     fetcher,
+    inputProps,
     ...restProps
   } = props;
 
@@ -118,15 +120,22 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
       ? `${label} *`
       : label;
 
+    if(controlProps.name === "branchId") {
+      console.log(restField.value);
+    }
+
     const defaultProps = {
-      helperText: (
-        <ErrorMessage
-          errors={errors}
-          name={controlProps.name}
-          render={({ message }) => message}
-        />
-      ),
-      error: !!error,
+      inputProps: {
+        ...inputProps,
+        helperText: (
+          <ErrorMessage
+            errors={errors}
+            name={controlProps.name}
+            render={({ message }) => message}
+          />
+        ),
+        error: !!error,
+      },
       label: updateLabel,
       ...restField,
       ...restProps,
@@ -138,10 +147,10 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
         filterOptions={(x) => x}
         onInputChange={onInputChange}
         ListboxProps={{
-          className: "h-[325px]",
+          className: "max-h-[325px]",
           onScroll: triggerLoadMoreOptions,
         }}
-        getOptionLabel={option => option?.[labelKey]}
+        getOptionLabel={(option) => option?.[labelKey]}
         {...defaultProps}
       />
     );

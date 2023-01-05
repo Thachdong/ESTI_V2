@@ -1,6 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import moment from "moment";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { branchs, orders, staff } from "src/api";
@@ -17,12 +18,14 @@ type TProps = {
 export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
   orderDetail,
 }) => {
+  // LOCAL STATE AND EXTRACT PROPS
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
   const { control, watch } = useFormContext();
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
 
+  // DATA FETCHING
   const { data: deliveryList } = useQuery(["DeliveryList"], () =>
     staff.getListDeliveryStaff().then((res) => res.data)
   );
@@ -35,6 +38,43 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
     staff.getListStockerStaff().then((res) => res.data)
   );
 
+  // METHODS
+  const renderTagsBaseOnInvoiceFlag = useCallback(() => {
+    if (!withoutPurchaseInvoice)
+      return (
+        <>
+          <FormSelectAsync
+            fetcher={orders.getList}
+            fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
+            controlProps={{
+              control,
+              name: "productOrderId",
+              rules: { required: "Phải chọn đơn mua hàng" },
+            }}
+            label="Đơn mua hàng"
+            labelKey="code"
+          />
+
+          <FormInputBase
+            name="saleAdmin"
+            label="Admin phụ trách"
+            value={orderDetail?.salesAdminCode}
+            disabled
+          />
+
+          <FormInputBase
+            name="createdAt"
+            label="Ngày tạo"
+            value={
+              orderDetail?.created &&
+              moment(orderDetail?.created).format("DD/MM/YYYY")
+            }
+            disabled
+          />
+        </>
+      );
+  }, [withoutPurchaseInvoice, orderDetail]);
+
   return (
     <Paper className="rounded-sm p-3">
       <Typography className="text-sm font-medium mb-3">
@@ -42,18 +82,7 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
       </Typography>
 
       <Box className="grid grid-cols-2 gap-4">
-        {!withoutPurchaseInvoice && (
-          <FormSelectAsync
-            fetcher={orders.getList}
-            fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
-            controlProps={{
-              control,
-              name: "productOrderId",
-            }}
-            label="Đơn mua hàng"
-            labelKey="code"
-          />
-        )}
+        {renderTagsBaseOnInvoiceFlag()}
 
         <FormSelectAsync
           fetcher={branchs.getList}
@@ -61,8 +90,10 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
           controlProps={{
             control,
             name: "branchId",
+            rules: { required: "Phải chọn chi nhánh" },
           }}
           label="Mã chi nhánh"
+          labelKey="code"
         />
 
         <FormSelect
@@ -97,23 +128,6 @@ export const WarehouseImportGeneralInfo: React.FC<TProps> = ({
           label="Thủ kho"
         />
 
-        {!withoutPurchaseInvoice && (
-          <FormInputBase
-            name="saleAdmin"
-            label="Admin phụ trách"
-            value={orderDetail?.salesAdminCode}
-            disabled
-          />
-        )}
-
-        {!withoutPurchaseInvoice && (
-          <FormInputBase
-            name="createdAt"
-            label="Ngày tạo"
-            value={moment(orderDetail?.created).format("DD/MM/YYYY")}
-            disabled
-          />
-        )}
         <FormInputBase
           name="warehouseConfigCode"
           label="Mã kho"

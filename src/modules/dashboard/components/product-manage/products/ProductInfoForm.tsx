@@ -23,11 +23,6 @@ export const ProductInfoForm: React.FC<TProps> = ({ isDisable }) => {
     products.getProductGroups().then((res) => res.data)
   );
 
-  useEffect(() => {
-    console.log("component mounted");
-    
-  }, [])
-
   return (
     <Box className="grid grid-cols-2 gap-4 py-3">
       <FormInput

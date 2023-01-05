@@ -156,6 +156,7 @@ export const ImportDetailTable = () => {
       <ProductsDialog
         onClose={handleClose}
         open={dialog.open && dialog?.type === "CreateProduct"}
+        type="Add"
       />
     </Paper>
   );
