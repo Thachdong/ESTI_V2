@@ -97,8 +97,6 @@ export const ExportDetailPage = () => {
 
         setSelectedOrder(productOrder);
 
-        const {exportStatus, mainOrderCode} = productOrder || {};
-
         setValue("exportStatus", productOrder?.exportStatus)
       }),
     {

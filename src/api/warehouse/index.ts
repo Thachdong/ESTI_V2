@@ -60,6 +60,12 @@ export const warehouse = {
   getImportSessionById: (id: string) =>
     request.get<any>(`${BASE_URL}/ImportWarehouse/${id}`),
 
+  updateImportSessionStatus: (id: string, status: number) =>
+    request.post<any, any>(
+      `${BASE_URL}/UpdateImportStatus?warehouseSessionId=${id}&status=${status}`,
+      {}
+    ),
+
   createExportWarehouse: (payload: TCreateExportWarehouse) =>
     request.post<TCreateExportWarehouse, string>(
       `${BASE_URL}/ExportWarehouse`,
@@ -72,10 +78,16 @@ export const warehouse = {
     request.get<any>(`${BASE_URL}/GetHeaderExportWarehouse`),
 
   updateExportSessionStatus: (id: string, status: number) =>
-    request.post<any, any>(`${BASE_URL}/UpdateExportStatus`, {
-      warehouseSessionId: id,
-      status,
-    }),
+    request.post<any, any>(
+      `${BASE_URL}/UpdateExportStatus?warehouseSessionId=${id}&status=${status}`,
+      {}
+    ),
+
+  updateReceivedBill: (id: string) =>
+    request.post<any, any>(
+      `${BASE_URL}/UpdateReceivedBill?warehouseSessionId=${id}`,
+      {}
+    ),
 
   deleteTransaction: (id: string) => request.delete(`${BASE_URL}/${id}`),
 };

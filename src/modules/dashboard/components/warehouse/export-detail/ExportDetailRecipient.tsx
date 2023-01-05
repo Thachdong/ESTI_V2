@@ -7,7 +7,7 @@ import {
   FormCheckbox,
   FormDatepicker,
   FormInput,
-  FormSelectMultiple,
+  FormSelect,
 } from "~modules-core/components";
 import { useRouter } from "next/router";
 
@@ -97,15 +97,15 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
           disabled={!!transactionId}
         />
 
-        <FormSelectMultiple
+        <FormSelect
           controlProps={{
             name: "paymentDocument",
             control,
           }}
           label="Chứng từ thanh toán"
-          selectShape={{ valueKey: "id", labelKey: "paymentDocumentName" }}
           options={paymentOptions || []}
           disabled={!!transactionId}
+          getOptionLabel={option => option?.paymentDocumentName}
         />
       </Box>
     </Paper>

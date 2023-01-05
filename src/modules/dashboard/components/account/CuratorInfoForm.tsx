@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormInput, FormSelect } from "~modules-core/components";
-import { curatorDepartments, curatorPositions, genderData } from "~modules-core/constance";
+import { curatorPositions, genderData } from "~modules-core/constance";
 
 type TProps = {
   isDisable: boolean;
@@ -27,6 +27,7 @@ export const CuratorInfoForm: React.FC<TProps> = ({isDisable}) => {
         controlProps={{ control, name: "curatorGender", rules: {required: "Phải chọn giới tính"} }}
         label="Giới tính"
         disabled={isDisable}
+        getOptionLabel={option => option?.name}
       />
 
       <FormSelect
@@ -34,6 +35,7 @@ export const CuratorInfoForm: React.FC<TProps> = ({isDisable}) => {
         controlProps={{ control, name: "curatorPosition", rules: {required: "Phải chọn chức vụ"} }}
         label="Chức vụ"
         disabled={isDisable}
+        getOptionLabel={option => option?.name}
       />
 
       <FormInput

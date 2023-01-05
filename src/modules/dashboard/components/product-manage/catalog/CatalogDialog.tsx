@@ -230,8 +230,9 @@ export const CatalogDialog: React.FC<TDialog> = ({
             rules: { required: "Phải chọn sản phẩm đại diện" },
           }}
           label="Sản phẩm đại diện"
-          selectShape={{ valueKey: "productId", labelKey: "title" }}
           disabled={disabled}
+          valueKey="productId"
+          labelKey="title"
         />
       );
   };
@@ -266,7 +267,6 @@ export const CatalogDialog: React.FC<TDialog> = ({
               rules: { required: "Phải chọn nhóm cha" },
             }}
             label="Nhóm cha"
-            selectShape={{ valueKey: "id", labelKey: "name" }}
             disabled={disabled}
           />
 
@@ -279,9 +279,10 @@ export const CatalogDialog: React.FC<TDialog> = ({
                 name: "productIds",
               }}
               label="Sản phẩm nổi bật"
-              selectShape={{ valueKey: "productId", labelKey: "title" }}
               disabled={disabled}
               multiple={true}
+              labelKey="title"
+              valueKey="productId"
             />
           )}
 

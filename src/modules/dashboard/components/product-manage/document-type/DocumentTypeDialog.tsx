@@ -7,7 +7,7 @@ import {
   BaseButton,
   Dialog,
   FormInput,
-  FormSelectMultiple,
+  FormSelect,
 } from "~modules-core/components";
 import { searchParams } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
@@ -193,7 +193,7 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
             disabled={disable}
           />
 
-          <FormSelectMultiple
+          <FormSelect
             options={searchParams}
             controlProps={{
               control,

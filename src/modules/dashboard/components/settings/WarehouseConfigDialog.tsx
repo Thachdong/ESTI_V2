@@ -157,10 +157,10 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập số vị trí" },
           }}
           options={branchsList as []}
-          selectShape={{ valueKey: "id", labelKey: "code" }}
           label="Chọn chi nhánh"
           className="mb-4"
           disabled={type === "View" && !isUpdate}
+          getOptionLabel={option => option?.code}
         />
 
         <FormInput

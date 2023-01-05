@@ -23,7 +23,6 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
               }}
               options={[]}
               label=""
-              required
               className="mb-4"
             />
           </div>
@@ -64,7 +63,6 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
                   }}
                   options={[]}
                   label=""
-                  required
                   className="mb-4"
                 />
               </div>
@@ -121,7 +119,6 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
                 }}
                 options={[]}
                 label=""
-                required
                 disabled
                 className="mb-4"
               />
@@ -220,7 +217,6 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
               }}
               options={[]}
               label=""
-              required
               className="mb-4"
             />
           </div>
@@ -237,7 +233,6 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
               }}
               options={[]}
               label=""
-              required
               className="mb-4"
             />
           </div>

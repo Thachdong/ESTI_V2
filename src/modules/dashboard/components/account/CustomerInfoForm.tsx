@@ -6,7 +6,6 @@ import {
   FormInput,
   FormSelect,
   FormSelectAsync,
-  FormSelectMultiple,
 } from "~modules-core/components";
 import {
   paymentExpiredIn,
@@ -52,10 +51,12 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Chi nhánh"
           disabled={isDisable}
+          getOptionLabel={option => option?.code}
+          labelKey="code"
         />
 
         <FormSelect
-          options={saleStaffs as []}
+          options={saleStaffs || []}
           controlProps={{
             control,
             name: "saleId",
@@ -63,6 +64,7 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Sale Phụ trách"
           disabled={isDisable}
+          getOptionLabel={(option) => option?.fullName}
         />
 
         <FormSelect
@@ -74,6 +76,7 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Sales Admin phụ trách"
           disabled={isDisable}
+          getOptionLabel={(option) => option?.fullName}
         />
 
         <FormSelect
@@ -85,6 +88,7 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Giao nhận phụ trách"
           disabled={isDisable}
+          getOptionLabel={(option) => option?.fullName}
         />
       </Box>
 
@@ -104,11 +108,12 @@ export const CustomerInfoForm: React.FC<TProps> = ({ isDisable }) => {
           disabled={isDisable}
         />
 
-        <FormSelectMultiple
+        <FormSelect
           options={productTypes}
           controlProps={{ control, name: "productSupply" }}
           label="Nhóm sản phẩm cung cấp"
           disabled={isDisable}
+          multiple
         />
 
         <FormInput

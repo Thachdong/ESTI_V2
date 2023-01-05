@@ -92,8 +92,8 @@ export const ProductManageForm: React.FC = () => {
             name: "unitId",
           }}
           label="Đơn vị tính"
-          selectShape={{ valueKey: "id", labelKey: "unitName" }}
           disabled={true}
+          labelKey="unitName"
         />
 
         <FormSelectAsync
@@ -103,10 +103,10 @@ export const ProductManageForm: React.FC = () => {
             name: "suppliers",
           }}
           label="Nhà cung cấp"
-          selectShape={{ valueKey: "id", labelKey: "supplierName" }}
-          formControlProps={{ className: "col-span-2" }}
+          className="col-span-2"
           disabled={true}
           multiple={true}
+          labelKey="supplierName"
         />
       </Box>
 

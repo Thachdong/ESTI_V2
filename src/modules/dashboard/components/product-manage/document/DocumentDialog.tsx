@@ -173,8 +173,8 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải chọn mã SP" },
             }}
             label="Mã sản phẩm"
-            selectShape={{ valueKey: "id", labelKey: "productCode" }}
             disabled={disabled}
+            labelKey="productCode"
           />
 
           <FormSelectAsync
@@ -185,8 +185,8 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải chọn tên SP" },
             }}
             label="Tên sản phẩm"
-            selectShape={{ valueKey: "id", labelKey: "productName" }}
             disabled={disabled}
+            labelKey="productName"
           />
 
           <FormSelectAsync
@@ -198,7 +198,6 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
               rules: { required: "Phải chọn nhóm SP" },
             }}
             label="Nhóm SP"
-            selectShape={{ valueKey: "id", labelKey: "name" }}
             disabled={disabled}
           />
 

@@ -100,7 +100,6 @@ export const WarehouseImportPage: React.FC = () => {
     router.push({
       pathname: "/dashboard/warehouse/import-detail",
       query: {
-        type: "update",
         id: defaultValue?.id,
       },
     });
@@ -130,7 +129,7 @@ export const WarehouseImportPage: React.FC = () => {
   return (
     <Paper className="bgContainer">
       <Box className="text-right mb-2">
-        <Link href="/dashboard/warehouse/import-detail?type=create">
+        <Link href="/dashboard/warehouse/import-detail">
           <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
         </Link>
       </Box>
