@@ -1,10 +1,8 @@
 // FEATURES:
 // 1. SELECT OPTION/OPTIONS
 // 2. ASYNCHRONOUS LOAD OPTIONS AND LOAD MORE ON SCROLL
-
+// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER || AUTOMATICALLY LOAD OPTION BASE ON DEFAULT VALUE(NOT IMPLEMNT YET)
 // 4. SERVER SIDE FILTER OPTIONS ON USER TYPING
-// 5. AUTOMATICALLY LOAD OPTION BASE ON DEFAULT VALUE
-// 3. ADD DEFAULT OPTIONS TO WARRANTY DEFAULT VALUE ALWAYS RENDER
 
 import { ErrorMessage } from "@hookform/error-message";
 import _ from "lodash";
@@ -34,29 +32,31 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
 
   const [options, setOptions] = useState<any[]>(defaultOptions || []);
 
-  const [filterParams, setFilterParams] = useState<any>(fetcherParams || {});
+  const [searchContent, setSearchContent] = useState<string | null>(null);
 
   // DATA FETCHING
   const { isLoading, isFetching } = useQuery(
     [
-      controlProps.name,
+      fetcher.toString() + controlProps.name,
       {
         pageSize: pagination.pageSize,
         pageIndex: pagination.pageIndex,
-        ...filterParams,
+        searchContent,
+        ...fetcherParams,
       },
     ],
     () =>
       fetcher({
         pageSize: pagination.pageSize,
         pageIndex: pagination.pageIndex,
-        ...filterParams,
+        searchContent,
+        ...fetcherParams,
       }).then((res) => res.data),
     {
       onSuccess: (data) => {
         const { items, totalItem, totalPage } = data;
 
-        const newOptions = filterParams[labelKey]
+        const newOptions = pagination.pageIndex === 1
           ? items
           : [...options, ...items];
 
@@ -103,9 +103,11 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     reason: "input" | "reset" | "clear"
   ) => {
     if (reason === "input") {
-      setFilterParams({ ...filterParams, [labelKey]: value });
+      setSearchContent(value);
+
+      setPagination({...pagination, pageIndex: 1})
     } else {
-      setFilterParams({ ...filterParams, [labelKey]: null });
+      setSearchContent(null);
     }
   };
 
@@ -119,10 +121,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     const updateLabel = Object.keys(rules).includes("required")
       ? `${label} *`
       : label;
-
-    if(controlProps.name === "branchId") {
-      console.log(restField.value);
-    }
 
     const defaultProps = {
       inputProps: {

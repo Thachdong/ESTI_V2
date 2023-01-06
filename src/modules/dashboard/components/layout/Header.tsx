@@ -24,7 +24,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
         .getImportSessionById(query?.id as string)
         .then((res) => res.data),
     {
-      enabled: pageName === "warehouse-import-detail",
+      enabled: pageName === "warehouse-import-detail" && !!query.id,
     }
   );
 

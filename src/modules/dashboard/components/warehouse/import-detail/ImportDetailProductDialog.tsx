@@ -30,11 +30,11 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
-  const [selectedProduct, setSelectedProduct] = useState<any>();  
+  const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const title = type === "Add" ? "Thêm SP" : "Cập nhật SP";
+  const title = type === "Update" ? "Cập nhật SP" : "Thêm SP";
 
   const { control, handleSubmit, setError, reset } = useForm({
     mode: "onBlur",
@@ -103,44 +103,50 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
     return error;
   }, []);
 
-  const handleAddProduct = useCallback((data: any) => {
-    const isError = handleValidate(data);
+  const handleAddProduct = useCallback(
+    (data: any) => {
+      const isError = handleValidate(data);
 
-    if (isError) return;
+      if (isError) return;
 
-    const product = {
-      positionId: selectedPosition?.id,
-      positionName: selectedPosition?.positionName,
-      totalPrice: data?.price * data?.quantity,
-      productManufactor: selectedProduct?.manufactor,
-      productSpecs: selectedProduct?.specs,
-      ...selectedProduct,
-      ...data,
-    };
+      const product = {
+        ...selectedProduct,
+        ...data,
+        positionId: selectedPosition?.id,
+        positionName: selectedPosition?.positionName,
+        totalPrice: data?.price * data?.quantity,
+        productManufactor: selectedProduct?.manufactor,
+        productSpecs: selectedProduct?.specs,
+      };
 
-    addProduct(product);
+      addProduct(product);
 
-    cleanup();
-  }, [selectedProduct, selectedPosition]);
+      cleanup();
+    },
+    [selectedProduct, selectedPosition]
+  );
 
-  const handleUpdateProduct = useCallback((data: any) => {
-    if (!data) return;
+  const handleUpdateProduct = useCallback(
+    (data: any) => {
+      if (!data) return;
 
-    const isError = handleValidate(data);
+      const isError = handleValidate(data);
 
-    if (isError) return;
+      if (isError) return;
 
-    const product = {
-      ...data,
-      totalPrice: data?.price * data?.quantity,
-      positionId: selectedPosition?.id,
-      positionName: selectedPosition?.positionName,
-    };
+      const product = {
+        ...data,
+        totalPrice: data?.price * data?.quantity,
+        positionId: selectedPosition?.id,
+        positionName: selectedPosition?.positionName,
+      };
 
-    updateProduct(product);
+      updateProduct(product);
 
-    cleanup();
-  }, [selectedPosition, updateProduct]);
+      cleanup();
+    },
+    [selectedPosition, updateProduct]
+  );
 
   return (
     <Dialog
@@ -180,7 +186,6 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
           disabled
           label="Hãng SX"
           value={selectedProduct?.manufactor}
-          defaultValue={selectedProduct?.manufactor}
         />
 
         <FormInputBase
@@ -266,12 +271,12 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
       </Box>
 
       <Box className="flex items-center justify-center my-4">
-        {type === "Add" ? (
-          <BaseButton onClick={handleSubmit(handleAddProduct)}>Tạo</BaseButton>
-        ) : (
+        {type === "Update" ? (
           <BaseButton onClick={handleSubmit(handleUpdateProduct)}>
             Cập nhật
           </BaseButton>
+        ) : (
+          <BaseButton onClick={handleSubmit(handleAddProduct)}>Tạo</BaseButton>
         )}
 
         <BaseButton onClick={onClose} className="!bg-main-1 ml-3">
