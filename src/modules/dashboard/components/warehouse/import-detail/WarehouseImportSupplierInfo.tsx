@@ -21,7 +21,7 @@ export const WarehouseImportSupplierInfo: React.FC<TProps> = ({
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
 
-  const supplier = withoutPurchaseInvoice ? selectedSupplier : supplierData;
+  const supplier = selectedSupplier ? selectedSupplier : supplierData;
 
   // DOM RENDERING
   return (

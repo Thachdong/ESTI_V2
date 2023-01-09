@@ -1,30 +1,21 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { BaseButton } from "~modules-core/components";
 import {
+  ButtonsBox,
   ImportDetailTable,
   WarehouseImportGeneralInfo,
   WarehouseImportSupplierInfo,
   WarehouseImportViewGeneralInfo,
 } from "~modules-dashboard/components";
-import SaveIcon from "@mui/icons-material/Save";
 import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
-import { useMutation, useQuery } from "react-query";
-import {
-  orders,
-  TCreateImportWarehouse,
-  TCreateImportWarehouseProduct,
-  warehouse,
-} from "src/api";
+import { useQuery } from "react-query";
+import { orders, warehouse } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
-import { toast } from "~modules-core/toast";
 import { useRouter } from "next/router";
 
 export const ImportDetailPage = () => {
   // LOCAL STATE AND EXTRACT PROPS
-  const [selectedOrder, setSelectedOrder] = useState<any>();
-
   const router = useRouter();
 
   const { query } = router;
@@ -35,24 +26,23 @@ export const ImportDetailPage = () => {
     },
   });
 
-  const { watch, setValue, handleSubmit, reset } = methods;
+  const { watch, setValue, reset } = methods;
 
   const productOrderId = watch("productOrderId");
 
   const withoutPurchaseInvoice = watch("withoutPurchaseInvoice");
 
   // DATA FETCHING
-  useQuery(
+  const { data: orderDetailData } = useQuery(
     ["orderDetail", { productOrderId }],
     () => orders.getById(productOrderId).then((res) => res.data),
     {
-      enabled: !!productOrderId,
-      onSuccess: (data) => setSelectedOrder(data),
+      enabled: !!productOrderId && !query.id,
     }
   );
 
-  const { data: transactionData, refetch: refetchTransaction} = useQuery(
-    ["ImportWarehouseDetail_" + query.id, { ...query }],
+  const { data: transactionData, refetch: refetchTransaction } = useQuery(
+    ["ImportWarehouseDetail_" + query.id],
     () =>
       warehouse
         .getImportSessionById(query.id as string)
@@ -62,146 +52,82 @@ export const ImportDetailPage = () => {
     }
   );
 
-  const orderDetail = query.id
-    ? transactionData?.warehouseSession
-    : selectedOrder?.productOrder?.productOrder;
+  let orderDetail: any = {};
+
+  switch (true) {
+    case !!query.id:
+      orderDetail = transactionData?.warehouseSession;
+      break;
+    case !!productOrderId:
+      orderDetail = orderDetailData?.productOrder?.productOrder;
+      break;
+    case withoutPurchaseInvoice:
+    default:
+      break;
+  }
 
   // SIDE EFFECTS
   useEffect(() => {
-    if (withoutPurchaseInvoice) {
+    if (withoutPurchaseInvoice && !query.id) {
       methods.reset({ productList: [], withoutPurchaseInvoice });
-
-      setSelectedOrder(undefined);
     }
   }, [withoutPurchaseInvoice]);
 
   useEffect(() => {
-    if (selectedOrder) {
-      const { deliveryId, branchId, supplierId } =
-        selectedOrder?.productOrder?.productOrder || {};
+    if (!query.id) {
+      if (!!orderDetailData) {
+        const { deliveryId, branchId, supplierId } =
+          orderDetailData?.productOrder?.productOrder || {};
 
-      const { productOrderDetail } = selectedOrder || {};
+        const { productOrderDetail = [] } = orderDetailData || {};
 
-      setValue("branchId", branchId);
+        setValue("branchId", branchId);
 
-      setValue("deliveryId", deliveryId);
+        setValue("deliveryId", deliveryId);
 
-      setValue("supplierId", supplierId);
+        setValue("supplierId", supplierId);
 
-      setValue("productList", productOrderDetail || []);
-    } else {
-      setValue("branchId", undefined);
+        setValue(
+          "productList",
+          productOrderDetail.map((prod: any, index: number) => ({
+            ...prod,
+            no: index + 1,
+          }))
+        );
+      } else {
+        setValue("branchId", undefined);
 
-      setValue("deliveryId", undefined);
+        setValue("deliveryId", undefined);
 
-      setValue("supplierId", undefined);
+        setValue("supplierId", undefined);
 
-      setValue("productList", []);
+        setValue("productList", []);
+      }
     }
-  }, [selectedOrder]);
-
-  useEffect(() => {
-    !productOrderId && setSelectedOrder(undefined);
-  }, [productOrderId]);
+  }, [orderDetailData, query.id]);
 
   useEffect(() => {
     if (!!transactionData) {
-      const { warehouse, warehouseSession } = transactionData;
+      const { warehouse = [], warehouseSession } = transactionData || {};
 
       reset({
         ...warehouseSession,
-        productList: warehouse,
+        productList: warehouse.map((prod: any, index: number) => ({
+          ...prod,
+          no: index + 1,
+        })),
         withoutPurchaseInvoice: warehouseSession?.productOrderId ? false : true,
       });
     }
   }, [transactionData]);
 
-  // METHODS
-  const mutateCreate = useMutation(
-    (data: TCreateImportWarehouse) => warehouse.createImportWarehouse(data),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        router.push("/dashboard/warehouse/warehouse-import");
-      },
-    }
-  );
-
-  const handleValidateProduct = (product: TCreateImportWarehouseProduct) => {
-    const { dateExpiration, dateManufacture, lotNumber, positionId } = product;
-
-    let messages: string[] = [];
-
-    switch (true) {
-      case !dateExpiration:
-        messages.push("chưa nhập hạn sử dụng!");
-      case !dateManufacture:
-        messages.push("chưa nhập ngày sản xuất!");
-      case !lotNumber:
-        messages.push("chưa nhập số LOT!");
-      case !positionId:
-        messages.push("chưa nhập vị trí!");
-      case dateManufacture > dateExpiration:
-        messages.push("Ngày sản xuất không hợp lệ!");
-    }
-
-    return messages.length > 0 ? messages : null;
-  };
-
-  const handleCreate = async (data: any) => {
-    let error: any[] = [];
-
-    const productList: TCreateImportWarehouseProduct[] = data?.productList?.map(
-      (product: any) => {
-        const errorMessage = handleValidateProduct(product);
-
-        if (!!errorMessage) {
-          error.push({
-            productName: product.productName,
-            message: errorMessage?.join(", "),
-          });
-        }
-
-        return {
-          productOrderDetailId: withoutPurchaseInvoice ? null : product?.id,
-          productId: product?.productId,
-          lotNumber: product?.lotNumber,
-          dateManufacture: product?.dateManufacture,
-          dateExpiration: product?.dateExpiration,
-          quantity: product?.quantity,
-          price: product?.price,
-          vat: product?.vat,
-          positionId: product?.positionId,
-        };
-      }
-    );
-
-    if (error.length > 0) {
-      error.map((err: any) => {
-        toast.error(`Sản phẩm: ${err.productName} lỗi: ${err.message}`);
-      });
-
-      return;
-    }
-
-    const payload: TCreateImportWarehouse = {
-      productOrderId: productOrderId || null,
-      branchId: data?.branchId,
-      deliveryId: data?.deliveryId,
-      supplierId: data?.supplierId,
-      purchaseId: data?.purchaseId,
-      stockerId: data?.stockerId,
-      warehouseCreate: productList,
-    };
-
-    await mutateCreate.mutateAsync(payload);
-  };
-
   return (
     <FormProvider {...methods}>
       {query.id ? (
-        <WarehouseImportViewGeneralInfo refetch={refetchTransaction} data={transactionData?.warehouseSession} />
+        <WarehouseImportViewGeneralInfo
+          refetch={refetchTransaction}
+          data={transactionData?.warehouseSession}
+        />
       ) : (
         <>
           <Box className="mb-2">
@@ -220,24 +146,11 @@ export const ImportDetailPage = () => {
 
       <WarehouseImportSupplierInfo supplierData={orderDetail} />
 
-      <ImportDetailTable />
+      <ImportDetailTable transactionData={transactionData?.warehouseSession} />
 
-      <Box className="flex justify-end my-4">
-        {query.type === "create" ? (
-          <BaseButton type="button" onClick={handleSubmit(handleCreate)}>
-            <SaveIcon className="mr-2" />
-            Lưu
-          </BaseButton>
-        ) : (
-          <BaseButton
-            type="button"
-            // onClick={handleSubmit(handleCreate)}
-          >
-            <SaveIcon className="mr-2" />
-            Cập nhật
-          </BaseButton>
-        )}
-      </Box>
+      <ButtonsBox
+        importStatus={transactionData?.warehouseSession?.importStatus}
+      />
     </FormProvider>
   );
 };

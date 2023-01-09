@@ -1,79 +1,37 @@
 import { Box, Paper, Typography } from "@mui/material";
 import moment from "moment";
-import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { Dispatch, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import { bookingOrder, branchs, staff, warehouse } from "src/api";
+import { useQuery } from "react-query";
+import { bookingOrder, branchs, staff } from "src/api";
 import {
-  BaseButton,
   FormInputBase,
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
-import { warehouseExportStatus } from "~modules-core/constance";
-import { toast } from "~modules-core/toast";
 
 type TProps = {
-  data: any;
-  callback: (opt: any) => void;
+  orderDetail: any;
+  selectedBranch: any;
+  setSelectedBranch: Dispatch<any>;
 };
 
-export const ExportDetailGeneralInfo: React.FC<TProps> = ({
-  data,
-  callback,
-}) => {  
+export const ExportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail, selectedBranch, setSelectedBranch }) => {
   // EXTRACT PROPS
-  const { transactionId } = useRouter().query;
-
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const isForDelete = watch("isForDelete");
 
-  const {deliverId} = data || {};
-  
-  const {
-    id,
-    branchCode,
-    created,
-    deliveryName,
-    warehouseConfigCode,
-    mainOrderCode,
-  } = data || {};
-
-  useEffect(() => {
-    deliverId && setValue("deliveryId", deliverId);
-  }, [data])
-
   // DATA FETCHING
-  const { data: deliveryOptions } = useQuery(
-    ["deliveryOptions", { isForDelete }],
-    () => staff.getListDeliveryStaff().then((res) => res.data),
-    {
-      enabled: isForDelete,
-    }
-  );
-
-  const mutateUpdateStatus = useMutation(
-    (payload: any) =>
-      warehouse.updateExportSessionStatus(payload?.id, payload?.status),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-      },
-      onError: (err: any) => {
-        toast.error(err?.resultMessage);
-      },
-    }
+  const { data: deliveryOptions } = useQuery(["deliveryOptions"], () =>
+    staff.getListDeliveryStaff().then((res) => res.data)
   );
 
   // DOM UTILITIES
   const renderInputTag = useCallback(() => {
-    switch (true) {
-      case !!transactionId:
-        return <FormInputBase value={mainOrderCode} disabled />;
-      case isForDelete:
-        return (
+    if (isForDelete) {
+      return (
+        <>
           <FormSelectAsync
             fetcher={branchs.getList}
             controlProps={{
@@ -81,12 +39,24 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
               name: "branchId",
               rules: { required: "Phải chọn chi nhánh" },
             }}
-            callback={callback}
+            callback={(opt) => setSelectedBranch(opt)}
             label="Mã chi nhánh"
           />
-        );
-      case !isForDelete:
-        return (
+          <FormSelect
+            options={deliveryOptions}
+            label="Nhân viên giao nhận"
+            controlProps={{
+              name: "deliveryId",
+              control: control,
+              rules: { required: "Phải chọn nhân viên giao nhận" },
+            }}
+            labelKey="fullName"
+          />
+        </>
+      );
+    } else {
+      return (
+        <>
           <FormSelectAsync
             fetcher={bookingOrder.getList}
             fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
@@ -98,32 +68,28 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
             label="Đơn đặt hàng"
             labelKey="mainOrderCode"
           />
-        );
+          <FormInputBase
+            value={
+              orderDetail?.created &&
+              moment(orderDetail?.created).format("DD/MM/YYYY")
+            }
+            disabled={true}
+            label="Ngày tạo"
+          />
+          <FormInputBase
+            value={orderDetail?.deliveryCode}
+            label="Nhân viên giao nhận"
+            disabled
+          />
+          <FormInputBase
+            value={orderDetail?.branchCode}
+            disabled={true}
+            label="Mã chi nhánh"
+          />
+        </>
+      );
     }
-  }, [transactionId, isForDelete]);
-
-  const renderStatusTag = useCallback(() => {
-    if (!transactionId) return;
-
-    return (
-      <>
-        <FormSelect
-          options={warehouseExportStatus}
-          controlProps={{
-            control,
-            name: "exportStatus",
-          }}
-          label="Trạng thái xuất kho"
-          getOptionLabel={option => option?.label}
-          valueKey="value"
-        />
-
-        <Box className="flex justify-end col-span-2">
-          <BaseButton>Cập nhật trạng thái</BaseButton>
-        </Box>
-      </>
-    );
-  }, [transactionId]);
+  }, [isForDelete, orderDetail]);
 
   return (
     <Paper className="rounded-sm p-3 mb-4">
@@ -134,41 +100,14 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
       <Box className="grid grid-cols-2 gap-4">
         {renderInputTag()}
 
-        {!isForDelete && (
-          <FormInputBase
-            value={created && moment(created).format("DD/MM/YYYY")}
-            disabled={true}
-            label="Ngày tạo"
-          />
-        )}
-
-        <FormSelect
-          controlProps={{
-            control,
-            name: "deliveryId",
-            rules: { required: "Phải chọn nhân viên giao nhận" },
-          }}
-          label="Nhân viên giao nhận"
-          options={deliveryOptions || []}
-          disabled={!isForDelete}
-          getOptionLabel={option => option?.fullName}
-        />
-
-        {!isForDelete && (
-          <FormInputBase
-            value={branchCode}
-            disabled={true}
-            label="Mã chi nhánh"
-          />
-        )}
-
         <FormInputBase
-          value={warehouseConfigCode}
+          value={
+            orderDetail?.warehouseConfigCode ||
+            selectedBranch?.warehouseConfigCode
+          }
           disabled={true}
           label="Mã kho"
         />
-
-        {renderStatusTag()}
       </Box>
     </Paper>
   );

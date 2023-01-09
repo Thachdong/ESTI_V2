@@ -53,18 +53,14 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   useEffect(() => {
     if (type === "Add") {
       reset({});
-    }
-
-    if (type === "View" && defaultValue) {
-      console.log(defaultValue);
-      
+    } else {
       reset(defaultValue);
     }
   }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
-    type === "Add"
+    type === "Add" || type === "AddFromAnotherRoute"
       ? "Thêm tài liệu sản phẩm"
       : type === "View" && isUpdate
       ? "Cập nhật tài liệu sản phẩm"
@@ -100,7 +96,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   // RENDER BUTTONS BASE ON DIALOG TYPE
   const renderButtons = () => {
     switch (true) {
-      case type === "Add":
+      case type === "Add" || type === "AddFromAnotherRoute":
         return (
           <>
             <BaseButton

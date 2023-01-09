@@ -19,14 +19,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
       : label;
 
     const defaultProps = {
-      // helperText: (
-      //   <ErrorMessage
-      //     errors={errors}
-      //     name={controlProps.name}
-      //     render={({ message }) => message}
-      //   />
-      // ),
-      error: !!error,
+      error,
       value: value || "",
       checked: value,
       ...restField,

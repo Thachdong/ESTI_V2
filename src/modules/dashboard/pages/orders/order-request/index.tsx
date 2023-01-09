@@ -95,7 +95,7 @@ export const OrderRequestPage: React.FC = () => {
             </AddButton>
           </div>
         </div>
-        <div>
+        <div className="h-[500px]">
           <DataTable
             rows={[]}
             columns={columns}

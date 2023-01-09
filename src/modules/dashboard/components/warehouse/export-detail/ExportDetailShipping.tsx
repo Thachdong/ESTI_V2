@@ -1,9 +1,13 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
-import { FormInput, FormInputBase } from "~modules-core/components";
+import { FormInput } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 
-export const ExportDetailShipping = () => {
+type TProps = {
+  exportStatus: number;
+}
+
+export const ExportDetailShipping: React.FC<TProps> = ({exportStatus}) => {
   const { control } = useFormContext();
 
   return (
@@ -19,6 +23,7 @@ export const ExportDetailShipping = () => {
             name: "deliveryUnit",
           }}
           label="Đơn vị v/c"
+          disabled={exportStatus > 0}
         />
 
         <FormInput
@@ -27,6 +32,7 @@ export const ExportDetailShipping = () => {
             name: "codeVD",
           }}
           label="Mã vận đơn"
+          disabled={exportStatus > 0}
         />
         <FormInputNumber
           controlProps={{
@@ -34,6 +40,7 @@ export const ExportDetailShipping = () => {
             name: "packageNumber",
           }}
           label="Số kiện hàng"
+          disabled={exportStatus > 0}
         />
         <FormInput
           controlProps={{
@@ -41,6 +48,7 @@ export const ExportDetailShipping = () => {
             name: "packageWeight",
           }}
           label="Khối lượng"
+          disabled={exportStatus > 0}
         />
         <FormInputNumber
           controlProps={{
@@ -48,6 +56,7 @@ export const ExportDetailShipping = () => {
             name: "shippingFee",
           }}
           label="Cước phí"
+          disabled={exportStatus > 0}
         />
       </Box>
     </Paper>

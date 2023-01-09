@@ -3,3 +3,4 @@ export * from "./WarehouseImportSupplierInfo";
 export * from "./ImportDetailProductDialog";
 export * from "./ImportDetailTable";
 export * from "./WarehouseImportViewGeneralInfo";
+export * from "./ButtonsBox";
