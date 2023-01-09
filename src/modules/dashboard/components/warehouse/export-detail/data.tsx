@@ -36,14 +36,22 @@ export const productColumns: TGridColDef[] = [
     headerName: "Ngày SX",
     minWidth: 100,
     renderCell: ({ row }) =>
-      row?.dateManufacture && moment(row?.dateManufacture).format("DD/MM/YYYY"),
+      row?.dateManufacture ? (
+        moment(row?.dateManufacture).format("DD/MM/YYYY")
+      ) : (
+        <span className="text-error">Chưa nhập</span>
+      ),
   },
   {
     field: "dateExpiration",
     headerName: "Hạn SD",
     minWidth: 100,
     renderCell: ({ row }) =>
-      row?.dateExpiration && moment(row?.dateExpiration).format("DD/MM/YYYY"),
+      row?.dateExpiration ? (
+        moment(row?.dateExpiration).format("DD/MM/YYYY")
+      ) : (
+        <span className="text-error">Chưa nhập</span>
+      ),
   },
   {
     field: "positionName",

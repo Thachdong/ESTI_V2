@@ -9,7 +9,11 @@ import {
   DropdownButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
-import { ProductsDialog } from "~modules-dashboard/components";
+import {
+  DocumentDialog,
+  ProductsDialog,
+  StampDialog,
+} from "~modules-dashboard/components";
 import { productColumns } from "~modules-dashboard/pages/warehouse/import-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
@@ -63,9 +67,12 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
   const handleAddProduct = useCallback(
     (product: any) => {
-      setValue("productList", [...productList, { ...product, no: productList.length + 1 }]);
+      setValue("productList", [
+        ...productList,
+        { ...product, no: productList.length + 1, id: dialog.type === "Copy" ? null : product?.id },
+      ]);
     },
-    [productList, setValue]
+    [productList, setValue, dialog.type]
   );
 
   const handleUpdateProduct = useCallback(
@@ -90,56 +97,59 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   };
 
   // DATA TABLE
-  const renderContextMenu = useCallback(
-    () => {
-      switch (true) {
-        case importStatus === undefined:
-          return (
-            <Menu className="p-0" id="product_table_menu">
-              <Item id="update-product" onClick={() => handleOpen("Update")}>
-                Cập nhật
-              </Item>
+  const renderContextMenu = useCallback(() => {
+    switch (true) {
+      case importStatus === undefined:
+        return (
+          <Menu className="p-0" id="product_table_menu">
+            <Item id="update-product" onClick={() => handleOpen("Update")}>
+              Cập nhật
+            </Item>
 
-              <Item id="delete-product" onClick={handleRemoveProduct}>
-                Xóa
-              </Item>
-            </Menu>
-          );
-        case importStatus === 0:
-          return (
-            <Menu className="p-0" id="product_table_menu">
-              <Item id="update-product" onClick={() => handleOpen("Update")}>
-                Cập nhật
-              </Item>
+            <Item id="delete-product" onClick={handleRemoveProduct}>
+              Xóa
+            </Item>
+          </Menu>
+        );
+      case importStatus === 0:
+        return (
+          <Menu className="p-0" id="product_table_menu">
+            <Item id="update-product" onClick={() => handleOpen("Update")}>
+              Cập nhật
+            </Item>
 
-              <Item id="delete-product" onClick={() => handleOpen("Copy")}>
-                Sao chép SP
-              </Item>
-            </Menu>
-          );
-        case importStatus > 0:
-          return (
-            <Menu className="p-0" id="product_table_menu">
-              <Item
-                id="view-product-document"
-                onClick={() => handleOpen("Update")}
-              >
-                Xem tài liệu SP
-              </Item>
+            <Item id="delete-product" onClick={() => handleOpen("Copy")}>
+              Sao chép SP
+            </Item>
+          </Menu>
+        );
+      case importStatus > 0:
+        return (
+          <Menu className="p-0" id="product_table_menu">
+            <Item
+              id="view-product-document"
+              // onClick={() => handleOpen("Update")}
+            >
+              Xem tài liệu SP
+            </Item>
 
-              <Item id="create-product-document" onClick={handleRemoveProduct}>
-                Tạo tài liệu SP
-              </Item>
+            <Item
+              id="create-product-document"
+              onClick={() => handleOpen("CreateDocument")}
+            >
+              Tạo tài liệu SP
+            </Item>
 
-              <Item id="create-product-label" onClick={handleRemoveProduct}>
-                Tạo nhãn SP
-              </Item>
-            </Menu>
-          );
-      }
-    },
-    [importStatus]
-  );
+            <Item
+              id="create-product-label"
+              onClick={() => handleOpen("CreateLabel")}
+            >
+              Tạo nhãn SP
+            </Item>
+          </Menu>
+        );
+    }
+  }, [importStatus]);
 
   const renderActionButtons = useCallback(
     (row: any) => {
@@ -186,11 +196,11 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                   label: "Xem tài liệu SP",
                 },
                 {
-                  action: handleRemoveProduct,
+                  action: () => handleOpen("CreateDocument"),
                   label: "Tạo tài liệu SP",
                 },
                 {
-                  action: handleRemoveProduct,
+                  action: () => handleOpen("CreateLabel"),
                   label: "Tạo nhãn SP",
                 },
               ]}
@@ -245,7 +255,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           columns={columns}
           autoHeight={true}
           hideSearchbar={true}
-          getRowId={row => row.no}
+          getRowId={(row) => row.no}
           hideFooter
           componentsProps={{
             row: {
@@ -262,7 +272,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
       <ImportDetailProductDialog
         onClose={handleClose}
-        open={dialog.open && dialog?.type !== "CreateProduct"}
+        open={dialog.open && (dialog?.type === "Add" || dialog?.type === "Update" || dialog?.type === "Copy")}
         type={dialog?.type}
         addProduct={handleAddProduct}
         updateProduct={handleUpdateProduct}
@@ -273,6 +283,20 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={dialog.open && dialog?.type === "CreateProduct"}
         type="Add"
+      />
+
+      <DocumentDialog
+        onClose={handleClose}
+        open={!!dialog?.open && dialog?.type === "CreateDocument"}
+        type="AddFromAnotherRoute"
+        defaultValue={defaultValue as any}
+      />
+
+      <StampDialog
+        onClose={handleClose}
+        open={dialog?.open && dialog?.type === "CreateLabel"}
+        type="AddFromAnotherRoute"
+        defaultValue={defaultValue as any}
       />
     </Paper>
   );

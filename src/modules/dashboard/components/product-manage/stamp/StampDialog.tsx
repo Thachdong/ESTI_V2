@@ -2,15 +2,7 @@ import { Box } from "@mui/material";
 import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  category,
-  products,
-  stamp,
-  TCategory,
-  TCreateStamp,
-  TProduct,
-  TUpdateStamp,
-} from "src/api";
+import { products, stamp, TCreateStamp, TProduct, TUpdateStamp } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -52,9 +44,7 @@ export const StampDialog: React.FC<TDialog> = ({
   useEffect(() => {
     if (type === "Add") {
       reset({});
-    }
-
-    if (type === "View" && defaultValue) {
+    } else {
       const {
         id,
         labelType = 1,
@@ -66,7 +56,7 @@ export const StampDialog: React.FC<TDialog> = ({
         specs,
         chemicalName,
         casCode,
-      } = defaultValue;
+      } = defaultValue || {};
 
       reset({
         id,
@@ -105,7 +95,7 @@ export const StampDialog: React.FC<TDialog> = ({
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
-    type === "Add"
+    type === "Add" || type === "AddFromAnotherRoute"
       ? "Thêm nhãn sản phẩm"
       : type === "View" && isUpdate
       ? "Cập nhật nhãn sản phẩm"
@@ -174,7 +164,7 @@ export const StampDialog: React.FC<TDialog> = ({
   // RENDER BUTTONS BASE ON DIALOG TYPE
   const renderButtons = () => {
     switch (true) {
-      case type === "Add":
+      case type === "Add" || type === "AddFromAnotherRoute":
         return (
           <>
             <BaseButton

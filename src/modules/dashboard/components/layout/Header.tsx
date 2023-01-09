@@ -29,13 +29,13 @@ export const Header: React.FC<TProps> = ({ data }) => {
   );
 
   const { data: warehouseExportDetail } = useQuery(
-    ["warehouseExportDetail_" + query.id],
+    ["warehouseExportDetail_" + query.transactionId],
     () =>
       warehouse
-        .getExportSessionById(query.id as string)
+        .getExportSessionById(query.transactionId as string)
         .then((res) => res.data),
     {
-      enabled: pageName === "warehouse-export-detail",
+      enabled: pageName === "warehouse-export-detail" && !!query.transactionId,
     }
   );
 
@@ -43,7 +43,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
 
   switch (pageName) {
     case "warehouse-export-detail":
-      if (query.id) {
+      if (query.transactionId) {
         extractedTitle = `XUẤT KHO / TẠO XUẤT KHO / ${
           warehouseExportDetail?.productOrder?.code || ""
         }`;

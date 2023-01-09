@@ -142,6 +142,8 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     return (
       <AutoCompleteBase
         options={options}
+        loading={isLoading || isFetching}
+        loadingText="Đang tải ..."
         filterOptions={(x) => x}
         onInputChange={onInputChange}
         ListboxProps={{

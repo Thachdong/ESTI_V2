@@ -45,7 +45,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
 
       return valueList;
     } else {
-      const valueObj = options.find((opt) => opt[valueKey] === value) || null;
+      const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
       callback?.(valueObj);
 
