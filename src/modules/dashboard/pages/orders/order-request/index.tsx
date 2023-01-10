@@ -1,13 +1,17 @@
-import { Paper } from "@mui/material";
+import { Menu, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import router from "next/router";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { Item } from "react-contexify";
 import { useForm } from "react-hook-form";
-import { TWarehouseExport } from "src/api";
+import { useQuery } from "react-query";
+import { mainOrder, TWarehouseExport } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
+  DropdownButton,
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -17,32 +21,100 @@ export const OrderRequestPage: React.FC = () => {
   const { control, handleSubmit } = useForm<any>({
     mode: "onBlur",
   });
+  const router = useRouter();
+  const { query } = router;
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
+  // DATA FETCHING
+  const { data, isLoading, isFetching, refetch } = useQuery(
+    [
+      "mainOrders",
+      "loading",
+      {
+        ...pagination,
+        ...query,
+      },
+    ],
+    () =>
+      mainOrder
+        .getList({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          ...query,
+        })
+        .then((res) => res.data),
+    {
+      onSuccess: (data) => {
+        setPagination({ ...pagination, total: data.totalItem });
+      },
+    }
+  );
 
   const columns: GridColDef<TWarehouseExport>[] = [
     {
-      field: "code",
+      field: "created",
       headerName: "NGÀY TẠO",
       renderCell: (params) =>
         params.row.created
           ? moment(params.row.created).format("DD/MM/YYYY")
           : "__",
+      minWidth: 200,
     },
-    { field: "branchCode", headerName: "MÃ ĐƠN ĐẶT HÀNG" },
-    { field: "mainOrderCode", headerName: "MÃ KHÁCH HÀNG" },
-    { field: "warehouseSessionCode", headerName: "TÊN KHÁCH HÀNG" },
-    { field: "nameProduct", headerName: "TỔNG GIÁ TRỊ" },
-    { field: "count", headerName: "GIÁ TRỊ ĐÃ GIAO" },
-    { field: "codeSupplier", headerName: "GIÁ TRỊ ĐÃ XUẤT HĐ" },
-    { field: "branchId", headerName: "CHI NHÁNH" },
-    { field: "nameSupplier", headerName: "SALES" },
-    { field: "status", headerName: "TRẠNG THÁI" },
-    { field: "action", headerName: "" },
+    { field: "mainOrderCode", headerName: "MÃ ĐƠN HÀNG", minWidth: 200 },
+    { field: "customerCode", headerName: "MÃ KHÁCH HÀNG", minWidth: 200 },
+    {
+      field: "companyName",
+      headerName: "TÊN KHÁCH HÀNG",
+      minWidth: 200,
+    },
+    {
+      field: "totalPrice",
+      headerName: "TỔNG GIÁ TRỊ",
+      minWidth: 200,
+      renderCell: (params) => _format.getVND(params?.row?.totalPrice),
+    },
+    {
+      field: "exportPrice",
+      headerName: "GIÁ TRỊ ĐÃ GIAO",
+      minWidth: 200,
+      renderCell: (params) => _format.getVND(params?.row?.exportPrice),
+    },
+    {
+      field: "totalBillPrice",
+      headerName: "GIÁ TRỊ ĐÃ XUẤT HĐ",
+      minWidth: 200,
+      renderCell: (params) => _format.getVND(params?.row?.totalBillPrice),
+    },
+    { field: "branchCode", headerName: "CHI NHÁNH", minWidth: 100 },
+    { field: "salesCode", headerName: "SALES", minWidth: 200 },
+    { field: "statusName", headerName: "TRẠNG THÁI", minWidth: 200 },
+    {
+      field: "action",
+      headerName: "",
+      minWidth: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => undefined,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: () => undefined,
+              label: "Xóa",
+            },
+          ]}
+        />
+      ),
+    },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
+
+  const onMouseEnterRow = () => {
+    console.log("hahaa");
+  };
 
   return (
     <>
@@ -80,7 +152,7 @@ export const OrderRequestPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <Paper className="p-2 w-full h-full shadow">
+      <Paper className="bgContainer p-2 shadow">
         <div className="flex gap-4 items-center mb-2">
           <div>
             <AddButton
@@ -95,16 +167,33 @@ export const OrderRequestPage: React.FC = () => {
             </AddButton>
           </div>
         </div>
-        <div>
+        <ContextMenuWrapper
+          menuId="order_request_table_menu"
+          menuComponent={
+            <Menu className="p-0" id="order_request_table_menu" open={false}>
+              <Item id="view-product" onClick={() => undefined}>
+                Xem chi tiết
+              </Item>
+              <Item id="delete-product" onClick={() => undefined}>
+                Xóa
+              </Item>
+            </Menu>
+          }
+        >
           <DataTable
-            rows={[]}
+            rows={data?.items as []}
             columns={columns}
             gridProps={{
-              // loading: isLoading || isFetching,
+              loading: isLoading || isFetching,
               ...paginationProps,
             }}
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
           />
-        </div>
+        </ContextMenuWrapper>
       </Paper>
     </>
   );

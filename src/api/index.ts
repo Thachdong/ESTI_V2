@@ -21,3 +21,4 @@ export * from "./label-history";
 export * from "./orders";
 export * from "./booking-order";
 export * from "./payment-document";
+export * from "./main-order";

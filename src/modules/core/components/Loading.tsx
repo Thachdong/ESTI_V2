@@ -13,8 +13,8 @@ export const Loading = () => {
   };
 
   return (
-    <div className="flex items-center h-full">
-      <Lottie options={defaultOptions} width={"auto"} height={450} />
+    <div className="flex items-center h-screen z-50 relative ">
+      <Lottie options={defaultOptions} width={200} height={200} />
     </div>
   );
 };

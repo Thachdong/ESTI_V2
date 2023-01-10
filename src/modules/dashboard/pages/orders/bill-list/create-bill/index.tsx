@@ -4,8 +4,8 @@ import moment from "moment";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  Abbreviatedable,
   BaseButton,
+  DataTable,
   FormInput,
   generatePaginationProps,
 } from "~modules-core/components";
@@ -56,14 +56,14 @@ export const CreateBillPage = () => {
             <span>THÔNG TIN SẢN PHẨM</span>
           </div>
           <div>
-            {" "}
-            <Abbreviatedable
+            <DataTable
               rows={[]}
               columns={columns}
               gridProps={{
-                // loading: isLoading || isFetching,
+                loading: false,
                 ...paginationProps,
               }}
+              hideSearchbar={true}
             />
           </div>
         </Paper>
