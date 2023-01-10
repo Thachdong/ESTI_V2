@@ -3,7 +3,7 @@ import moment from "moment";
 import { useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { branchs, orders, staff } from "src/api";
+import { branchs, purchaseOrder, staff } from "src/api";
 import {
   FormInputBase,
   FormSelect,
@@ -43,7 +43,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
       return (
         <>
           <FormSelectAsync
-            fetcher={orders.getList}
+            fetcher={purchaseOrder.getList}
             fetcherParams={{ status: 2 }} // Lấy order đang thực hiện
             controlProps={{
               control,

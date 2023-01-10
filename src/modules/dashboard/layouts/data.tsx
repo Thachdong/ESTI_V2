@@ -44,11 +44,11 @@ export const menu = [
     childrens: [
       {
         title: "Sản phẩm cần mua",
-        link: "purchase/products",
+        link: "purchase/purchase-plan",
       },
       {
         title: "Đơn mua hàng",
-        link: "purchase/supplier",
+        link: "purchase/purchase-request",
       },
     ],
   },
