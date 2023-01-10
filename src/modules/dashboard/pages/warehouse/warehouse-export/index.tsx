@@ -1,7 +1,7 @@
 import { Box, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
 import { exportWarehouse, TWarehouseExport } from "src/api";
@@ -29,7 +29,7 @@ export const WarehouseExportPage: React.FC = () => {
 
   const { query } = router;
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -51,8 +51,10 @@ export const WarehouseExportPage: React.FC = () => {
   }, []);
 
   const onNavigationToDetail = useCallback(() => {
+    const {id} = defaultValue.current || {};
+
     router.push(
-      `/dashboard/warehouse/export-detail?transactionId=${defaultValue?.id}`
+      `/dashboard/warehouse/export-detail?transactionId=${id}`
     );
   }, [router, defaultValue]);
 
@@ -118,7 +120,7 @@ export const WarehouseExportPage: React.FC = () => {
 
     const currentRow = data?.items.find((item: any) => item?.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -173,13 +175,13 @@ export const WarehouseExportPage: React.FC = () => {
         <WarehouseExportNoteDialog
           onClose={onCloseDialog}
           open={Boolean(dialog?.open && dialog.type === "note")}
-          defaultValue={defaultValue}
+          defaultValue={defaultValue.current}
         />
 
         <WarehouseExportStatusDialog
           onClose={onCloseDialog}
           open={Boolean(dialog?.open && dialog.type === "status")}
-          defaultValue={defaultValue}
+          defaultValue={defaultValue.current}
           refetch={refetch}
         />
       </Paper>

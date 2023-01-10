@@ -1,7 +1,7 @@
 import { Box, Paper } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { TWarehouseExport, warehouse } from "src/api";
@@ -28,7 +28,7 @@ export const WarehouseImportPage: React.FC = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -93,14 +93,16 @@ export const WarehouseImportPage: React.FC = () => {
 
     const currentRow = data?.items.find((item: any) => item?.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const handleRedirectToDetail = useCallback(() => {
+    const { id } = defaultValue.current || {};
+
     router.push({
       pathname: "/dashboard/warehouse/import-detail",
       query: {
-        id: defaultValue?.id,
+        id,
       },
     });
   }, [defaultValue]);
@@ -117,10 +119,14 @@ export const WarehouseImportPage: React.FC = () => {
   );
 
   const handleDeleteTransaction = useCallback(async () => {
-    if (!defaultValue) return;
+    const {warehouseSessionCode, id} = defaultValue.current || {};
 
-    if (confirm("Xác nhận xóa phiên nhập kho " + defaultValue.warehouseSessionCode)) {
-      await deleteMutation.mutateAsync(defaultValue.id)
+    if (
+      confirm(
+        "Xác nhận xóa phiên nhập kho " + warehouseSessionCode
+      )
+    ) {
+      await deleteMutation.mutateAsync(id);
     }
   }, [deleteMutation, defaultValue]);
 
@@ -171,7 +177,7 @@ export const WarehouseImportPage: React.FC = () => {
       <WarehouseImportNoteDialog
         onClose={() => setDialog({ open: false, type: undefined })}
         open={dialog?.open as boolean}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

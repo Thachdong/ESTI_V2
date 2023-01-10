@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState, MouseEvent } from "react";
+import { useCallback, useEffect, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
@@ -32,7 +32,7 @@ export const StampPage = () => {
 
   const [historyDialog, setHistoryDialog] = useState(false);
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   const { control, watch } = useForm<{ labelType: number }>({
     defaultValues: { labelType: 1 },
@@ -88,8 +88,10 @@ export const StampPage = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa nhãn: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {productName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa nhãn: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -127,7 +129,7 @@ export const StampPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -194,7 +196,7 @@ export const StampPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
 
       <StampHistoryDialog

@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { category, productDocument, TDocument } from "src/api";
@@ -29,7 +29,7 @@ export const DocumentsPage: React.FC = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   // SIDE EFFECTS
   // PUSH PAGINATION QUERY
@@ -92,8 +92,10 @@ export const DocumentsPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa tài liệu SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {productName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa tài liệu SP: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -140,7 +142,7 @@ export const DocumentsPage: React.FC = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -198,7 +200,7 @@ export const DocumentsPage: React.FC = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

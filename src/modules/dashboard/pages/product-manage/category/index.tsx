@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { category, TCategory } from "src/api";
@@ -29,8 +29,8 @@ export const CategoryPage: React.FC = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
-
+  const defaultValue = useRef<any>();
+  
   usePathBaseFilter(pagination);
 
   // DIALOG METHODS
@@ -77,8 +77,10 @@ export const CategoryPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa Danh mục: " + defaultValue?.name)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {name, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa Danh mục: " + name)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -112,7 +114,7 @@ export const CategoryPage: React.FC = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -169,7 +171,7 @@ export const CategoryPage: React.FC = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

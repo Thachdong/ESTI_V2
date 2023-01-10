@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState, MouseEvent, useEffect } from "react";
+import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { customer, suppliers } from "src/api";
@@ -29,7 +29,7 @@ export const CustomersPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -80,8 +80,10 @@ export const CustomersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa khách hàng: " + defaultValue?.companyName)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {companyName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa khách hàng: " + companyName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -115,7 +117,7 @@ export const CustomersPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -174,7 +176,7 @@ export const CustomersPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

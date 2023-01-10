@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { documentCareer } from "src/api";
@@ -24,7 +24,7 @@ export const TechnicalDocumentsPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -81,8 +81,10 @@ export const TechnicalDocumentsPage = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa loại tài liệu: " + defaultValue.name)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {name, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa loại tài liệu: " + name)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -91,7 +93,7 @@ export const TechnicalDocumentsPage = () => {
 
     const currentRow = data?.find((item: any) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   // DOM RENDER
@@ -145,7 +147,7 @@ export const TechnicalDocumentsPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

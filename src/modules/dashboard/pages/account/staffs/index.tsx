@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState, MouseEvent } from "react";
+import React, { useCallback, useEffect, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { staff, TStaff } from "src/api";
@@ -33,7 +33,7 @@ export const StaffsPage = () => {
 
   const [dialog, setDialog] = useState<TDialog>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<TStaff>();
+  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -80,8 +80,10 @@ export const StaffsPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa nhân viên: " + defaultValue?.username)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {username, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa nhân viên: " + username)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -115,7 +117,7 @@ export const StaffsPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -173,7 +175,7 @@ export const StaffsPage = () => {
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         type={dialog.type}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );
