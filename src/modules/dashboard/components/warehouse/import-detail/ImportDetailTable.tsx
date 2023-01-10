@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
 import {
@@ -27,7 +27,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   const { importStatus } = transactionData || {};
 
@@ -48,9 +48,11 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
   // METHODS
   const handleRemoveProduct = useCallback(() => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue?.productName)) {
+    const {productName, no} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa SP: " + productName)) {
       const updatedProductList = productList.filter(
-        (p: any) => p?.no !== defaultValue?.no
+        (p: any) => p?.no !== no
       );
 
       setValue("productList", updatedProductList);
@@ -93,7 +95,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       (item: any) => item.no?.toString() === id
     );
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   // DATA TABLE
@@ -276,7 +278,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         type={dialog?.type}
         addProduct={handleAddProduct}
         updateProduct={handleUpdateProduct}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue.current}
       />
 
       <ProductsDialog
@@ -289,14 +291,14 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={!!dialog?.open && dialog?.type === "CreateDocument"}
         type="AddFromAnotherRoute"
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
 
       <StampDialog
         onClose={handleClose}
         open={dialog?.open && dialog?.type === "CreateLabel"}
         type="AddFromAnotherRoute"
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

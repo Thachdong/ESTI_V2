@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { branchs, TBranch } from "src/api";
 import {
@@ -23,7 +23,7 @@ export const BranchConfigPage: React.FC = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [defaultValue, setDefaultValue] = useState<TBranch | null>();
+  const defaultValue = useRef<TBranch | any>();
 
   const [dialog, setDialog] = useState<{
     open: boolean;
@@ -39,16 +39,16 @@ export const BranchConfigPage: React.FC = () => {
     (row: TBranch) => {
       setDialog({ open: true, type: "View" });
 
-      setDefaultValue(row);
+      defaultValue.current = row;
     },
-    [setDefaultValue]
+    [defaultValue]
   );
 
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
-    setDefaultValue(null);
-  }, [setDefaultValue]);
+    defaultValue.current = null;
+  }, [defaultValue]);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -120,7 +120,7 @@ export const BranchConfigPage: React.FC = () => {
         type={dialog.type}
         refetch={refetch}
         title="tạo chi nhánh"
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

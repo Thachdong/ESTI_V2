@@ -1,7 +1,7 @@
 import { Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { TBranch, warehouseConfig } from "src/api";
 import {
@@ -22,7 +22,7 @@ export const WarehouseConfigPage: React.FC = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [defaultValue, setDefaultValue] = useState<TBranch | null>();
+  const defaultValue = useRef<TBranch | null>();
 
   const [dialog, setDialog] = useState<{
     open: boolean;
@@ -47,16 +47,16 @@ export const WarehouseConfigPage: React.FC = () => {
     (row: TBranch) => {
       setDialog({ open: true, type: "View" });
 
-      setDefaultValue(row);
+      defaultValue.current = row;
     },
-    [setDefaultValue]
+    [defaultValue]
   );
 
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
-    setDefaultValue(null);
-  }, [setDefaultValue]);
+    defaultValue.current = null;
+  }, [defaultValue]);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -128,7 +128,7 @@ export const WarehouseConfigPage: React.FC = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current as any}
       />
     </Paper>
   );

@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productManage, products, warehouseConfig } from "src/api";
@@ -34,7 +34,7 @@ export const ProductManageTable = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -134,8 +134,16 @@ export const ProductManageTable = () => {
   ];
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue?.productName)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {id, productName} = defaultValue.current || {};
+
+    if (!id) {
+      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
+
+      return;
+    }
+
+    if (confirm("Xác nhận xóa SP: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -144,7 +152,7 @@ export const ProductManageTable = () => {
 
     const currentRow = data?.items.find((item) => item.rowId === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -206,7 +214,7 @@ export const ProductManageTable = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { TUnit, units } from "src/api";
 import {
@@ -24,7 +24,7 @@ export const UnitConfigPage: React.FC = () => {
   
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [defaultValue, setDefaultValue] = useState<TUnit | null>();
+  const defaultValue = useRef<TUnit | null>();
 
   const [dialog, setDialog] = useState<{
     open: boolean;
@@ -40,16 +40,16 @@ export const UnitConfigPage: React.FC = () => {
     (row: TUnit) => {
       setDialog({ open: true, type: "View" });
 
-      setDefaultValue(row);
+      defaultValue.current = row;
     },
-    [setDefaultValue]
+    [defaultValue]
   );
 
   const onAdd = useCallback(() => {
     setDialog({ open: true, type: "Add" });
 
-    setDefaultValue(null);
-  }, [setDefaultValue]);
+    defaultValue.current = null;
+  }, [defaultValue]);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -151,7 +151,7 @@ export const UnitConfigPage: React.FC = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current as any}
       />
     </Paper>
   );

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import _ from "lodash";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { position, TPosition } from "src/api";
 import { AddButton } from "~modules-core/components";
@@ -16,7 +16,7 @@ export const StoragePage: React.FC = () => {
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<TPosition>();
+  const defaultValue = useRef<any>();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -26,7 +26,7 @@ export const StoragePage: React.FC = () => {
   const onDialogOpen = useCallback((type: string, data: TPosition) => {
     setDialog({ open: true, type });
 
-    setDefaultValue(data);
+    defaultValue.current = data;
   }, []);
 
   // DATA FETCHING
@@ -102,7 +102,7 @@ export const StoragePage: React.FC = () => {
         onClose={onDialogClose}
         open={dialog.open && dialog.type === "View"}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue .current}
         title="THÔNG TIN VỊ TRÍ LƯU"
       />
     </Box>

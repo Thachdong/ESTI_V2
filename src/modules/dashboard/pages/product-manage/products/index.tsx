@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   MouseEvent,
+  useRef,
 } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
@@ -53,7 +54,7 @@ export const ProductsPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -147,8 +148,10 @@ export const ProductsPage = () => {
   };
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {productName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa SP: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -213,7 +216,7 @@ export const ProductsPage = () => {
 
     const currentRow = data?.items.find((item: any) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -282,7 +285,7 @@ export const ProductsPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

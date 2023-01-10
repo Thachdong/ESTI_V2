@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
 import {
@@ -29,7 +29,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   const { watch, setValue } = useFormContext();
 
@@ -80,10 +80,12 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   };
 
   const handleDeleteProduct = useCallback(() => {
-    if (!defaultValue) return;
+    const {productCode, no} = defaultValue.current || {};
 
-    if (confirm("Xác nhận xóa SP: " + defaultValue.productCode)) {
-      productListOperators.delete(defaultValue.no);
+    if (!productCode) return;
+
+    if (confirm("Xác nhận xóa SP: " + productCode)) {
+      productListOperators.delete(no);
     }
   }, [defaultValue]);
 
@@ -206,7 +208,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
       (item: any) => item.no?.toString() === id
     );
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   return (
@@ -253,7 +255,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         onClose={onCloseDialog}
         open={!!dialog?.open}
         type={dialog?.type}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue.current}
         warehouseConfig={warehouseConfig}
         productOptions={productOptions}
         productListOperators={productListOperators}

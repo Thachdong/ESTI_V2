@@ -10,7 +10,7 @@ import {
 } from "~modules-dashboard/components";
 import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
 import { useQuery } from "react-query";
-import { orders, warehouse } from "src/api";
+import { purchaseOrder, warehouse } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
 import { useRouter } from "next/router";
 
@@ -35,7 +35,7 @@ export const ImportDetailPage = () => {
   // DATA FETCHING
   const { data: orderDetailData } = useQuery(
     ["orderDetail", { productOrderId }],
-    () => orders.getById(productOrderId).then((res) => res.data),
+    () => purchaseOrder.getById(productOrderId).then((res) => res.data),
     {
       enabled: !!productOrderId && !query.id,
     }

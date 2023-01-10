@@ -1,9 +1,9 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { customer, suppliers } from "src/api";
+import { purchasePlan } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -15,12 +15,11 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { CustomersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { CustomerColumns } from "./customerColumns";
+import { purchasePlanColumns } from "./data";
 
-export const CustomersPage = () => {
+export const PurchasePlanPage = () => {
   const router = useRouter();
 
   const { query } = router;
@@ -34,61 +33,63 @@ export const CustomersPage = () => {
   usePathBaseFilter(pagination);
 
   // DIALOG METHODS
-  const onDialogClose = useCallback(() => {
+  const handleCloseDialog = useCallback(() => {
     setDialog({ open: false });
   }, []);
 
-  const onUpdate = useCallback(() => {
-    setDialog({ open: true, type: "View" });
+  const handleOpenDialog = useCallback((type: string) => {
+    setDialog({ open: true, type });
   }, []);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "customersList",
-      "loading",
+      "PurchasePlan",
       {
-        ...pagination,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
         ...query,
       },
     ],
     () =>
-      customer
+      purchasePlan
         .getList({
-          pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
+          pageIndex: pagination.pageIndex,
           ...query,
         })
         .then((res) => res.data),
     {
       onSuccess: (data) => {
-        setPagination({ ...pagination, total: data.totalItem });
+        setPagination({ ...pagination, total: data?.totalItem });
       },
     }
   );
 
-  // DATA TABLE
-  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
-    onError: (error: any) => {
-      toast.error(error?.resultMessage);
-    },
+  const deleteMutation = useMutation((id: string) => purchasePlan.delete(id), {
     onSuccess: (data) => {
-      toast.success(data.resultMessage);
+      toast.success(data?.resultMessage);
 
       refetch();
     },
   });
 
-  const onDelete = useCallback(async () => {
-    const {companyName, id} = defaultValue.current || {};
+  const handleDelete = useCallback(async () => {
+    const { mainOrderCodes, id } = defaultValue.current || {};
 
-    if (confirm("Xác nhận xóa khách hàng: " + companyName)) {
-      await mutateDelete.mutateAsync(id as string);
+    if (!id) {
+      toast.error("Có lỗi xãy ra, vui lòng thử lại!");
+      return;
     }
-  }, [defaultValue]);
 
+    if (confirm("Xác nhận hủy: " + mainOrderCodes)) {
+      await deleteMutation.mutateAsync(defaultValue.current?.id);
+    }
+  }, [defaultValue.current]);
+
+  // DATA TABLE
   const columns: TGridColDef[] = [
-    ...CustomerColumns,
+    ...purchasePlanColumns,
     {
       field: "action",
       headerName: "",
@@ -99,12 +100,16 @@ export const CustomersPage = () => {
           id={row?.id}
           items={[
             {
-              action: onUpdate,
-              label: "Thông tin chi tiết",
+              action: () => console.log(""),
+              label: "Chi tiết SP cần mua",
             },
             {
-              action: onDelete,
-              label: "Xóa",
+              action: () => handleOpenDialog("Note"),
+              label: "Sao chép SP cần mua",
+            },
+            {
+              action: handleDelete,
+              label: "Hủy SP cần mua",
             },
           ]}
         />
@@ -112,7 +117,9 @@ export const CustomersPage = () => {
     },
   ];
 
-  const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
+  const paginationProps = generatePaginationProps(pagination, setPagination);
+
+  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
     const currentRow = data?.items.find((item) => item.id === id);
@@ -120,44 +127,37 @@ export const CustomersPage = () => {
     defaultValue.current = currentRow;
   };
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);
-
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox label="Tìm kiếm sale phụ trách" />
-        </div>
+      <Box className="flex justify-between mb-3">
+        <Box className="w-1/3">
+          <SearchBox />
+        </Box>
 
-        <div className="w-1/2 flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Tạo khách hàng
-          </AddButton>
-        </div>
-      </div>
+        <AddButton variant="contained">Mua SP nhập kho</AddButton>
+      </Box>
 
       <ContextMenuWrapper
         menuId="customer_table_menu"
         menuComponent={
           <Menu className="p-0" id="customer_table_menu">
             <Item
-              id="view-product"
-              onClick={() => setDialog({ open: true, type: "View" })}
+              id="view"
+              onClick={() => console.log(defaultValue.current?.id)}
             >
-              Xem chi tiết
+              Chi tiết SP cần mua
             </Item>
-            <Item id="delete-product" onClick={onDelete}>
-              Xóa
+            <Item id="note" onClick={() => handleOpenDialog("Note")}>
+              Sao chép SP cần mua
+            </Item>
+            <Item id="status" onClick={handleDelete}>
+              Hủy SP cần mua
             </Item>
           </Menu>
         }
       >
         <DataTable
-          rows={data?.items as []}
+          rows={data?.items || []}
           columns={columns}
           gridProps={{
             loading: isLoading || isFetching,
@@ -170,14 +170,6 @@ export const CustomersPage = () => {
           }}
         />
       </ContextMenuWrapper>
-
-      <CustomersDialog
-        onClose={onDialogClose}
-        open={dialog.open}
-        type={dialog.type}
-        refetch={refetch}
-        defaultValue={defaultValue.current}
-      />
     </Paper>
   );
 };
