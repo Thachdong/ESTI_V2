@@ -15,9 +15,9 @@ const defaultDataGridProps: Partial<DataGridProps> = {
     NoRowsOverlay: NoRowsOverlay,
   },
   disableSelectionOnClick: true,
-  filterMode: "server",
+  // filterMode: "server",
   paginationMode: "server",
-  sortingMode: "server",
+  // sortingMode: "server",
   showColumnRightBorder: true,
   showCellRightBorder: true,
 };

@@ -71,6 +71,7 @@ export const warehouse = {
       `${BASE_URL}/ExportWarehouse`,
       payload
     ),
+
   getExportSessionById: (id: string) =>
     request.get<any>(`${BASE_URL}/ExportWarehouse/${id}`),
 
@@ -90,4 +91,7 @@ export const warehouse = {
     ),
 
   deleteTransaction: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  updateTransaction: (payload: any) =>
+    request.patch<any, any>(`${BASE_URL}/UpdateWarehouse`, payload),
 };

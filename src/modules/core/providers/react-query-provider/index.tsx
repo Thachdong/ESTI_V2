@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import React, { ReactNode } from "react";
 import {
   QueryClient,

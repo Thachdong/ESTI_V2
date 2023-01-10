@@ -59,13 +59,19 @@ const useResponseSuccess = (response: AxiosResponse) => {
 };
 
 const useResponseError = (error: AxiosError) => {
-  const { isAxiosError, response } = error || {};
+  const { isAxiosError } = error || {};
+
+  const response: any = error?.response;
 
   if (isAxiosError && response) {
     const { config, status, data } = response || {};
 
+    const url = getUrlFromConfig(config);
+
+    const errorMessage = response?.data?.resultMessage;
+
     console.log(
-      `%c ${status} - ${getUrlFromConfig(config)}:`,
+      `%c ${status} - ${url}:`,
       "color: #a71d5d; font-weight: bold",
       data
     );
@@ -75,19 +81,27 @@ const useResponseError = (error: AxiosError) => {
       throw new axios.Cancel("401 trigger more than twice!");
     }
 
+    if (window === undefined) {
+      return Promise.reject(error);
+    }
+
     switch (status) {
       case 401:
       case 408: {
+        // IGNORE WITH SOME ROUTES
+        if (url?.includes("authenticate/login")) {
+          break;
+        }
+
         // TURN ON ABORT FLAG
         isAbort = true;
 
-        // ALERT INFO TO USER
-        window.alert(
-          "Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !"
-        );
-        
-        // TRIGGER TOKEN ROTATION | SIGNOUT HERE
+        // ALERT SOME INFO TO USER
+        window && window.alert(errorMessage || "Phiên đăng nhập hết hạn!");
+
+        // LOGOUT
         signOut();
+
         break;
       }
       default:

@@ -10,15 +10,15 @@ import {
 } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 import { TDialog } from "~types/dialog";
-import { position, products, products as productsApi } from "src/api";
+import { position, products } from "src/api";
 import { useEffect, useState } from "react";
 import { toast } from "~modules-core/toast";
 import _ from "lodash";
 
 type TProps = {
   productOptions: any[];
-  warehouseConfigId: string;
-  productsOperator: any;
+  warehouseConfig: any;
+  productListOperators: any;
 };
 
 export const ProductDialog: React.FC<TDialog & TProps> = ({
@@ -26,9 +26,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
   onClose,
   type,
   defaultValue,
-  warehouseConfigId,
-  productsOperator,
+  warehouseConfig,
   productOptions,
+  productListOperators,
 }) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
@@ -36,7 +36,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const { control, handleSubmit, reset, setError, watch } = useForm();
+  const { control, handleSubmit, reset, setError } = useForm();
 
   const { watch: globalWatch } = useFormContext();
 
@@ -47,7 +47,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
-      reset();
+      reset({});
     } else {
       reset({ ...defaultValue });
     }
@@ -57,19 +57,20 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
   const { data: lotOptions } = useQuery(
     [
       "getLotOptions_" + selectedProduct?.productId,
-      { warehouseConfigId, id: selectedProduct?.productId },
+      { selectedProduct, warehouseConfig },
     ],
     () =>
-      productsApi
-        .getLot(selectedProduct?.productId, warehouseConfigId)
+      products
+        .getLot(selectedProduct?.id, warehouseConfig?.warehouseConfigId)
         .then((res) => res.data),
     {
-      // enabled: !!selectedProduct && !!warehouseConfigId,
+      enabled: !!selectedProduct && !!warehouseConfig?.warehouseConfigId,
     }
   );
 
   // METHODS
   const handleCreateProduct = (data: any) => {
+    // 1. DATA VALIDATION
     const { quantity } = data;
 
     if (quantity > selectedLot?.quantity) {
@@ -81,10 +82,12 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
       return;
     }
 
-    const totalPrice = quantity * selectedProduct?.price;
+    //2. ADD PRODUCT
+    const totalPrice = quantity * (selectedProduct?.price || 0);
 
     const product = {
       ...selectedProduct,
+      ...data,
       id: new Date().getTime(),
       quantity,
       totalPrice,
@@ -96,8 +99,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
       selectedPosition,
     };
 
-    productsOperator.addProduct({ ...product });
+    productListOperators.add({ ...product });
 
+    //3. CLEAN UP
     toast.success("Thêm sản phẩm thành công!");
 
     reset();
@@ -106,6 +110,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
   };
 
   const handleUpdateProduct = (data: any) => {
+    // 1. DATA VALIDATION
     const { quantity } = data;
 
     if (quantity > selectedLot?.quantity) {
@@ -117,7 +122,8 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
       return;
     }
 
-    const totalPrice = quantity * selectedProduct?.price;
+    //2. UPDATE PRODUCT
+    const totalPrice = quantity * (selectedProduct?.price || 0);
 
     const product = {
       ...defaultValue,
@@ -131,8 +137,9 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
       selectedPosition,
     };
 
-    productsOperator.updateProduct(defaultValue?.id, { ...product });
+    productListOperators.update({ ...product });
 
+    //3. CLEAN UP
     toast.success("Cập nhật sản phẩm thành công!");
 
     reset();
@@ -171,7 +178,8 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
             options={productOptions}
             label="Mã sản phẩm"
             callback={(opt) => setSelectedProduct(opt)}
-            getOptionLabel={option => option?.productCode}
+            valueKey="productId"
+            labelKey="productCode"
           />
         )}
 
@@ -184,7 +192,7 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
           options={lotOptions || []}
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
-          getOptionLabel={option => option?.lotNumber}
+          getOptionLabel={(option) => option?.lotNumber}
           valueKey="lotNumber"
         />
 
@@ -197,13 +205,19 @@ export const ProductDialog: React.FC<TDialog & TProps> = ({
             rules: { required: "Phải chọn vị trí" },
           }}
           fetcher={position.getProductsByPositionId}
-          fetcherParams={{ lotNumber: selectedLot?.lotNumber }}
+          fetcherParams={{
+            lotNumber: selectedLot?.lotNumber,
+            warehouseConfigCode: warehouseConfig?.warehouseConfigCode,
+            productCode: selectedProduct?.productCode
+          }}
           callback={(opt) => setSelectedPosition(opt)}
           label="Chọn vị trí"
           defaultOptions={
             type === "Update" ? [defaultValue?.selectedPosition] : []
           }
           labelKey="positionName"
+          valueKey="positionId"
+          disabled={!selectedLot?.lotNumber}
         />
 
         <FormInputNumber

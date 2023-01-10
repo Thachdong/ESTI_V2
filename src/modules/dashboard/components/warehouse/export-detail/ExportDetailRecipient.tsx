@@ -12,19 +12,20 @@ import {
 import { useRouter } from "next/router";
 
 type TProps = {
-  selectedOrder: any;
+  orderData: any;
 };
 
-export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
+export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
+  // EEXTRACT PROPS
   const { transactionId } = useRouter().query;
 
-  const { receiverFullName, receiverPhone, receiverAddress } =
-    selectedOrder || {};
+  const { receiverFullName, receiverPhone, receiverAddress } = orderData;
 
   const { control, setValue, watch } = useFormContext();
 
   const isDefaultReceiver = watch("isDefaultReceiver");
 
+  // SIDE EFFECTS
   useEffect(() => {
     setValue("receiverFullName", receiverFullName);
 
@@ -33,10 +34,12 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
     setValue("receiverAddress", receiverAddress);
   }, [receiverFullName, receiverPhone, receiverAddress]);
 
+  // DATA FETCHING
   const { data: paymentOptions } = useQuery(["paymentOptions"], () =>
     paymentDocument.getList().then((res) => res.data)
   );
 
+  // DOM RENDERING
   return (
     <Paper className="rounded-sm p-3">
       <Typography className="text-sm font-medium mb-3">
@@ -62,7 +65,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
             rules: { required: "Phải nhập người nhận hàng" },
           }}
           label="Người nhận hàng"
-          disabled={isDefaultReceiver}
+          disabled={isDefaultReceiver || !!transactionId}
         />
 
         <FormInput
@@ -72,7 +75,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
             rules: { required: "Phải nhập SĐT" },
           }}
           label="SĐT"
-          disabled={isDefaultReceiver}
+          disabled={isDefaultReceiver || !!transactionId}
         />
 
         <FormInput
@@ -82,7 +85,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
             rules: { required: "Phải nhập Đ/c nhận hàng" },
           }}
           label="Đ/c nhận hàng"
-          disabled={isDefaultReceiver}
+          disabled={isDefaultReceiver || !!transactionId}
           multiline
           minRows={2}
         />
@@ -105,7 +108,8 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ selectedOrder }) => {
           label="Chứng từ thanh toán"
           options={paymentOptions || []}
           disabled={!!transactionId}
-          getOptionLabel={option => option?.paymentDocumentName}
+          getOptionLabel={(option) => option?.paymentDocumentName}
+          multiple
         />
       </Box>
     </Paper>

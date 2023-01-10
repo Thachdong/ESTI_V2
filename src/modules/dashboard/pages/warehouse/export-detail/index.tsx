@@ -1,38 +1,27 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
+import { bookingOrder, warehouse } from "src/api";
+import { FormCheckbox } from "~modules-core/components";
 import {
-  bookingOrder,
-  TCreateExportWarehouse,
-  TCreateExportWarehouseProduct,
-  warehouse,
-} from "src/api";
-import { BaseButton, FormCheckbox } from "~modules-core/components";
-import { toast } from "~modules-core/toast";
-import {
-  ExportDetailContact,
+  ExportDetailButtonsBox,
   ExportDetailCustomer,
   ExportDetailGeneralInfo,
   ExportDetailProducts,
   ExportDetailRecipient,
   ExportDetailShipping,
+  ExportViewGeneralInfo,
 } from "~modules-dashboard/components";
 
 export const ExportDetailPage = () => {
   // LOCAL STATE AND EXTRACT PROPS
-  const [selectedBranch, setSelectedBranch] = useState<any>();
-
-  const [selectedOrder, setSelectedOrder] = useState<any>();
-
-  const [products, setProducts] = useState<any[]>([]);
-
-  const [productOptions, setProductOptions] = useState<any[]>([]);
-
   const router = useRouter();
 
-  const { transactionId } = router?.query;
+  const [selectedBranch, setSelectedBranch] = useState<any>();
+
+  const { transactionId } = router.query;
 
   const methods = useForm<any>({
     defaultValues: {
@@ -40,225 +29,162 @@ export const ExportDetailPage = () => {
     },
   });
 
-  const { watch, handleSubmit, reset, setValue } = methods;
+  const { watch, reset, setValue } = methods;
 
   const isForDelete = watch("isForDelete");
 
   const orderId = watch("mainOrderId");
 
-  const warehouseConfigId = isForDelete
-    ? selectedBranch?.warehouseCongifId
-    : (selectedOrder?.warehouseConfigId as string);
+  // DATA FETCHING
+  const { data: orderDetailData } = useQuery(
+    ["orderDetail", { orderId }],
+    () =>
+      bookingOrder.getById(orderId).then((res) => {
+        const { mainOrderDetail = [], mainOrder = {} } = res.data || {};
 
-    console.log(selectedBranch);
-    
+        // REMOVE ALL PRODUCTS WITH STATUS 2 - ĐÃ HOÀN THÀNH
+        const products = mainOrderDetail.filter(
+          (product: any) => product?.tProductStatus !== 2
+        );
+
+        setValue("productList", products);
+
+        setValue("deliveryId", mainOrder?.deliveryId);
+
+        return { ...res.data, mainOrderDetail: products };
+      }),
+    {
+      enabled: !!orderId,
+    }
+  );
+
+  const { data: transactionData, refetch: refetchTransactionDetail } = useQuery(
+    ["warehouseExportDetail_" + transactionId],
+    () =>
+      warehouse
+        .getExportSessionById(transactionId as string)
+        .then((res) => res.data),
+    {
+      enabled: !!transactionId,
+    }
+  );
+
+  let warehouseConfig: any = {};
+
+  if (!!transactionId) {
+    warehouseConfig = {
+      warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
+      warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
+    };
+  } else if (isForDelete) {
+    warehouseConfig = {
+      warehouseConfigId: selectedBranch?.warehouseConfigId,
+      warehouseConfigCode: selectedBranch?.warehouseConfigCode,
+    };
+  } else {
+    warehouseConfig = {
+      warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
+      warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
+    };
+  }
 
   // SIDE EFFECTS
   useEffect(() => {
     if (isForDelete) {
       reset({ isForDelete });
 
-      setProducts([]);
-
-      setSelectedOrder({});
+      setValue("productList", []);
     }
   }, [isForDelete]);
 
-  // DATA FETCHING
-  useQuery(
-    ["orderDetail", { orderId }],
-    () => bookingOrder.getById(orderId).then((res) => res.data),
-    {
-      enabled: !!orderId,
-      onSuccess: (data: any) => {
-        const { mainOrderDetail = [], mainOrder } = data || {};
+  useEffect(() => {
+    const { productOrder = {}, productOrderDetail } = transactionData || {};
 
-        setSelectedOrder(mainOrder || {});
+    const {
+      deliveryUnit,
+      codeVD,
+      packageNumber,
+      packageWeight,
+      shippingFee,
+      exportStatus,
+    } = productOrder;
 
-        // REMOVE ALL PRODUCTS WITH STATUS 2 - ĐÃ HOÀN THÀNH
-        const productList = mainOrderDetail.filter(
-          (product: any) => product?.tProductStatus !== 2
-        );
-
-        setProducts(productList);
-
-        setProductOptions(productList);
-      },
-    }
-  );
-
-  useQuery(
-    ["warehouseExportDetail_" + transactionId],
-    () =>
-      warehouse.getExportSessionById(transactionId as string).then((res) => {
-        const {productOrder, productOrderDetail} = res.data || {};
-
-        setProducts(productOrderDetail);
-
-        setSelectedOrder(productOrder);
-
-        setValue("exportStatus", productOrder?.exportStatus)
-      }),
-    {
-      enabled: !!transactionId,
-    }
-  );
-
-  // PRODUCTS OPERATIONS
-  const addProduct = useCallback(
-    (prod: any) => {
-      setProducts([...products, prod]);
-    },
-    [products]
-  );
-
-  const updateProduct = useCallback(
-    (id: string, prod: any) => {
-      setProducts((prev) =>
-        prev.map((product) =>
-          product.id === id ? { ...prod } : { ...product }
-        )
-      );
-    },
-    [setProducts]
-  );
-
-  const deleteProduct = useCallback(
-    (id: string) => {
-      setProducts((prev) => prev.filter((prod: any) => prod?.id !== id));
-    },
-    [setProducts]
-  );
-
-  const productsOperator = {
-    addProduct,
-    updateProduct,
-    deleteProduct,
-  };
-
-  const createMutation = useMutation(
-    (data: TCreateExportWarehouse) => warehouse.createExportWarehouse(data),
-    {
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        router.push("/dashboard/warehouse/warehouse-export");
-      },
-    }
-  );
-
-  const handleValidateProduct = (product: any) => {
-    const { lotNumber, positionId } = product;
-
-    let messages: string[] = [];
-
-    switch (true) {
-      case !lotNumber:
-        messages.push("chưa nhập số LOT!");
-      case !positionId:
-        messages.push("chưa nhập vị trí!");
-    }
-
-    return messages.length > 0 ? messages : null;
-  };
-
-  const handleCreate = async (data: any) => {
-    // 1. CATCH INVALID PRODUCTS
-    let error: any[] = [];
-
-    const productList: TCreateExportWarehouseProduct[] = products.map(
-      (prod: any) => {
-        const errorMessage = handleValidateProduct(prod);
-
-        if (!!errorMessage) {
-          error.push({
-            productName: prod?.productName,
-            message: errorMessage?.join(", "),
-          });
-        }
-
-        return {
-          productId: prod?.productId,
-          lotNumber: prod?.lotNumber,
-          dateManufacture: prod?.dateManufacture,
-          dateExpiration: prod?.dateExpiration,
-          quantity: prod?.quantity,
-          price: prod?.price,
-          vat: prod?.vat,
-          positionId: prod?.positionId,
-        };
-      }
-    );
-
-    if (error.length > 0) {
-      error.map((err: any) => {
-        toast.error(`Sản phẩm: ${err.productName} lỗi: ${err.message}`);
-      });
-
-      return;
-    }
-
-    // 2. CALL API
-    const {paymentDocument} = data;
-
-    const payload: TCreateExportWarehouse = {
-      ...data,
-      paymentDocument: paymentDocument.join(","),
-      exportWarehouseCreate: productList,
-    };
-    
-    await createMutation.mutateAsync(payload);
-  };
-
-  const callback = useCallback((opt: any) => {
-    setSelectedBranch(opt);
-  }, []);
+    reset({
+      deliveryUnit,
+      codeVD,
+      packageNumber,
+      packageWeight,
+      shippingFee,
+      exportStatus,
+      productList: productOrderDetail,
+    });
+  }, [transactionData]);
 
   // DOM RENDERING
   return (
     <FormProvider {...methods}>
-      <Box className="mb-2">
-        <FormCheckbox
-          controlProps={{
-            name: "isForDelete",
-            control: methods.control,
-          }}
-          label="Xuất bỏ sản phẩm"
+      {transactionId ? (
+        <ExportViewGeneralInfo
+          refetch={refetchTransactionDetail}
+          data={transactionData?.productOrder}
         />
-      </Box>
-
-      <ExportDetailGeneralInfo
-        callback={callback}
-        data={isForDelete ? selectedBranch : selectedOrder}
-      />
+      ) : (
+        <>
+          <Box className="mb-2">
+            <FormCheckbox
+              controlProps={{
+                name: "isForDelete",
+                control: methods.control,
+              }}
+              label="Xuất bỏ sản phẩm"
+            />
+          </Box>
+          <ExportDetailGeneralInfo
+            orderDetail={orderDetailData?.mainOrder}
+            selectedBranch={selectedBranch}
+            setSelectedBranch={setSelectedBranch}
+          />
+        </>
+      )}
 
       {!isForDelete && (
         <Box className="grid grid-cols-2 gap-4 mb-4">
-          <ExportDetailCustomer selectedOrder={selectedOrder} />
+          <ExportDetailCustomer
+            customerData={
+              transactionId
+                ? transactionData?.productOrder
+                : orderDetailData?.mainOrder
+            }
+          />
 
-          <ExportDetailContact selectedOrder={selectedOrder} />
+          <ExportDetailRecipient
+            orderData={
+              transactionId
+                ? transactionData?.productOrder
+                : orderDetailData?.mainOrder
+            }
+          />
 
-          <ExportDetailRecipient selectedOrder={selectedOrder} />
-
-          <ExportDetailShipping />
+          <ExportDetailShipping
+            exportStatus={transactionData?.productOrder?.exportStatus}
+          />
         </Box>
       )}
 
       <ExportDetailProducts
-        products={products}
-        warehouseConfigId={warehouseConfigId}
-        productsOperator={productsOperator}
-        productOptions={productOptions}
+        exportStatus={transactionData?.productOrder?.exportStatus}
+        warehouseConfig={warehouseConfig}
+        productOptions={
+          transactionId
+            ? transactionData?.productOrderDetail || []
+            : orderDetailData?.mainOrderDetail || []
+        }
       />
 
-      <Box className="flex justify-end my-4">
-        <BaseButton type="button" onClick={handleSubmit(handleCreate)}>
-          Xuất kho
-        </BaseButton>
-      </Box>
+      <ExportDetailButtonsBox
+        exportStatus={transactionData?.productOrder?.exportStatus}
+        orderData={orderDetailData?.mainOrder}
+      />
     </FormProvider>
   );
 };

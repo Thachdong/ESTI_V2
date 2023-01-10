@@ -95,6 +95,8 @@ export function LoginForm() {
         }
 
         if (!ok && error) {
+          console.log(error);
+          
           const errorData = JSON.parse(decodeURIComponent(error as string));
 
           toast.error(errorData?.resultMessage);

@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import _ from "lodash";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useCallback } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
 
 type TProps = {
@@ -21,7 +21,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     inputProps,
     ...restProps
   } = props;
-  
+
   const handleChange = (
     _: SyntheticEvent<Element, Event>,
     value: any | any[]
@@ -33,23 +33,25 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     }
   };
 
-  const renderValue = (val: any | any[]) => {
-    if (!val) return val;
+  const renderValue = useCallback(() => {
+    if (value === undefined) return restProps.multiple ? [] : value;
 
-    if (Array.isArray(val)) {
-      const valueList = val.map((vl) => options.find((o) => o[valueKey] === vl));
+    if (Array.isArray(value)) {
+      const valueList = value.map((vl) =>
+        options.find((o) => o[valueKey] === vl)
+      );
 
       callback?.(valueList);
 
       return valueList;
     } else {
-      const valueObj = options.find((opt) => opt[valueKey] === val) || null;
+      const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
       callback?.(valueObj);
 
       return valueObj;
     }
-  };
+  }, [value, options, callback]);
 
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",
@@ -63,9 +65,9 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     <Autocomplete
       options={options}
       onChange={handleChange}
-      value={renderValue(value)}
+      value={renderValue() || null}
       renderInput={(params) => (
-        <TextField {...params} {...inputProps} value={renderValue(value)} label={label} />
+        <TextField {...params} {...inputProps} value={renderValue() || null} label={label} />
       )}
       {...defaultProps}
     />

@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import _ from "lodash";
 import { Controller } from "react-hook-form";
 import { TFormInputNumberProps } from "~types/form-controlled/form-input-number";
 import { TRenderControllerParams } from "~types/react-hook-form";
@@ -12,15 +13,21 @@ export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
+    const helperTextOpbject = _.isEmpty(errors)
+      ? {}
+      : {
+          helperText: (
+            <ErrorMessage
+              errors={errors}
+              name={controlProps.name}
+              render={({ message }) => message}
+            />
+          ),
+        };
+
     const defaultProps = {
-      helperText: (
-        <ErrorMessage
-          errors={errors}
-          name={controlProps.name}
-          render={({ message }) => message}
-        />
-      ),
       error: !!error,
+      ...helperTextOpbject,
       ...restField,
       ...baseProps,
     };
