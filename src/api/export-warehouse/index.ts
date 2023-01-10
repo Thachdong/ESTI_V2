@@ -21,6 +21,8 @@ export type TWarehouseExport = {
   active: boolean;
   exportPrice: number;
   totalBillPrice: number;
+  paid: number;
+  unPaid: number;
 };
 
 export type TExportWarehouseStatusPayload = {
