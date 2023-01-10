@@ -1,1 +1,1 @@
-export * from "./NoteDialog";
+export * from "./WarehouseImportNoteDialog";

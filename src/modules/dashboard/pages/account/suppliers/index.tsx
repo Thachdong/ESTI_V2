@@ -15,7 +15,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { SupplierDialog } from "~modules-dashboard/components/account";
+import { SuppliersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { supplierColumns } from "./supplierColumns";
@@ -167,7 +167,7 @@ export const SuppliersPage = () => {
         />
       </ContextMenuWrapper>
 
-      <SupplierDialog
+      <SuppliersDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

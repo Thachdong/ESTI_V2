@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
-  ButtonsBox,
+  ImportDetailButtonsBox,
   ImportDetailTable,
-  WarehouseImportGeneralInfo,
-  WarehouseImportSupplierInfo,
-  WarehouseImportViewGeneralInfo,
+  ImportDetailGeneralInfo,
+  ImportDetailSupplierInfo,
+  ImportDetailViewGeneralInfo,
 } from "~modules-dashboard/components";
 import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
 import { useQuery } from "react-query";
@@ -124,7 +124,7 @@ export const ImportDetailPage = () => {
   return (
     <FormProvider {...methods}>
       {query.id ? (
-        <WarehouseImportViewGeneralInfo
+        <ImportDetailViewGeneralInfo
           refetch={refetchTransaction}
           data={transactionData?.warehouseSession}
         />
@@ -140,15 +140,15 @@ export const ImportDetailPage = () => {
               checked={withoutPurchaseInvoice}
             />
           </Box>
-          <WarehouseImportGeneralInfo orderDetail={orderDetail} />
+          <ImportDetailGeneralInfo orderDetail={orderDetail} />
         </>
       )}
 
-      <WarehouseImportSupplierInfo supplierData={orderDetail} />
+      <ImportDetailSupplierInfo supplierData={orderDetail} />
 
       <ImportDetailTable transactionData={transactionData?.warehouseSession} />
 
-      <ButtonsBox
+      <ImportDetailButtonsBox
         importStatus={transactionData?.warehouseSession?.importStatus}
       />
     </FormProvider>

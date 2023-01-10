@@ -10,10 +10,10 @@ import {
   DropdownButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
+import { productColumns } from "~modules-dashboard/pages/warehouse/export-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { productColumns } from "./data";
-import { ProductDialog } from "./ProductDialog";
+import { ExportDetailProductDialog } from "./ExportDetailProductDialog";
 
 type TProps = {
   productOptions: any[];
@@ -249,7 +249,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         <strong> {_format.getVND(totalPrice)}</strong>
       </Typography>
 
-      <ProductDialog
+      <ExportDetailProductDialog
         onClose={onCloseDialog}
         open={!!dialog?.open}
         type={dialog?.type}
@@ -258,13 +258,6 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         productOptions={productOptions}
         productListOperators={productListOperators}
       />
-
-      {/* <DocumentDialog
-        onClose={onCloseDialog}
-        open={!!dialog?.open}
-        type={dialog?.type}
-        defaultValue={defaultValue as any}
-      /> */}
     </Paper>
   );
 };
