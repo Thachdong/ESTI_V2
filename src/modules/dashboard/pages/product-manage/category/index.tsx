@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { category, TCategory } from "src/api";
@@ -15,7 +15,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { CatalogDialog } from "~modules-dashboard/components";
+import { CategoryDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { categoryColumns } from "./categoryColumns";
@@ -164,7 +164,7 @@ export const CategoryPage: React.FC = () => {
         />
       </ContextMenuWrapper>
 
-      <CatalogDialog
+      <CategoryDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

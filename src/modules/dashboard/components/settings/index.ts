@@ -1,3 +1,3 @@
-export * from "./BranchsDialog";
-export * from "./WarehouseConfigDialog";
-export * from "./UnitDialog";
+export * from "./branch-config";
+export * from "./unit-config";
+export * from "./warehouse-config";

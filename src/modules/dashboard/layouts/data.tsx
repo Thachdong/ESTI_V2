@@ -74,7 +74,7 @@ export const menu = [
     childrens: [
       {
         title: "Tra cứu vị trí",
-        link: "product-manage/warehouse",
+        link: "product-manage/storage",
       },
       {
         title: "Tra cứu sản phẩm",
@@ -132,15 +132,15 @@ export const menu = [
     childrens: [
       {
         title: "Cấu hình đơn vị",
-        link: "settings/product-units",
+        link: "settings/unit-config",
       },
       {
         title: "Cấu hình kho",
-        link: "settings/warehouses",
+        link: "settings/warehouse-config",
       },
       {
         title: "Cấu hình chi nhánh",
-        link: "settings/branchs",
+        link: "settings/branch-config",
       },
     ],
   },

@@ -16,8 +16,7 @@ import {
 import { defaultPagination, productTypesStamp } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StampDialog } from "~modules-dashboard/components";
-import { StampHistoryDialog } from "~modules-dashboard/components/product-manage/stamp/HistoryDialog";
+import { StampDialog, StampHistoryDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { stampColumns } from "./data";

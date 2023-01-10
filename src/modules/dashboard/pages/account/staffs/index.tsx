@@ -15,7 +15,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StaffDialog } from "~modules-dashboard/components/account";
+import { StaffsDialog } from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
 import { staffColumns } from "./staffColumns";
 
@@ -169,7 +169,7 @@ export const StaffsPage = () => {
         />
       </ContextMenuWrapper>
 
-      <StaffDialog
+      <StaffsDialog
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         type={dialog.type}

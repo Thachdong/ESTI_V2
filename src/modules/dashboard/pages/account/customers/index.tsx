@@ -14,7 +14,7 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { CustomerDialog } from "~modules-dashboard/components";
+import { CustomersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { CustomerColumns } from "./customerColumns";
@@ -177,7 +177,7 @@ export const CustomersPage = () => {
         />
       </ContextMenuWrapper>
 
-      <CustomerDialog
+      <CustomersDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

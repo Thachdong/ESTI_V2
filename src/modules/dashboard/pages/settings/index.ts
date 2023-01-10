@@ -1,3 +1,3 @@
-export * from "./branchs";
-export * from "./warehousesConfig";
-export * from "./product-units";
+export * from "./branch-config";
+export * from "./warehouse-config";
+export * from "./unit-config";

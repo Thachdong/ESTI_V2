@@ -15,8 +15,8 @@ import {
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
-import { ProductInfoForm } from "./ProductInfoForm";
-import { WebsiteInfoForm } from "./WebsiteInfoForm";
+import { ProductsInfoForm } from "./ProductsInfoForm";
+import { ProductsWebsiteInfoForm } from "./ProductsWebsiteInfoForm";
 
 const infoFields = [
   "productName",
@@ -323,11 +323,11 @@ export const ProductsDialog: React.FC<TDialog> = ({
 
           <FormProvider {...methods}>
             <TabPanelContainForm value="1" index={"1"}>
-              <ProductInfoForm isDisable={disabled} />
+              <ProductsInfoForm isDisable={disabled} />
             </TabPanelContainForm>
 
             <TabPanelContainForm value="2" index={"2"}>
-              <WebsiteInfoForm isDisable={disabled} />
+              <ProductsWebsiteInfoForm isDisable={disabled} />
             </TabPanelContainForm>
           </FormProvider>
         </TabContext>

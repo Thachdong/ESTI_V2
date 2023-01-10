@@ -1,2 +1,2 @@
-export * from "./ProductInfoForm";
+export * from "./ProductsInfoForm";
 export * from "./ProductsDialog";

@@ -16,7 +16,7 @@ import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
-import { NoteDialog } from "~modules-dashboard/components";
+import { WarehouseImportNoteDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { importWarehouseColumns } from "./data";
@@ -168,7 +168,7 @@ export const WarehouseImportPage: React.FC = () => {
         />
       </ContextMenuWrapper>
 
-      <NoteDialog
+      <WarehouseImportNoteDialog
         onClose={() => setDialog({ open: false, type: undefined })}
         open={dialog?.open as boolean}
         defaultValue={defaultValue}
