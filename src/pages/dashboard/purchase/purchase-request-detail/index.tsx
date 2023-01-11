@@ -1,7 +1,7 @@
-import { CreateSupplierPage } from "~modules-dashboard/pages";
+import { PurchaseRequestDetailPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <CreateSupplierPage />;
+const Index:TNextPageWithLayout = () => <PurchaseRequestDetailPage />
 
 Index.displayName = "Tạo đơn mua hàng";
 

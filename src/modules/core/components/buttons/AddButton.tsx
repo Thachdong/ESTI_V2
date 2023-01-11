@@ -5,6 +5,7 @@ import clsx from "clsx";
 export const AddButton: React.FC<ButtonProps> = ({ ref, ...props }) => {
   return (
     <Button
+      variant="contained"
       {...props}
       className={clsx(
         "bg-main-2 hover:bg-[#3182ce] px-3",

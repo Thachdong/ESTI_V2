@@ -30,7 +30,7 @@ export const PurchaseRequestPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
-  
+
   const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
@@ -119,7 +119,13 @@ export const PurchaseRequestPage = () => {
           <SearchBox />
         </Box>
 
-        <AddButton variant="contained">Tạo đơn mua hàng</AddButton>
+        <AddButton
+          onClick={() =>
+            router.push("/dashboard/purchase/purchase-request-detail")
+          }
+        >
+          Tạo đơn mua hàng
+        </AddButton>
       </Box>
 
       <ContextMenuWrapper

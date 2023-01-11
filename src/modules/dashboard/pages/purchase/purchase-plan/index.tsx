@@ -15,6 +15,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
+import { PurchasePlanDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { purchasePlanColumns } from "./data";
@@ -100,11 +101,11 @@ export const PurchasePlanPage = () => {
           id={row?.id}
           items={[
             {
-              action: () => console.log(""),
+              action: () => handleOpenDialog("View"),
               label: "Chi tiết SP cần mua",
             },
             {
-              action: () => handleOpenDialog("Note"),
+              action: () => handleOpenDialog("Clone"),
               label: "Sao chép SP cần mua",
             },
             {
@@ -134,7 +135,7 @@ export const PurchasePlanPage = () => {
           <SearchBox />
         </Box>
 
-        <AddButton variant="contained">Mua SP nhập kho</AddButton>
+        <AddButton variant="contained" onClick={() => handleOpenDialog("Add")}>Mua SP nhập kho</AddButton>
       </Box>
 
       <ContextMenuWrapper
@@ -143,11 +144,11 @@ export const PurchasePlanPage = () => {
           <Menu className="p-0" id="customer_table_menu">
             <Item
               id="view"
-              onClick={() => console.log(defaultValue.current?.id)}
+              onClick={() => handleOpenDialog("View")}
             >
               Chi tiết SP cần mua
             </Item>
-            <Item id="note" onClick={() => handleOpenDialog("Note")}>
+            <Item id="note" onClick={() => handleOpenDialog("Clone")}>
               Sao chép SP cần mua
             </Item>
             <Item id="status" onClick={handleDelete}>
@@ -170,6 +171,14 @@ export const PurchasePlanPage = () => {
           }}
         />
       </ContextMenuWrapper>
+
+      <PurchasePlanDialog
+        onClose={handleCloseDialog}
+        open={dialog.open}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+        refetch={refetch}
+      />
     </Paper>
   );
 };
