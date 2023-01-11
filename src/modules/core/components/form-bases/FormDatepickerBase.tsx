@@ -13,7 +13,6 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
     onChange,
     renderInputProps,
     helperText,
-    className,
     ...restProps
   } = props;
 

@@ -34,17 +34,19 @@ export const purchasePlanColumns: TGridColDef[] = [
 
 export const dialogColumns: TGridColDef[] = [
   {
-    field: "STT",
+    field: "no",
     headerName: "STT",
+    align: "center",
     width: 50
   },
-  { field: "branchCode", headerName: "MÃ SẢN PHẨM", minWidth: 120 },
-  { field: "mainOrderCode", headerName: "MÔ TẢ", minWidth: 120, flex: 1 },
-  { field: "warehouseSessionCode", headerName: "HÃNG SẢN XUẤT", minWidth: 150 },
-  { field: "nameProduct", headerName: "QUY CÁCH", minWidth: 100 },
-  { field: "count", headerName: "ĐƠN VỊ", minWidth: 100 },
-  { field: "codeSupplier", headerName: "SỐ LƯỢNG", minWidth: 100 },
-  { field: "status", headerName: "ĐƠN GIÁ", minWidth: 100, renderCell: ({row}) => _format.getVND(row?.price) },
-  { field: "nameSupplier", headerName: "THÀNH TIỀN", minWidth: 120 },
+  { field: "productCode", headerName: "MÃ SP", minWidth: 120 },
+  { field: "productName", headerName: "TÊN SP", minWidth: 120, flex: 1 },
+  { field: "manufactor", headerName: "HÃNG SẢN XUẤT", minWidth: 150 },
+  { field: "specs", headerName: "QUY CÁCH", minWidth: 100 },
+  { field: "unitName", headerName: "ĐƠN VỊ", minWidth: 100 },
+  { field: "quantity", headerName: "SỐ LƯỢNG", minWidth: 100 },
+  { field: "price", headerName: "ĐƠN GIÁ", minWidth: 100, renderCell: ({row}) => _format.getVND(row?.price) },
+  { field: "vat", headerName: "VAT %", minWidth: 75 },
+  { field: "totalPrice", headerName: "THÀNH TIỀN", minWidth: 120 },
   { field: "note", headerName: "GHI CHÚ", minWidth: 120 },
 ];
