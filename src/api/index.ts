@@ -23,3 +23,4 @@ export * from "./booking-order";
 export * from "./payment-document";
 export * from "./main-order";
 export * from "./bill";
+export * from "./pre-quote";
