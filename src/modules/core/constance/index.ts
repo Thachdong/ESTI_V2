@@ -2,7 +2,7 @@ export const defaultPagination: TPagination = {
   pageSize: 20,
   pageIndex: 1,
   total: 0,
-  totalPage: 0
+  totalPage: 0,
 };
 
 export const genderData = [
@@ -147,21 +147,45 @@ export const warehouseExportStatus = [
   },
 ];
 
-export const purchaseRequestStatus = [
+export const businessAreas = [
   {
-    value: 1,
-    label: "Chưa thực hiện",
+    id: 1,
+    name: "Dược phẩm",
   },
   {
-    value: 2,
-    label: "Đang thực hiện",
+    id: 2,
+    name: "Thực phẩm",
   },
   {
-    value: 3,
-    label: "Hoàn thành",
+    id: 3,
+    name: "Đồ uống",
   },
   {
-    value: 4,
-    label: "Hủy",
+    id: 4,
+    name: "Đơn vị kiểm định",
   },
-]
+  {
+    id: 5,
+    name: "Trung tâm nghiên cứu",
+  },
+  {
+    id: 6,
+    name: "Da giày - may mặc",
+  },
+  {
+    id: 7,
+    name: "Chế phẩm cao su",
+  },
+  {
+    id: 8,
+    name: "Thuỷ sản",
+  },
+  {
+    id: 9,
+    name: "Chế phẩm điện",
+  },
+  {
+    id: 10,
+    name: "Khác",
+  },
+];
