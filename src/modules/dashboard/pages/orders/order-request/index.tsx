@@ -1,86 +1,99 @@
-import { Paper } from "@mui/material";
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
+import { Menu, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
-import router from "next/router";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { Item } from "react-contexify";
 import { useForm } from "react-hook-form";
-import { TWarehouseExport } from "src/api";
+import { useQuery } from "react-query";
+import { mainOrder, TWarehouseExport } from "src/api";
 import {
   AddButton,
+  CardReport,
+  ContextMenuWrapper,
   DataTable,
+  DropdownButton,
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
+import { orderColumns } from "./orderColumns";
 
 export const OrderRequestPage: React.FC = () => {
   const { control, handleSubmit } = useForm<any>({
     mode: "onBlur",
   });
+  const router = useRouter();
+  const { query } = router;
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
+  // DATA FETCHING
+  const { data, isLoading, isFetching, refetch } = useQuery(
+    [
+      "mainOrders",
+      "loading",
+      {
+        ...pagination,
+        ...query,
+      },
+    ],
+    () =>
+      mainOrder
+        .getList({
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          ...query,
+        })
+        .then((res) => res.data),
+    {
+      onSuccess: (data) => {
+        setPagination({ ...pagination, total: data.totalItem });
+      },
+    }
+  );
 
   const columns: GridColDef<TWarehouseExport>[] = [
+    ...orderColumns,
     {
-      field: "code",
-      headerName: "NGÀY TẠO",
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
+      field: "action",
+      headerName: "",
+      minWidth: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => undefined,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: () => undefined,
+              label: "Xóa",
+            },
+          ]}
+        />
+      ),
     },
-    { field: "branchCode", headerName: "MÃ ĐƠN ĐẶT HÀNG" },
-    { field: "mainOrderCode", headerName: "MÃ KHÁCH HÀNG" },
-    { field: "warehouseSessionCode", headerName: "TÊN KHÁCH HÀNG" },
-    { field: "nameProduct", headerName: "TỔNG GIÁ TRỊ" },
-    { field: "count", headerName: "GIÁ TRỊ ĐÃ GIAO" },
-    { field: "codeSupplier", headerName: "GIÁ TRỊ ĐÃ XUẤT HĐ" },
-    { field: "branchId", headerName: "CHI NHÁNH" },
-    { field: "nameSupplier", headerName: "SALES" },
-    { field: "status", headerName: "TRẠNG THÁI" },
-    { field: "action", headerName: "" },
   ];
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
+  const onMouseEnterRow = () => {
+    console.log("hahaa");
+  };
+
   return (
     <>
       <div className="mb-4 grid grid-cols-4 gap-4">
-        <div className="bg-[#c6c2bc] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>CHƯA THỰC HIỆN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0</span>
-          </div>
-        </div>
-        <div className="bg-[#519de0] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>ĐANG THỰC HIỆN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>47</span>
-          </div>
-        </div>
-        <div className="bg-[#48cda1] p-4 rounded-sm h-[100px] font-semibold text-[#fff]">
-          <div className="mb-4 ">
-            <span>HOÀN THÀNH</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>29</span>
-          </div>
-        </div>
-        <div className="bg-[#c686e8] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0 VNĐ</span>
-          </div>
-        </div>
+        <CardReport title={"Chưa thực hiện"} BgImage={"Orange"} value={123} />
+        <CardReport title={"Đang thực hiện"} BgImage={"Green"} value={123} />
+        <CardReport title={"Hoàn thành"} BgImage={"Black"} value={123} />
+        <CardReport title={"Tổng giá trị"} BgImage={"Red"} value={123} />
       </div>
-      <Paper className="p-2 w-full h-full shadow">
+      <Paper className="bgContainer p-2 shadow">
         <div className="flex gap-4 items-center mb-2">
           <div>
             <AddButton
@@ -95,16 +108,33 @@ export const OrderRequestPage: React.FC = () => {
             </AddButton>
           </div>
         </div>
-        <div className="h-[500px]">
+        <ContextMenuWrapper
+          menuId="order_request_table_menu"
+          menuComponent={
+            <Menu className="p-0" id="order_request_table_menu" open={false}>
+              <Item id="view-product" onClick={() => undefined}>
+                Xem chi tiết
+              </Item>
+              <Item id="delete-product" onClick={() => undefined}>
+                Xóa
+              </Item>
+            </Menu>
+          }
+        >
           <DataTable
-            rows={[]}
+            rows={data?.items as []}
             columns={columns}
             gridProps={{
-              // loading: isLoading || isFetching,
+              loading: isLoading || isFetching,
               ...paginationProps,
             }}
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
           />
-        </div>
+        </ContextMenuWrapper>
       </Paper>
     </>
   );

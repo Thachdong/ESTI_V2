@@ -26,7 +26,7 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
       sx={{
         gridTemplateColumns: expand
           ? "250px calc(100vw - 250px)"
-          : "60px calc(100vw - 60px)",
+          : "64px calc(100vw - 64px)",
       }}
     >
       {/* height: 60px */}
@@ -36,9 +36,9 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
         <Header data={data} />
 
         <Box
-          className="bg-[#f5f8fb] flex-grow relative  overflow-y-auto"
+          className="bg-[#F3F6F9] flex-grow relative  overflow-y-auto"
           component="main"
-          sx={{ height: "calc(100vh - 60px - 45px)" }}
+          sx={{ height: "calc(100vh - 64px - 45px)" }}
         >
           {!!isFetching && (
             <Box className="absolute w-full">

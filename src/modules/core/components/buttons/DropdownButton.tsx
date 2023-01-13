@@ -56,8 +56,8 @@ export const DropdownButton: React.FC<TDropdownButton> = ({ items, id }) => {
           "aria-labelledby": buttonId,
         }}
       >
-        {items.map((item, index) => (
-          <MenuItem key={index} onClick={() => handleClickItem(item.action)}>
+        {items?.map((item, index) => (
+          <MenuItem key={index} onClick={() => handleClickItem(item?.action)}>
             {item.label}
           </MenuItem>
         ))}

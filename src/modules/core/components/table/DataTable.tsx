@@ -42,7 +42,16 @@ export const DataTable: React.FC<TDataGrid> = ({
   });
 
   return (
-    <Box className={clsx("data-table-container w-full overflow-auto flex-grow h-full")}>
+    <Box
+      className={clsx(
+        "data-table-container w-full overflow-auto flex-grow h-full"
+      )}
+      // sx={{
+      //   "&:nth-of-type(odd)": {
+      //     backgroundColor: "#aaa",
+      //   },
+      // }}
+    >
       <DataGrid
         headerHeight={hideSearchbar ? 32 : 64}
         getRowHeight={() => "auto"}

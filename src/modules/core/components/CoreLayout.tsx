@@ -6,8 +6,8 @@ export const CoreLayout: React.FC<TLayoutProps> = ({ Page }) => {
 
   switch (layoutName) {
     case "Dashboard":
-      return <DashboardLayout data={data} Page={Page} />
-    
+      return <DashboardLayout data={data} Page={Page} />;
+
     default:
       return <Page />;
   }

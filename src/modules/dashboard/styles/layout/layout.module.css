@@ -4,5 +4,5 @@
 }
 
 .dashboard-layout .page {
-  @apply flex-grow overflow-x-hidden overflow-y-auto p-2;
+  @apply flex-grow overflow-x-hidden overflow-y-auto p-4;
 }

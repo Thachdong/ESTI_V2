@@ -17,6 +17,7 @@ import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
 import { BaseButton } from "~modules-core/components";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 type TProps = {
   expand: boolean;
@@ -48,10 +49,12 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
 
       if (type === "children") {
         return `${pathSlice[2]}/${pathSlice[3]}` === id
-          ? { background: "#5d6c79" }
+          ? { color: "#2684C5" }
           : {};
       } else {
-        return pathSlice[2] === id ? { background: "#5d6c79" } : {};
+        return pathSlice[2] === id
+          ? { background: "#2684C5", color: "#fff", fontWeight: "bold" }
+          : { color: "#6494BE" };
       }
     },
     [pathname]
@@ -68,18 +71,23 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
           <React.Fragment key={index}>
             <ListItem
               className={clsx(
-                styles["menu-items"],
+                // styles["menu-items"],
                 styles["parent-menu-items"]
               )}
               disablePadding
-              sx={{ ...renderActiveStyle(item.id, "parent") }}
             >
-              <ListItemButton onClick={() => handleCollapse(item.id)}>
-                <ListItemIcon className="text-white min-w-[32px] w-8">
-                  {item.icon}
-                </ListItemIcon>
+              <ListItemButton
+                onClick={() => handleCollapse(item.id)}
+                sx={{ ...renderActiveStyle(item.id, "parent") }}
+                className={clsx(styles["menu-items"], "mx-2 rounded px-2")}
+              >
+                {/* <ListItemIcon className="text-[#6494BE] min-w-[32px] w-8"> */}
+                {item.icon}
+                {/* </ListItemIcon> */}
 
-                <span className="flex-grow text-sm py-2">{item.title}</span>
+                <span className="flex-grow text-sm py-2 font-semibold text-white pl-2">
+                  {item.title}
+                </span>
 
                 {collapses.includes(item.id) ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
@@ -89,14 +97,15 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
               <List className="p-0">
                 {item.childrens.map((child) => (
                   <Link href={`/dashboard/${child.link}`} key={child.link}>
-                    <a className="w-full d-block no-underline text-white">
+                    <a className="w-full d-block no-underline text-[#fff] ">
                       <ListItem
                         disablePadding
-                        className={clsx(styles["menu-items"])}
+                        className={clsx("hover:text-[#2684C5]")}
                         sx={{ ...renderActiveStyle(child.link, "children") }}
                       >
-                        <ListItemButton>
-                          <span className="text-sm pl-[32px] py-2">
+                        <ListItemButton className="flex items-center  pl-[24px]">
+                          <FiberManualRecordIcon className="w-2 h-2" />
+                          <span className="text-sm py-2 pl-4 font-semibold">
                             {child.title}
                           </span>
                         </ListItemButton>
@@ -116,7 +125,7 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
   return (
     <Box
       className={styles["sidebar"]}
-      sx={{ width: expand ? "250px" : "60px" }}
+      sx={{ width: expand ? "250px" : "64px" }}
     >
       <Box className={styles["logo-box"]}>
         {!expand ? (
@@ -128,12 +137,16 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
         <BaseButton
           variant="text"
           onClick={() => setExpand(!expand)}
-          className={clsx(styles["expand-btn"], "min-w-[32px]")}
+          className={clsx(
+            styles["expand-btn"],
+            "min-w-[32px]",
+            expand && "bg-[#599F50] text-white"
+          )}
         >
           <MenuIcon className="w-[30px] h-[40px]" />
         </BaseButton>
       </Box>
-
+      <Box className={styles["avatar-box"]}></Box>
       {renderMenu()}
     </Box>
   );

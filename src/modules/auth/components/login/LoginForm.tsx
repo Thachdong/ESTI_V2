@@ -53,14 +53,14 @@ export function LoginForm() {
 
   // SIDE EFFECTS
   React.useEffect(() => {
-    const {callbackUrl} = router.query;
+    const { callbackUrl } = router.query;
 
-    const {accessToken, expires} = session.data || {};
+    const { accessToken, expires } = session.data || {};
 
     const isTokenExpired = moment(expires).isBefore();
 
     if (accessToken && !isTokenExpired) {
-      router.push(callbackUrl as string || "/dashboard/quotations/requests");
+      router.push((callbackUrl as string) || "/dashboard/quotations/requests");
     }
   }, [session]);
 
@@ -89,14 +89,14 @@ export function LoginForm() {
 
           toast.success("Đăng nhập thành công!");
 
-          const {accessToken} = await getSession() || {};
+          const { accessToken } = (await getSession()) || {};
 
           accessToken && setBearerToken(accessToken);
         }
 
         if (!ok && error) {
           console.log(error);
-          
+
           const errorData = JSON.parse(decodeURIComponent(error as string));
 
           toast.error(errorData?.resultMessage);
@@ -110,8 +110,12 @@ export function LoginForm() {
   );
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Paper className="w-full grid gap-4 justify-center p-8 mt-10">
+    <Container
+      component="main"
+      maxWidth="sm"
+      className="h-screen w-screen flex items-center"
+    >
+      <Paper className="w-full grid gap-4 p-8 shadow-none bg-[#f4f6f7] justify-center">
         <Avatar className="mx-auto" sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
@@ -142,7 +146,11 @@ export function LoginForm() {
             }}
           />
 
-          <BaseButton type="submit" isSubmitting={isSubmitting}>
+          <BaseButton
+            type="submit"
+            isSubmitting={isSubmitting}
+            className="bg-[#214d73] font-bold"
+          >
             Đăng nhập
           </BaseButton>
 
