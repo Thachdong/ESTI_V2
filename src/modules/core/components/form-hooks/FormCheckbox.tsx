@@ -1,5 +1,4 @@
 import { Controller } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { TFormCheckbox } from "~types/form-controlled/form-checkbox";
@@ -30,6 +29,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
       <FormControlLabel
         control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
+        className={textFieldProps?.className}
         {...labelProps}
       />
     );

@@ -9,6 +9,7 @@ module.exports = {
       error: "#d32f2f",
       info: "#0288d1",
       white: "#fff",
+      grey: "#747474",
       "grey-2": "rgba(0, 0, 0, 0.12)",
       "grey-3": "#e0e0e0",
       main: "#2684C5",

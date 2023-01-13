@@ -13,8 +13,10 @@ export const AddButton: React.FC<ButtonProps> = ({ ref, ...props }) => {
         props?.className
       )}
     >
-      <AddIcon className="mr-2 " />
-      <span className="truncate">{props?.children}</span>
+      <AddIcon />
+      {
+        props?.children && <span className="truncate ml-2">{props?.children}</span>
+      }
     </Button>
   );
 };

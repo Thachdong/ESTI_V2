@@ -6,7 +6,7 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     fullWidth: true,
     variant: "outlined",
     size: "small",
-    value: props.value || null,
+    value: props.value || "",
     ...props,
   };
 

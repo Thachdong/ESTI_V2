@@ -1,4 +1,4 @@
-export * from "./quotations";
+export * from "./quotation";
 export * from "./settings";
 export * from "./account";
 export * from "./warehouse";
