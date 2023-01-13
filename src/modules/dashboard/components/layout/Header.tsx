@@ -14,7 +14,6 @@ type TProps = {
 
 export const Header: React.FC<TProps> = ({ data }) => {
   const { title, pageName } = data || {};
-
   const { query } = useRouter();
 
   const { data: warehouseImportDetail } = useQuery(
@@ -68,18 +67,30 @@ export const Header: React.FC<TProps> = ({ data }) => {
       <Typography
         component="h1"
         variant="h5"
-        className="flex-grow pl-12 text-xl font-medium"
+        className="flex-grow pl-[64px] text-xl font-medium"
       >
-        {title || extractedTitle}
+        {title ? (
+          <>
+            <div className="flex items-center">
+              <span>{title.split("/")[0]}</span>
+              {title.split("/")[1] ? (
+                <span className="text-[#DDDDDD] !font-normal px-2">/</span>
+              ) : null}
+              <span className="text-main-2">{title.split("/")[1]}</span>
+            </div>
+          </>
+        ) : (
+          <>{extractedTitle}</>
+        )}
       </Typography>
 
       <LoadingButton
-        sx={{ height: "34px " }}
+        sx={{ height: "44px " }}
         variant="contained"
         color="error"
         startIcon={<PowerSettingsNewRoundedIcon />}
         onClick={() => signOut()}
-        className="shadow bg-[#E53E3E] font-semibold text-sm p-3"
+        className="shadow-none text-[#E53E3E] bg-[#fde9e9] font-bold text-sm p-4"
       >
         Đăng xuất
       </LoadingButton>

@@ -1,11 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 import { TGridColDef } from "~types/data-grid";
 import { useRouter } from "next/router";
@@ -259,8 +254,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
   return (
     <Box className="w-full h-[64px]">
-      <Box className="flex items-center bg-main text-[#fff] h-[32px] pl-1 pr-3">
-        <Typography className="uppercase text-sm mr-1">
+      <Box className="flex items-center bg-[#9FADBB] text-[#fff] h-[40px] pl-1 pr-3 ">
+        <Typography className="uppercase text-sm mr-1 font-semibold">
           {colDef.headerName}
         </Typography>
 

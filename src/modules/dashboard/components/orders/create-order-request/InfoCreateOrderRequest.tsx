@@ -10,7 +10,6 @@ import {
 } from "~modules-core/components";
 import AddIcon from "@mui/icons-material/Add";
 import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
-import { CustomerDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 import { branchs, customer, preQuote, staff } from "src/api";
 import { useQuery } from "react-query";
@@ -20,6 +19,7 @@ import {
   paymentExpiredIn,
   paymentTypes,
 } from "~modules-core/constance";
+import { CustomersDialog } from "~modules-dashboard/components";
 
 type TProps = {
   control: any;
@@ -181,7 +181,7 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   >
                     <AddIcon />
                   </BaseButton>
-                  <CustomerDialog
+                  <CustomersDialog
                     onClose={onDialogClose}
                     open={dialog.open}
                     type={dialog.type}

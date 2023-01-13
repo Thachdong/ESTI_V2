@@ -11,10 +11,10 @@ type TProps = {
 
 export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
   const { pathname } = useRouter();
+  const pathSlice = pathname.split("/");
 
   const renderActiveStyle = useCallback(
     (id: string, type: "children" | "parent") => {
-      const pathSlice = pathname.split("/");
       // [0]: domain;
       // [1]: dashboard;
       // [2]: parentUrl;
@@ -22,10 +22,12 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
 
       if (type === "children") {
         return `${pathSlice[2]}/${pathSlice[3]}` === id
-          ? { background: "#5d6c79", color: "#fff" }
+          ? { background: "#2684C5", color: "#fff" }
           : {};
       } else {
-        return pathSlice[2] === id ? { background: "#5d6c79" } : {};
+        return pathSlice[2] === id
+          ? { background: "#2684C5", color: "#fff" }
+          : { color: "#6494BE" };
       }
     },
     [pathname]
@@ -38,14 +40,26 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
           <ListItem
             disablePadding
             className={clsx(
-              styles["menu-items"],
+              // styles["menu-items"],
               styles["expand-items"],
-              "relative h-[52px] shadow-lg !border !border-[#8c8888]"
+              "relative shadow-lg h-[64px]"
             )}
-            sx={{ ...renderActiveStyle(item?.id, "parent") }}
           >
-            <ListItemButton>
-              <ListItemIcon className="text-white">{item.icon}</ListItemIcon>
+            <ListItemButton
+              sx={{ ...renderActiveStyle(item?.id, "parent") }}
+              className={clsx(
+                styles["menu-items"],
+                "h-[48px] w-[64px] px-3 mx-2 rounded "
+              )}
+            >
+              {/* <ListItemIcon
+                className={clsx(
+                  pathSlice[2] === item?.id ? "text-white" : "text-[#6494BE]",
+                  "!text-base"
+                )}
+              > */}
+              {item.icon}
+              {/* </ListItemIcon> */}
             </ListItemButton>
 
             {
@@ -63,7 +77,10 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
                   <ListItem
                     key={child?.link}
                     disablePadding
-                    className={clsx(styles["menu-items"], "text-sm")}
+                    className={clsx(
+                      styles["menu-items"],
+                      "text-sm font-semibold"
+                    )}
                     sx={{ ...renderActiveStyle(child.link, "children") }}
                   >
                     <ListItemButton>

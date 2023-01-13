@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { useCallback, useState } from "react";
 import { exportWarehouse, TExportWarehouseStatusPayload } from "src/api";
 import { BaseButton, Dialog } from "~modules-core/components";
-import { purchaseRequestStatus } from "~modules-core/constance";
+// import { purchaseRequestStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -14,7 +14,7 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
   refetch,
 }) => {
   const [status, setStatus] = useState(defaultValue?.status);
-
+  const purchaseRequestStatus: any = [];
   const mutateUpdate = useMutation(
     (payload: TExportWarehouseStatusPayload) =>
       exportWarehouse.updateStatus(payload),
@@ -37,7 +37,7 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
       });
     }
   }, [defaultValue?.id, status]);
-  
+
   return (
     <Dialog
       open={open}
@@ -50,7 +50,7 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
         defaultValue={defaultValue?.status}
         onChange={(e) => setStatus(e.target.value)}
       >
-        {purchaseRequestStatus.map((status) => (
+        {purchaseRequestStatus?.map((status: any) => (
           <FormControlLabel
             key={status.value}
             value={status.value}

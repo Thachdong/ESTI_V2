@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 import { Menu, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Item } from "react-contexify";
@@ -9,6 +12,7 @@ import { useQuery } from "react-query";
 import { mainOrder, TWarehouseExport } from "src/api";
 import {
   AddButton,
+  CardReport,
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
@@ -84,38 +88,10 @@ export const OrderRequestPage: React.FC = () => {
   return (
     <>
       <div className="mb-4 grid grid-cols-4 gap-4">
-        <div className="bg-[#c6c2bc] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>CHƯA THỰC HIỆN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0</span>
-          </div>
-        </div>
-        <div className="bg-[#519de0] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>ĐANG THỰC HIỆN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>47</span>
-          </div>
-        </div>
-        <div className="bg-[#48cda1] p-4 rounded-sm h-[100px] font-semibold text-[#fff]">
-          <div className="mb-4 ">
-            <span>HOÀN THÀNH</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>29</span>
-          </div>
-        </div>
-        <div className="bg-[#c686e8] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0 VNĐ</span>
-          </div>
-        </div>
+        <CardReport title={"Chưa thực hiện"} BgImage={"Orange"} value={123} />
+        <CardReport title={"Đang thực hiện"} BgImage={"Green"} value={123} />
+        <CardReport title={"Hoàn thành"} BgImage={"Black"} value={123} />
+        <CardReport title={"Tổng giá trị"} BgImage={"Red"} value={123} />
       </div>
       <Paper className="bgContainer p-2 shadow">
         <div className="flex gap-4 items-center mb-2">
