@@ -5,7 +5,7 @@ const nextConfig = {
   redirects: async() => ([
     {
       source: '/',
-      destination: '/dashboard/quotations/requests',
+      destination: '/dashboard/quotation/quote-list',
       permanent: true,
     },
   ])

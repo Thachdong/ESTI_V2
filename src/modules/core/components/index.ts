@@ -11,3 +11,4 @@ export * from "./form-hooks/FormAvatar";
 export * from "./tabpanel-contain-form";
 export * from "./ContextMenuWrapper";
 export * from "./card-base";
+export * from "./FormCustomer";

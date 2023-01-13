@@ -13,5 +13,8 @@ export const quoteRequest = {
       {}
     ),
 
-  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
 };
