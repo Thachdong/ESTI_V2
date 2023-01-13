@@ -22,3 +22,4 @@ export * from "./purchase-order";
 export * from "./purchase-plan";
 export * from "./booking-order";
 export * from "./payment-document";
+export * from "./quote-request";

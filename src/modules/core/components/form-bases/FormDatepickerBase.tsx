@@ -41,7 +41,6 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
                 helperText={helperText}
                 {...params}
                 {...renderInputProps}
-                {...restProps}
               />
             )
       }

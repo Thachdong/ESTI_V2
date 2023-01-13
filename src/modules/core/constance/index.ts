@@ -2,8 +2,26 @@ export const defaultPagination: TPagination = {
   pageSize: 20,
   pageIndex: 1,
   total: 0,
-  totalPage: 0
+  totalPage: 0,
 };
+
+export const quoteOrderStatus = [
+  { value: 0, label: "Chưa thực hiện" },
+  { value: 1, label: "Đang thực hiện" },
+  { value: 2, label: "Kết chuyển báo cáo" },
+  { value: 3, label: "Hủy yêu cầu" },
+  { value: 4, label: "Tạm ngưng" },
+  { value: 5, label: "Hủy báo giá" },
+];
+
+export const quoteStatus = [
+  { value: 1, label: "Chưa báo giá" },
+  { value: 2, label: "Đã báo giá" },
+  { value: 3, label: "Đề nghị báo giá lại" },
+  { value: 4, label: "Kết chuyển đơn hàng" },
+  { value: 5, label: "Từ chối" },
+  { value: 6, label: "Hủy" },
+];
 
 export const genderData = [
   { id: 1, name: "Nam" },
@@ -164,4 +182,4 @@ export const purchaseRequestStatus = [
     value: 4,
     label: "Hủy",
   },
-]
+];

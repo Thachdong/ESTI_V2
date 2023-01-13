@@ -14,11 +14,11 @@ export const menu = [
     childrens: [
       {
         title: "Đơn yêu cầu",
-        link: "quotations/requests",
+        link: "quotation/quote-request",
       },
       {
         title: "Đơn báo giá",
-        link: "quotations",
+        link: "quotation/quote-list",
       },
     ],
   },
