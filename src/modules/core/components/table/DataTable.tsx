@@ -18,8 +18,8 @@ const defaultDataGridProps: Partial<DataGridProps> = {
   // filterMode: "server",
   paginationMode: "server",
   // sortingMode: "server",
-  showColumnRightBorder: true,
-  showCellRightBorder: true,
+  // showColumnRightBorder: true,
+  // showCellRightBorder: true,
 };
 
 export const DataTable: React.FC<TDataGrid> = ({
@@ -46,11 +46,6 @@ export const DataTable: React.FC<TDataGrid> = ({
       className={clsx(
         "data-table-container w-full overflow-auto flex-grow h-full"
       )}
-      // sx={{
-      //   "&:nth-of-type(odd)": {
-      //     backgroundColor: "#aaa",
-      //   },
-      // }}
     >
       <DataGrid
         headerHeight={hideSearchbar ? 32 : 64}

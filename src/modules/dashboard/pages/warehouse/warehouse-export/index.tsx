@@ -51,11 +51,9 @@ export const WarehouseExportPage: React.FC = () => {
   }, []);
 
   const onNavigationToDetail = useCallback(() => {
-    const {id} = defaultValue.current || {};
+    const { id } = defaultValue.current || {};
 
-    router.push(
-      `/dashboard/warehouse/export-detail?transactionId=${id}`
-    );
+    router.push(`/dashboard/warehouse/export-detail?transactionId=${id}`);
   }, [router, defaultValue]);
 
   // DATA FETCHING
@@ -133,9 +131,7 @@ export const WarehouseExportPage: React.FC = () => {
         <Box className="text-right mb-2">
           <AddButton
             variant="contained"
-            onClick={() =>
-              router.push("/dashboard/warehouse/export-detail")
-            }
+            onClick={() => router.push("/dashboard/warehouse/export-detail")}
           >
             Tạo phiếu xuất kho
           </AddButton>
@@ -144,7 +140,7 @@ export const WarehouseExportPage: React.FC = () => {
         <ContextMenuWrapper
           menuId="warehouse_import_menu"
           menuComponent={
-            <Menu className="p-0" id="warehouse_import_menu">
+            <Menu className="font-bold text-sm p-2" id="warehouse_import_menu">
               <Item id="view-detail" onClick={onNavigationToDetail}>
                 Chi tiết xuất kho
               </Item>

@@ -6,7 +6,11 @@
   @apply flex flex-col w-full h-full shadow overflow-y-auto p-2;
 }
 
-.disable-form-input,
+input {
+  outline: none !important;
+}
+
+input :t .disable-form-input,
 .Mui-disabled:not(button) {
   background: #f0f0f0 !important;
   cursor: not-allowed !important;
@@ -91,4 +95,25 @@
 .data-table-container
   .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* handle table */
+.MuiDataGrid-columnHeader .MuiDataGrid-columnSeparator svg {
+  display: none !important;
+}
+
+.MuiDataGrid-columnHeader {
+  outline: none !important;
+}
+
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row:nth-child(2n) {
+  background-color: #f3f6f9 !important;
+}
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row {
+  border: none !important;
+  cursor: pointer !important;
+}
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-cell {
+  border: none !important;
+  outline: none !important;
 }

@@ -43,7 +43,7 @@ export const DropdownButton: React.FC<TDropdownButton> = ({ items, id }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        className="w-[32px] min-w-[32px] h-[32px] rounded-full text-[#000]"
+        className="w-[32px] min-w-[32px] h-[32px] text-[#000]"
       >
         <DotsIcon />
       </Button>
@@ -57,7 +57,11 @@ export const DropdownButton: React.FC<TDropdownButton> = ({ items, id }) => {
         }}
       >
         {items?.map((item, index) => (
-          <MenuItem key={index} onClick={() => handleClickItem(item?.action)}>
+          <MenuItem
+            key={index}
+            className="font-semibold text-sm text-[#061E33]"
+            onClick={() => handleClickItem(item?.action)}
+          >
             {item.label}
           </MenuItem>
         ))}
