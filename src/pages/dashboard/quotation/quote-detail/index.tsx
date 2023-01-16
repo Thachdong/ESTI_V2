@@ -1,6 +1,7 @@
+import { QuoteDetailPage } from "~modules-dashboard/pages/quotation/quote-detail";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <div>Tạo báo giá</div>
+const Index: TNextPageWithLayout = () => <QuoteDetailPage />
 
 Index.displayName = "Yêu cầu báo giá";
 

@@ -1,13 +1,14 @@
+import { QuoteListPage } from "~modules-dashboard/pages/quotation/quote-list";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <div>Danh sách báo giá</div>
+const Index: TNextPageWithLayout = () => <QuoteListPage />
 
-Index.displayName = "Yêu cầu báo giá";
+Index.displayName = "Đơn báo giá";
 
 Index.layoutName = "Dashboard";
 
 Index.data = {
-    title: "BÁO GIÁ / YÊU CẦU BÁO GIÁ"
+    title: "BÁO GIÁ / ĐƠN BÁO GIÁ"
   }
 
 export default Index;

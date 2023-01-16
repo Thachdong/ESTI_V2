@@ -15,12 +15,15 @@ export const quoteOrderStatus = [
 ];
 
 export const quoteStatus = [
-  { value: 1, label: "Chưa báo giá" },
-  { value: 2, label: "Đã báo giá" },
-  { value: 3, label: "Đề nghị báo giá lại" },
-  { value: 4, label: "Kết chuyển đơn hàng" },
-  { value: 5, label: "Từ chối" },
-  { value: 6, label: "Hủy" },
+  { value: 0, label: "Chưa báo giá" },
+  { value: 1, label: "Đã báo giá" },
+  { value: 2, label: "Báo giá lại" },
+  { value: 3, label: "Kết chuyển đơn hàng" },
+  { value: 4, label: "Từ chối" },
+  { value: 5, label: "Hủy báo giá" },
+  { value: 6, label: "Hủy yêu cầu" },
+  { value: 7, label: "Quá hạn" },
+  { value: 8, label: "Tạm ngưng" },
 ];
 
 export const genderData = [

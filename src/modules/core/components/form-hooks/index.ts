@@ -8,3 +8,4 @@ export * from "./FormTextEditor";
 export * from "./FormUploadFiles";
 export * from "./FormCheckbox";
 export * from "./FormSelect";
+export * from "./FormInputNumber";
