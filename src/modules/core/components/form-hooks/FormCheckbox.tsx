@@ -31,6 +31,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
         control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
         {...labelProps}
+        className="!border !border-[#ffff] !rounded"
       />
     );
   };

@@ -25,6 +25,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     fetcherParams,
     fetcher,
     inputProps,
+    placeholder = "",
     ...restProps
   } = props;
 
@@ -56,9 +57,8 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
       onSuccess: (data) => {
         const { items, totalItem, totalPage } = data;
 
-        const newOptions = pagination.pageIndex === 1
-          ? items
-          : [...options, ...items];
+        const newOptions =
+          pagination.pageIndex === 1 ? items : [...options, ...items];
 
         const uniqItems = _.uniqBy(newOptions, (item: any) => item?.[valueKey]);
 
@@ -105,7 +105,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     if (reason === "input") {
       setSearchContent(value);
 
-      setPagination({...pagination, pageIndex: 1})
+      setPagination({ ...pagination, pageIndex: 1 });
     } else {
       setSearchContent(null);
     }
@@ -134,25 +134,30 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
         ),
         error: !!error,
       },
-      label: updateLabel,
+      label: placeholder,
       ...restField,
       ...restProps,
     };
 
     return (
-      <AutoCompleteBase
-        options={options}
-        loading={isLoading || isFetching}
-        loadingText="Đang tải ..."
-        filterOptions={(x) => x}
-        onInputChange={onInputChange}
-        ListboxProps={{
-          className: "max-h-[325px]",
-          onScroll: triggerLoadMoreOptions,
-        }}
-        getOptionLabel={(option) => option?.[labelKey]}
-        {...defaultProps}
-      />
+      <>
+        <div className="text-[#747474] font-medium">
+          <p className="my-2">{updateLabel}</p>
+        </div>
+        <AutoCompleteBase
+          options={options}
+          loading={isLoading || isFetching}
+          loadingText="Đang tải ..."
+          filterOptions={(x) => x}
+          onInputChange={onInputChange}
+          ListboxProps={{
+            className: "max-h-[325px] !border-none",
+            onScroll: triggerLoadMoreOptions,
+          }}
+          getOptionLabel={(option) => option?.[labelKey]}
+          {...defaultProps}
+        />
+      </>
     );
   };
 

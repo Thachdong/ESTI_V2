@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Typography } from "@mui/material";
 import { GridColumnHeaderParams } from "@mui/x-data-grid";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
@@ -109,7 +110,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             className={clsx(
               sortMode === "asc" && sortMode !== null
                 ? "text-[#fff]"
-                : "text-[#a1a1a1]",
+                : "text-[#061E33]",
               "cursor-pointer !font-bold mr-1"
             )}
           >
@@ -120,8 +121,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             className={clsx(
               sortMode === "desc" && sortMode !== null
                 ? "text-[#fff]"
-                : "text-[#a1a1a1]",
-              "cursor-pointer"
+                : "text-[#061E33]",
+              "cursor-pointer !font-bold"
             )}
           >
             &#8595;
@@ -198,7 +199,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             id={field + "_searchbox"}
             onChange={handleInputChange}
             value={filterData.searchTerm}
-            className="w-10/12 border-0"
+            className="w-10/12 border-0 bg-[#F3F6F9]"
           >
             {options?.map(({ value, label }) => (
               <option key={value} value={value}>
@@ -216,7 +217,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
               variant: "standard",
             }}
             inputFormat="DD/MM/YYYY"
-            inputProps={{ sx: { fontSize: "14px" } }}
+            inputProps={{
+              sx: { fontSize: "14px" },
+            }}
             InputProps={{
               disableUnderline: true,
             }}
@@ -230,14 +233,20 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             id={field + "_searchbox"}
             onChange={handleInputChange}
             value={filterData.searchTerm}
-            className="w-10/12 border-0"
+            className="w-10/12 border-0 rounded !bg-[#F3F6F9]"
           />
         );
     }
   };
 
   const renderFilterBox = useCallback(() => {
-    if (!isFilter || field === "action") return <></>;
+    if (!isFilter || field === "action")
+      return (
+        <>
+          {" "}
+          <span className="!bg-[#F3F6F9] w-full h-[40px]"> </span>{" "}
+        </>
+      );
 
     return (
       <>
@@ -246,6 +255,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           type="checkbox"
           onChange={handleCheckbox}
           checked={filterData.isCheck}
+          className="w-[16px] h-[16px] cursor-pointer !bg-[#F3F6F9]"
         />
         {renderInputTagBaseOnType()}
       </>
@@ -253,15 +263,15 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   }, [isFilter, type, filterData]);
 
   return (
-    <Box className="w-full h-[64px]">
-      <Box className="flex items-center bg-[#9FADBB] text-[#fff] h-[40px] pl-1 pr-3 ">
+    <Box className="w-full h-[70px]">
+      <Box className="flex items-center bg-[#9FADBB] text-[#fff] h-[40px] pl-1 pr-3 !border-0 !min-w-[200px]">
         <Typography className="uppercase text-sm mr-1 font-semibold">
           {colDef.headerName}
         </Typography>
 
         {renderSortIcons()}
       </Box>
-      <Box className="flex items-center bg-[#fff] !w-full h-[32px] px-1">
+      <Box className="flex items-center bg-[#F3F6F9] !w-full py-[2px]">
         {renderFilterBox()}
       </Box>
     </Box>

@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { Bill, TWarehouseExport } from "src/api";
 import {
   AddButton,
+  CardReport,
   ContextMenuWrapper,
   DataTable,
   generatePaginationProps,
@@ -62,38 +63,22 @@ export const BillListPage: React.FC = () => {
   return (
     <>
       <div className="mb-4 grid grid-cols-4 gap-4 ">
-        <div className="bg-[#c6c2bc] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ HOÁ ĐƠN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0</span>
-          </div>
-        </div>
-        <div className="bg-[#519de0] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ ĐÃ THANH TOÁN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>47</span>
-          </div>
-        </div>
-        <div className="bg-[#48cda1] p-4 rounded-sm h-[100px] font-semibold text-[#fff]">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ CÒN PHẢI THU</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>29</span>
-          </div>
-        </div>
-        <div className="bg-[#c686e8] p-4 rounded-sm h-[100px] font-semibold text-white">
-          <div className="mb-4 ">
-            <span>TỔNG GIÁ TRỊ QUÁ HẠN</span>
-          </div>
-          <div className="flex justify-end text-xl">
-            <span>0 VNĐ</span>
-          </div>
-        </div>
+        <CardReport
+          title={"TỔNG GIÁ TRỊ HOÁ ĐƠN"}
+          BgImage={"Orange"}
+          value={0}
+        />
+        <CardReport
+          title={"TỔNG GIÁ TRỊ ĐÃ THANH TOÁN"}
+          BgImage={"Green"}
+          value={0}
+        />
+        <CardReport
+          title={"TỔNG GIÁ TRỊ CÒN PHẢI THU"}
+          BgImage={"Black"}
+          value={0}
+        />
+        <CardReport title={"TỔNG GIÁ TRỊ QUÁ HẠN"} BgImage={"Red"} value={0} />
       </div>
       <Paper className="p-2 w-full h-full shadow bgContainer">
         <div className="flex gap-4 items-center mb-2">

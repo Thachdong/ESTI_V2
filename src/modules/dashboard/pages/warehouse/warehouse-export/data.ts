@@ -77,7 +77,7 @@ export const warehouseExportColumns: TGridColDef<TWarehouseExport>[] = [
   {
     field: "exportStatusName",
     headerName: "TRẠNG THÁI",
-    minWidth: 120,
+    minWidth: 150,
     type: "select",
     options: warehouseExportStatus,
     sortAscValue: 19,

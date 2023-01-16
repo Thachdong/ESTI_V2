@@ -146,7 +146,13 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
           <MenuIcon className="w-[30px] h-[40px]" />
         </BaseButton>
       </Box>
-      <Box className={styles["avatar-box"]}></Box>
+      <Box className={clsx(!expand ? "hidden" : styles["avatar-box"])}>
+        <Box className={clsx("!h-fit text-center")}>
+          <Image src="/Avatar.jpeg" alt="Esti" width={100} height={100} />
+          <p className="m-0 text-xs">Director - Director</p>
+          <p className="m-0 pt-2 font-medium text-sm">ADMIN-004</p>
+        </Box>
+      </Box>
       {renderMenu()}
     </Box>
   );

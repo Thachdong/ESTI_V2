@@ -43,8 +43,8 @@ export const CardReport: React.FC<TProps> = ({
         />
       </div>
       <div className="absolute z-40 top-4 left-5 grid font-bold uppercase">
-        <span className="mb-[18px] text-xl">{title}</span>
-        <span className="text-4xl">{value}</span>
+        <span className="mb-[16px] text-base">{title}</span>
+        <span className="text-3xl">{value}</span>
       </div>
     </div>
   );

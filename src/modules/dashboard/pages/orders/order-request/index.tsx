@@ -59,7 +59,7 @@ export const OrderRequestPage: React.FC = () => {
     ...orderColumns,
     {
       field: "action",
-      headerName: "",
+      headerName: "action",
       minWidth: 50,
       renderCell: ({ row }) => (
         <DropdownButton

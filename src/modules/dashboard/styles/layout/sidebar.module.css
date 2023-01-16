@@ -20,6 +20,10 @@
 
 .sidebar .avatar-box {
   height: 190px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  color: #fff;
 }
 
 .sidebar .expand-btn {
