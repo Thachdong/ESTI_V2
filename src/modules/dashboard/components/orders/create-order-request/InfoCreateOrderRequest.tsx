@@ -103,21 +103,18 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
   return (
     <div>
       <Paper className="shadow-none p-4 mt-4 grid grid-cols-2 gap-x-4">
-        <div className="font-bold text-sm col-span-2 mb-4">
+        <div className="font-bold text-sm col-span-2 mb-1">
           <span>THÔNG TIN CHUNG</span>
         </div>
         {!checkConfirm && (
           <div className="flex items-center">
-            <div className="w-[20%] font-semibold text-sm">
-              <span>Đơn báo giá:</span>
-            </div>
-            <div className="w-[80%]">
+            <div className="w-[100%]">
               <FormSelectAsync
                 controlProps={{
                   name: "preQuoteCode",
                   control,
                 }}
-                label=""
+                label="Đơn báo giá"
                 fetcher={preQuote.getList}
                 labelKey="preQuoteCode"
                 callback={onSelectPrequote}
@@ -127,16 +124,13 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
         )}
 
         <div className="flex items-center">
-          <div className="w-[20%] font-semibold text-sm">
-            <span>CN thực hiện:</span>
-          </div>
-          <div className="w-[80%]">
+          <div className="w-[100%]">
             <FormSelectAsync
               controlProps={{
                 name: "Branchs",
                 control,
               }}
-              label=""
+              label="CN thực hiện"
               labelKey="name"
               fetcher={branchs.getList}
             />
