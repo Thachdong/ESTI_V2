@@ -35,7 +35,7 @@ export const DataTable: React.FC<TDataGrid> = ({
     if (hideSearchbar) {
       delete column["renderHeader"];
 
-      column.headerClassName = "bg-main text-white px-2";
+      column.headerClassName = "!bg-[#9FADBB] text-white px-2 font-bold";
     }
 
     return column;

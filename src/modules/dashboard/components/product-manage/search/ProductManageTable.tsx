@@ -134,7 +134,7 @@ export const ProductManageTable = () => {
   ];
 
   const handleDelete = useCallback(async () => {
-    const {id, productName} = defaultValue.current || {};
+    const { id, productName } = defaultValue.current || {};
 
     if (!id) {
       toast.error("Có lỗi xảy ra, vui lòng thử lại!");
@@ -205,7 +205,7 @@ export const ProductManageTable = () => {
             },
           }}
           getRowId={(row) => row.rowId}
-          className="grouping-column"
+          className="grouping-column "
         />
       </ContextMenuWrapper>
 

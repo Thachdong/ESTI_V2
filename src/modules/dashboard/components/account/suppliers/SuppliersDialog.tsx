@@ -8,6 +8,7 @@ import {
   BaseButton,
   Dialog,
   FormAvatar,
+  FormDatepicker,
   TabPanelContainForm,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
@@ -238,6 +239,9 @@ export const SuppliersDialog: React.FC<TDialog> = ({
                 label="Ảnh đại diện của nhà cung cấp"
               />
             </Box>
+            <Box>
+              <FormDatepicker controlProps={{ control, name: "Date" }} />
+            </Box>
             <Box className="flex flex-col items-center justify-center">
               {renderButtons()}
             </Box>
@@ -274,7 +278,9 @@ export const SuppliersDialog: React.FC<TDialog> = ({
                   <SuppliersInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
                 <TabPanelContainForm value="2" index={"2"}>
-                  <SuppliersCuratorInfoForm isDisable={type === "View" && !isUpdate} />
+                  <SuppliersCuratorInfoForm
+                    isDisable={type === "View" && !isUpdate}
+                  />
                 </TabPanelContainForm>
               </Box>
             </Box>

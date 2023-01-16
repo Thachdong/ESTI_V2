@@ -14,7 +14,7 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     ...defaultProps.inputProps,
     className: clsx(
       props.disabled &&
-        "disable-form-input !bg-[#dfe2e5] !rounded !border !border-[#dfe2e5]",
+        "disable-form-input !bg-[#dfe2e5] !rounded !border !border-[#fff]",
       props?.inputProps?.className
     ),
   };
@@ -33,7 +33,6 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
       {...defaultProps}
       {...forceTriggerLabelShrink}
       inputProps={inputProps}
-      className="h-[40px] bg-[#f6f9fb] !border !border-[#fcfdfd]"
     />
   );
 };

@@ -10,7 +10,7 @@ export const ProductManageCards = () => {
 
   return (
     <Box className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-      <Card className="bg-[#48BB78] rounded-sm text-white">
+      <Card className="bg-[#48BB78] rounded text-white">
         <CardContent>
           <Typography gutterBottom className="font-bold">
             GIÁ TRỊ TỒN KHO
@@ -18,11 +18,14 @@ export const ProductManageCards = () => {
 
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold truncate" component="span">
-                {list?.tenKho}:
+              <Typography
+                className="text-sm font-bold truncate"
+                component="span"
+              >
+                {list?.tenKho}
               </Typography>
               <Typography
-                className="flex-grow text-right text-2xl font-bold"
+                className="flex-grow text-right text-sm font-bold"
                 component="span"
               >
                 {_format.getVND(list?.giaTriKho)} Đ
@@ -32,18 +35,21 @@ export const ProductManageCards = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-[#4299e1] rounded-sm text-white">
+      <Card className="bg-[#4299e1] rounded text-white">
         <CardContent>
           <Typography gutterBottom className="font-bold">
             HÀNG CẬN DATE
           </Typography>
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold truncate" component="span">
+              <Typography
+                className="text-sm font-bold truncate"
+                component="span"
+              >
                 {list?.tenKho}:
               </Typography>
               <Typography
-                className="flex-grow text-right text-2xl font-bold"
+                className="flex-grow text-right text-sm font-bold"
                 component="span"
               >
                 {_format.getVND(list?.giaTriCanDate)} Đ
@@ -53,7 +59,7 @@ export const ProductManageCards = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-[#ECC94B] rounded-sm text-white">
+      <Card className="bg-[#ECC94B] rounded text-white">
         <CardContent>
           <Typography gutterBottom className="font-bold">
             NHẬP BỔ SUNG
@@ -61,11 +67,14 @@ export const ProductManageCards = () => {
 
           {data?.stockLikst?.map((list: any, index: number) => (
             <Box className="flex" key={index}>
-              <Typography className="text-2xl font-bold truncate" component="span">
+              <Typography
+                className="text-sm font-bold truncate"
+                component="span"
+              >
                 {list?.tenKho}:
               </Typography>
               <Typography
-                className="flex-grow text-right text-2xl font-bold"
+                className="flex-grow text-right text-sm font-bold"
                 component="span"
               >
                 {_format.getVND(list?.slCanNhapKho)} Mặt hàng

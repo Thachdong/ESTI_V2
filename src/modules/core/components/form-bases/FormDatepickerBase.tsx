@@ -8,13 +8,8 @@ import moment from "moment";
 import { TFormDatepickerBase } from "~types/form-controlled/form-datepicker";
 
 export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
-  const {
-    renderInput,
-    onChange,
-    renderInputProps,
-    helperText,
-    ...restProps
-  } = props;
+  const { renderInput, onChange, renderInputProps, helperText, ...restProps } =
+    props;
 
   const handleChange = (
     value: any,
