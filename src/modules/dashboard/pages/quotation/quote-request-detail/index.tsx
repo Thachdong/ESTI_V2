@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { FormCheckbox } from "~modules-core/components";
 import {
   QuoteRequestDetailAddition,
-  QuoteRequestDetailAttatch,
+  QuoteRequestDetailAttach,
   QuoteRequestDetailContact,
   QuoteRequestDetailCustomer,
   QuoteRequestDetailProduct,
@@ -33,7 +33,7 @@ export const QuoteRequestDetailPage = () => {
 
         <QuoteRequestDetailContact />
 
-        <QuoteRequestDetailAttatch />
+        <QuoteRequestDetailAttach />
 
         <QuoteRequestDetailAddition />
 

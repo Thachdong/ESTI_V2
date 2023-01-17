@@ -8,12 +8,12 @@ import {
   DataTable,
   DropdownButton,
 } from "~modules-core/components";
-import { QuoteRequestDetailDialog } from "~modules-dashboard/components";
-import { productColumns } from "~modules-dashboard/pages/quotation/quote-request-detail/data";
+import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
+import { QuoteDetailDialog } from "./QuoteDetailDialog";
 
-export const QuoteRequestDetailProduct: React.FC = () => {
+export const QuoteDetailProduct: React.FC = () => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const defaultValue = useRef<any>();
@@ -108,12 +108,11 @@ export const QuoteRequestDetailProduct: React.FC = () => {
                 onMouseEnter: onMouseEnterRow,
               },
             }}
-            rowCount={products?.length}
           />
         </ContextMenuWrapper>
       </Box>
 
-      <QuoteRequestDetailDialog
+      <QuoteDetailDialog
         onClose={onClose}
         open={!!dialog?.open}
         type={dialog?.type}

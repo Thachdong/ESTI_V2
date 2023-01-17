@@ -5,7 +5,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFileRounded";
 import { useCallback } from "react";
 import { quoteRequest } from "src/api";
 
-export const QuoteRequestDetailAttatch: React.FC = () => {
+export const QuoteDetailAttach: React.FC = () => {
   const { control, setValue, watch } = useFormContext();
 
   const attachFile = watch("attachFile");

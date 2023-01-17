@@ -1,7 +1,17 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import clsx from "clsx";
 
-export const FormInputBase: React.FC<TextFieldProps> = (props) => {
+type TProps = TextFieldProps & {
+  shrinkLabel?: boolean;
+};
+
+export const FormInputBase: React.FC<TProps> = ({
+  shrinkLabel = false,
+  InputProps,
+  inputProps,
+  InputLabelProps,
+  ...props
+}) => {
   const defaultProps: TextFieldProps = {
     fullWidth: true,
     variant: "outlined",
@@ -10,29 +20,30 @@ export const FormInputBase: React.FC<TextFieldProps> = (props) => {
     ...props,
   };
 
-  const inputProps = {
-    ...defaultProps.inputProps,
-    className: clsx(
-      props.disabled &&
-        "disable-form-input !bg-[#dfe2e5] !rounded !border !border-[#fff]",
-      props?.inputProps?.className
-    ),
-  };
+  const shrink = shrinkLabel ? {} : {shrink: false}
 
-  const forceTriggerLabelShrink = !!props?.value
-    ? {
-        InputLabelProps: {
-          ...props?.InputLabelProps,
-          shrink: true,
-        },
-      }
-    : {};
+  const defaultLabelProps = {
+    className: "!bg-transparent text-input-label font-medium",
+    ...shrink,
+    ...InputLabelProps,
+  }
+
+  const defaultInputProps = {
+    ...InputProps,
+    className: clsx("bg-input-bg border-input-border", InputProps?.className),
+  }
+
+  const defaultInputTagProps = {
+    ...inputProps,
+    className: clsx(!shrinkLabel && "pl-[40%] text-right", inputProps?.className),
+  }
 
   return (
     <TextField
+      InputLabelProps={defaultLabelProps}
+      InputProps={defaultInputProps}
+      inputProps={defaultInputTagProps}
       {...defaultProps}
-      {...forceTriggerLabelShrink}
-      inputProps={inputProps}
     />
   );
 };

@@ -11,10 +11,9 @@ input {
   /* border: solid 0.5px #fff !important; */
 }
 
-input :t .disable-form-input,
+input .disable-form-input,
 .Mui-disabled:not(button) {
-  background: #f0f0f0 !important;
-  cursor: not-allowed !important;
+  @apply !border-disabled-input-border !bg-disabled-input-bg cursor-not-allowed;
 }
 
 /* CUSTOM MUI COMPONENT STYLE NEED TO LOAD FIRST AT ALL */

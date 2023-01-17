@@ -3,13 +3,12 @@ import _ from "lodash";
 import { SyntheticEvent, useCallback } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
 
-type TProps = {
+type TProps = TAutocompleteProps & {
   onChange: (val: any | any[]) => void;
 };
 
-export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
-  props
-) => {
+export const AutoCompleteBase: React.FC<TProps> = (props) => {
+  // EXTRACT PROPS
   const {
     label,
     onChange,
@@ -19,9 +18,11 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     options = [],
     callback,
     inputProps,
+    shrinkLabel = false,
     ...restProps
   } = props;
 
+  // METHODS
   const handleChange = (
     _: SyntheticEvent<Element, Event>,
     value: any | any[]
@@ -53,6 +54,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     }
   }, [value, options, callback]);
 
+  // DEFFAULT PROPS
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",
     noOptionsText: "Không có lựa chọn",
@@ -61,13 +63,39 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     ...restProps,
   };
 
+  const shrink = shrinkLabel ? {} : {shrink: false}
+
+  const defaultInputProps = {
+    InputLabelProps: { ...shrink },
+    label,
+    sx: {
+      ".MuiInputBase-root": {
+        background: "#f6f9fb",
+        borderColor: "#fcfdfd"
+      },
+      label: {
+        fontWeight: 500,
+        color: "#747474"
+      }
+    },
+    ...inputProps,
+  };
+
+  const defaultSx: any = shrinkLabel ? {} : {
+    input: {
+      textAlign: "right",
+      paddingLeft: "30% !important",
+    },
+  };
+
   return (
     <Autocomplete
       options={options}
       onChange={handleChange}
-      value={renderValue() || null}
+      value={renderValue()}
+      sx={defaultSx}
       renderInput={(params) => (
-        <TextField {...params} {...inputProps} value={renderValue() || null} label={label} />
+        <TextField {...params} {...defaultInputProps} value={renderValue()} />
       )}
       {...defaultProps}
     />

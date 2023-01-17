@@ -25,7 +25,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
     fetcherParams,
     fetcher,
     inputProps,
-    placeholder = "",
     ...restProps
   } = props;
 
@@ -134,17 +133,13 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
         ),
         error: !!error,
       },
-      label: placeholder,
+      label: updateLabel,
       ...restField,
       ...restProps,
     };
 
     return (
-      <>
-        <div className="text-[#747474] font-medium">
-          <p className="my-2">{updateLabel}</p>
-        </div>
-        <AutoCompleteBase
+      <AutoCompleteBase
           options={options}
           loading={isLoading || isFetching}
           loadingText="Đang tải ..."
@@ -157,7 +152,6 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
           getOptionLabel={(option) => option?.[labelKey]}
           {...defaultProps}
         />
-      </>
     );
   };
 
