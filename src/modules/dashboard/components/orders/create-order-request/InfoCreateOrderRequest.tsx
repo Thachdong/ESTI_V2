@@ -179,8 +179,6 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                     onClose={onDialogClose}
                     open={dialog.open}
                     type={dialog.type}
-                    // refetch={refetch}
-                    // defaultValue={defaultValue as any}
                   />
                 </div>
               </div>
@@ -484,21 +482,22 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
       </div>
       <Paper className="shadow-none p-4 mt-4 grid gap-4 grid-cols-2">
         <div className="">
-          <div className="font-bold text-sm mb-2">
+          <div className="font-bold text-sm mb-2 ">
             <span>FILE ĐÍNH KÈM</span>
           </div>
           <div>
-            <AddButton
-              variant="contained"
-              className="mr-3 bg-white text-[#131313] w-full shadow-none border-[2px] border-dashed min-h-[50px] hover:bg-[#e2e9ed]"
-            >
-              <InputLabel htmlFor="product-file" className="text-[#131313]">
+            <AddButton variant="contained" className="">
+              <InputLabel
+                htmlFor="product-file"
+                className="!text-[#FFF] font-semibold"
+              >
                 Đính kèm file
                 <FormInputBase
                   id="product-file"
-                  className="hidden"
+                  className="!hidden"
                   type="file"
                   onChange={() => undefined}
+                  title="Đính kèm file"
                 />
               </InputLabel>
             </AddButton>

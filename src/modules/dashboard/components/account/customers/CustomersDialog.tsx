@@ -249,7 +249,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isSupplierFieldError ? "red" : "ỉnherit" }}
+                        sx={{ color: isSupplierFieldError ? "red" : "inherit" }}
                       >
                         Thông tin khách hàng
                       </Typography>
@@ -274,7 +274,9 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <CustomersInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
                 <TabPanelContainForm value="2" index={"2"}>
-                  <CustomersReceiveInfoForm isDisable={type === "View" && !isUpdate} />
+                  <CustomersReceiveInfoForm
+                    isDisable={type === "View" && !isUpdate}
+                  />
                 </TabPanelContainForm>
               </Box>
             </Box>
