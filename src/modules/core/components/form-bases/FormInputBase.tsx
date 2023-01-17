@@ -9,6 +9,7 @@ export const FormInputBase: React.FC<TProps> = ({
   shrinkLabel = false,
   InputProps,
   inputProps,
+  InputLabelProps,
   ...props
 }) => {
   const defaultProps: TextFieldProps = {
@@ -21,8 +22,8 @@ export const FormInputBase: React.FC<TProps> = ({
 
   const defaultLabelProps = {
     shrink: shrinkLabel,
-    className: "!bg-transparent",
-    ...props?.InputLabelProps,
+    className: "!bg-transparent text-input-label font-medium",
+    ...InputLabelProps,
   }
 
   const defaultInputProps = {

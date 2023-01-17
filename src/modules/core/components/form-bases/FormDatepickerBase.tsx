@@ -8,14 +8,17 @@ import moment from "moment";
 import { TFormDatepickerBase } from "~types/form-controlled/form-datepicker";
 
 export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
+  // EXTRACT PROPS
   const {
     renderInput,
     onChange,
     renderInputProps,
     helperText,
+    InputProps,
     ...restProps
   } = props;
 
+  // METHODS
   const handleChange = (
     value: any,
     keyboardInputValue?: string | undefined
@@ -29,23 +32,28 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
     }
   };
 
+  // DEFAULT PROPS
+  const defaultRenderInput = !!renderInput ? renderInput : (params: any) => (
+    <TextField
+      size="small"
+      inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
+      helperText={helperText}
+      {...params}
+      {...renderInputProps}
+    />
+  )
+
+  const defaultInputProps = {
+    ...InputProps,
+    className: clsx("bg-input-bg", InputProps?.className),
+  }
+
   return (
     <DateTimePicker
-      renderInput={
-        renderInput
-          ? renderInput
-          : (params: any) => (
-              <TextField
-                size="small"
-                inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
-                helperText={helperText}
-                {...params}
-                {...renderInputProps}
-              />
-            )
-      }
+      renderInput={defaultRenderInput}
       dayOfWeekFormatter={(day) => `${day}`}
       onChange={handleChange}
+      InputProps={defaultInputProps}
       {...restProps}
     />
   );

@@ -6,11 +6,22 @@ import NumberFormat, {
   SourceInfo,
 } from "react-number-format";
 
-export const FormInputNumberBase: React.FC<
-  NumberFormatProps<TextFieldProps>
-> = (props) => {
-  const { onChange, ...restProps } = props;
+type TProps = NumberFormatProps<TextFieldProps> & {
+  shrinkLabel?: boolean;
+};
 
+export const FormInputNumberBase: React.FC<TProps> = (props) => {
+  // EXTRACT PROPS
+  const { onChange, shrinkLabel = false, InputLabelProps, InputProps, inputProps, ...restProps } = props;
+
+  // METHODS
+  const handleValueChange = (values: NumberFormatValues, _: SourceInfo) => {
+    const floatValue = values?.floatValue as any;
+
+    onChange?.(floatValue || "");
+  };
+
+  // DEFAULT PROPS
   const defaultProps: NumberFormatProps<TextFieldProps> = {
     allowLeadingZeros: false,
     allowNegative: false,
@@ -21,18 +32,30 @@ export const FormInputNumberBase: React.FC<
     ...restProps,
   };
 
-  const handleValueChange = (values: NumberFormatValues, _: SourceInfo) => {
-    const floatValue = values?.floatValue as any;
+  const defaultLabelProps = {
+    shrink: shrinkLabel,
+    className: "!bg-transparent text-input-label font-medium",
+    ...InputLabelProps,
+  }
 
-    onChange?.(floatValue || "");
-  };
+  const defaultInputProps = {
+    ...InputProps,
+    className: clsx("bg-input-bg border-input-border", InputProps?.className),
+  }
+
+  const defaultInputTagProps = {
+    ...inputProps,
+    className: clsx("pl-[40%] text-right", inputProps?.className),
+  }
 
   return (
     <NumberFormat
       customInput={TextField}
       variant="outlined"
-      className={clsx(props.disabled && "bg-[#f0f0f0]", props.className)}
       onValueChange={handleValueChange}
+      InputLabelProps={defaultLabelProps}
+      InputProps={defaultInputProps}
+      inputProps={defaultInputTagProps}
       {...defaultProps}
     />
   );

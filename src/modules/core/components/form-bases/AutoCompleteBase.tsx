@@ -72,7 +72,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         borderColor: "#fcfdfd"
       },
       label: {
-        fontWeight: 600,
+        fontWeight: 500,
         color: "#747474"
       }
     },

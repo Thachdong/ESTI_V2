@@ -4,4 +4,5 @@ import { NumberFormatProps } from "react-number-format";
 
 type TFormInputNumberProps = NumberFormatProps<TextFieldProps> & {
   controlProps: TControllerProps;
+  shrinkLabel?: boolean;
 };
