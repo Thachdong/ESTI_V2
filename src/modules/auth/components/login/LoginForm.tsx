@@ -27,6 +27,8 @@ import { setBearerToken } from "src/api/instance";
 import Link from "next/link";
 import { useCallback } from "react";
 import moment from "moment";
+import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
 
 type TLoginCredential = {
   username: string;
@@ -112,15 +114,19 @@ export function LoginForm() {
   return (
     <Container
       component="main"
-      maxWidth="sm"
-      className="h-screen w-screen flex items-center"
+      maxWidth={false}
+      className="h-screen w-full flex items-center justify-center bg-[#f6f7fd]"
     >
-      <Paper className="w-full grid gap-4 p-8 shadow-none bg-[#f4f6f7] justify-center">
+      <Paper className="w-[500px] grid gap-4 p-8 shadow-xl bg-[#fff] justify-center">
         <Avatar className="mx-auto" sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
 
-        <Typography className="mx-auto" component="h1" variant="h5">
+        <Typography
+          className="mx-auto font-semibold"
+          component="h1"
+          variant="h5"
+        >
           Đăng nhập
         </Typography>
 
@@ -129,22 +135,31 @@ export function LoginForm() {
           onSubmit={handleSubmit(onSubmit)}
           className="w-[375px] grid gap-4 mt-4"
         >
-          <FormInput
-            controlProps={{
-              control: control,
-              name: "username",
-              rules: { required: "Phải nhập tên đăng nhập" },
-            }}
-            label="Tên đăng nhập"
-          />
+          <Box className="flex gap-2">
+            <PersonIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+            <FormInput
+              controlProps={{
+                control: control,
+                name: "username",
+                rules: { required: "Phải nhập tên đăng nhập" },
+              }}
+              label="Tên đăng nhập"
+              variant="standard"
+              className="!rounded-none"
+            />
+          </Box>
 
-          <FormInputPassword
-            controlProps={{
-              control: control,
-              name: "password",
-              rules: { required: "Phải nhập mật khẩu" },
-            }}
-          />
+          <Box className="flex gap-2">
+            <LockIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+            <FormInputPassword
+              controlProps={{
+                control: control,
+                name: "password",
+                rules: { required: "Phải nhập mật khẩu" },
+              }}
+              variant="standard"
+            />
+          </Box>
 
           <BaseButton
             type="submit"

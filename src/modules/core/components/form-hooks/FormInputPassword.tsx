@@ -8,12 +8,12 @@ import { FormInputBase } from "../form-bases";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 
 export const FormInputPassword: React.FC<TFormInputProps> = (props) => {
-  const {controlProps, ...inputProps} = props;
+  const { controlProps, ...inputProps } = props;
 
   const [showPassword, setShowPassword] = useState(false);
 
   const endAdornment = (
-    <InputAdornment position="end">
+    <InputAdornment position="end" className="!pb-2">
       <IconButton
         aria-label="toggle password visibility"
         onClick={() => setShowPassword((showPassword) => !showPassword)}
@@ -25,7 +25,7 @@ export const FormInputPassword: React.FC<TFormInputProps> = (props) => {
   );
 
   const renderController = ({
-    field: {ref, ...restField},
+    field: { ref, ...restField },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
