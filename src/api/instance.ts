@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { signOut } from "next-auth/react";
-import { toast } from "~modules-core/toast";
+import { getSession, signOut } from "next-auth/react";
 
 const TIMEOUT_IN_MILISECOND = 10000;
 
@@ -18,11 +17,24 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
   return baseURL ? url?.replace(baseURL, "") : url;
 };
 
-const useRequestCongif = (config: AxiosRequestConfig) => {
+const useRequestCongif = async (config: AxiosRequestConfig) => {
   const { method, params, data } = config || {};
 
+  const url = getUrlFromConfig(config);
+
+  const bearerToken = instance.defaults.headers.common["Authorization"];
+
+  // TRY TO GET TOKEN WHEN IT ABSENT FROM HEADER
+  if (!bearerToken) {
+    const { accessToken } = (await getSession()) || {};
+
+    config.headers = {
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+    };
+  }
+
   console.log(
-    `%c ${method?.toUpperCase()} - ${getUrlFromConfig(config)}:`,
+    `%c ${method?.toUpperCase()} - ${url}:`,
     "color: #0086b3; font-weight: bold",
     { params, data }
   );
@@ -47,23 +59,49 @@ const useResponseSuccess = (response: AxiosResponse) => {
 };
 
 const useResponseError = (error: AxiosError) => {
-  const { isAxiosError, response } = error || {};
+  const { isAxiosError } = error || {};
+
+  const response: any = error?.response;
 
   if (isAxiosError && response) {
     const { config, status, data } = response || {};
 
+    const url = getUrlFromConfig(config);
+
+    const errorMessage = response?.data?.resultMessage;
+
     console.log(
-      `%c ${status} - ${getUrlFromConfig(config)}:`,
+      `%c ${status} - ${url}:`,
       "color: #a71d5d; font-weight: bold",
       data
     );
 
+    // ABORT ALL REQUEST IF 401 | 408 | 403 MEET TWICE
+    if (isAbort) {
+      throw new axios.Cancel("401 trigger more than twice!");
+    }
+
+    if (window === undefined) {
+      return Promise.reject(error);
+    }
+
     switch (status) {
+      case 401:
       case 408: {
-        // TRIGGER TOKEN ROTATION | SIGNOUT HERE
+        // IGNORE WITH SOME ROUTES
+        if (url?.includes("authenticate/login")) {
+          break;
+        }
+
+        // TURN ON ABORT FLAG
+        isAbort = true;
+
+        // ALERT SOME INFO TO USER
+        window && window.alert(errorMessage || "Phiên đăng nhập hết hạn!");
+
+        // LOGOUT
         signOut();
-        // TOAST statusText
-        toast.error("Phiên đăng nhập hết hạn hoặc không có quyền truy cập tài liệu !")
+
         break;
       }
       default:
@@ -75,5 +113,8 @@ const useResponseError = (error: AxiosError) => {
 
   return Promise.reject(error);
 };
+
+// THIS FLAG WILL TRIGGER ABORT ALL REQUEST IF 401 | 408 | 403 MEET TWICE
+let isAbort = false;
 
 instance.interceptors.response.use(useResponseSuccess, useResponseError);

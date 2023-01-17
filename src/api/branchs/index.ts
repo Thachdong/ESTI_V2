@@ -8,6 +8,7 @@ export type TBranch = {
     taxCode: string;
     name: string;
     id: string;
+    warehouseConfigCode?: string | null;
 }
 
 const BASE_PATH = "BranchConfig";

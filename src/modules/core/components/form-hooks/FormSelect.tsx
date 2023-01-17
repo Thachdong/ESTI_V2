@@ -1,22 +1,17 @@
 import { ErrorMessage } from "@hookform/error-message";
-import clsx from "clsx";
 import { Controller } from "react-hook-form";
-import { TFormSelect } from "~types/form-controlled/form-select";
+import { TAutocomplete } from "~types/form-controlled/form-select";
 import { TRenderControllerParams } from "~types/react-hook-form";
-import { FormSelectBase } from "../form-bases";
+import { AutoCompleteBase } from "../form-bases/AutoCompleteBase";
 
-export const FormSelect: React.FC<TFormSelect> = (props) => {
-  const { selectShape = { valueKey: "id", labelKey: "name" } } = props;
-
-  const { controlProps, label, ...selectProps } = props;
+export const FormSelect: React.FC<TAutocomplete> = (props) => {
+  const { controlProps, label, inputProps, ...selectProps } = props;
 
   const renderController = ({
-    field: { ref, value, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+    field: { ref, ...restField }, // ADDRESS CHROME DEV TOOLS WARING: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    const { name } = controlProps;
-
     const rules = controlProps.rules || {};
 
     const updateLabel = Object.keys(rules).includes("required")
@@ -24,22 +19,23 @@ export const FormSelect: React.FC<TFormSelect> = (props) => {
       : label;
 
     const defaultBaseProps = {
-      helperText: (
-        <ErrorMessage
-          errors={errors}
-          name={name as any}
-          render={({ message }) => message}
-        />
-      ),
-      error: !!error,
-      selectShape: selectShape,
-      value: value || "",
+      inputProps: {
+        ...inputProps,
+        helperText: (
+          <ErrorMessage
+            errors={errors}
+            name={controlProps.name}
+            render={({ message }) => message}
+          />
+        ),
+        error: !!error,
+      },
       label: updateLabel,
       ...restField,
       ...selectProps,
     };
 
-    return <FormSelectBase {...defaultBaseProps} />;
+    return <AutoCompleteBase {...defaultBaseProps} />;
   };
 
   return <Controller {...controlProps} render={renderController} />;

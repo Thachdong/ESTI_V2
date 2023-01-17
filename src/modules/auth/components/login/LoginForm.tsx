@@ -15,11 +15,20 @@ import {
   signIn,
   SignInOptions,
   SignInResponse,
+  useSession,
 } from "next-auth/react";
-import { BaseButton, FormInput, FormInputPassword } from "~modules-core/components";
+import {
+  BaseButton,
+  FormInput,
+  FormInputPassword,
+} from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { setBearerToken } from "src/api/instance";
 import Link from "next/link";
+import { useCallback } from "react";
+import moment from "moment";
+import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
 
 type TLoginCredential = {
   username: string;
@@ -27,6 +36,9 @@ type TLoginCredential = {
 };
 
 export function LoginForm() {
+  // LOCAL STATE AND EXTRACT PROPS
+  const session = useSession();
+
   const {
     control,
     handleSubmit,
@@ -41,51 +53,80 @@ export function LoginForm() {
 
   const router = useRouter();
 
-  const onSubmit = async (data: TLoginCredential) => {
+  // SIDE EFFECTS
+  React.useEffect(() => {
     const { callbackUrl } = router.query;
-    try {
-      const signInPayload: SignInOptions = {
-        data: JSON.stringify(data),
-        callbackUrl: callbackUrl as string,
-        redirect: false,
-      };
 
-      const response: SignInResponse | undefined = await signIn(
-        "credentials-signin",
-        signInPayload
-      );
+    const { accessToken, expires } = session.data || {};
 
-      const { error, ok, url } = response || {};
+    const isTokenExpired = moment(expires).isBefore();
 
-      if (ok) {        
-        router.push(callbackUrl as string || "/dashboard/quotations/requests");
-
-        toast.success("Đăng nhập thành công!");
-
-        const session = await getSession();
-
-        session?.accessToken && setBearerToken(session.accessToken);
-      }
-
-      if (!ok && error) {
-        const errorData = JSON.parse(decodeURIComponent(error as string));
-
-        toast.error(errorData?.resultMessage);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Lỗi không xác định!");
+    if (accessToken && !isTokenExpired) {
+      router.push((callbackUrl as string) || "/dashboard/quotations/requests");
     }
-  };
+  }, [session]);
+
+  const onSubmit = useCallback(
+    async (data: TLoginCredential) => {
+      const { callbackUrl } = router.query;
+
+      try {
+        const signInPayload: SignInOptions = {
+          data: JSON.stringify(data),
+          callbackUrl: callbackUrl as string,
+          redirect: false,
+        };
+
+        const response: SignInResponse | undefined = await signIn(
+          "credentials-signin",
+          signInPayload
+        );
+
+        const { error, ok } = response || {};
+
+        if (ok) {
+          router.push(
+            (callbackUrl as string) || "/dashboard/quotations/requests"
+          );
+
+          toast.success("Đăng nhập thành công!");
+
+          const { accessToken } = (await getSession()) || {};
+
+          accessToken && setBearerToken(accessToken);
+        }
+
+        if (!ok && error) {
+          console.log(error);
+
+          const errorData = JSON.parse(decodeURIComponent(error as string));
+
+          toast.error(errorData?.resultMessage);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Lỗi không xác định!");
+      }
+    },
+    [router]
+  );
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Paper className="w-full grid gap-4 justify-center p-8 mt-10">
+    <Container
+      component="main"
+      maxWidth={false}
+      className="h-screen w-full flex items-center justify-center bg-[#f6f7fd]"
+    >
+      <Paper className="w-[500px] grid gap-4 p-8 shadow-xl bg-[#fff] justify-center">
         <Avatar className="mx-auto" sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
 
-        <Typography className="mx-auto" component="h1" variant="h5">
+        <Typography
+          className="mx-auto font-semibold"
+          component="h1"
+          variant="h5"
+        >
           Đăng nhập
         </Typography>
 
@@ -94,24 +135,37 @@ export function LoginForm() {
           onSubmit={handleSubmit(onSubmit)}
           className="w-[375px] grid gap-4 mt-4"
         >
-          <FormInput
-            controlProps={{
-              control: control,
-              name: "username",
-              rules: { required: "Phải nhập tên đăng nhập" },
-            }}
-            label="Tên đăng nhập"
-          />
+          <Box className="flex gap-2">
+            <PersonIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+            <FormInput
+              controlProps={{
+                control: control,
+                name: "username",
+                rules: { required: "Phải nhập tên đăng nhập" },
+              }}
+              label="Tên đăng nhập"
+              variant="standard"
+              className="!rounded-none"
+            />
+          </Box>
 
-          <FormInputPassword
-            controlProps={{
-              control: control,
-              name: "password",
-              rules: { required: "Phải nhập mật khẩu" },
-            }}
-          />
+          <Box className="flex gap-2">
+            <LockIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+            <FormInputPassword
+              controlProps={{
+                control: control,
+                name: "password",
+                rules: { required: "Phải nhập mật khẩu" },
+              }}
+              variant="standard"
+            />
+          </Box>
 
-          <BaseButton type="submit" isSubmitting={isSubmitting}>
+          <BaseButton
+            type="submit"
+            isSubmitting={isSubmitting}
+            className="bg-[#214d73] font-bold"
+          >
             Đăng nhập
           </BaseButton>
 

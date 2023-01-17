@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { category, productDocument, TDocument } from "src/api";
@@ -8,10 +8,9 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination, parentCategoryId } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
@@ -30,15 +29,15 @@ export const DocumentsPage: React.FC = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
   // SIDE EFFECTS
   // PUSH PAGINATION QUERY
   useEffect(() => {
     const initQuery = {
+      ...query,
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
-      ...query,
     };
 
     router.push({ query: initQuery });
@@ -93,8 +92,10 @@ export const DocumentsPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa tài liệu SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {productName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa tài liệu SP: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -115,18 +116,23 @@ export const DocumentsPage: React.FC = () => {
     ...documentColumns.slice(1),
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -136,7 +142,7 @@ export const DocumentsPage: React.FC = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -194,7 +200,7 @@ export const DocumentsPage: React.FC = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

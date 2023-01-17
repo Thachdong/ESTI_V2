@@ -42,9 +42,9 @@ export const SearchBox: React.FC<TSearchBox> = ({
       onClick={() =>
         router.push({ query: { ...query, searchContent: content } })
       }
-      className="cursor-pointer"
+      className="cursor-pointer "
     >
-      <SearchRoundedIcon />
+      <SearchRoundedIcon className="text-main" />
     </InputAdornment>
   );
 
@@ -54,7 +54,6 @@ export const SearchBox: React.FC<TSearchBox> = ({
       onChange={handleChange}
       onKeyPress={handleEnter}
       label={label}
-      className="pr-3"
     />
   );
 };

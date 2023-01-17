@@ -1,8 +1,8 @@
 import { Controller } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { TFormCheckbox } from "~types/form-controlled/form-checkbox";
+import clsx from "clsx";
 
 export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
   const { controlProps, label, labelProps, ...textFieldProps } = props;
@@ -19,23 +19,18 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
       : label;
 
     const defaultProps = {
-      // helperText: (
-      //   <ErrorMessage
-      //     errors={errors}
-      //     name={controlProps.name}
-      //     render={({ message }) => message}
-      //   />
-      // ),
-      error: !!error,
+      error,
       value: value || "",
+      checked: value,
       ...restField,
       ...textFieldProps,
     };
 
     return (
       <FormControlLabel
-        control={<Checkbox {...defaultProps} />}
+        control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
+        className={clsx("!border !border-[#ffff] !rounded", textFieldProps?.className)}
         {...labelProps}
       />
     );

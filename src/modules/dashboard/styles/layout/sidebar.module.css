@@ -10,8 +10,7 @@
 
 .sidebar .logo-box {
   @apply flex items-center justify-center text-white;
-  height: 60px;
-  border-bottom: 0.5px solid #4e4d4d;
+  height: 64px;
   position: relative;
 }
 
@@ -19,13 +18,23 @@
   transition: all 0.3s;
 }
 
+.sidebar .avatar-box {
+  height: 190px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  color: #fff;
+}
+
 .sidebar .expand-btn {
-  @apply flex items-center justify-center h-[32px] absolute;
-  /* background: #fff; */
-  /* border-color: #000; */
-  right: -45px;
+  @apply flex items-center justify-center absolute;
+  right: -64px;
   color: #000;
   cursor: pointer;
+  border-right: solid 1px rgb(240, 239, 239);
+  height: 64px;
+  border-radius: 0;
+  width: 64px;
 }
 
 .sidebar .absolute-menu {
@@ -35,13 +44,21 @@
   width: 250px;
 }
 
+.sidebar .expand-items {
+  width: 64px !important;
+}
+
 .sidebar .expand-items:hover .absolute-menu {
   display: block;
 }
 
+.sidebar .expand-items .absolute-menu > li:hover {
+  color: #fff;
+}
+
 .menu {
   overflow-y: auto;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 64px - 190px);
   color: #fff;
 }
 /* SCROLLBAR STYLING */
@@ -67,9 +84,11 @@
 }
 
 .parent-menu-items {
-  border-bottom: 1px solid rgba(72, 94, 144, 0.16);
+  padding: 4px 0;
+  /* border-bottom: 1px solid rgba(72, 94, 144, 0.16); */
 }
 
 .menu-items:hover {
-  background: #e1e1e166;
+  background: #2684c5;
+  color: white !important;
 }

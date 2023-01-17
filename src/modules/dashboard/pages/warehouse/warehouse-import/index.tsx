@@ -1,54 +1,46 @@
-import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
-import router from "next/router";
-import React, { useState } from "react";
-import { useQuery } from "react-query";
-import { exportWarehouse, TWarehouseExport, warehouse } from "src/api";
+import { Box, Paper } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useCallback, useRef, useState } from "react";
+import { Item, Menu } from "react-contexify";
+import { useMutation, useQuery } from "react-query";
+import { TWarehouseExport, warehouse } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
+  DropdownButton,
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
+import { WarehouseImportNoteDialog } from "~modules-dashboard/components";
+import { TGridColDef } from "~types/data-grid";
+import { TDefaultDialogState } from "~types/dialog";
+import { importWarehouseColumns } from "./data";
 
 export const WarehouseImportPage: React.FC = () => {
+  const router = useRouter();
+
+  const { query } = router;
+
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
-  const columns: GridColDef<TWarehouseExport>[] = [
-    {
-      field: "code",
-      headerName: "NGÀY TẠO",
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
-    },
-    { field: "branchCode", headerName: "CHI NHÁNH", flex: 1 },
-    { field: "productOrderCode", headerName: "MÃ ĐƠN MUA HÀNG" },
-    { field: "warehouseSessionCode", headerName: "MÃ NHẬP KHO" },
-    { field: "supplierCode", headerName: "MÃ NCC" },
-    { field: "supplierName", headerName: "TÊN NHÀ CUNG CẤP" },
-    {
-      field: "totalPrice",
-      headerName: "GIÁ TRỊ NHẬP KHO",
-      renderCell: (params) => _format.getVND(params.row.totalPrice),
-    },
-    { field: "deliveryCode", headerName: "GIAO NHẬN" },
-    { field: "receiverBillName", headerName: "TRẠNG THÁI HOÁ ĐƠN" },
-    { field: "importStatusName", headerName: "TRẠNG THÁI NHẬP KHO" },
-  ];
+  const defaultValue = useRef<any>();
+
+  const [dialog, setDialog] = useState<TDefaultDialogState>();
+
+  usePathBaseFilter(pagination);
 
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "exportWarehouse",
+      "importWarehouse",
       "loading",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        searchContent,
+        ...pagination,
+        ...query,
       },
     ],
     () =>
@@ -56,7 +48,7 @@ export const WarehouseImportPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -66,23 +58,107 @@ export const WarehouseImportPage: React.FC = () => {
     }
   );
 
-  // console.log("exportwarehouse", data);
+  // DATA TABLE
+  const columns: TGridColDef<TWarehouseExport>[] = [
+    ...importWarehouseColumns,
+    {
+      field: "action",
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: handleRedirectToDetail,
+              label: "Chi tiết nhập kho",
+            },
+            {
+              action: handleDeleteTransaction,
+              label: "Hủy nhập kho",
+            },
+            {
+              action: () => console.log(""),
+              label: "Ghi chú",
+            },
+          ]}
+        />
+      ),
+    },
+  ];
+
+  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item: any) => item?.id === id);
+
+    defaultValue.current = currentRow;
+  };
+
+  const handleRedirectToDetail = useCallback(() => {
+    const { id } = defaultValue.current || {};
+
+    router.push({
+      pathname: "/dashboard/warehouse/import-detail",
+      query: {
+        id,
+      },
+    });
+  }, [defaultValue]);
+
+  const deleteMutation = useMutation(
+    (id: string) => warehouse.deleteTransaction(id),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleDeleteTransaction = useCallback(async () => {
+    const {warehouseSessionCode, id} = defaultValue.current || {};
+
+    if (
+      confirm(
+        "Xác nhận xóa phiên nhập kho " + warehouseSessionCode
+      )
+    ) {
+      await deleteMutation.mutateAsync(id);
+    }
+  }, [deleteMutation, defaultValue]);
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
-      <div className="mb-2">
-        <AddButton
-          variant="contained"
-          onClick={() =>
-            router.push("/dashboard/warehouse/create-warehouse-import")
-          }
-        >
-          Tạo phiếu nhập kho
-        </AddButton>
-      </div>
-      <div>
+    <Paper className="bgContainer">
+      <Box className="text-right mb-2">
+        <Link href="/dashboard/warehouse/import-detail">
+          <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
+        </Link>
+      </Box>
+
+      <ContextMenuWrapper
+        menuId="warehouse_import_menu"
+        menuComponent={
+          <Menu className="p-0" id="warehouse_import_menu">
+            <Item id="view-detail" onClick={handleRedirectToDetail}>
+              Chi tiết nhập kho
+            </Item>
+            <Item id="delete-transaction" onClick={handleDeleteTransaction}>
+              Hủy nhập kho
+            </Item>
+            <Item
+              id="transation-note"
+              onClick={() => setDialog({ open: true, type: "note" })}
+            >
+              Ghi chú
+            </Item>
+          </Menu>
+        }
+      >
         <DataTable
           rows={data?.items as []}
           columns={columns}
@@ -90,8 +166,19 @@ export const WarehouseImportPage: React.FC = () => {
             loading: isLoading || isFetching,
             ...paginationProps,
           }}
+          componentsProps={{
+            row: {
+              onMouseEnter: onMouseEnterRow,
+            },
+          }}
         />
-      </div>
+      </ContextMenuWrapper>
+
+      <WarehouseImportNoteDialog
+        onClose={() => setDialog({ open: false, type: undefined })}
+        open={dialog?.open as boolean}
+        defaultValue={defaultValue.current}
+      />
     </Paper>
   );
 };

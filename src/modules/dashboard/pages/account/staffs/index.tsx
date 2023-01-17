@@ -1,8 +1,6 @@
 import { Paper } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState, MouseEvent } from "react";
+import React, { useCallback, useEffect, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { staff, TStaff } from "src/api";
@@ -10,14 +8,14 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StaffDialog } from "~modules-dashboard/components/account";
+import { StaffsDialog } from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
 import { staffColumns } from "./staffColumns";
 
@@ -35,18 +33,9 @@ export const StaffsPage = () => {
 
   const [dialog, setDialog] = useState<TDialog>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<TStaff>();
+  const defaultValue = useRef<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      ...query,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onUpdate = useCallback(() => {
@@ -91,8 +80,10 @@ export const StaffsPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa nhân viên: " + defaultValue?.username)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {username, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa nhân viên: " + username)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -100,19 +91,23 @@ export const StaffsPage = () => {
     ...staffColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      width: 100,
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      width: 50,
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -122,7 +117,7 @@ export const StaffsPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -176,11 +171,11 @@ export const StaffsPage = () => {
         />
       </ContextMenuWrapper>
 
-      <StaffDialog
+      <StaffsDialog
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         type={dialog.type}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

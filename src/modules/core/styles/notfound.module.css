@@ -1,4 +1,4 @@
 .notfound {
-  @apply flex flex-col items-center justify-center bg-white overflow-hidden rounded-xl;
+  @apply flex flex-col items-center justify-center bg-white overflow-hidden rounded;
   height: calc(100vh - 60px - 32px);
 }

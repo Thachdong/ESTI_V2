@@ -15,11 +15,11 @@ const defaultDataGridProps: Partial<DataGridProps> = {
     NoRowsOverlay: NoRowsOverlay,
   },
   disableSelectionOnClick: true,
-  filterMode: "server",
+  // filterMode: "server",
   paginationMode: "server",
-  sortingMode: "server",
-  showColumnRightBorder: true,
-  showCellRightBorder: true,
+  // sortingMode: "server",
+  // showColumnRightBorder: true,
+  // showCellRightBorder: true,
 };
 
 export const DataTable: React.FC<TDataGrid> = ({
@@ -35,16 +35,21 @@ export const DataTable: React.FC<TDataGrid> = ({
     if (hideSearchbar) {
       delete column["renderHeader"];
 
-      column.headerClassName = "bg-main text-white px-2";
+      column.headerClassName = "!bg-[#9FADBB] text-white px-2 font-bold";
     }
 
     return column;
   });
 
   return (
-    <Box className={clsx("w-full overflow-auto flex-grow h-full")}>
+    <Box
+      className={clsx(
+        "data-table-container w-full overflow-auto flex-grow h-full"
+      )}
+    >
       <DataGrid
         headerHeight={hideSearchbar ? 32 : 64}
+        getRowHeight={() => "auto"}
         {...defaultDataGridProps}
         {...gridProps}
         {...props}

@@ -1,16 +1,15 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { documentType, TDocumentType } from "src/api";
+import { documentType } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
-  SearchBox,
-  ViewButton,
+  DropdownButton,
+  RefreshButton,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { DocumentTypeDialog } from "~modules-dashboard/components";
@@ -25,13 +24,7 @@ export const DocumentTypesPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
-
-  // SIDE EFFECTS
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    router.push({ query });
-  }, [router.isReady]);
+  const defaultValue = useRef<any>();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -61,18 +54,23 @@ export const DocumentTypesPage = () => {
     },
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -89,8 +87,10 @@ export const DocumentTypesPage = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa loại tài liệu: " + defaultValue.name)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {name, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa loại tài liệu: " + name)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -99,24 +99,21 @@ export const DocumentTypesPage = () => {
 
     const currentRow = data?.find((item: any) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   // DOM RENDER
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
-
-        <Box className="flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Thêm tài liệu
-          </AddButton>
-        </Box>
+      <Box className="flex justify-end mb-3">
+        <RefreshButton onClick={() => refetch()} />
+        <AddButton
+          onClick={() => setDialog({ open: true, type: "Add" })}
+          variant="contained"
+          className="ml-3"
+        >
+          Thêm tài liệu
+        </AddButton>
       </Box>
 
       <ContextMenuWrapper
@@ -156,7 +153,7 @@ export const DocumentTypesPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

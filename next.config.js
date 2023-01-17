@@ -2,10 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  redirects: () => ([
+  redirects: async() => ([
     {
       source: '/',
-      destination: '/dashboard/quotations/requests',
+      destination: '/dashboard/quotation/quote-list',
       permanent: true,
     },
   ])

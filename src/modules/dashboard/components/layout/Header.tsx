@@ -4,29 +4,93 @@ import { LoadingButton } from "@mui/lab";
 import styles from "~modules-dashboard/styles/layout/header.module.css";
 import { signOut } from "next-auth/react";
 import clsx from "clsx";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import { warehouse } from "src/api";
 
 type TProps = {
-  title: string;
+  data: any;
 };
 
-export const Header: React.FC<TProps> = ({ title }) => {
+export const Header: React.FC<TProps> = ({ data }) => {
+  const { title, pageName } = data || {};
+  const { query } = useRouter();
+
+  const { data: warehouseImportDetail } = useQuery(
+    ["ImportWarehouseDetail_" + query?.id, { ...query }],
+    () =>
+      warehouse
+        .getImportSessionById(query?.id as string)
+        .then((res) => res.data),
+    {
+      enabled: pageName === "warehouse-import-detail" && !!query.id,
+    }
+  );
+
+  const { data: warehouseExportDetail } = useQuery(
+    ["warehouseExportDetail_" + query.transactionId],
+    () =>
+      warehouse
+        .getExportSessionById(query.transactionId as string)
+        .then((res) => res.data),
+    {
+      enabled: pageName === "warehouse-export-detail" && !!query.transactionId,
+    }
+  );
+
+  let extractedTitle = "";
+
+  switch (pageName) {
+    case "warehouse-export-detail":
+      if (query.transactionId) {
+        extractedTitle = `XUẤT KHO / TẠO XUẤT KHO / ${
+          warehouseExportDetail?.productOrder?.code || ""
+        }`;
+      } else {
+        extractedTitle = "XUẤT KHO / TẠO XUẤT KHO";
+      }
+      break;
+
+    case "warehouse-import-detail":
+      if (query.id) {
+        extractedTitle = `NHẬP KHO / CHI TIẾT / ${
+          warehouseImportDetail?.warehouseSession?.code || ""
+        }`;
+      } else {
+        extractedTitle = "NHẬP KHO / TẠO NHẬP KHO";
+      }
+      break;
+  }
+
   return (
     <Box className={clsx(styles["header"])}>
       <Typography
         component="h1"
         variant="h5"
-        className="flex-grow pl-12 text-xl font-medium"
+        className="flex-grow pl-[64px] text-xl font-medium uppercase"
       >
-        {title}
+        {title ? (
+          <>
+            <div className="flex items-center">
+              <span>{title.split("/")[0]}</span>
+              {title.split("/")[1] ? (
+                <span className="text-[#DDDDDD] !font-normal px-2">/</span>
+              ) : null}
+              <span className="text-main-2">{title.split("/")[1]}</span>
+            </div>
+          </>
+        ) : (
+          <>{extractedTitle}</>
+        )}
       </Typography>
 
       <LoadingButton
-        sx={{ height: "34px " }}
+        sx={{ height: "44px " }}
         variant="contained"
         color="error"
         startIcon={<PowerSettingsNewRoundedIcon />}
         onClick={() => signOut()}
-        className="shadow bg-[#E53E3E] font-semibold text-sm p-3"
+        className="shadow-none text-[#E53E3E] bg-[#fde9e9] font-bold text-sm p-4"
       >
         Đăng xuất
       </LoadingButton>

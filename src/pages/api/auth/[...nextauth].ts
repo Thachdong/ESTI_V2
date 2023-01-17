@@ -21,7 +21,7 @@ const handleCredentialsAuthorize = async (credentials: any ) => {
       accessTokenExp: exp,
     });
   } catch (error: any) {
-    return Promise.reject(new Error(encodeURIComponent(JSON.stringify(error?.data))));
+    return Promise.reject(new Error(encodeURIComponent(JSON.stringify(error))));
   }
 };
 

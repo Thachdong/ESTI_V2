@@ -1,45 +1,62 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
-import router from "next/router";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useRef, useState } from "react";
+import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
 import { exportWarehouse, TWarehouseExport } from "src/api";
 import {
   AddButton,
+  ContextMenuWrapper,
   DataTable,
+  DropdownButton,
   generatePaginationProps,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
+import {
+  WarehouseExportNoteDialog,
+  WarehouseExportStatistical,
+  WarehouseExportStatusDialog,
+} from "~modules-dashboard/components";
+import { TDefaultDialogState } from "~types/dialog";
+import { warehouseExportColumns } from "./data";
 
 export const WarehouseExportPage: React.FC = () => {
+  // LOCAL STATE AND EXTRACT PROPS
+  const router = useRouter();
+
+  const { query } = router;
+
+  const defaultValue = useRef<any>();
+
+  const [dialog, setDialog] = useState<TDefaultDialogState>();
+
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [searchContent, setSearchContent] = useState("");
-  const columns: GridColDef<TWarehouseExport>[] = [
-    {
-      field: "code",
-      headerName: "NGÀY TẠO",
-      renderCell: (params) =>
-        params.row.created
-          ? moment(params.row.created).format("DD/MM/YYYY")
-          : "__",
-    },
-    { field: "branchCode", headerName: "CHI NHÁNH" },
-    { field: "mainOrderCode", headerName: "MÃ ĐƠN HÀNG" },
-    { field: "warehouseSessionCode", headerName: "MÃ XUẤT KHO" },
-    { field: "customerCode", headerName: "MÃ KH" },
-    { field: "companyName", headerName: "TÊN KHÁCH HÀNG", flex: 3 },
-    {
-      field: "totalPrice",
-      headerName: "GIÁ TRỊ XUẤT KHO",
-      renderCell: (params) => _format.getVND(params.row.totalPrice),
-    },
-    { field: "deliveryCode", headerName: "GIAO NHẬN" },
-    { field: "exportStatusName", headerName: "TRẠNG THÁI" },
-  ];
+  usePathBaseFilter(pagination);
 
+  // DIALOG METHODS
+  const onCloseDialog = useCallback(() => {
+    setDialog({ open: false, type: undefined });
+  }, []);
+
+  const onOpenNoteDialog = useCallback(() => {
+    setDialog({ open: true, type: "note" });
+  }, []);
+
+  const onOpenStatusDialog = useCallback(() => {
+    setDialog({ open: true, type: "status" });
+  }, []);
+
+  const onNavigationToDetail = useCallback(() => {
+    const { id } = defaultValue.current || {};
+
+    router.push(`/dashboard/warehouse/export-detail?transactionId=${id}`);
+  }, [router, defaultValue]);
+
+  // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "exportWarehouse",
@@ -47,7 +64,7 @@ export const WarehouseExportPage: React.FC = () => {
       {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-        searchContent,
+        ...query,
       },
     ],
     () =>
@@ -55,7 +72,7 @@ export const WarehouseExportPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          searchContent,
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -65,32 +82,105 @@ export const WarehouseExportPage: React.FC = () => {
     }
   );
 
-  // console.log("exportwarehouse", data);
+  // DATA TABLE
+  const columns: GridColDef<TWarehouseExport>[] = [
+    ...warehouseExportColumns,
+    {
+      field: "action",
+      headerName: "",
+      width: 50,
+      flex: 0,
+      align: "center",
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: onNavigationToDetail,
+              label: "Chi tiết xuất kho",
+            },
+            {
+              action: onOpenNoteDialog,
+              label: "Ghi chú",
+            },
+            {
+              action: onOpenStatusDialog,
+              label: "Trạng thái",
+            },
+          ]}
+        />
+      ),
+    },
+  ];
+
+  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
+    const id = e.currentTarget.dataset.id;
+
+    const currentRow = data?.items.find((item: any) => item?.id === id);
+
+    defaultValue.current = currentRow;
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
-    <Paper className="p-2 w-full h-full shadow">
-      <div className="mb-2">
-        <AddButton
-          variant="contained"
-          onClick={() =>
-            router.push("/dashboard/warehouse/create-warehouse-export")
+    <Box className="h-full">
+      <WarehouseExportStatistical />
+
+      <Paper className="bgContainer">
+        <Box className="text-right mb-2">
+          <AddButton
+            variant="contained"
+            onClick={() => router.push("/dashboard/warehouse/export-detail")}
+          >
+            Tạo phiếu xuất kho
+          </AddButton>
+        </Box>
+
+        <ContextMenuWrapper
+          menuId="warehouse_import_menu"
+          menuComponent={
+            <Menu className="font-bold text-sm p-2" id="warehouse_import_menu">
+              <Item id="view-detail" onClick={onNavigationToDetail}>
+                Chi tiết xuất kho
+              </Item>
+              <Item id="delete-transaction" onClick={onOpenNoteDialog}>
+                Ghi chú
+              </Item>
+              <Item id="transation-note" onClick={onOpenStatusDialog}>
+                Trạng thái
+              </Item>
+            </Menu>
           }
         >
-          Tạo phiếu xuất kho
-        </AddButton>
-      </div>
-      <div>
-        <DataTable
-          rows={data?.items as []}
-          columns={columns}
-          gridProps={{
-            loading: isLoading || isFetching,
-            ...paginationProps,
-          }}
+          <DataTable
+            rows={data?.items as []}
+            columns={columns}
+            gridProps={{
+              loading: isLoading || isFetching,
+              ...paginationProps,
+            }}
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+          />
+        </ContextMenuWrapper>
+
+        <WarehouseExportNoteDialog
+          onClose={onCloseDialog}
+          open={Boolean(dialog?.open && dialog.type === "note")}
+          defaultValue={defaultValue.current}
         />
-      </div>
-    </Paper>
+
+        <WarehouseExportStatusDialog
+          onClose={onCloseDialog}
+          open={Boolean(dialog?.open && dialog.type === "status")}
+          defaultValue={defaultValue.current}
+          refetch={refetch}
+        />
+      </Paper>
+    </Box>
   );
 };

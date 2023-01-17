@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState, MouseEvent } from "react";
+import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { suppliers, TSupplier } from "src/api";
@@ -8,14 +8,14 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { SupplierDialog } from "~modules-dashboard/components/account";
+import { SuppliersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { supplierColumns } from "./supplierColumns";
@@ -25,21 +25,11 @@ export const SuppliersPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<TSupplier>();
+  const defaultValue = useRef<any>();
 
-  const router = useRouter();
+  usePathBaseFilter(pagination);
 
-  const { query } = router;
-
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      ...query,
-    };
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  const { query } = useRouter();
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -88,8 +78,10 @@ export const SuppliersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa nhà cung cấp: " + defaultValue?.supplierName)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {supplierName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa nhà cung cấp: " + supplierName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -97,18 +89,23 @@ export const SuppliersPage = () => {
     ...supplierColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -118,7 +115,7 @@ export const SuppliersPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -172,12 +169,12 @@ export const SuppliersPage = () => {
         />
       </ContextMenuWrapper>
 
-      <SupplierDialog
+      <SuppliersDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

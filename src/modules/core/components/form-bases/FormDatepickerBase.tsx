@@ -1,22 +1,59 @@
+// USAGE:
+// INPUT: NUMBER | UNDEFINED
+// OUTPUT: NUMBER | UNDEFINED
 import { TextField } from "@mui/material";
-import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import clsx from "clsx";
+import moment from "moment";
+import { TFormDatepickerBase } from "~types/form-controlled/form-datepicker";
 
-export const FormDatepickerBase: React.FC<DateTimePickerProps<any, any>> = (
-  props
-) => {
-  const { renderInput, ...restProps } = props;
+export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
+  // EXTRACT PROPS
+  const {
+    renderInput,
+    onChange,
+    renderInputProps,
+    helperText,
+    InputProps,
+    ...restProps
+  } = props;
+
+  // METHODS
+  const handleChange = (
+    value: any,
+    keyboardInputValue?: string | undefined
+  ) => {
+    const keyboardInputDate = moment(keyboardInputValue, props.inputFormat);
+
+    if (value?._isValid || keyboardInputDate.isValid()) {
+      onChange(value?.valueOf());
+    } else {
+      onChange("invalidDate");
+    }
+  };
+
+  // DEFAULT PROPS
+  const defaultRenderInput = !!renderInput ? renderInput : (params: any) => (
+    <TextField
+      size="small"
+      inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
+      helperText={helperText}
+      {...params}
+      {...renderInputProps}
+    />
+  )
+
+  const defaultInputProps = {
+    ...InputProps,
+    className: clsx("bg-input-bg", InputProps?.className),
+  }
 
   return (
     <DateTimePicker
-      renderInput={(params: any) => (
-        <TextField
-          size="small"
-          inputProps={{ ...params.inputProps, placeholder: "Chọn ngày" }}
-          {...params}
-          {...restProps}
-        />
-      )}
+      renderInput={defaultRenderInput}
       dayOfWeekFormatter={(day) => `${day}`}
+      onChange={handleChange}
+      InputProps={defaultInputProps}
       {...restProps}
     />
   );

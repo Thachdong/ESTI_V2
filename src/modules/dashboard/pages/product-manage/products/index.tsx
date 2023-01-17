@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   MouseEvent,
+  useRef,
 } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
@@ -15,13 +16,13 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   FormInputBase,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { ProductsDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -53,18 +54,9 @@ export const ProductsPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      ...query,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -156,8 +148,10 @@ export const ProductsPage = () => {
   };
 
   const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa SP: " + defaultValue.productName)) {
-      await mutateDelete.mutateAsync(defaultValue.id as string);
+    const {productName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa SP: " + productName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
@@ -196,18 +190,23 @@ export const ProductsPage = () => {
     },
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={() => setDialog({ open: true, type: "View" })}
-          />
-          <DeleteButton
-            onClick={handleDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id as string}
+          items={[
+            {
+              action: () => setDialog({ open: true, type: "View" }),
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -215,9 +214,9 @@ export const ProductsPage = () => {
   const onMouseEnterRow = (e: MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.items.find((item: any) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -286,7 +285,7 @@ export const ProductsPage = () => {
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

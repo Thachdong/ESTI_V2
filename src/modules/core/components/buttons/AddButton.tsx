@@ -2,14 +2,21 @@ import AddIcon from "@mui/icons-material/Add";
 import { Button, ButtonProps } from "@mui/material";
 import clsx from "clsx";
 
-export const AddButton: React.FC<ButtonProps> = (props) => {
+export const AddButton: React.FC<ButtonProps> = ({ ref, ...props }) => {
   return (
     <Button
+      variant="contained"
       {...props}
-      className={clsx("bg-main-2 hover:bg-[#3182ce] px-3", props?.className)}
+      className={clsx(
+        "bg-main-2 hover:bg-[#3182ce] px-3 shadow-none !font-bold",
+        props.disabled && "disable-form-input",
+        props?.className
+      )}
     >
-      <AddIcon className="mr-2 !font-semibold" />
-      <span className="truncate">{props?.children}</span>
+      <AddIcon />
+      {
+        props?.children && <span className="truncate ml-2">{props?.children}</span>
+      }
     </Button>
   );
 };

@@ -1,5 +1,7 @@
 .footer {
-    @apply flex flex-col items-center justify-center;
-    height: 45px;
-    border-top: 1px solid #e0e0e0;
+  @apply flex flex-col items-center justify-center;
+  height: 45px;
+  /* border-top: 1px solid #e0e0e0; */
+  color: #747474;
+  background-color: #f3f6f9;
 }

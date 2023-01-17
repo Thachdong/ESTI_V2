@@ -6,11 +6,114 @@
   @apply flex flex-col w-full h-full shadow overflow-y-auto p-2;
 }
 
-.MuiDataGrid-columnHeaderTitleContainerContent {
+input {
+  outline: none !important;
+  /* border: solid 0.5px #fff !important; */
+}
+
+input .disable-form-input,
+.Mui-disabled:not(button) {
+  @apply !border-disabled-input-border !bg-disabled-input-bg cursor-not-allowed;
+}
+
+/* CUSTOM MUI COMPONENT STYLE NEED TO LOAD FIRST AT ALL */
+/* GROUPING COLUMN STYLES */
+.grouping-column .MuiDataGrid-columnHeaderTitleContainerContent {
+  @apply flex justify-center;
+}
+
+.grouping-column .css-f3jnds-MuiDataGrid-columnHeaders {
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+}
+
+.grouping-column
+  .MuiDataGrid-columnHeaders
+  .css-yrdy0g-MuiDataGrid-columnHeaderRow:first-child {
+  height: 32px !important;
+  line-height: 32px !important;
+  border-bottom: 1px solid #fff;
+  @apply text-white bg-main;
+}
+
+.grouping-column
+  .MuiDataGrid-columnHeaders
+  .css-yrdy0g-MuiDataGrid-columnHeaderRow:first-child
+  .MuiDataGrid-columnHeader {
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.grouping-column .MuiDataGrid-virtualScroller {
+  transform: translateY(-32px);
+}
+
+/* CUSTOM HEADER HEIGHT */
+.data-table-container .MuiDataGrid-columnHeaderTitleContainerContent {
   width: 100%;
 }
 
-.disable-form-input {
-  background: #f0f0f0;
-  cursor: not-allowed !important;
+/* CUSTOM ROW HEIGHT TO AUTO */
+.data-table-container .MuiDataGrid-virtualScrollerContent {
+  max-height: none !important;
+  min-height: 40px !important;
+  padding-bottom: 20px !important;
+}
+
+.data-table-container .MuiDataGrid-cell {
+  line-height: unset !important;
+  max-height: none !important;
+  white-space: normal !important;
+  min-height: 40px !important;
+  padding: 8px;
+}
+
+.data-table-container .MuiDataGrid-row {
+  max-height: none !important;
+  min-height: 40px !important;
+}
+
+/* SCROLLBAR STYLING */
+/* width */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar {
+  width: 4px;
+  height: 12px;
+}
+
+/* Track */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.data-table-container .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
+  background: rgb(223, 223, 223);
+}
+
+/* Handle on hover */
+.data-table-container
+  .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* handle table */
+.MuiDataGrid-columnHeader .MuiDataGrid-columnSeparator svg {
+  display: none !important;
+}
+
+.MuiDataGrid-columnHeader {
+  outline: none !important;
+}
+
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row:nth-child(2n) {
+  background-color: #f3f6f9 !important;
+}
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row {
+  border: none !important;
+  cursor: pointer !important;
+}
+.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-cell {
+  border: none !important;
+  outline: none !important;
 }

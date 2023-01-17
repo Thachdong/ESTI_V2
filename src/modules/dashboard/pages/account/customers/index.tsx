@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState, MouseEvent, useEffect } from "react";
+import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { customer, suppliers } from "src/api";
@@ -8,14 +8,14 @@ import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
+  DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { CustomerDialog } from "~modules-dashboard/components";
+import { CustomersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { CustomerColumns } from "./customerColumns";
@@ -29,18 +29,9 @@ export const CustomersPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const [defaultValue, setDefaultValue] = useState<any>();
+  const defaultValue = useRef<any>();
 
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      ...query,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
@@ -89,27 +80,34 @@ export const CustomersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa khách hàng: " + defaultValue?.companyName)) {
-      await mutateDelete.mutateAsync(defaultValue?.id as string);
+    const {companyName, id} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa khách hàng: " + companyName)) {
+      await mutateDelete.mutateAsync(id as string);
     }
-  }, []);
+  }, [defaultValue]);
 
   const columns: TGridColDef[] = [
     ...CustomerColumns,
     {
       field: "action",
-      headerName: "Thao tác",
-      renderCell: () => (
-        <>
-          <ViewButton
-            className="min-h-[40px] min-w-[40px]"
-            onClick={onUpdate}
-          />
-          <DeleteButton
-            onClick={onDelete}
-            className="min-h-[40px] min-w-[40px]"
-          />
-        </>
+      headerName: "",
+      align: "center",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: onUpdate,
+              label: "Thông tin chi tiết",
+            },
+            {
+              action: onDelete,
+              label: "Xóa",
+            },
+          ]}
+        />
       ),
     },
   ];
@@ -119,7 +117,7 @@ export const CustomersPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    setDefaultValue(currentRow);
+    defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
@@ -173,12 +171,12 @@ export const CustomersPage = () => {
         />
       </ContextMenuWrapper>
 
-      <CustomerDialog
+      <CustomersDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}
         refetch={refetch}
-        defaultValue={defaultValue as any}
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

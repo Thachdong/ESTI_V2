@@ -40,7 +40,6 @@ export const RulesSupplier: React.FC<TProps> = ({ control }) => {
                 }}
                 options={[]}
                 label=""
-                required
                 className=""
               />
             </div>

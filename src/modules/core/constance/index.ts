@@ -2,7 +2,29 @@ export const defaultPagination: TPagination = {
   pageSize: 20,
   pageIndex: 1,
   total: 0,
+  totalPage: 0,
 };
+
+export const quoteOrderStatus = [
+  { value: 0, label: "Chưa thực hiện" },
+  { value: 1, label: "Đang thực hiện" },
+  { value: 2, label: "Kết chuyển báo cáo" },
+  { value: 3, label: "Hủy yêu cầu" },
+  { value: 4, label: "Tạm ngưng" },
+  { value: 5, label: "Hủy báo giá" },
+];
+
+export const quoteStatus = [
+  { value: 0, label: "Chưa báo giá" },
+  { value: 1, label: "Đã báo giá" },
+  { value: 2, label: "Báo giá lại" },
+  { value: 3, label: "Kết chuyển đơn hàng" },
+  { value: 4, label: "Từ chối" },
+  { value: 5, label: "Hủy báo giá" },
+  { value: 6, label: "Hủy yêu cầu" },
+  { value: 7, label: "Quá hạn" },
+  { value: 8, label: "Tạm ngưng" },
+];
 
 export const genderData = [
   { id: 1, name: "Nam" },
@@ -34,32 +56,157 @@ export const productTypes = [
   { id: 6, name: "Nhóm sản phẩm khác" },
 ];
 
+export const productTypesStamp = [
+  // USE IN STAMP CONFIG PAGE
+  { id: 1, name: "Thiết bị" },
+  { id: 2, name: "Hóa chất" },
+  { id: 3, name: "Dụng cụ" },
+];
+
 export const curatorDepartments = [
-  {id: 1, name: "Phòng hành chánh"},
-  {id: 2, name: "Phòng thu mua"},
-  {id: 3, name: "Phòng QC"},
-  {id: 4, name: "Phòng QA"},
-  {id: 5, name: "Phòng ban khác"},
+  { id: 1, name: "Phòng hành chánh" },
+  { id: 2, name: "Phòng thu mua" },
+  { id: 3, name: "Phòng QC" },
+  { id: 4, name: "Phòng QA" },
+  { id: 5, name: "Phòng ban khác" },
 ];
 
 export const curatorPositions = [
-  {id: 1, name: 'Giám đốc'},
-  {id: 2, name: 'Kế toán'},
-  {id: 3, name: 'Nhân viên bán hàng'},
+  { id: 1, name: "Giám đốc" },
+  { id: 2, name: "Kế toán" },
+  { id: 3, name: "Nhân viên bán hàng" },
 ];
 
 export const productTemplates = [
-  {id: 1, name: "Template 1", url: "https://estiweb.monamedia.net/template/sanpham-1.html"},
-  {id: 2, name: "Template 2", url: "https://estiweb.monamedia.net/template/sanpham-2.html"},
-  {id: 3, name: "Template 3", url: ""},
-]
-
+  {
+    id: 1,
+    name: "Template 1",
+    url: "https://estiweb.monamedia.net/template/sanpham-1.html",
+  },
+  {
+    id: 2,
+    name: "Template 2",
+    url: "https://estiweb.monamedia.net/template/sanpham-2.html",
+  },
+  { id: 3, name: "Template 3", url: "" },
+];
 
 export const parentCategoryId = "00000000-0000-0000-0000-000000000000";
 
 export const searchParams = [
-  {id: 1, name: "Mã sản phẩm"},
-  {id: 2, name: "Tên sản phẩm"},
-  {id: 3, name: "Nhà sản xuất"},
-  {id: 4, name: "Lô sản xuất"},
-]
+  { id: 1, name: "Mã sản phẩm" },
+  { id: 2, name: "Tên sản phẩm" },
+  { id: 3, name: "Nhà sản xuất" },
+  { id: 4, name: "Lô sản xuất" },
+];
+
+export const positionStatus = [
+  {
+    id: 1,
+    name: "Không có hàng",
+  },
+  {
+    id: 2,
+    name: "Còn trống",
+  },
+  {
+    id: 3,
+    name: "Gần đầy",
+  },
+  {
+    id: 4,
+    name: "Hết chổ",
+  },
+];
+
+export const warehouseImportStatus = [
+  {
+    value: 0,
+    label: "Chưa thực hiện",
+  },
+  {
+    value: 1,
+    label: "Đã nhập kho",
+  },
+  {
+    value: 2,
+    label: "Hủy",
+  },
+];
+
+export const VAT = [
+  { id: 0, name: "0%" },
+  { id: 5, name: "5%" },
+  { id: 8, name: "8%" },
+  { id: 10, name: "10%" },
+];
+
+export const warehouseExportStatus = [
+  {
+    value: 0,
+    label: "Chưa thực hiện",
+  },
+  {
+    value: 1,
+    label: "Đang đóng gói",
+  },
+  {
+    value: 2,
+    label: "Đang vận chuyển",
+  },
+  {
+    value: 3,
+    label: "Hoàn thành",
+  },
+  {
+    value: 4,
+    label: "Hủy đơn nháp",
+  },
+  {
+    value: 5,
+    label: "Hủy",
+  },
+];
+
+export const businessAreas = [
+  {
+    id: 1,
+    name: "Dược phẩm",
+  },
+  {
+    id: 2,
+    name: "Thực phẩm",
+  },
+  {
+    id: 3,
+    name: "Đồ uống",
+  },
+  {
+    id: 4,
+    name: "Đơn vị kiểm định",
+  },
+  {
+    id: 5,
+    name: "Trung tâm nghiên cứu",
+  },
+  {
+    id: 6,
+    name: "Da giày - may mặc",
+  },
+  {
+    id: 7,
+    name: "Chế phẩm cao su",
+  },
+  {
+    id: 8,
+    name: "Thuỷ sản",
+  },
+  {
+    id: 9,
+    name: "Chế phẩm điện",
+  },
+  {
+    id: 10,
+    name: "Khác",
+  },
+];
