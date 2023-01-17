@@ -32,9 +32,11 @@ export const FormInputNumberBase: React.FC<TProps> = (props) => {
     ...restProps,
   };
 
+  const shrink = shrinkLabel ? {} : {shrink: false}
+
   const defaultLabelProps = {
-    shrink: shrinkLabel,
     className: "!bg-transparent text-input-label font-medium",
+    ...shrink,
     ...InputLabelProps,
   }
 
@@ -45,7 +47,7 @@ export const FormInputNumberBase: React.FC<TProps> = (props) => {
 
   const defaultInputTagProps = {
     ...inputProps,
-    className: clsx("pl-[40%] text-right", inputProps?.className),
+    className: clsx(!shrinkLabel && "pl-[40%] text-right", inputProps?.className),
   }
 
   return (

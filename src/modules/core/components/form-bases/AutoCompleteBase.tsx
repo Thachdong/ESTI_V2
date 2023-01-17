@@ -63,8 +63,10 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     ...restProps,
   };
 
+  const shrink = shrinkLabel ? {} : {shrink: false}
+
   const defaultInputProps = {
-    InputLabelProps: { shrink: shrinkLabel },
+    InputLabelProps: { ...shrink },
     label,
     sx: {
       ".MuiInputBase-root": {
@@ -79,7 +81,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     ...inputProps,
   };
 
-  const defaultSx = {
+  const defaultSx: any = shrinkLabel ? {} : {
     input: {
       textAlign: "right",
       paddingLeft: "30% !important",
