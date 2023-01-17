@@ -1,13 +1,14 @@
 import { Autocomplete, TextField } from "@mui/material";
+import clsx from "clsx";
 import _ from "lodash";
 import { SyntheticEvent, useCallback } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
 
-type TProps = {
+type TProps = TAutocompleteProps & {
   onChange: (val: any | any[]) => void;
 };
 
-export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
+export const AutoCompleteBase: React.FC<TProps> = (
   props
 ) => {
   const {
@@ -19,6 +20,7 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     options = [],
     callback,
     inputProps,
+    shrinkLabel=false,
     ...restProps
   } = props;
 
@@ -61,13 +63,21 @@ export const AutoCompleteBase: React.FC<TAutocompleteProps & TProps> = (
     ...restProps,
   };
 
+  const defaultInputProps = {
+    inputProps: {
+      className: clsx("pl-[40%] text-right", inputProps?.className),
+    },
+    InputLabelProps: {shrink: shrinkLabel},
+    label,
+  }
+
   return (
     <Autocomplete
       options={options}
       onChange={handleChange}
       value={renderValue() || null}
       renderInput={(params) => (
-        <TextField {...params} {...inputProps} value={renderValue() || null} label={label} />
+        <TextField {...params} {...defaultInputProps} value={renderValue() || null} />
       )}
       {...defaultProps}
     />

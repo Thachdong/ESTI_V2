@@ -4,4 +4,5 @@ import { TControllerProps } from "~types/react-hook-form";
 
 type TFormInputProps = TextFieldProps & {
   controlProps: TControllerProps;
+  shrinkLabel?: boolean;
 };

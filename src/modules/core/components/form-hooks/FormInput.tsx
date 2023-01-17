@@ -3,6 +3,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { TRenderControllerParams } from "~types/react-hook-form";
 import { TFormInputProps } from "~types/form-controlled/form-input";
 import { FormInputBase } from "~modules-core/components/form-bases";
+import _ from "lodash";
 
 export const FormInput: React.FC<TFormInputProps> = (props) => {
   const { controlProps, label, ...textFieldProps } = props;
@@ -26,7 +27,7 @@ export const FormInput: React.FC<TFormInputProps> = (props) => {
           render={({ message }) => message}
         />
       ),
-      error: !!error,
+      error: !_.isEmpty(errors),
       value: value || "",
       label: updateLabel,
       ...restField,

@@ -108,6 +108,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
                 onMouseEnter: onMouseEnterRow,
               },
             }}
+            rowCount={products?.length}
           />
         </ContextMenuWrapper>
       </Box>

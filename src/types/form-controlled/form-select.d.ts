@@ -14,6 +14,7 @@ type TAutocompleteProps = Partial<
 > & {
   label: string;
   options: any[];
+  shrinkLabel?: boolean;
   valueKey?: string;
   labelKey?:string;
   inputProps?: TextFieldProps;

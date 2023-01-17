@@ -10,10 +10,9 @@ input {
   outline: none !important;
 }
 
-input :t .disable-form-input,
+input .disable-form-input,
 .Mui-disabled:not(button) {
-  background: #f0f0f0 !important;
-  cursor: not-allowed !important;
+  @apply !border-[#dfe2e5] !bg-[#dfe2e5] cursor-not-allowed;
 }
 
 /* CUSTOM MUI COMPONENT STYLE NEED TO LOAD FIRST AT ALL */
