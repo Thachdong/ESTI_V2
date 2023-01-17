@@ -12,8 +12,6 @@ export const FormSelect: React.FC<TAutocomplete> = (props) => {
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
-    const { name } = controlProps;
-
     const rules = controlProps.rules || {};
 
     const updateLabel = Object.keys(rules).includes("required")

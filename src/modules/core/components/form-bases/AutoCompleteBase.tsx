@@ -1,5 +1,4 @@
 import { Autocomplete, TextField } from "@mui/material";
-import clsx from "clsx";
 import _ from "lodash";
 import { SyntheticEvent, useCallback } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
@@ -8,9 +7,8 @@ type TProps = TAutocompleteProps & {
   onChange: (val: any | any[]) => void;
 };
 
-export const AutoCompleteBase: React.FC<TProps> = (
-  props
-) => {
+export const AutoCompleteBase: React.FC<TProps> = (props) => {
+  // EXTRACT PROPS
   const {
     label,
     onChange,
@@ -20,10 +18,11 @@ export const AutoCompleteBase: React.FC<TProps> = (
     options = [],
     callback,
     inputProps,
-    shrinkLabel=false,
+    shrinkLabel = false,
     ...restProps
   } = props;
 
+  // METHODS
   const handleChange = (
     _: SyntheticEvent<Element, Event>,
     value: any | any[]
@@ -55,6 +54,7 @@ export const AutoCompleteBase: React.FC<TProps> = (
     }
   }, [value, options, callback]);
 
+  // DEFFAULT PROPS
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",
     noOptionsText: "Không có lựa chọn",
@@ -64,20 +64,36 @@ export const AutoCompleteBase: React.FC<TProps> = (
   };
 
   const defaultInputProps = {
-    inputProps: {
-      className: clsx("pl-[40%] text-right", inputProps?.className),
-    },
-    InputLabelProps: {shrink: shrinkLabel},
+    InputLabelProps: { shrink: shrinkLabel },
     label,
-  }
+    sx: {
+      ".MuiInputBase-root": {
+        background: "#f6f9fb",
+        borderColor: "#fcfdfd"
+      },
+      label: {
+        fontWeight: 600,
+        color: "#747474"
+      }
+    },
+    ...inputProps,
+  };
+
+  const defaultSx = {
+    input: {
+      textAlign: "right",
+      paddingLeft: "30% !important",
+    },
+  };
 
   return (
     <Autocomplete
       options={options}
       onChange={handleChange}
-      value={renderValue() || null}
+      value={renderValue()}
+      sx={defaultSx}
       renderInput={(params) => (
-        <TextField {...params} {...defaultInputProps} value={renderValue() || null} />
+        <TextField {...params} {...defaultInputProps} value={renderValue()} />
       )}
       {...defaultProps}
     />

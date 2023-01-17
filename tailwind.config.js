@@ -17,6 +17,12 @@ module.exports = {
       "main-2": "#2684C5",
       "main-3": "#DBB918",
       "main-4": "#23DBD3",
+      // COLOR FOR INPUT TAGS
+      "input-bg": "#f6f9fb",
+      "input-border": "#fcfdfd",
+      "disabled-input-bg": "#dfe2e5",
+      "disabled-input-border": "#dfe2e5",
+      "input-label": "#747474"
     },
   },
   plugins: [],

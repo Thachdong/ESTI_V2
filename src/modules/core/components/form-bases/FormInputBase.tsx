@@ -27,7 +27,7 @@ export const FormInputBase: React.FC<TProps> = ({
 
   const defaultInputProps = {
     ...InputProps,
-    className: clsx("bg-[#f6f9fb] border-[#fcfdfd]", InputProps?.className),
+    className: clsx("bg-input-bg border-input-border", InputProps?.className),
   }
 
   const defaultInputTagProps = {
