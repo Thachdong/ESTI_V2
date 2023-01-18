@@ -108,6 +108,7 @@ export const QuoteDetailProduct: React.FC = () => {
                 onMouseEnter: onMouseEnterRow,
               },
             }}
+            paginationMode="client"
           />
         </ContextMenuWrapper>
       </Box>

@@ -97,6 +97,7 @@ export const PurchaseDetailTable = () => {
         hideFooter
         autoHeight
         hideSearchbar
+        paginationMode="client"
       />
 
       <PurchaseDetailDialog

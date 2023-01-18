@@ -1,10 +1,13 @@
 import { DataGridProps, GridColDef } from "@mui/x-data-grid";
+import { ReactNode } from "react";
 
 type TDataGrid = DataGridProps & {
   rows?: any[];
-  columns?: any[];
+  columns?: TGridColDef[];
   gridProps?: Partial<DataGridProps>;
   hideSearchbar?: boolean;
+  expandable?: boolean;
+  generateExpandContent?: (data: any) => ReactNode;
 };
 
 type TGridColDef<TData = any> = GridColDef<TData> & {

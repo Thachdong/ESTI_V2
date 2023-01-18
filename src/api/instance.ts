@@ -89,7 +89,7 @@ const useResponseError = (error: AxiosError) => {
       case 401:
       case 408: {
         // IGNORE WITH SOME ROUTES
-        if (url?.includes("authenticate/login")) {
+        if (url?.includes("Authenticate/login")) {
           break;
         }
 

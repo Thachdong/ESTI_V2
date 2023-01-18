@@ -41,6 +41,7 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail, selecte
             }}
             callback={(opt) => setSelectedBranch(opt)}
             label="Mã chi nhánh"
+            labelKey="code"
           />
           <FormSelect
             options={deliveryOptions}

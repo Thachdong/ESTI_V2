@@ -131,7 +131,7 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                 control,
               }}
               label="CN thực hiện"
-              labelKey="name"
+              labelKey="code"
               fetcher={branchs.getList}
             />
           </div>

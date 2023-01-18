@@ -27,7 +27,7 @@ export const FormInput: React.FC<TFormInputProps> = (props) => {
           render={({ message }) => message}
         />
       ),
-      error: !_.isEmpty(errors),
+      error: !!error,
       value: value || "",
       label: updateLabel,
       ...restField,

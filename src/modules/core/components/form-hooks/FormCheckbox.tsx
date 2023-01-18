@@ -8,7 +8,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
   const { controlProps, label, labelProps, ...textFieldProps } = props;
 
   const renderController = ({
-    field: { value, ref, ...restField },
+    field: { value, onChange },
     fieldState: { error },
     formState: { errors },
   }: TRenderControllerParams) => {
@@ -20,10 +20,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
 
     const defaultProps = {
       error,
-      value: value || "",
       checked: value,
-      ...restField,
-      ...textFieldProps,
     };
 
     return (
@@ -31,6 +28,8 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
         control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
         className={clsx("!border !border-[#ffff] !rounded", textFieldProps?.className)}
+        value={value || false}
+        onChange={onChange}
         {...labelProps}
       />
     );

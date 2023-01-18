@@ -208,9 +208,6 @@ export const QuotationRequestsPage = () => {
               loading: isLoading || isFetching,
               ...paginationProps,
             }}
-            getDetailPanelContent={({ row }) => (
-              <Box>{`Order #${row.id}`}</Box>
-            )}
             componentsProps={{
               row: {
                 onMouseEnter: onMouseEnterRow,

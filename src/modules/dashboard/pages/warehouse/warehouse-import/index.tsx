@@ -176,7 +176,7 @@ export const WarehouseImportPage: React.FC = () => {
 
       <WarehouseImportNoteDialog
         onClose={() => setDialog({ open: false, type: undefined })}
-        open={dialog?.open as boolean}
+        open={!!dialog?.open}
         defaultValue={defaultValue.current}
       />
     </Paper>

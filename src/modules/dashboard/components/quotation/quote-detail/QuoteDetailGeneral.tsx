@@ -3,7 +3,6 @@ import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { branchs, staff } from "src/api";
 import {
-  FormInputBase,
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
@@ -30,6 +29,7 @@ export const QuoteDetailGeneral: React.FC = () => {
           }}
           fetcher={branchs.getList}
           label="CN thực hiện"
+          labelKey="code"
         />
 
         <FormSelect

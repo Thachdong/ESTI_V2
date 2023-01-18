@@ -29,6 +29,7 @@ export const PurchasePlanTable: React.FC = () => {
         hideFooter
         autoHeight
         hideSearchbar
+        paginationMode="client"
       />
 
       <PurchasePlanProductDialog

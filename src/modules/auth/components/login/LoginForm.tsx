@@ -29,6 +29,8 @@ import { useCallback } from "react";
 import moment from "moment";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
+import { useMutation } from "react-query";
+import { authenticate } from "src/api";
 
 type TLoginCredential = {
   username: string;
@@ -66,14 +68,19 @@ export function LoginForm() {
     }
   }, [session]);
 
+  const mutateLogin = useMutation((data: TLoginCredential) =>
+    authenticate.login(data).then(res => res.data)
+  );
+
   const onSubmit = useCallback(
     async (data: TLoginCredential) => {
       const { callbackUrl } = router.query;
 
       try {
+        const {token} = await mutateLogin.mutateAsync(data);
+
         const signInPayload: SignInOptions = {
-          data: JSON.stringify(data),
-          callbackUrl: callbackUrl as string,
+          data: JSON.stringify({token}),
           redirect: false,
         };
 
@@ -99,13 +106,12 @@ export function LoginForm() {
         if (!ok && error) {
           console.log(error);
 
-          const errorData = JSON.parse(decodeURIComponent(error as string));
+          const errorData = decodeURIComponent(error as string);
 
-          toast.error(errorData?.resultMessage);
+          toast.error(errorData);
         }
       } catch (error) {
         console.log(error);
-        toast.error("Lỗi không xác định!");
       }
     },
     [router]
@@ -135,31 +141,37 @@ export function LoginForm() {
           onSubmit={handleSubmit(onSubmit)}
           className="w-[375px] grid gap-4 mt-4"
         >
-          <Box className="flex gap-2">
-            <PersonIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "username",
-                rules: { required: "Phải nhập tên đăng nhập" },
-              }}
-              label="Tên đăng nhập"
-              variant="standard"
-              className="!rounded-none"
-            />
-          </Box>
+          <FormInput
+            controlProps={{
+              control: control,
+              name: "username",
+              rules: { required: "Phải nhập tên đăng nhập" },
+            }}
+            label="Tên đăng nhập"
+            variant="standard"
+            className="!rounded-none"
+            shrinkLabel
+            InputProps={{
+              startAdornment: (
+                <PersonIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+              ),
+            }}
+          />
 
-          <Box className="flex gap-2">
-            <LockIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
-            <FormInputPassword
-              controlProps={{
-                control: control,
-                name: "password",
-                rules: { required: "Phải nhập mật khẩu" },
-              }}
-              variant="standard"
-            />
-          </Box>
+          <FormInputPassword
+            controlProps={{
+              control: control,
+              name: "password",
+              rules: { required: "Phải nhập mật khẩu" },
+            }}
+            variant="standard"
+            shrinkLabel
+            InputProps={{
+              startAdornment: (
+                <LockIcon className="bg-[#f4f6f8] p-2 w-[46px] h-[46px] rounded" />
+              ),
+            }}
+          />
 
           <BaseButton
             type="submit"

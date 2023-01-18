@@ -35,7 +35,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
   };
 
   const renderValue = useCallback(() => {
-    if (value === undefined) return restProps.multiple ? [] : value;
+    if (!value) return restProps.multiple ? [] : undefined;
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>
@@ -59,7 +59,8 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     size: "small",
     noOptionsText: "Không có lựa chọn",
     disableCloseOnSelect: restProps.multiple,
-    getOptionLabel: (option: any) => option?.[labelKey],
+    getOptionLabel: (option: any) =>
+      option?.[labelKey] || "Incorrect label key",
     ...restProps,
   };
 
@@ -72,11 +73,12 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       ".MuiInputBase-root": {
         background: "#f6f9fb",
         borderColor: "#fcfdfd",
-        paddingLeft: (!shrinkLabel && restProps.multiple) ? "40% !important" : "0px",
-        direction: (!shrinkLabel && restProps.multiple) ? "rtl" : "ltr"
+        paddingLeft:
+          !shrinkLabel && restProps.multiple ? "40% !important" : "0px",
+        direction: !shrinkLabel && restProps.multiple ? "rtl" : "ltr",
       },
       ".MuiChip-root": {
-        direction: "ltr"
+        direction: "ltr",
       },
       label: {
         fontWeight: 500,

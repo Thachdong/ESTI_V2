@@ -145,6 +145,7 @@ export const DocumentTypesPage = () => {
           }}
           hideSearchbar={true}
           hideFooterPagination={true}
+          paginationMode="client"
         />
       </ContextMenuWrapper>
 
