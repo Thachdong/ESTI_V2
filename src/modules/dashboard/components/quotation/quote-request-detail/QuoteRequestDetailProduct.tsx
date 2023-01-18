@@ -109,6 +109,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
               },
             }}
             rowCount={products?.length}
+            paginationMode="client"
           />
         </ContextMenuWrapper>
       </Box>

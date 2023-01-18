@@ -61,7 +61,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
     ],
     () =>
       products
-        .getLot(selectedProduct?.id, warehouseConfig?.warehouseConfigId)
+        .getLot(selectedProduct?.productId, warehouseConfig?.warehouseConfigId)
         .then((res) => res.data),
     {
       enabled: !!selectedProduct && !!warehouseConfig?.warehouseConfigId,

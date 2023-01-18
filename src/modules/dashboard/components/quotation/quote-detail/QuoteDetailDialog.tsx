@@ -226,6 +226,7 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
           hideSearchbar
           autoHeight
           getRowId={(row) => row.no}
+          paginationMode="client"
         />
       </Box>
 

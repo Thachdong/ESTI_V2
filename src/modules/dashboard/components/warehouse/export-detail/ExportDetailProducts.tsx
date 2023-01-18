@@ -243,6 +243,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          paginationMode="client"
         />
       </ContextMenuWrapper>
 

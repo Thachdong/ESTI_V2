@@ -83,6 +83,7 @@ export const StoragePositionHistory: React.FC<TProps> = ({
         columns={positionHistoryColumns}
         rows={data?.items || []}
         autoHeight={true}
+        paginationMode="client"
       />
     </Box>
   );

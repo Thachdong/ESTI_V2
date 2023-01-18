@@ -76,6 +76,7 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
         columns={positionProductColumns}
         rows={data?.items || []}
         autoHeight={true}
+        paginationMode="client"
       />
     </Box>
   );

@@ -149,7 +149,7 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
             className: "max-h-[325px] !border-none",
             onScroll: triggerLoadMoreOptions,
           }}
-          getOptionLabel={(option) => option?.[labelKey]}
+          getOptionLabel={(option) => option?.[labelKey] || ""}
           {...defaultProps}
         />
     );
