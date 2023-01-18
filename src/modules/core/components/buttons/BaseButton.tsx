@@ -28,21 +28,18 @@ export const BaseButton: React.FC<TBaseButton> = (props) => {
 
   return (
     <Tooltip title={tooltipText} placement={tooltipPlacement || "top"}>
-      {/* <Box > */}
-        <Button
-          variant="contained"
-          component="span"
-          onClick={handleClick}
-          disabled={loading || isSubmitting}
-          {...rest}
-        >
-          {children}
+      <Button
+        variant="contained"
+        onClick={handleClick}
+        disabled={loading || isSubmitting}
+        {...rest}
+      >
+        {children}
 
-          {(loading || isSubmitting) && (
-            <CircularProgress size="1rem" color="inherit" />
-          )}
-        </Button>
-      {/* </Box> */}
+        {(loading || isSubmitting) && (
+          <CircularProgress size="1rem" color="inherit" />
+        )}
+      </Button>
     </Tooltip>
   );
 };
