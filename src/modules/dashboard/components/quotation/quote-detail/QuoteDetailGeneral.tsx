@@ -29,7 +29,7 @@ export const QuoteDetailGeneral: React.FC = () => {
           }}
           fetcher={branchs.getList}
           label="CN thực hiện"
-          labelKey="branchCode"
+          labelKey="code"
         />
 
         <FormSelect
