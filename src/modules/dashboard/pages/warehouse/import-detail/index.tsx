@@ -122,35 +122,39 @@ export const ImportDetailPage = () => {
   }, [transactionData]);
 
   return (
-    <FormProvider {...methods}>
-      {query.id ? (
-        <ImportDetailViewGeneralInfo
-          refetch={refetchTransaction}
-          data={transactionData?.warehouseSession}
+    <Box className="container-center">
+      <FormProvider {...methods}>
+        {query.id ? (
+          <ImportDetailViewGeneralInfo
+            refetch={refetchTransaction}
+            data={transactionData?.warehouseSession}
+          />
+        ) : (
+          <>
+            <Box className="mb-2">
+              <FormCheckbox
+                controlProps={{
+                  name: "withoutPurchaseInvoice",
+                  control: methods.control,
+                }}
+                label="Nhập hàng không thông qua đơn mua"
+                checked={withoutPurchaseInvoice}
+              />
+            </Box>
+            <ImportDetailGeneralInfo orderDetail={orderDetail} />
+          </>
+        )}
+
+        <ImportDetailSupplierInfo supplierData={orderDetail} />
+
+        <ImportDetailTable
+          transactionData={transactionData?.warehouseSession}
         />
-      ) : (
-        <>
-          <Box className="mb-2">
-            <FormCheckbox
-              controlProps={{
-                name: "withoutPurchaseInvoice",
-                control: methods.control,
-              }}
-              label="Nhập hàng không thông qua đơn mua"
-              checked={withoutPurchaseInvoice}
-            />
-          </Box>
-          <ImportDetailGeneralInfo orderDetail={orderDetail} />
-        </>
-      )}
 
-      <ImportDetailSupplierInfo supplierData={orderDetail} />
-
-      <ImportDetailTable transactionData={transactionData?.warehouseSession} />
-
-      <ImportDetailButtonsBox
-        importStatus={transactionData?.warehouseSession?.importStatus}
-      />
-    </FormProvider>
+        <ImportDetailButtonsBox
+          importStatus={transactionData?.warehouseSession?.importStatus}
+        />
+      </FormProvider>
+    </Box>
   );
 };

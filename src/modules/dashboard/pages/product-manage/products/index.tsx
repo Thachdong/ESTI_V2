@@ -136,7 +136,7 @@ export const ProductsPage = () => {
     const fileExtension = file?.name?.split(".").pop();
 
     if (!excelEstensions.includes(fileExtension)) {
-      toast.error(`File ${file.name} không đúng định dạng!`);
+      toast.error(`File ${file?.name} không đúng định dạng!`);
 
       return;
     }
@@ -236,7 +236,7 @@ export const ProductsPage = () => {
           </AddButton>
 
           <AddButton variant="contained" className="mr-3">
-            <InputLabel htmlFor="product-file" className="cursor-pointer text-white">
+            <InputLabel htmlFor="product-file" className="cursor-pointer font-semibold text-white">
               Thêm file excel
               <FormInputBase
                 id="product-file"
