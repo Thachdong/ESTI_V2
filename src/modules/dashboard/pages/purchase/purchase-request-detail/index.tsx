@@ -11,7 +11,10 @@ import {
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
-import { PurchaseDetailTable, PurchaseDetailTerms } from "~modules-dashboard/components";
+import {
+  PurchaseDetailTable,
+  PurchaseDetailTerms,
+} from "~modules-dashboard/components";
 
 export const PurchaseRequestDetailPage = () => {
   const [supplier, setSupplier] = useState<any>();
@@ -42,123 +45,129 @@ export const PurchaseRequestDetailPage = () => {
   ]);
 
   return (
-    <FormProvider {...method}>
-      <Box className="bg-white p-4 my-4">
-        <Typography className="font-semibold text-sm mb-2">
-          THÔNG TIN CHUNG
-        </Typography>
-        <Box className="grid grid-cols-2 gap-4">
-          <FormSelectAsync
-            fetcher={branchs.getList}
-            controlProps={{
-              name: "branchId",
-              control,
-            }}
-            label="Chọn chi nhánh"
-            labelKey="code"
-          />
-        </Box>
-      </Box>
-
-      <Box className="grid grid-cols-2 gap-4 mb-4">
-        <Box className="bg-white p-4">
+    <Box className="container-center">
+      <FormProvider {...method}>
+        <Box className="bg-white p-4 my-4">
           <Typography className="font-semibold text-sm mb-2">
-            THÔNG TIN NHÀ CUNG CẤP
+            THÔNG TIN CHUNG
           </Typography>
-
-          <Box className="grid gap-4">
+          <Box className="grid grid-cols-2 gap-4">
             <FormSelectAsync
-              fetcher={suppliers.getList}
+              fetcher={branchs.getList}
               controlProps={{
-                name: "supplierId",
+                name: "branchId",
                 control,
               }}
-              callback={(opt) => setSupplier(opt)}
-              label="Chọn nhà cung cấp"
-              labelKey="supplierCode"
-            />
-
-            <FormInputBase label="Địa chỉ" value={supplier?.address} disabled />
-
-            <FormInputBase
-              label="Mã số thuế"
-              value={supplier?.taxCode}
-              disabled
-            />
-
-            <FormInputBase
-              label="Nhóm sản phẩm cung cấp"
-              value={supplier?.address}
-              disabled
+              label="Chọn chi nhánh"
+              labelKey="code"
             />
           </Box>
         </Box>
 
-        <Box className="bg-white p-4">
+        <Box className="grid grid-cols-2 gap-4 mb-4">
+          <Box className="bg-white p-4">
+            <Typography className="font-semibold text-sm mb-2">
+              THÔNG TIN NHÀ CUNG CẤP
+            </Typography>
+
+            <Box className="grid gap-4">
+              <FormSelectAsync
+                fetcher={suppliers.getList}
+                controlProps={{
+                  name: "supplierId",
+                  control,
+                }}
+                callback={(opt) => setSupplier(opt)}
+                label="Chọn nhà cung cấp"
+                labelKey="supplierCode"
+              />
+
+              <FormInputBase
+                label="Địa chỉ"
+                value={supplier?.address}
+                disabled
+              />
+
+              <FormInputBase
+                label="Mã số thuế"
+                value={supplier?.taxCode}
+                disabled
+              />
+
+              <FormInputBase
+                label="Nhóm sản phẩm cung cấp"
+                value={supplier?.address}
+                disabled
+              />
+            </Box>
+          </Box>
+
+          <Box className="bg-white p-4">
+            <Typography className="font-semibold text-sm mb-2">
+              THÔNG TIN LIÊN HỆ
+            </Typography>
+
+            <Box className="grid gap-4">
+              <FormInputBase
+                label="Người phụ trách"
+                value={supplier?.curatorName}
+                disabled
+              />
+
+              <FormInputBase
+                label="Chức vụ"
+                value={supplier?.curatorPositionName}
+                disabled
+              />
+
+              <FormInputBase
+                label="Điện thoại"
+                value={supplier?.curatorPhone}
+                disabled
+              />
+
+              <FormInputBase
+                label="Email"
+                value={supplier?.curatorEmail}
+                disabled
+              />
+            </Box>
+          </Box>
+        </Box>
+
+        <Box className="bg-white p-4 mb-4">
           <Typography className="font-semibold text-sm mb-2">
-            THÔNG TIN LIÊN HỆ
+            PHÂN CÔNG VIỆC
           </Typography>
-
-          <Box className="grid gap-4">
-            <FormInputBase
-              label="Người phụ trách"
-              value={supplier?.curatorName}
-              disabled
+          <Box className="grid grid-cols-2 gap-4">
+            <FormSelect
+              options={selectOptions[0].data || []}
+              controlProps={{
+                name: "salesAdminId",
+                control,
+                rules: { required: "Phải chọn admin phụ trách" },
+              }}
+              label="Admin phụ trách"
+              labelKey="fullName"
             />
 
-            <FormInputBase
-              label="Chức vụ"
-              value={supplier?.curatorPositionName}
-              disabled
-            />
-
-            <FormInputBase
-              label="Điện thoại"
-              value={supplier?.curatorPhone}
-              disabled
-            />
-
-            <FormInputBase
-              label="Email"
-              value={supplier?.curatorEmail}
-              disabled
+            <FormSelect
+              options={selectOptions[1].data || []}
+              controlProps={{
+                name: "deliveryId",
+                control,
+                rules: { required: "Phải chọn giao nhận phụ trách" },
+              }}
+              label="Giao nhận phụ trách"
+              labelKey="fullName"
             />
           </Box>
         </Box>
-      </Box>
 
-      <Box className="bg-white p-4 mb-4">
-        <Typography className="font-semibold text-sm mb-2">
-          PHÂN CÔNG VIỆC
-        </Typography>
-        <Box className="grid grid-cols-2 gap-4">
-          <FormSelect
-            options={selectOptions[0].data || []}
-            controlProps={{
-              name: "salesAdminId",
-              control,
-              rules: { required: "Phải chọn admin phụ trách" },
-            }}
-            label="Admin phụ trách"
-            labelKey="fullName"
-          />
+        <PurchaseDetailTable />
 
-          <FormSelect
-            options={selectOptions[1].data || []}
-            controlProps={{
-              name: "deliveryId",
-              control,
-              rules: { required: "Phải chọn giao nhận phụ trách" },
-            }}
-            label="Giao nhận phụ trách"
-            labelKey="fullName"
-          />
-        </Box>
-      </Box>
-
-      <PurchaseDetailTable />
-
-      <PurchaseDetailTerms />
-    </FormProvider>
+        <PurchaseDetailTerms />
+      </FormProvider>
+    </Box>
   );
 };

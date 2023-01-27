@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.container-center {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .bgContainer {
   @apply flex flex-col w-full h-full shadow overflow-y-auto p-2;
 }
@@ -54,7 +60,7 @@ input .disable-form-input,
   width: 100%;
 }
 
-.data-table-container {
+.bgContainer .data-table-container {
   margin-left: -8px;
   margin-right: -8px;
   margin-bottom: -8px;

@@ -21,6 +21,7 @@ export const QuoteDetailPage: React.FC = () => {
   });
 
   return (
+    <Box className="container-center">
     <FormProvider {...method}>
       <Box className="mb-3">
         <FormCheckbox
@@ -56,5 +57,6 @@ export const QuoteDetailPage: React.FC = () => {
         <QuoteDetailSaleNote />
       </Box>
     </FormProvider>
+    </Box>
   );
 };
