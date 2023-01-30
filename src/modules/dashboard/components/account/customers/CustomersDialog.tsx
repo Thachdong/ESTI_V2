@@ -2,16 +2,14 @@ import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { customer, suppliers, TSupplier } from "src/api";
+import { customer } from "src/api";
 import {
-  BaseButton,
   Dialog,
   FormAvatar,
   TabPanelContainForm,
 } from "~modules-core/components";
-import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
+import { CustomersDialogButtons } from "./CustomersDialogButtons";
 import { CustomersInfoForm } from "./CustomersInfoForm";
 import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
 
@@ -35,7 +33,7 @@ const supplierFields = [
   "cardOwner",
   "bankName",
   "cardNumber",
-  "productSupply",
+  "professionId",
   "salesAdminID",
   "deliveryID",
 ];
@@ -55,7 +53,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
     setTab(newValue);
   };
 
-  const methods = useForm<TSupplier>({
+  const methods = useForm({
     mode: "onBlur",
     shouldUnregister: false,
     reValidateMode: "onSubmit",
@@ -63,8 +61,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
 
   const {
     control,
-    handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
     reset,
   } = methods;
 
@@ -92,9 +89,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
     }
 
     if (type === "View" && defaultValue) {
-      const productSupply = defaultValue?.productSupply || "";
-
-      reset({ ...defaultValue, productSupply: productSupply.split(", ") });
+      reset({ ...defaultValue });
     }
   }, [type, defaultValue]);
 
@@ -105,120 +100,6 @@ export const CustomersDialog: React.FC<TDialog> = ({
       : type === "View" && isUpdate
       ? "Cập nhật khách hàng"
       : "Thông tin khách hàng";
-
-  // DIALOG MUTATION DECLARATIONS
-  const mutationAdd = useMutation(
-    (payload: TSupplier) => suppliers.create(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleAddSupplier = async (payload: TSupplier) => {
-    const productSupply = payload.productSupply as number[];
-
-    await mutationAdd.mutateAsync({
-      ...payload,
-      productSupply: productSupply?.join(", "),
-    });
-  };
-
-  const mutateUpdate = useMutation(
-    (data: TSupplier) => suppliers.update(data),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleUpdateSupplier = async (data: TSupplier) => {
-    const productSupply = data.productSupply as number[];
-
-    await mutateUpdate.mutateAsync({
-      ...data,
-      productSupply: productSupply?.join(", "),
-    });
-  };
-
-  // RENDER BUTTONS BASE ON DIALOG TYPE
-  const renderButtons = () => {
-    switch (true) {
-      case type === "Add":
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleAddSupplier)}
-              className="w-full mb-3"
-              disabled={!isDirty}
-            >
-              Tạo
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === false:
-        return (
-          <>
-            <BaseButton
-              type="button"
-              className="w-full mb-3"
-              onClick={() => setIsUpdate(true)}
-            >
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === true:
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleUpdateSupplier)}
-              className="w-full mb-3"
-              disabled={!isDirty}
-            >
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={() => setIsUpdate(false)}
-            >
-              Quay lại
-            </BaseButton>
-          </>
-        );
-    }
-  };
 
   return (
     <Dialog
@@ -239,7 +120,13 @@ export const CustomersDialog: React.FC<TDialog> = ({
               />
             </Box>
             <Box className="flex flex-col items-center justify-center">
-              {renderButtons()}
+              <CustomersDialogButtons
+                type={type}
+                isUpdate={isUpdate}
+                setIsUpdate={setIsUpdate}
+                onClose={onClose}
+                refetch={refetch}
+              />
             </Box>
           </Box>
           <TabContext value={tab}>

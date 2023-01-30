@@ -17,7 +17,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
     staff.getListSaleAdmin().then((res) => res.data)
   );
 
-  return (
+  return (  
     <Box>
       <Box
         component="fieldset"
@@ -28,7 +28,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
         <FormInput
           controlProps={{
             control,
-            name: "contactName",
+            name: "curatorName",
             rules: { required: "Phải nhập tên người liên hệ" },
           }}
           label="Tên người liên hệ"
@@ -55,7 +55,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Nhân viên phụ trách"
           disabled={isDisable}
-          getOptionLabel={option => option?.fullName}
+          getOptionLabel={(option) => option?.fullName}
         />
 
         <FormSelect
@@ -122,7 +122,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
         <FormInput
           controlProps={{
             control,
-            name: "contactName",
+            name: "receiverName",
             rules: { required: "Phải nhập họ tên người nhận hàng" },
           }}
           label="Họ tên người nhận hàng"
@@ -132,7 +132,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
         <FormInput
           controlProps={{
             control,
-            name: "curatorEmail",
+            name: "receiverEmail",
           }}
           label="Email"
           required={false}
@@ -159,7 +159,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
           disabled={isDisable}
         />
 
-<FormInput
+        <FormInput
           controlProps={{
             control,
             name: "curatorAddress",

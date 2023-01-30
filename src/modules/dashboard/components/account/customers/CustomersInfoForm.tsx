@@ -8,9 +8,9 @@ import {
   FormSelectAsync,
 } from "~modules-core/components";
 import {
+  businessAreas,
   paymentExpiredIn,
   paymentTypes,
-  productTypes,
 } from "~modules-core/constance";
 
 type TProps = {
@@ -41,6 +41,16 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
         className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
       >
         <legend>Thông tin tài khoản:</legend>
+
+        <FormInput
+          controlProps={{
+            control,
+            name: "userName",
+            rules: { required: "Phải nhập tên tài khoản" },
+          }}
+          label="Tên tài khoản"
+          disabled={isDisable}
+        />
 
         <FormSelectAsync
           fetcher={branchs.getList}
@@ -101,6 +111,16 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
         <FormInput
           controlProps={{
             control,
+            name: "companyName",
+            rules: { required: "Phải nhập tên doanh nghiệp" },
+          }}
+          label="Tên doanh nghiệp"
+          disabled={isDisable}
+        />
+
+        <FormInput
+          controlProps={{
+            control,
             name: "taxCode",
             rules: { required: "Phải nhập mã số thuế " },
           }}
@@ -109,11 +129,10 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
         />
 
         <FormSelect
-          options={productTypes}
-          controlProps={{ control, name: "productSupply" }}
-          label="Nhóm sản phẩm cung cấp"
+          options={businessAreas}
+          controlProps={{ control, name: "professionId" }}
+          label="Ngành nghề"
           disabled={isDisable}
-          multiple
         />
 
         <FormInput
