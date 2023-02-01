@@ -1,16 +1,15 @@
 import { Box, Checkbox, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import {
-  FormInput,
-} from "~modules-core/components";
+import { FormInput } from "~modules-core/components";
 
 type TProps = {
   isDisable: boolean;
   index: number;
+  type: string;
 };
 
-export const CustomersBill: React.FC<TProps> = ({ isDisable, index }) => {
+export const CustomersBill: React.FC<TProps> = ({ isDisable, index, type }) => {
   const [defaultValue, setDefaultValue] = useState(true);
 
   const { control, watch, setValue } = useFormContext();
@@ -24,7 +23,7 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index }) => {
     watch("curatorCreate")[index];
 
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue && type === "Add") {
       setValue(`curatorCreate.${index}.billFullName`, curatorName);
 
       setValue(`curatorCreate.${index}.billPhone`, curatorPhone);
@@ -33,7 +32,14 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index }) => {
 
       setValue(`curatorCreate.${index}.billAddress`, curatorAddress);
     }
-  }, [defaultValue, { curatorAddress, curatorEmail, curatorPhone, curatorName }]);
+  }, [
+    type,
+    defaultValue,
+    curatorAddress,
+    curatorEmail,
+    curatorPhone,
+    curatorName,
+  ]);
 
   return (
     <Box
@@ -42,15 +48,17 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index }) => {
     >
       <legend>Thông tin hóa đơn:</legend>
 
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Cùng thông tin người liên hệ"
-        disabled={isDisable}
-        className="col-span-2"
-        value={defaultValue}
-        onChange={(e: any) => setDefaultValue(e.target.checked)}
-        checked={defaultValue}
-      />
+      {type === "Add" && (
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Cùng thông tin người liên hệ"
+          disabled={isDisable}
+          className="col-span-2"
+          value={defaultValue}
+          onChange={(e: any) => setDefaultValue(e.target.checked)}
+          checked={defaultValue}
+        />
+      )}
 
       <FormInput
         controlProps={{

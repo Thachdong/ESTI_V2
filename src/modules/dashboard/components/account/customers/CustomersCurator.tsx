@@ -1,7 +1,5 @@
 import { Box } from "@mui/material";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
-import { staff } from "src/api";
 import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments, genderData } from "~modules-core/constance";
 
@@ -11,16 +9,12 @@ type TProps = {
 };
 
 export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
   useFieldArray({
     control,
     name: "curatorCreate",
   });
-
-  const { data: saleAdminStaffs } = useQuery(["saleAdminStaffs"], () =>
-    staff.getListSaleAdmin().then((res) => res.data)
-  );
 
   return (
     <>
@@ -68,19 +62,6 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
           }}
           label="Phòng ban"
           disabled={isDisable}
-          shrinkLabel
-        />
-
-        <FormSelect
-          options={saleAdminStaffs || []}
-          controlProps={{
-            control,
-            name: `curatorCreate.${index}.salesAdminID`,
-            rules: { required: "Phải chọn nhân viên phụ trách" },
-          }}
-          label="Nhân viên phụ trách"
-          disabled={isDisable}
-          labelKey="fullName"
           shrinkLabel
         />
 

@@ -16,11 +16,6 @@ export type TCreateCustomerCompanyInfo = {
   address: string;
   hotline: string;
   email: string;
-  // cuartorName: string;
-  // curatorDepartment: number;
-  // curatorGender: number;
-  // curatorPhone: string;
-  // curatorEmail: string;
   website: string;
   paymentLimit: number;
   paymentType: number;

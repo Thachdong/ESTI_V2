@@ -6,32 +6,41 @@ import { FormInput } from "~modules-core/components";
 type TProps = {
   isDisable: boolean;
   index: number;
+  type: string;
 };
 
-export const CustomersReceiver: React.FC<TProps> = ({ isDisable, index }) => {
+export const CustomersReceiver: React.FC<TProps> = ({
+  isDisable,
+  index,
+  type,
+}) => {
   const [defaultValue, setDefaultValue] = useState(true);
 
   const { control, watch, setValue } = useFormContext();
-
-  const { curatorAddress, curatorEmail, curatorPhone, curatorName } =
-    watch("curatorCreate")[index];
 
   useFieldArray({
     control,
     name: "curatorCreate",
   });
 
+  const { curatorAddress, curatorEmail, curatorPhone, curatorName } =
+    watch("curatorCreate")[index];
+
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue && type === "Add") {
       setValue(`curatorCreate.${index}.receiverName`, curatorName);
-
       setValue(`curatorCreate.${index}.receiverPhone1`, curatorPhone);
-
       setValue(`curatorCreate.${index}.receiverEmail`, curatorEmail);
-
       setValue(`curatorCreate.${index}.receiverAddress`, curatorAddress);
     }
-  }, [defaultValue, { curatorAddress, curatorEmail, curatorPhone, curatorName }]);
+  }, [
+    type,
+    defaultValue,
+    curatorAddress,
+    curatorEmail,
+    curatorPhone,
+    curatorName,
+  ]);
 
   return (
     <Box
@@ -40,15 +49,17 @@ export const CustomersReceiver: React.FC<TProps> = ({ isDisable, index }) => {
     >
       <legend>Thông tin người nhận hàng:</legend>
 
-      <FormControlLabel
-        control={<Checkbox size="small" />}
-        label="Cùng thông tin người liên hệ"
-        disabled={isDisable}
-        className="col-span-2"
-        value={defaultValue}
-        onChange={(e: any) => setDefaultValue(e.target.checked)}
-        checked={defaultValue}
-      />
+      {type === "Add" && (
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label="Cùng thông tin người liên hệ"
+          disabled={isDisable}
+          className="col-span-2"
+          value={defaultValue}
+          onChange={(e: any) => setDefaultValue(e.target.checked)}
+          checked={defaultValue}
+        />
+      )}
 
       <FormInput
         controlProps={{

@@ -1,5 +1,6 @@
 import { Box, Collapse, List, ListItemButton, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { AddButton, DeleteButton } from "~modules-core/components";
 import { CustomersBill } from "./CustomersBill";
 import { CustomersCurator } from "./CustomersCurator";
@@ -7,12 +8,20 @@ import { CustomersReceiver } from "./CustomersReceiver";
 
 type TProps = {
   isDisable: boolean;
+  type: string;
 };
 
-export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
+export const CustomersReceiveInfoForm: React.FC<TProps> = ({ type, isDisable }) => {
   const [collapses, setCollapses] = useState<number[]>([0]);
 
   const [curators, setCurators] = useState<any[]>([{}]);
+
+  const { control } = useFormContext();
+  
+  const {remove, append} = useFieldArray({
+    control,
+    name: "curatorCreate",
+  });
 
   // METHODS
   const handleCollapse = useCallback(
@@ -26,12 +35,16 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
 
   const handleAdd = useCallback(() => {
     setCurators([...curators, {}]);
+
+    append({});
   }, [curators]);
 
   const handleRemove = useCallback(
     (index: number) => {
       if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
         setCurators((prev) => prev.filter((c: any, i: number) => i !== index));
+
+        remove(index);
       }
     },
     [curators]
@@ -67,9 +80,9 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
             >
               <CustomersCurator isDisable={isDisable} index={index} />
 
-              <CustomersReceiver isDisable={isDisable} index={index} />
+              <CustomersReceiver type={type} isDisable={isDisable} index={index} />
 
-              <CustomersBill isDisable={isDisable} index={index} />
+              <CustomersBill type={type} isDisable={isDisable} index={index} />
             </Collapse>
           </Box>
         ))}
