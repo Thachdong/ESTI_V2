@@ -1,8 +1,6 @@
 import { request } from "../method";
 
 export type TCreateCustomer = {
-  userName: string;
-  branchID: string;
   salesId: string;
   salesAdminId: string;
   deliveryId: string;
@@ -75,7 +73,7 @@ export const customer = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
-  uploadAvatar: (file: FormData) =>
+  uploadImage: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
 
   create: (payload: TCreateCustomer) =>

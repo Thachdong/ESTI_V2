@@ -35,7 +35,7 @@ export const FormInputNumberBase: React.FC<TProps> = (props) => {
   const shrink = shrinkLabel ? {} : {shrink: false}
 
   const defaultLabelProps = {
-    className: "!bg-transparent text-input-label font-medium",
+    className: "!bg-transparent text-input-label",
     ...shrink,
     ...InputLabelProps,
   }

@@ -18,7 +18,7 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   onClose,
-  refetch
+  refetch,
 }) => {
   const {
     formState: { isDirty },
@@ -42,7 +42,58 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
     }
   );
 
-  const handleAddCustomer = async (payload: any) => {
+  const handleAddCustomer = async (data: any) => {
+    const payload = {
+      salesId: data?.salesId,
+      salesAdminId: data?.salesAdminId,
+      deliveryId: data?.deliveryId,
+      avatar: data?.avatar,
+      companyInfo: {
+        name: data?.companyName,
+        professionId: data?.professionId,
+        taxCode: data?.taxCode,
+        address: data?.address,
+        hotline: data?.hotline,
+        email: data?.email,
+        website: data?.website,
+        paymentLimit: data?.paymentLimit,
+        paymentType: data?.paymentType,
+        identityCard: data?.identityCard,
+        identityCardImage: data?.identityCardImage,
+      },
+      curatorCreate: data?.curatorCreate?.map?.((curator: any) => {
+        const {
+          billAddress,
+          billEmail,
+          billFullName,
+          billPhone,
+          receiverAddress,
+          receiverEmail,
+          receiverName,
+          receiverPhone1,
+          receiverPhone2,
+          ...rest
+        } = curator || {};
+
+        return {
+          ...rest,
+          receiver: {
+            receiverAddress,
+            receiverEmail,
+            receiverName,
+            receiverPhone1,
+            receiverPhone2,
+          },
+          billRecipientCreate: {
+            billAddress,
+            billEmail,
+            billFullName,
+            billPhone,
+          },
+        };
+      }),
+    };
+
     await mutationAdd.mutateAsync(payload);
   };
 

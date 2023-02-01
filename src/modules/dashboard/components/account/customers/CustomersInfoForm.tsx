@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { branchs, staff } from "src/api";
+import { branchs, customer, staff } from "src/api";
 import {
+  FormImageGallery,
   FormInput,
   FormSelect,
   FormSelectAsync,
@@ -42,63 +43,43 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
       >
         <legend>Thông tin tài khoản:</legend>
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "userName",
-            rules: { required: "Phải nhập tên tài khoản" },
-          }}
-          label="Tên tài khoản"
-          disabled={isDisable}
-        />
-
-        <FormSelectAsync
-          fetcher={branchs.getList}
-          controlProps={{
-            control,
-            name: "branchId",
-            rules: { required: "Phải nhập chọn chi nhánh" },
-          }}
-          label="Chi nhánh"
-          disabled={isDisable}
-          getOptionLabel={option => option?.code}
-          labelKey="code"
-        />
-
         <FormSelect
           options={saleStaffs || []}
           controlProps={{
             control,
-            name: "saleId",
+            name: "salesId",
             rules: { required: "Phải chọn sale phụ trách" },
           }}
           label="Sale Phụ trách"
           disabled={isDisable}
           getOptionLabel={(option) => option?.fullName}
+          shrinkLabel
         />
 
         <FormSelect
           options={saleAdminStaffs}
           controlProps={{
             control,
-            name: "saleAdminId",
+            name: "salesAdminId",
             rules: { required: "Phải chọn sale admin phụ trách" },
           }}
           label="Sales Admin phụ trách"
           disabled={isDisable}
           getOptionLabel={(option) => option?.fullName}
+          shrinkLabel
         />
 
         <FormSelect
           options={deliveryStaffs}
           controlProps={{
             control,
-            name: "deliveryStaffId",
+            name: "deliveryId",
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
           disabled={isDisable}
           getOptionLabel={(option) => option?.fullName}
+          shrinkLabel
         />
       </Box>
 
@@ -112,39 +93,45 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           controlProps={{
             control,
             name: "companyName",
-            rules: { required: "Phải nhập tên doanh nghiệp" },
+            rules: { required: "Phải nhập tên doanh nghiệp / khách hàng" },
           }}
-          label="Tên doanh nghiệp"
+          label="Tên doanh nghiệp / khách hàng"
           disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormSelect
+          options={businessAreas}
+          controlProps={{
+            control,
+            name: "professionId",
+            rules: { required: "Phải nhập ngành nghề" },
+          }}
+          label="Ngành nghề"
+          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{
             control,
-            name: "taxCode",
-            rules: { required: "Phải nhập mã số thuế " },
+            name: "hotline",
+            rules: { required: "Phải nhập hotline / số điện thoại" },
           }}
-          label="Mã số thuế"
+          label="Hotline / số điện thoại"
           disabled={isDisable}
-        />
-
-        <FormSelect
-          options={businessAreas}
-          controlProps={{ control, name: "professionId" }}
-          label="Ngành nghề"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
-          controlProps={{ control, name: "phone" }}
-          label="Số điện thoại"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{ control, name: "email" }}
+          controlProps={{
+            control,
+            name: "email",
+            rules: { required: "Phải nhập email" },
+          }}
           label="Email"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -156,6 +143,7 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Hình thức thanh toán"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -167,22 +155,50 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Thời hạn thanh toán"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
-          multiline
-          minRows={3}
-          controlProps={{ control, name: "address" }}
-          label="Địa chỉ"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          multiline
-          minRows={3}
           controlProps={{ control, name: "website" }}
           label="Website"
           disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          controlProps={{
+            control,
+            name: "taxCode",
+          }}
+          label="Mã số thuế"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          controlProps={{ control, name: "identityCard" }}
+          label="Số CMND (khách hàng là cá nhân)"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          multiline
+          minRows={3}
+          controlProps={{
+            control,
+            name: "address",
+          }}
+          label="Địa chỉ"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormImageGallery
+          loader={customer.uploadImage}
+          controlProps={{ control, name: "identityCardImage" }}
+          title="Tải ảnh CMND"
+          className="mb-3"
         />
       </Box>
     </Box>

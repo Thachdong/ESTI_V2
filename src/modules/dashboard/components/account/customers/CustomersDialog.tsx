@@ -1,5 +1,6 @@
 import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
+import _ from "lodash";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { customer } from "src/api";
@@ -12,31 +13,6 @@ import { TDialog } from "~types/dialog";
 import { CustomersDialogButtons } from "./CustomersDialogButtons";
 import { CustomersInfoForm } from "./CustomersInfoForm";
 import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
-
-const curatorFields = [
-  "curatorPosition",
-  "curatorPhone",
-  "curatorName",
-  "curatorGender",
-  "curatorAddress",
-  "curatorEmail",
-];
-
-const supplierFields = [
-  "supplierName",
-  "address",
-  "paymentLimit",
-  "phone",
-  "avatar",
-  "taxCode",
-  "paymentType",
-  "cardOwner",
-  "bankName",
-  "cardNumber",
-  "professionId",
-  "salesAdminID",
-  "deliveryID",
-];
 
 export const CustomersDialog: React.FC<TDialog> = ({
   onClose,
@@ -65,24 +41,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
     reset,
   } = methods;
 
-  // ERRORS CATCHING
-  const errorKeys = Object.keys(errors);
-
-  const isCuratorFieldError = !!errorKeys.find((err: string) =>
-    curatorFields.join().includes(err)
-  );
-
-  const isSupplierFieldError = !!errorKeys.find((err: string) =>
-    supplierFields.join().includes(err)
-  );
-
   // SIDE EFFECTS
-  useEffect(() => {
-    isCuratorFieldError && setTab("2");
-
-    isSupplierFieldError && setTab("1");
-  }, [isCuratorFieldError, isSupplierFieldError]);
-
   useEffect(() => {
     if (type === "Add") {
       reset({});
@@ -114,7 +73,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar
-                loader={customer.uploadAvatar}
+                loader={customer.uploadImage}
                 controlProps={{ control, name: "avatar" }}
                 label="Ảnh đại diện của nhà cung cấp"
               />
@@ -136,7 +95,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isSupplierFieldError ? "red" : "inherit" }}
+                        sx={{ color: _.isEmpty(errors) ? "inherit" : "red" }}
                       >
                         Thông tin khách hàng
                       </Typography>
@@ -146,9 +105,9 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isCuratorFieldError ? "red" : "ỉnherit" }}
+                        sx={{ color: _.isEmpty(errors) ? "inherit" : "red" }}
                       >
-                        Thông tin nhận hàng
+                        Thông tin liên hệ
                       </Typography>
                     }
                     value="2"
@@ -160,6 +119,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                 <TabPanelContainForm value="1" index={"1"}>
                   <CustomersInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
+
                 <TabPanelContainForm value="2" index={"2"}>
                   <CustomersReceiveInfoForm
                     isDisable={type === "View" && !isUpdate}
