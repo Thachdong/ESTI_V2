@@ -56,9 +56,7 @@ type BillRecipientCreate = {
   note: string;
 };
 
-export type TUpdateCustomer = Partial<TCreateCustomer> & {
-  id: string;
-};
+export type TUpdateCustomer = any;
 
 const BASE_URL = "Customer";
 
