@@ -76,4 +76,5 @@ export const customer = {
 
   update: (payload: TUpdateCustomer) =>
     request.patch<TUpdateCustomer, any>(BASE_URL, payload),
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
 };
