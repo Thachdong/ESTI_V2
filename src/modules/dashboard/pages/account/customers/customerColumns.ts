@@ -57,14 +57,6 @@ export const CustomerColumns: TGridColDef[] = [
     sortAscValue: 15,
   },
   {
-    field: "statusName",
-    headerName: "Trạng thái",
-    width: 125,
-    filterKey: "status",
-    sortDescValue: 7,
-    sortAscValue: 16,
-  },
-  {
     field: "createdByName",
     headerName: "Người tạo",
     width: 125,

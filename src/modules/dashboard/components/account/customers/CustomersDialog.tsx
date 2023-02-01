@@ -54,7 +54,8 @@ export const CustomersDialog: React.FC<TDialog> = ({
     const { companyInfo = {}, customer = {}, curatorInfo = [] } = data || {};
 
     return {
-      id: customer.id,
+      companyInfoId: companyInfo.id,
+      customerId: customer.id,
       salesId: customer.salesId,
       salesAdminId: customer.salesAdminId,
       deliveryId: customer.deliveryId,

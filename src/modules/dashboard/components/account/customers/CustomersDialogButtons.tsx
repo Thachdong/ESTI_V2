@@ -117,20 +117,36 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
   const handleUpdateCustomer = async (data: any) => {
     const payload = convertPayload(data);
 
+    const { customerId, companyInfoId } = data || {};
+
     await mutateUpdate.mutateAsync({
       ...payload,
-      id: data.id,
-      curatorCreate: payload.curatorCreate?.map?.((curator: any) => ({
-        ...curator,
-        receiver: {
-          ...curator?.receiver,
-          id: curator?.receiverId,
-        },
-        billRecipientCreate: {
-          ...curator?.billRecipientCreate,
-          id: curator?.billId,
-        },
-      })),
+      id: customerId,
+      companyInfo: {
+        ...payload?.companyInfo,
+        id: companyInfoId,
+      },
+      curatorCreate: payload.curatorCreate?.map?.((curator: any) => {
+        const {
+          receiver = {},
+          billRecipientCreate = {},
+          receiverId,
+          billId,
+          ...rest
+        } = curator || {};
+
+        return {
+          ...rest,
+          receiver: {
+            ...receiver,
+            id: receiverId,
+          },
+          billRecipientCreate: {
+            ...billRecipientCreate,
+            id: billId,
+          },
+        };
+      }),
     });
   };
 

@@ -56,9 +56,7 @@ type BillRecipientCreate = {
   note: string;
 };
 
-export type TUpdateCustomer = Partial<TCreateCustomer> & {
-  id: string;
-};
+export type TUpdateCustomer = any;
 
 const BASE_URL = "Customer";
 
@@ -76,4 +74,5 @@ export const customer = {
 
   update: (payload: TUpdateCustomer) =>
     request.patch<TUpdateCustomer, any>(BASE_URL, payload),
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
 };
