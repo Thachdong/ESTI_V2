@@ -23,7 +23,7 @@ export const FormInputBase: React.FC<TProps> = ({
   const shrink = shrinkLabel ? {} : {shrink: false}
 
   const defaultLabelProps = {
-    className: clsx("!bg-transparent font-medium", !props.error && "text-input-label"),
+    className: clsx("!bg-transparent", !props.error && "text-input-label"),
     ...shrink,
     ...InputLabelProps,
   }

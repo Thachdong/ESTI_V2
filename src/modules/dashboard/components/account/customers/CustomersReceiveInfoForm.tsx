@@ -1,177 +1,94 @@
-import { Box } from "@mui/material";
-import { useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
-import { staff } from "src/api";
-import { FormInput, FormSelect } from "~modules-core/components";
-import { FormCheckbox } from "~modules-core/components/form-hooks/FormCheckbox";
-import { curatorDepartments, genderData } from "~modules-core/constance";
+import { Box, Collapse, List, ListItemButton, Typography } from "@mui/material";
+import { useCallback, useState } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { AddButton, DeleteButton } from "~modules-core/components";
+import { CustomersBill } from "./CustomersBill";
+import { CustomersCurator } from "./CustomersCurator";
+import { CustomersReceiver } from "./CustomersReceiver";
 
 type TProps = {
   isDisable: boolean;
+  type: string;
 };
 
-export const CustomersReceiveInfoForm: React.FC<TProps> = ({ isDisable }) => {
-  const { control } = useFormContext();
+export const CustomersReceiveInfoForm: React.FC<TProps> = ({ type, isDisable }) => {
+  const [collapses, setCollapses] = useState<number[]>([0]);
 
-  const { data: saleAdminStaffs } = useQuery(["saleAdminStaffs"], () =>
-    staff.getListSaleAdmin().then((res) => res.data)
+  const [curators, setCurators] = useState<any[]>([{}]);
+
+  const { control } = useFormContext();
+  
+  const {remove, append} = useFieldArray({
+    control,
+    name: "curatorCreate",
+  });
+
+  // METHODS
+  const handleCollapse = useCallback(
+    (index: number) => {
+      collapses.includes(index)
+        ? setCollapses((prev) => prev.filter((i) => i !== index))
+        : setCollapses([...collapses, index]);
+    },
+    [collapses]
+  );
+
+  const handleAdd = useCallback(() => {
+    setCurators([...curators, {}]);
+
+    append({});
+  }, [curators]);
+
+  const handleRemove = useCallback(
+    (index: number) => {
+      if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
+        setCurators((prev) => prev.filter((c: any, i: number) => i !== index));
+
+        remove(index);
+      }
+    },
+    [curators]
   );
 
   return (
     <Box>
-      <Box
-        component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
-      >
-        <legend>Thông tin người liên hệ:</legend>
+      <List className="pt-0">
+        {curators.map((curator: any, index: number) => (
+          <Box className="!border-grey-2 !rounded-[4px] mb-2">
+            <ListItemButton
+              component="fieldset"
+              onClick={() => handleCollapse(index)}
+              className="border-b-2 border-solid border-[#e9e9e9] mb-3"
+            >
+              <Typography className="font-semibold w-full">{`Thông tin liên hệ ${
+                index + 1
+              }`}</Typography>
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "contactName",
-            rules: { required: "Phải nhập tên người liên hệ" },
-          }}
-          label="Tên người liên hệ"
-          disabled={isDisable}
-        />
+              {index > 0 && (
+                <DeleteButton
+                  color="error"
+                  onClick={() => handleRemove(index)}
+                />
+              )}
+            </ListItemButton>
 
-        <FormSelect
-          options={curatorDepartments}
-          controlProps={{
-            control,
-            name: "curatorDepartment",
-            rules: { required: "Phải chọn phòng ban" },
-          }}
-          label="Phòng ban"
-          disabled={isDisable}
-        />
+            <Collapse
+              in={collapses.includes(index)}
+              timeout="auto"
+              unmountOnExit
+              className="w-full"
+            >
+              <CustomersCurator isDisable={isDisable} index={index} />
 
-        <FormSelect
-          options={saleAdminStaffs || []}
-          controlProps={{
-            control,
-            name: "salesAdminID",
-            rules: { required: "Phải chọn nhân viên phụ trách" },
-          }}
-          label="Nhân viên phụ trách"
-          disabled={isDisable}
-          getOptionLabel={option => option?.fullName}
-        />
+              <CustomersReceiver type={type} isDisable={isDisable} index={index} />
 
-        <FormSelect
-          options={genderData}
-          controlProps={{
-            control,
-            name: "curatorGender",
-            rules: { required: "Phải chọn giới tính" },
-          }}
-          label="Giới tính"
-          disabled={isDisable}
-        />
+              <CustomersBill type={type} isDisable={isDisable} index={index} />
+            </Collapse>
+          </Box>
+        ))}
+      </List>
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorPhone",
-            rules: { required: "Phải nhập số điện thoại" },
-          }}
-          label="Số điện thoại"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorEmail",
-          }}
-          label="Email"
-          required={false}
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorAddress",
-            rules: { required: "Phải nhập địa chỉ" },
-          }}
-          label="Địa chỉ"
-          multiline
-          minRows={3}
-          disabled={isDisable}
-          className="col-span-2"
-        />
-      </Box>
-
-      <Box
-        component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-[100px]"
-      >
-        <legend>Thông tin người nhận hàng:</legend>
-
-        <FormCheckbox
-          controlProps={{
-            control,
-            name: "checkbox",
-          }}
-          label="Cùng thông tin người liên hệ"
-          disabled={isDisable}
-          className="col-span-2"
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "contactName",
-            rules: { required: "Phải nhập họ tên người nhận hàng" },
-          }}
-          label="Họ tên người nhận hàng"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorEmail",
-          }}
-          label="Email"
-          required={false}
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorPhone1",
-            rules: { required: "Phải nhập số điện thoại 1" },
-          }}
-          label="Số điện thoại 1"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          controlProps={{
-            control,
-            name: "curatorPhone2",
-            rules: { required: "Phải nhập số điện thoại 2" },
-          }}
-          label="Số điện thoại 2"
-          disabled={isDisable}
-        />
-
-<FormInput
-          controlProps={{
-            control,
-            name: "curatorAddress",
-            rules: { required: "Phải nhập địa chỉ" },
-          }}
-          label="Địa chỉ"
-          multiline
-          minRows={3}
-          disabled={isDisable}
-          className="col-span-2"
-        />
-      </Box>
+      <AddButton onClick={handleAdd}>Thêm thông tin liên hệ</AddButton>
     </Box>
   );
 };

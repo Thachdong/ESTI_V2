@@ -22,7 +22,7 @@ import { CustomerColumns } from "./customerColumns";
 
 export const CustomersPage = () => {
   const router = useRouter();
-
+  
   const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);

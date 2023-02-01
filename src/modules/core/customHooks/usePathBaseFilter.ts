@@ -14,6 +14,6 @@ export const usePathBaseFilter = (pagination?: TPagination) => {
       pageSize: pagination?.pageSize,
     };
 
-    isReady && router.push({ query: initQuery });
+    (isReady && !!pagination) && router.push({ query: initQuery });
   }, [pagination, isReady]);
 };

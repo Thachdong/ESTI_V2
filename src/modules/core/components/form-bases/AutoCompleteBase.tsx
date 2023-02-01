@@ -81,7 +81,6 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         direction: "ltr",
       },
       label: {
-        fontWeight: 500,
         color: "#747474",
       },
     },

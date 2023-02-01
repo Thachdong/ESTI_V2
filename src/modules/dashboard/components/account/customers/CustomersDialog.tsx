@@ -1,44 +1,19 @@
 import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import _ from "lodash";
+import { useState, useEffect, useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { customer, suppliers, TSupplier } from "src/api";
+import { useQuery } from "react-query";
+import { customer } from "src/api";
 import {
-  BaseButton,
   Dialog,
   FormAvatar,
   TabPanelContainForm,
 } from "~modules-core/components";
-import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
+import { CustomersDialogButtons } from "./CustomersDialogButtons";
 import { CustomersInfoForm } from "./CustomersInfoForm";
 import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
-
-const curatorFields = [
-  "curatorPosition",
-  "curatorPhone",
-  "curatorName",
-  "curatorGender",
-  "curatorAddress",
-  "curatorEmail",
-];
-
-const supplierFields = [
-  "supplierName",
-  "address",
-  "paymentLimit",
-  "phone",
-  "avatar",
-  "taxCode",
-  "paymentType",
-  "cardOwner",
-  "bankName",
-  "cardNumber",
-  "productSupply",
-  "salesAdminID",
-  "deliveryID",
-];
 
 export const CustomersDialog: React.FC<TDialog> = ({
   onClose,
@@ -55,7 +30,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
     setTab(newValue);
   };
 
-  const methods = useForm<TSupplier>({
+  const methods = useForm({
     mode: "onBlur",
     shouldUnregister: false,
     reValidateMode: "onSubmit",
@@ -63,40 +38,76 @@ export const CustomersDialog: React.FC<TDialog> = ({
 
   const {
     control,
-    handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors },
     reset,
   } = methods;
 
-  // ERRORS CATCHING
-  const errorKeys = Object.keys(errors);
-
-  const isCuratorFieldError = !!errorKeys.find((err: string) =>
-    curatorFields.join().includes(err)
+  const { data: customerDetail } = useQuery(
+    ["CustomerDetail_" + defaultValue?.id],
+    () => customer.getById(defaultValue?.id).then((res) => res.data),
+    {
+      enabled: !!defaultValue,
+    }
   );
 
-  const isSupplierFieldError = !!errorKeys.find((err: string) =>
-    supplierFields.join().includes(err)
-  );
+  const convertCustomerDetail = useCallback((data: any) => {
+    const { companyInfo = {}, customer = {}, curatorInfo = [] } = data || {};
+
+    return {
+      id: customer.id,
+      salesId: customer.salesId,
+      salesAdminId: customer.salesAdminId,
+      deliveryId: customer.deliveryId,
+      avatar: customer.avatar,
+      companyName: companyInfo.name,
+      professionId: companyInfo.professionId,
+      taxCode: companyInfo.taxCode,
+      address: companyInfo.address,
+      hotline: companyInfo.hotline,
+      email: companyInfo.email,
+      website: companyInfo.website,
+      paymentLimit: companyInfo.paymentLimit,
+      paymentType: companyInfo.paymentType,
+      identityCard: companyInfo.identityCard,
+      identityCardImage: !!companyInfo.identityCardImage
+        ? companyInfo.identityCardImage?.split?.(",")
+        : [],
+      curatorCreate: curatorInfo.map((curator: any) => ({
+        id: curator?.id,
+        userName: curator?.userName,
+        curatorName: curator?.curatorName,
+        curatorDepartment: curator?.curatorDepartment,
+        curatorGender: curator?.curatorGender,
+        curatorAddress: curator?.curatorAddress,
+        curatorPhone: curator?.curatorPhone,
+        curatorEmail: curator?.curatorEmail,
+
+        receiverId: curator?.receiverById?.id,
+        receiverAddress: curator?.receiverById?.address,
+        receiverEmail: curator?.receiverById?.email,
+        receiverName: curator?.receiverById?.fullName,
+        receiverPhone1: curator?.receiverById?.phone1,
+        receiverPhone2: curator?.receiverById?.phone2,
+
+        billId: curator?.recipientById?.id,
+        billAddress: curator?.recipientById?.address,
+        billEmail: curator?.recipientById?.email,
+        billFullName: curator?.recipientById?.fullName,
+        billPhone: curator?.recipientById?.phone,
+      })),
+    };
+  }, []);
 
   // SIDE EFFECTS
-  useEffect(() => {
-    isCuratorFieldError && setTab("2");
-
-    isSupplierFieldError && setTab("1");
-  }, [isCuratorFieldError, isSupplierFieldError]);
-
   useEffect(() => {
     if (type === "Add") {
       reset({});
     }
 
     if (type === "View" && defaultValue) {
-      const productSupply = defaultValue?.productSupply || "";
-
-      reset({ ...defaultValue, productSupply: productSupply.split(", ") });
+      reset(convertCustomerDetail(customerDetail));
     }
-  }, [type, defaultValue]);
+  }, [type, defaultValue, customerDetail]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
@@ -105,120 +116,6 @@ export const CustomersDialog: React.FC<TDialog> = ({
       : type === "View" && isUpdate
       ? "Cập nhật khách hàng"
       : "Thông tin khách hàng";
-
-  // DIALOG MUTATION DECLARATIONS
-  const mutationAdd = useMutation(
-    (payload: TSupplier) => suppliers.create(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleAddSupplier = async (payload: TSupplier) => {
-    const productSupply = payload.productSupply as number[];
-
-    await mutationAdd.mutateAsync({
-      ...payload,
-      productSupply: productSupply?.join(", "),
-    });
-  };
-
-  const mutateUpdate = useMutation(
-    (data: TSupplier) => suppliers.update(data),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleUpdateSupplier = async (data: TSupplier) => {
-    const productSupply = data.productSupply as number[];
-
-    await mutateUpdate.mutateAsync({
-      ...data,
-      productSupply: productSupply?.join(", "),
-    });
-  };
-
-  // RENDER BUTTONS BASE ON DIALOG TYPE
-  const renderButtons = () => {
-    switch (true) {
-      case type === "Add":
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleAddSupplier)}
-              className="w-full mb-3"
-              disabled={!isDirty}
-            >
-              Tạo
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === false:
-        return (
-          <>
-            <BaseButton
-              type="button"
-              className="w-full mb-3"
-              onClick={() => setIsUpdate(true)}
-            >
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === true:
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleUpdateSupplier)}
-              className="w-full mb-3"
-              disabled={!isDirty}
-            >
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="w-full !bg-main-1"
-              onClick={() => setIsUpdate(false)}
-            >
-              Quay lại
-            </BaseButton>
-          </>
-        );
-    }
-  };
 
   return (
     <Dialog
@@ -233,13 +130,19 @@ export const CustomersDialog: React.FC<TDialog> = ({
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar
-                loader={customer.uploadAvatar}
+                loader={customer.uploadImage}
                 controlProps={{ control, name: "avatar" }}
                 label="Ảnh đại diện của nhà cung cấp"
               />
             </Box>
             <Box className="flex flex-col items-center justify-center">
-              {renderButtons()}
+              <CustomersDialogButtons
+                type={type}
+                isUpdate={isUpdate}
+                setIsUpdate={setIsUpdate}
+                onClose={onClose}
+                refetch={refetch}
+              />
             </Box>
           </Box>
           <TabContext value={tab}>
@@ -249,7 +152,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isSupplierFieldError ? "red" : "inherit" }}
+                        sx={{ color: _.isEmpty(errors) ? "inherit" : "red" }}
                       >
                         Thông tin khách hàng
                       </Typography>
@@ -259,9 +162,9 @@ export const CustomersDialog: React.FC<TDialog> = ({
                   <Tab
                     label={
                       <Typography
-                        sx={{ color: isCuratorFieldError ? "red" : "ỉnherit" }}
+                        sx={{ color: _.isEmpty(errors) ? "inherit" : "red" }}
                       >
-                        Thông tin nhận hàng
+                        Thông tin liên hệ
                       </Typography>
                     }
                     value="2"
@@ -273,9 +176,11 @@ export const CustomersDialog: React.FC<TDialog> = ({
                 <TabPanelContainForm value="1" index={"1"}>
                   <CustomersInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
+
                 <TabPanelContainForm value="2" index={"2"}>
                   <CustomersReceiveInfoForm
                     isDisable={type === "View" && !isUpdate}
+                    type={type || ""}
                   />
                 </TabPanelContainForm>
               </Box>
