@@ -16,14 +16,6 @@ export const CustomerColumns: TGridColDef[] = [
     sortAscValue: 9,
   },
   {
-    field: "branchCode",
-    headerName: "Chi nhánh",
-    width: 150,
-    filterKey: "branchCode",
-    sortDescValue: 1,
-    sortAscValue: 10,
-  },
-  {
     field: "salesCode",
     headerName: "Sale phụ trách",
     width: 150,
@@ -32,7 +24,7 @@ export const CustomerColumns: TGridColDef[] = [
     sortAscValue: 11,
   },
   {
-    field: "companyProfessionId",
+    field: "customerCode",
     headerName: "Mã KH",
     width: 150,
     filterKey: "customerCode",

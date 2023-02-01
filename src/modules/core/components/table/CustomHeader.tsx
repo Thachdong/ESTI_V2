@@ -218,7 +218,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             }}
             inputFormat="DD/MM/YYYY"
             inputProps={{
-              sx: { fontSize: "14px" },
+              sx: { fontSize: "14px", padding: 0 },
             }}
             InputProps={{
               disableUnderline: true,
@@ -242,10 +242,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   const renderFilterBox = useCallback(() => {
     if (!isFilter || field === "action")
       return (
-        <>
-          {" "}
-          <span className="!bg-[#F3F6F9] w-full h-[40px]"> </span>{" "}
-        </>
+          <Box className="!bg-[#F3F6F9] w-full h-[28px]" />
       );
 
     return (
@@ -255,7 +252,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
           type="checkbox"
           onChange={handleCheckbox}
           checked={filterData.isCheck}
-          className="w-[16px] h-[16px] cursor-pointer !bg-[#F3F6F9]"
+          className="min-w-[16px !important] min-h-[16px !important] cursor-pointer !bg-[#F3F6F9]"
         />
         {renderInputTagBaseOnType()}
       </>
@@ -263,7 +260,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   }, [isFilter, type, filterData]);
 
   return (
-    <Box className="w-full h-[70px]">
+    <Box className="w-full h-[68px]">
       <Box className="flex items-center bg-[#9FADBB] text-[#fff] h-[40px] pl-1 pr-3 !border-0 !min-w-[200px]">
         <Typography className="uppercase text-sm mr-1 font-semibold">
           {colDef.headerName}
@@ -271,7 +268,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
 
         {renderSortIcons()}
       </Box>
-      <Box className="flex items-center bg-[#F3F6F9] !w-full py-[2px]">
+      <Box className="flex items-center bg-[#F3F6F9] !w-full h-[28px]">
         {renderFilterBox()}
       </Box>
     </Box>

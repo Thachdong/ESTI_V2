@@ -264,6 +264,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          paginationMode="client"
         />
       </ContextMenuWrapper>
 

@@ -122,69 +122,71 @@ export const ExportDetailPage = () => {
 
   // DOM RENDERING
   return (
-    <FormProvider {...methods}>
-      {transactionId ? (
-        <ExportViewGeneralInfo
-          refetch={refetchTransactionDetail}
-          data={transactionData?.productOrder}
-        />
-      ) : (
-        <>
-          <Box className="mb-2">
-            <FormCheckbox
-              controlProps={{
-                name: "isForDelete",
-                control: methods.control,
-              }}
-              label="Xuất bỏ sản phẩm"
+    <Box className="container-center">
+      <FormProvider {...methods}>
+        {transactionId ? (
+          <ExportViewGeneralInfo
+            refetch={refetchTransactionDetail}
+            data={transactionData?.productOrder}
+          />
+        ) : (
+          <>
+            <Box className="mb-2">
+              <FormCheckbox
+                controlProps={{
+                  name: "isForDelete",
+                  control: methods.control,
+                }}
+                label="Xuất bỏ sản phẩm"
+              />
+            </Box>
+            <ExportDetailGeneralInfo
+              orderDetail={orderDetailData?.mainOrder}
+              selectedBranch={selectedBranch}
+              setSelectedBranch={setSelectedBranch}
+            />
+          </>
+        )}
+
+        {!isForDelete && (
+          <Box className="grid grid-cols-2 gap-4 mb-4">
+            <ExportDetailCustomer
+              customerData={
+                transactionId
+                  ? transactionData?.productOrder
+                  : orderDetailData?.mainOrder
+              }
+            />
+
+            <ExportDetailRecipient
+              orderData={
+                transactionId
+                  ? transactionData?.productOrder
+                  : orderDetailData?.mainOrder
+              }
+            />
+
+            <ExportDetailShipping
+              exportStatus={transactionData?.productOrder?.exportStatus}
             />
           </Box>
-          <ExportDetailGeneralInfo
-            orderDetail={orderDetailData?.mainOrder}
-            selectedBranch={selectedBranch}
-            setSelectedBranch={setSelectedBranch}
-          />
-        </>
-      )}
+        )}
 
-      {!isForDelete && (
-        <Box className="grid grid-cols-2 gap-4 mb-4">
-          <ExportDetailCustomer
-            customerData={
-              transactionId
-                ? transactionData?.productOrder
-                : orderDetailData?.mainOrder
-            }
-          />
+        <ExportDetailProducts
+          exportStatus={transactionData?.productOrder?.exportStatus}
+          warehouseConfig={warehouseConfig}
+          productOptions={
+            transactionId
+              ? transactionData?.productOrderDetail || []
+              : orderDetailData?.mainOrderDetail || []
+          }
+        />
 
-          <ExportDetailRecipient
-            orderData={
-              transactionId
-                ? transactionData?.productOrder
-                : orderDetailData?.mainOrder
-            }
-          />
-
-          <ExportDetailShipping
-            exportStatus={transactionData?.productOrder?.exportStatus}
-          />
-        </Box>
-      )}
-
-      <ExportDetailProducts
-        exportStatus={transactionData?.productOrder?.exportStatus}
-        warehouseConfig={warehouseConfig}
-        productOptions={
-          transactionId
-            ? transactionData?.productOrderDetail || []
-            : orderDetailData?.mainOrderDetail || []
-        }
-      />
-
-      <ExportDetailButtonsBox
-        exportStatus={transactionData?.productOrder?.exportStatus}
-        orderData={orderDetailData?.mainOrder}
-      />
-    </FormProvider>
+        <ExportDetailButtonsBox
+          exportStatus={transactionData?.productOrder?.exportStatus}
+          orderData={orderDetailData?.mainOrder}
+        />
+      </FormProvider>
+    </Box>
   );
 };

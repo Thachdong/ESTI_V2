@@ -1,16 +1,16 @@
 import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { branchs, staff } from "src/api";
+import { customer, staff } from "src/api";
 import {
+  FormImageGallery,
   FormInput,
   FormSelect,
-  FormSelectAsync,
 } from "~modules-core/components";
 import {
+  businessAreas,
   paymentExpiredIn,
   paymentTypes,
-  productTypes,
 } from "~modules-core/constance";
 
 type TProps = {
@@ -20,7 +20,7 @@ type TProps = {
 export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const context = useFormContext();
 
-  const { control } = context;
+  const { control, watch } = context;
 
   const { data: deliveryStaffs } = useQuery(["deliveryStaffs"], () =>
     staff.getListDeliveryStaff().then((res) => res.data)
@@ -42,53 +42,43 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
       >
         <legend>Thông tin tài khoản:</legend>
 
-        <FormSelectAsync
-          fetcher={branchs.getList}
-          controlProps={{
-            control,
-            name: "branchId",
-            rules: { required: "Phải nhập chọn chi nhánh" },
-          }}
-          label="Chi nhánh"
-          disabled={isDisable}
-          getOptionLabel={option => option?.code}
-          labelKey="code"
-        />
-
         <FormSelect
           options={saleStaffs || []}
           controlProps={{
             control,
-            name: "saleId",
+            name: "salesId",
             rules: { required: "Phải chọn sale phụ trách" },
           }}
           label="Sale Phụ trách"
           disabled={isDisable}
-          getOptionLabel={(option) => option?.fullName}
+          labelKey="fullName"
+          shrinkLabel
         />
 
         <FormSelect
           options={saleAdminStaffs}
           controlProps={{
             control,
-            name: "saleAdminId",
+            name: "salesAdminId",
             rules: { required: "Phải chọn sale admin phụ trách" },
           }}
           label="Sales Admin phụ trách"
           disabled={isDisable}
           getOptionLabel={(option) => option?.fullName}
+          shrinkLabel
         />
 
         <FormSelect
           options={deliveryStaffs}
           controlProps={{
             control,
-            name: "deliveryStaffId",
+            name: "deliveryId",
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
           disabled={isDisable}
           getOptionLabel={(option) => option?.fullName}
+          shrinkLabel
         />
       </Box>
 
@@ -101,31 +91,57 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
         <FormInput
           controlProps={{
             control,
-            name: "taxCode",
-            rules: { required: "Phải nhập mã số thuế " },
+            name: "companyName",
+            rules: { required: "Phải nhập tên doanh nghiệp / khách hàng" },
           }}
-          label="Mã số thuế"
+          label="Tên doanh nghiệp / khách hàng"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
-          options={productTypes}
-          controlProps={{ control, name: "productSupply" }}
-          label="Nhóm sản phẩm cung cấp"
+          options={businessAreas}
+          controlProps={{
+            control,
+            name: "professionId",
+            rules: { required: "Phải nhập ngành nghề" },
+          }}
+          label="Ngành nghề"
           disabled={isDisable}
-          multiple
+          shrinkLabel
         />
 
         <FormInput
-          controlProps={{ control, name: "phone" }}
-          label="Số điện thoại"
+          controlProps={{
+            control,
+            name: "taxCode",
+            rules: { required: "Phải nhập mã số thuế" },
+          }}
+          label="Mã số thuế"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
-          controlProps={{ control, name: "email" }}
+          controlProps={{
+            control,
+            name: "hotline",
+            rules: { required: "Phải nhập hotline / số điện thoại" },
+          }}
+          label="Hotline / số điện thoại"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          controlProps={{
+            control,
+            name: "email",
+            rules: { required: "Phải nhập email" },
+          }}
           label="Email"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -137,6 +153,7 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Hình thức thanh toán"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -148,22 +165,40 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Thời hạn thanh toán"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
-          multiline
-          minRows={3}
-          controlProps={{ control, name: "address" }}
-          label="Địa chỉ"
-          disabled={isDisable}
-        />
-
-        <FormInput
-          multiline
-          minRows={3}
           controlProps={{ control, name: "website" }}
           label="Website"
           disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          controlProps={{ control, name: "identityCard" }}
+          label="Số CMND (khách hàng là cá nhân)"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          multiline
+          minRows={3}
+          controlProps={{
+            control,
+            name: "address",
+          }}
+          label="Địa chỉ"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormImageGallery
+          loader={customer.uploadImage}
+          controlProps={{ control, name: "identityCardImage" }}
+          title="Tải ảnh CMND"
+          className="mb-3"
         />
       </Box>
     </Box>

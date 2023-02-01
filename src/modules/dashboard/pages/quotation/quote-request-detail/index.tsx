@@ -17,6 +17,7 @@ export const QuoteRequestDetailPage = () => {
   });
 
   return (
+    <Box className="container-center">
     <FormProvider {...method}>
       <Box className="mb-3">
         <FormCheckbox
@@ -40,5 +41,6 @@ export const QuoteRequestDetailPage = () => {
         <QuoteRequestDetailProduct />
       </Box>
     </FormProvider>
+    </Box>
   );
 };

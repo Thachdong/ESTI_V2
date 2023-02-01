@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Tooltip } from "@mui/material";
+import { Box, Button, CircularProgress, Tooltip } from "@mui/material";
 import { useCallback, useState } from "react";
 import { TBaseButton } from "~types/buttons";
 
@@ -11,7 +11,6 @@ export const BaseButton: React.FC<TBaseButton> = (props) => {
     isSubmitting,
     ...rest
   } = props;
-
   const [loading, setLoading] = useState(false);
 
   // TOGGLE LOADING FLAG
@@ -25,7 +24,7 @@ export const BaseButton: React.FC<TBaseButton> = (props) => {
     } finally {
       setLoading(false);
     }
-  }, [onClick]);  
+  }, [onClick]);
 
   return (
     <Tooltip title={tooltipText} placement={tooltipPlacement || "top"}>

@@ -1,17 +1,12 @@
 import NextAuth, { Session } from "next-auth";
 import CredentialsProvider, { CredentialsConfig } from "next-auth/providers/credentials";
-import { authenticate } from "src/api";
 import { parseJwt } from "~modules-core/utility";
 
 const handleCredentialsAuthorize = async (credentials: any ) => {
   try {
     const { data: stringifyPayload } = credentials;
 
-    const payload = JSON.parse(stringifyPayload as string);
-
-    const res = await authenticate.login(payload);
-
-    const { token } = res.data;
+    const {token} = JSON.parse(stringifyPayload as string);
 
     const { userInfo, exp } = parseJwt(token);
 
@@ -20,6 +15,7 @@ const handleCredentialsAuthorize = async (credentials: any ) => {
       accessToken: token,
       accessTokenExp: exp,
     });
+
   } catch (error: any) {
     return Promise.reject(new Error(encodeURIComponent(JSON.stringify(error))));
   }

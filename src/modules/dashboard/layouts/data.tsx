@@ -8,7 +8,7 @@ import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
 
 export const menu = [
   {
-    id: "quotations",
+    id: "quotation",
     title: "Báo giá",
     icon: <QuoteIcon className="w-[24px] h-[24px]" />,
     childrens: [
