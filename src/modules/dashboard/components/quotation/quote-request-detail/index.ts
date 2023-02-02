@@ -4,3 +4,4 @@ export * from "./QuoteRequestDetailAddition";
 export * from "./QuoteRequestDetailAttach";
 export * from "./QuoteRequestDetailProduct";
 export * from "./QuoteRequestDetailDialog";
+export * from "./QuoteRequestDetailButtons";

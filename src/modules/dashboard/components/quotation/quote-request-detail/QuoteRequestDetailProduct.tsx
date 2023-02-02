@@ -79,7 +79,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
       <Box className="flex items-center mb-3">
         <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
 
-        <AddButton onClick={() => onOpen("Add")}>Thêm SP</AddButton>
+        <AddButton onClick={() => onOpen("Add")}>Thêm SP báo giá </AddButton>
       </Box>
 
       <Box className="bg-white">
