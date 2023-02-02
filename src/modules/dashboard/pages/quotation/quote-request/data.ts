@@ -40,14 +40,6 @@ export const quotationRequestColumns: TGridColDef[] = [
     sortDescValue: 3,
   },
   {
-    field: "branchCode",
-    headerName: "Chi nhánh",
-    minWidth: 125,
-    filterKey: "branchCode",
-    sortAscValue: 13,
-    sortDescValue: 5,
-  },
-  {
     field: "preOrderStatusName",
     headerName: "Trạng thái YC",
     minWidth: 150,

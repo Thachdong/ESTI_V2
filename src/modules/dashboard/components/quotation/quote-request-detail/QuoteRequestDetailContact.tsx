@@ -1,9 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
-import {
-  FormInput,
-  FormSelect,
-} from "~modules-core/components";
+import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
 
 export const QuoteRequestDetailContact: React.FC = () => {

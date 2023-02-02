@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/react";
 import { useEffect } from "react";
 import { setBearerToken } from "src/api/instance";
 import dynamic from "next/dynamic";
@@ -21,9 +20,7 @@ export const useStartUp = () => {
   }, []);
 
   async function handleSetBearerToken() {
-    const session = await getSession();
-
-    const { accessToken } = session || {};
+    const accessToken = localStorage.getItem("accessToken");
 
     accessToken && setBearerToken(accessToken);
   }
