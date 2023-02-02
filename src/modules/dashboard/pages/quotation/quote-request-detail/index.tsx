@@ -4,6 +4,7 @@ import { FormCheckbox } from "~modules-core/components";
 import {
   QuoteRequestDetailAddition,
   QuoteRequestDetailAttach,
+  QuoteRequestDetailButtons,
   QuoteRequestDetailContact,
   QuoteRequestDetailCustomer,
   QuoteRequestDetailProduct,
@@ -18,29 +19,31 @@ export const QuoteRequestDetailPage = () => {
 
   return (
     <Box className="container-center">
-    <FormProvider {...method}>
-      <Box className="mb-3">
-        <FormCheckbox
-          label="Khách hàng có trong hệ thống"
-          controlProps={{
-            name: "customerAvailable",
-            control: method.control,
-          }}
-        />
-      </Box>
+      <FormProvider {...method}>
+        <Box className="mb-3">
+          <FormCheckbox
+            label="Khách hàng có trong hệ thống"
+            controlProps={{
+              name: "customerAvailable",
+              control: method.control,
+            }}
+          />
+        </Box>
 
-      <Box className="grid grid-cols-2 gap-4">
-        <QuoteRequestDetailCustomer />
+        <Box className="grid grid-cols-2 gap-4">
+          <QuoteRequestDetailCustomer />
 
-        <QuoteRequestDetailContact />
+          <QuoteRequestDetailContact />
 
-        <QuoteRequestDetailAttach />
+          <QuoteRequestDetailAttach />
 
-        <QuoteRequestDetailAddition />
+          <QuoteRequestDetailAddition />
 
-        <QuoteRequestDetailProduct />
-      </Box>
-    </FormProvider>
+          <QuoteRequestDetailProduct />
+        </Box>
+
+        <QuoteRequestDetailButtons />
+      </FormProvider>
     </Box>
   );
 };

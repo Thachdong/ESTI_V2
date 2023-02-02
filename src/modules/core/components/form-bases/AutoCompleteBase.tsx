@@ -103,7 +103,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       value={renderValue()}
       sx={defaultSx}
       renderInput={(params) => (
-        <TextField {...params} {...defaultInputProps} value={renderValue()} />
+        <TextField {...params} {...defaultInputProps} />
       )}
       {...defaultProps}
     />

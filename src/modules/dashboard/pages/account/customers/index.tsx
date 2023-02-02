@@ -1,9 +1,9 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState, MouseEvent, useEffect, useRef } from "react";
+import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { customer, suppliers } from "src/api";
+import { customer } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -68,7 +68,7 @@ export const CustomersPage = () => {
   );
 
   // DATA TABLE
-  const mutateDelete = useMutation((id: string) => suppliers.delete(id), {
+  const mutateDelete = useMutation((id: string) => customer.delete(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
     },

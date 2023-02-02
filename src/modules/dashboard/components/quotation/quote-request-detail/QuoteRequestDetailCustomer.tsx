@@ -5,20 +5,45 @@ import { customer as customerApi } from "src/api";
 import { FormCustomer, FormInput } from "~modules-core/components";
 
 export const QuoteRequestDetailCustomer: React.FC = () => {
-  const { control, watch } = useFormContext();
+  const { control, watch, reset, setValue } = useFormContext();
 
   const customerId = watch("customerId");
 
   const customerAvailable = watch("customerAvailable");
 
+  console.log(watch("curatorDepartmentId"));
+  
+
   useQuery(
-    ["customerDetail"],
+    ["customerDetail", customerId],
     () =>
       customerApi.getById(customerId).then((res) => {
-        const { companyInfo, curatorInfo } = res.data;
+        const { companyInfo, curatorInfo = [] } = res.data;
 
-        const {name, taxCode, address, } = companyInfo || {};
-        console.log(companyInfo, curatorInfo);
+        console.log(curatorInfo);
+        
+
+        const { name, taxCode, address } = companyInfo || {};
+
+        setValue("companyName", name);
+
+        setValue("companyTaxCode", taxCode);
+
+        setValue("companyAddress", address);
+
+        const {curatorName, curatorDepartment, curatorPhone, curatorEmail, id, receiverById} = curatorInfo[0] || {};
+
+        setValue("curatorName", curatorName);
+
+        setValue("curatorDepartmentId", curatorDepartment);
+
+        setValue("curatorPhone", curatorPhone);
+
+        setValue("curatorEmail", curatorEmail);
+
+        setValue("curatorId", id);
+
+        setValue("receiverAdress", receiverById?.address);
       }),
     {
       enabled: !!customerId,
@@ -33,26 +58,24 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
 
       <Box className="flex-grow bg-white rounded-sm p-3">
         {customerAvailable && (
-          <>
-            <FormCustomer
-              controlProps={{
-                name: "customerId",
-                control: control,
-                rules: { required: "Phải chọn mã khách hàng" },
-              }}
-            />
-
-            <FormInput
-              controlProps={{
-                name: "companyName",
-                control: control,
-                rules: { required: "Phải nhập tên khách hàng" },
-              }}
-              label="Tên khách hàng"
-              className="my-4"
-            />
-          </>
+          <FormCustomer
+            controlProps={{
+              name: "customerId",
+              control: control,
+              rules: { required: "Phải chọn mã khách hàng" },
+            }}
+          />
         )}
+
+        <FormInput
+          controlProps={{
+            name: "companyName",
+            control: control,
+            rules: { required: "Phải nhập tên khách hàng" },
+          }}
+          label="Tên khách hàng"
+          className="my-4"
+        />
 
         <FormInput
           controlProps={{

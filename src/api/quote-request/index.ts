@@ -1,5 +1,29 @@
 import { request } from "../method";
 
+export type TCreateQuoteRequest = {
+  customerId?: string
+  companyName: string
+  companyTaxCode: string
+  companyProfession: number
+  companyAddress: string
+  companyEmail: string
+  receiverAdress: string
+  curatorId: string
+  curatorName: string
+  curatorDepartmentId: number
+  curatorPhone: string
+  curatorEmail: string
+  requirements: string
+  attachFile: string
+  preOrderDetailCreate: TCreateQuoteRequestProduct[]
+}
+
+export type TCreateQuoteRequestProduct = {
+  productId: string
+  quantity: number
+  note: string
+}
+
 const BASE_URL = "PreOrder";
 
 export const quoteRequest = {
@@ -17,4 +41,6 @@ export const quoteRequest = {
 
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
+  create: (payload: TCreateQuoteRequest) => request.post<TCreateQuoteRequest, any>(BASE_URL, payload)
 };
