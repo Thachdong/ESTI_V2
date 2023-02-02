@@ -11,26 +11,20 @@ import {
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import {
-  getSession,
-  signIn,
-  SignInOptions,
-  SignInResponse,
-  useSession,
-} from "next-auth/react";
-import {
   BaseButton,
   FormInput,
   FormInputPassword,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
-import { setBearerToken } from "src/api/instance";
 import Link from "next/link";
 import { useCallback } from "react";
-import moment from "moment";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import { useMutation } from "react-query";
 import { authenticate } from "src/api";
+import { _format } from "~modules-core/utility/fomat";
+import { parseJwt } from "~modules-core/utility";
+import { useSession } from "~modules-core/customHooks/useSession";
 
 type TLoginCredential = {
   username: string;
@@ -59,57 +53,38 @@ export function LoginForm() {
   React.useEffect(() => {
     const { callbackUrl } = router.query;
 
-    const { accessToken, expires } = session.data || {};
+    const { accessToken } = session;
 
-    const isTokenExpired = moment(expires).isBefore();
-
-    if (accessToken && !isTokenExpired) {
-      router.push((callbackUrl as string) || "/dashboard/quotations/requests");
+    if (accessToken) {
+      router.push((callbackUrl as string) || "/dashboard/quotation/quote-list");
     }
   }, [session]);
 
   const mutateLogin = useMutation((data: TLoginCredential) =>
-    authenticate.login(data).then(res => res.data)
+    authenticate.login(data).then((res) => res.data)
   );
+
+  const handleRedirect = () => {
+    const callbackUrl = router.query.callbackUrl as string;
+    
+    router.push(callbackUrl || "/dashboard/quotation/quote-list");
+  };
 
   const onSubmit = useCallback(
     async (data: TLoginCredential) => {
-      const { callbackUrl } = router.query;
 
       try {
-        const {token} = await mutateLogin.mutateAsync(data);
+        const { token } = await mutateLogin.mutateAsync(data);
 
-        const signInPayload: SignInOptions = {
-          data: JSON.stringify({token}),
-          redirect: false,
-        };
+        const userInfo = parseJwt(token);
 
-        const response: SignInResponse | undefined = await signIn(
-          "credentials-signin",
-          signInPayload
-        );
+        localStorage.setItem("accessToken", token);
 
-        const { error, ok } = response || {};
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
-        if (ok) {
-          router.push(
-            (callbackUrl as string) || "/dashboard/quotations/requests"
-          );
+        toast.success("Đăng nhập thành công !");
 
-          toast.success("Đăng nhập thành công!");
-
-          const { accessToken } = (await getSession()) || {};
-
-          accessToken && setBearerToken(accessToken);
-        }
-
-        if (!ok && error) {
-          console.log(error);
-
-          const errorData = decodeURIComponent(error as string);
-
-          toast.error(errorData);
-        }
+        handleRedirect();
       } catch (error) {
         console.log(error);
       }

@@ -14,7 +14,8 @@ type TProps = {
 
 export const Header: React.FC<TProps> = ({ data }) => {
   const { title, pageName } = data || {};
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query } = router;
 
   const { data: warehouseImportDetail } = useQuery(
     ["ImportWarehouseDetail_" + query?.id, { ...query }],
@@ -62,6 +63,14 @@ export const Header: React.FC<TProps> = ({ data }) => {
       break;
   }
 
+  const handleLogout = () => {
+    localStorage.clear();
+
+    const { pathname } = window.location;
+
+    router.push(`/auth/login?callbackUrl=${pathname}`);
+  };
+
   return (
     <Box className={clsx(styles["header"])}>
       <Typography
@@ -89,7 +98,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
         variant="contained"
         color="error"
         startIcon={<PowerSettingsNewRoundedIcon />}
-        onClick={() => signOut()}
+        onClick={handleLogout}
         className="shadow-none text-[#E53E3E] bg-[#fde9e9] font-bold text-sm p-4"
       >
         Đăng xuất

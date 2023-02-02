@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getSession, signOut } from "next-auth/react";
 
 const TIMEOUT_IN_MILISECOND = 10000;
 
@@ -26,7 +25,7 @@ const useRequestCongif = async (config: AxiosRequestConfig) => {
 
   // TRY TO GET TOKEN WHEN IT ABSENT FROM HEADER
   if (!bearerToken) {
-    const { accessToken } = (await getSession()) || {};
+    const accessToken = localStorage.getItem("accessToken");
 
     config.headers = {
       Authorization: accessToken ? `Bearer ${accessToken}` : "",
@@ -93,14 +92,18 @@ const useResponseError = (error: AxiosError) => {
           break;
         }
 
+        const { pathname } = window.location;
+
         // TURN ON ABORT FLAG
         isAbort = true;
 
         // ALERT SOME INFO TO USER
-        window && window.alert(errorMessage || "Phiên đăng nhập hết hạn!");
+        window?.alert?.(errorMessage || "Phiên đăng nhập hết hạn!");
 
         // LOGOUT
-        signOut();
+        localStorage.clear();
+
+        window.location.replace(`/auth/login?callbackUrl=${pathname}`);
 
         break;
       }
