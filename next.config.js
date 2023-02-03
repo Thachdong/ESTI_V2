@@ -2,13 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  redirects: async() => ([
-    {
-      source: '/',
-      destination: '/dashboard/quotation/quote-list',
-      permanent: true,
-    },
-  ])
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
