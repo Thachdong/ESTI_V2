@@ -4,16 +4,12 @@ import { NextPage } from "next";
 import { Session } from "next-auth";
 import { ReactElement } from "react";
 
-type TPageProps = {
-  session: Session;
-};
-
 type TNextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   layoutName?: string,
   data?: any
 };
 
-interface IMyAppProps extends AppProps<TPageProps> {
+interface IMyAppProps extends AppProps {
   emotionCache?: EmotionCache;
   Component: TNextPageWithLayout;
 }

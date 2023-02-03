@@ -17,16 +17,16 @@ export const CardReport: React.FC<TProps> = ({
   useEffect(() => {
     switch (true) {
       case BgImage === "Orange":
-        setImage("../../Rectangle_100.png");
+        setImage("/Rectangle_100.png");
         break;
       case BgImage === "Green":
-        setImage("../../Rectangle_101.png");
+        setImage("/Rectangle_101.png");
         break;
       case BgImage === "Black":
-        setImage("../../Rectangle_102.png");
+        setImage("/Rectangle_102.png");
         break;
       case BgImage === "Red":
-        setImage("../../Rectangle_103.png");
+        setImage("/Rectangle_103.png");
         break;
       default:
         break;

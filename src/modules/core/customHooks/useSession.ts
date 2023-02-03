@@ -19,8 +19,6 @@ export const useSession = () => {
 
       const userInfo = JSON.parse(rawUserInfo as string);
 
-      const menu = JSON.parse(localStorage.getItem("menu") as string);
-
       setSession({ accessToken, userInfo });
     } catch (error) {
       console.log(error);

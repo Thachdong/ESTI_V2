@@ -7,8 +7,13 @@ export const instance = axios.create({
   timeout: TIMEOUT_IN_MILISECOND,
 });
 
-export const setBearerToken = (token: string) =>
-  (instance.defaults.headers.common["Authorization"] = "Bearer " + token);
+export const setBearerToken = () => {
+  const accessToken = localStorage.getItem("accessToken");
+
+  if (!!accessToken) {
+    instance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  }
+};
 
 const getUrlFromConfig = (config: AxiosRequestConfig) => {
   const { baseURL, url } = config;
@@ -17,19 +22,21 @@ const getUrlFromConfig = (config: AxiosRequestConfig) => {
 };
 
 const useRequestCongif = async (config: AxiosRequestConfig) => {
-  const { method, params, data } = config || {};
+  const { method, params, data, headers } = config || {};
 
   const url = getUrlFromConfig(config);
 
-  const bearerToken = instance.defaults.headers.common["Authorization"];
+  const bearerToken = headers?.["Authorization"];
 
   // TRY TO GET TOKEN WHEN IT ABSENT FROM HEADER
   if (!bearerToken) {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = await localStorage.getItem("accessToken");
 
-    config.headers = {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
-    };
+    if (!!accessToken) {
+      config.headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+    }
   }
 
   console.log(

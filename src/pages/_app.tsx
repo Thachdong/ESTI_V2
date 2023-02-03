@@ -7,7 +7,6 @@ import "react-contexify/ReactContexify.css";
 import "~styles/globals.css";
 
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 
@@ -23,7 +22,6 @@ const clientEmotionCache = createEmotionCache();
 
 function MyApp({
   Component,
-  pageProps: { session },
   emotionCache = clientEmotionCache,
 }: IMyAppProps) {
   const [loading, setLoading] = useState(false);
@@ -34,21 +32,22 @@ function MyApp({
 
   const displayName = Component.displayName;
 
+  console.log("ádfasdf");
+  
+
   return (
-    <SessionProvider session={session}>
-      <ReactQueryProvider>
-        <MuiProvider emotionCache={emotionCache}>
-          <Head>
-            <link rel="icon" type="image/png" href="/logo-small.png" />
-            <title>{loading ? "Đang chuyển hướng..." : displayName}</title>
-          </Head>
+    <ReactQueryProvider>
+      <MuiProvider emotionCache={emotionCache}>
+        <Head>
+          <link rel="icon" type="image/png" href="/logo-small.png" />
+          <title>{loading ? "Đang chuyển hướng..." : displayName}</title>
+        </Head>
 
-          <ToastContainer {...toastOptions} />
+        <ToastContainer {...toastOptions} />
 
-          <CoreLayout Page={Component} />
-        </MuiProvider>
-      </ReactQueryProvider>
-    </SessionProvider>
+        <CoreLayout Page={Component} />
+      </MuiProvider>
+    </ReactQueryProvider>
   );
 }
 
