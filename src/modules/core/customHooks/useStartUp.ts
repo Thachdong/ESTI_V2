@@ -16,12 +16,6 @@ dynamic(
 
 export const useStartUp = () => {
   useEffect(() => {
-    handleSetBearerToken();
+    setBearerToken();
   }, []);
-
-  async function handleSetBearerToken() {
-    const accessToken = localStorage.getItem("accessToken");
-
-    accessToken && setBearerToken(accessToken);
-  }
 };
