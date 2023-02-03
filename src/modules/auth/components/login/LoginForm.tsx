@@ -17,7 +17,7 @@ import {
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import { useMutation } from "react-query";
@@ -25,6 +25,7 @@ import { authenticate } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
 import { parseJwt } from "~modules-core/utility";
 import { useSession } from "~modules-core/customHooks/useSession";
+import { defaultRoute } from "~modules-core/constance";
 
 type TLoginCredential = {
   username: string;
@@ -50,13 +51,13 @@ export function LoginForm() {
   const router = useRouter();
 
   // SIDE EFFECTS
-  React.useEffect(() => {
+  useEffect(() => {
     const { callbackUrl } = router.query;
 
     const { accessToken } = session;
 
     if (accessToken) {
-      router.push((callbackUrl as string) || "/dashboard/quotation/quote-list");
+      router.push((callbackUrl as string) || defaultRoute);
     }
   }, [session]);
 
@@ -67,7 +68,7 @@ export function LoginForm() {
   const handleRedirect = () => {
     const callbackUrl = router.query.callbackUrl as string;
     
-    router.push(callbackUrl || "/dashboard/quotation/quote-list");
+    router.push(callbackUrl || defaultRoute);
   };
 
   const onSubmit = useCallback(

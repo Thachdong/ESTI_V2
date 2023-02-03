@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
 import { LoadingButton } from "@mui/lab";
 import styles from "~modules-dashboard/styles/layout/header.module.css";
-import { signOut } from "next-auth/react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";

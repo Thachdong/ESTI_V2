@@ -12,7 +12,6 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { menu } from "~modules-dashboard/layouts/data";
-import Image from "next/image";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
@@ -129,9 +128,9 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
     >
       <Box className={styles["logo-box"]}>
         {!expand ? (
-          <Image src="/logo-small.png" alt="Esti" width={40} height={40} />
+          <img src="/logo-small.png" alt="Esti" width={40} height={40} />
         ) : (
-          <Image src="/logo-full.png" alt="Esti" width={134} height={59} />
+          <img src="/logo-full.png" alt="Esti" width={134} height={59} />
         )}
 
         <BaseButton
@@ -148,7 +147,7 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
       </Box>
       <Box className={clsx(!expand ? "hidden" : styles["avatar-box"])}>
         <Box className={clsx("!h-fit text-center")}>
-          <Image src="/Avatar.jpeg" alt="Esti" width={100} height={100} />
+          <img src="/Avatar.jpeg" alt="Esti" width={100} height={100} />
           <p className="m-0 text-xs">Director - Director</p>
           <p className="m-0 pt-2 font-medium text-sm">ADMIN-004</p>
         </Box>
