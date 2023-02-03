@@ -210,3 +210,5 @@ export const businessAreas = [
     name: "Khác",
   },
 ];
+
+export const defaultRoute = "/dashboard/quotation/quote-list";

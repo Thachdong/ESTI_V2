@@ -32,9 +32,6 @@ function MyApp({
 
   const displayName = Component.displayName;
 
-  console.log("ádfasdf");
-  
-
   return (
     <ReactQueryProvider>
       <MuiProvider emotionCache={emotionCache}>

@@ -2,8 +2,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Menu, Paper } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
-import moment from "moment";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Item } from "react-contexify";

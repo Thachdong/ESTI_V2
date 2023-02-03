@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import clsx from "clsx";
-import { useState } from "react";
-import { useIsFetching } from "react-query";
-import { Loading } from "~modules-core/components";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useSession } from "~modules-core/customHooks/useSession";
 import { Footer, Header, Sidebar } from "~modules-dashboard/components/layout";
 import styles from "~modules-dashboard/styles/layout/layout.module.css";
 import { TNextPageWithLayout } from "~types/_app";
@@ -15,10 +15,16 @@ type TProps = {
 export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
   const [expand, setExpand] = useState(true);
 
-  // ADD "loading" TO QUERY KEY TO TRIGGER LOADING EFFECT
-  const isFetching = useIsFetching({
-    predicate: (query) => query?.queryKey?.includes("loading"),
-  });
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      const callbackUrl = router.asPath;
+      router.push(`/auth/login/?callbackUrl=${callbackUrl}`);
+    }
+  }, []);
 
   return (
     <Box
@@ -40,11 +46,6 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
           component="main"
           sx={{ height: "calc(100vh - 64px - 45px)" }}
         >
-          {!!isFetching && (
-            <Box className="absolute w-full">
-              <Loading />
-            </Box>
-          )}
           <Box className={clsx(styles["page"], "relative w-full h-full")}>
             <Page />
           </Box>
