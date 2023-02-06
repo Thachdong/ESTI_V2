@@ -131,6 +131,10 @@ export const menu = [
     icon: <SettingsIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
+        title: "Cấu hình loại khách hàng",
+        link: "settings/customer-type-config",
+      },
+      {
         title: "Cấu hình đơn vị",
         link: "settings/unit-config",
       },
