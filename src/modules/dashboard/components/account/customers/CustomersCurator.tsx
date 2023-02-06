@@ -1,7 +1,13 @@
 import { Box } from "@mui/material";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
+import { customerType } from "src/api/customer-type";
 import { FormInput, FormSelect } from "~modules-core/components";
-import { curatorDepartments, genderData } from "~modules-core/constance";
+import {
+  curatorDepartments,
+  discountTypeOptions,
+  genderData,
+} from "~modules-core/constance";
 
 type TProps = {
   isDisable: boolean;
@@ -15,6 +21,10 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
     control,
     name: "curatorCreate",
   });
+
+  const { data: customerTypeOptions = [] } = useQuery(["CustomerTypesList"], () =>
+    customerType.getAll().then((res) => res.data)
+  );
 
   return (
     <>
@@ -31,6 +41,31 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
             rules: { required: "Phải nhập tên tài khoản" },
           }}
           label="Tên tài khoản"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormSelect
+          controlProps={{
+            control,
+            name: `curatorCreate.${index}.typeAccount`,
+            rules: { required: "Phải chọn loại tài khoản" },
+          }}
+          options={customerTypeOptions}
+          label="Loại tài khoản"
+          disabled={isDisable}
+          shrinkLabel
+          labelKey="levelName"
+        />
+
+        <FormSelect
+          controlProps={{
+            control,
+            name: `curatorCreate.${index}.typeDiscount`,
+            rules: { required: "Phải chọn loại chiết khấu" },
+          }}
+          options={discountTypeOptions}
+          label="Loại chiết khấu"
           disabled={isDisable}
           shrinkLabel
         />
