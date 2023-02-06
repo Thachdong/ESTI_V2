@@ -1,20 +1,31 @@
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { branchs, TBranch } from "src/api";
-import { BaseButton, Dialog, FormInput } from "~modules-core/components";
+import {
+  customerType,
+  TCreateCustomerType,
+  TUpdateCustomerType,
+} from "src/api/customer-type";
+import {
+  BaseButton,
+  Dialog,
+  FormInput,
+  FormInputNumber,
+  FormSelect,
+} from "~modules-core/components";
+import { accountTypeOptions } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const BranchConfigDialog: React.FC<TDialog> = ({
+export const CustomerTypeDialog: React.FC<TDialog> = ({
   onClose,
   refetch,
   open,
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset } = useForm<TBranch>({
+  const { control, handleSubmit, reset } = useForm<any>({
     mode: "onBlur",
   });
 
@@ -22,10 +33,10 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
 
   const title =
     type === "Add"
-      ? "Tạo chi nhánh"
+      ? "Tạo loại khách hàng"
       : type === "View" && isUpdate
-      ? "Cập nhật chi nhánh"
-      : "Thông tin chi nhánh";
+      ? "Cập nhật loại khách hàng"
+      : "Thông tin loại khách hàng";
 
   useEffect(() => {
     if (type === "Add") {
@@ -34,11 +45,13 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
 
     if (type === "View" && defaultValue) {
       reset(defaultValue);
+
+      setIsUpdate(false);
     }
   }, [defaultValue, reset]);
 
   const mutationAdd = useMutation(
-    (payload: Omit<TBranch, "id">) => branchs.create(payload),
+    (payload: TCreateCustomerType) => customerType.create(payload),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -53,8 +66,12 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
     }
   );
 
-  const mutateUpdate = useMutation(
-    (payload: TBranch) => branchs.update(payload),
+  const handleAdd = useCallback(async (data: any) => {
+    await mutationAdd.mutateAsync({ ...data });
+  }, []);
+
+  const mutationUpdate = useMutation(
+    (payload: TUpdateCustomerType) => customerType.update(payload),
     {
       onError: (error: any) => {
         toast.error(error?.resultMessage);
@@ -69,17 +86,16 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
     }
   );
 
+  const handleUpdate = useCallback(async (data: any) => {
+    await mutationUpdate.mutateAsync({ ...data, id: defaultValue?.id });
+  }, []);
+
   const renderButtons = () => {
     switch (true) {
       case type === "Add":
         return (
           <>
-            <BaseButton
-              onClick={handleSubmit((data: Omit<TBranch, "id">) =>
-                mutationAdd.mutateAsync(data)
-              )}
-              className="mr-2"
-            >
+            <BaseButton onClick={handleSubmit(handleAdd)} className="mr-2">
               Tạo
             </BaseButton>
             <BaseButton type="button" className="!bg-main-1" onClick={onClose}>
@@ -105,10 +121,7 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
       case type === "View" && isUpdate === true:
         return (
           <>
-            <BaseButton
-              onClick={handleSubmit((data) => mutateUpdate.mutateAsync(data))}
-              className="mr-2"
-            >
+            <BaseButton onClick={handleSubmit(handleUpdate)} className="mr-2">
               Cập nhật
             </BaseButton>
             <BaseButton
@@ -128,73 +141,51 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
       <Box component="form" onSubmit={(e: any) => e.preventDefault()}>
         <FormInput
           controlProps={{
-            name: "code",
+            name: "levelName",
             control,
-            rules: { required: "Phải nhập mã chi nhánh" },
+            rules: { required: "Phải nhập tên" },
           }}
-          label="Mã chi nhánh"
+          label="Tên"
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
+          shrinkLabel
+        />
+
+        <FormSelect
+          controlProps={{
+            name: "accountType",
+            control,
+            rules: { required: "Phải chọn nhóm khách hàng" },
+          }}
+          options={accountTypeOptions}
+          label="Nhóm tài khoản"
+          className="mb-4"
+          disabled={type === "View" && !isUpdate}
+          shrinkLabel
+        />
+
+        <FormInputNumber
+          controlProps={{
+            name: "discount",
+            control,
+          }}
+          label="Chiết khấu"
           required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
+          shrinkLabel
         />
 
-        <FormInput
+        <FormInputNumber
           controlProps={{
-            name: "name",
+            name: "point",
             control,
-            rules: { required: "Phải nhập tên chi nhánh " },
           }}
-          label="Tên chi nhánh"
+          label="Tích điểm"
           required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "taxCode",
-            control,
-            rules: { required: "Phải nhập mã số thuế " },
-          }}
-          label="Mã số thuế"
-          required
-          className="mb-4"
-          disabled={type === "View" && !isUpdate}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "address",
-            control,
-            rules: { required: "Phải nhập mã địa chỉ " },
-          }}
-          label="Địa chỉ"
-          required
-          className="mb-4"
-          disabled={type === "View" && !isUpdate}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "email",
-            control,
-            rules: { required: "Phải nhập email " },
-          }}
-          label="Email"
-          required
-          className="mb-4"
-          disabled={type === "View" && !isUpdate}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "phone",
-            control,
-            rules: { required: "Phải nhập số điện thoại " },
-          }}
-          label="Số điện thoại"
-          required
-          disabled={type === "View" && !isUpdate}
+          shrinkLabel
         />
 
         <Box className="flex items-center justify-end mt-4">

@@ -23,6 +23,7 @@ export const FormInputNumberBase: React.FC<TProps> = (props) => {
 
   // DEFAULT PROPS
   const defaultProps: NumberFormatProps<TextFieldProps> = {
+    fullWidth: true,
     allowLeadingZeros: false,
     allowNegative: false,
     thousandSeparator: true,

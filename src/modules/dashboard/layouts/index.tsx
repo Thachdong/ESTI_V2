@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSession } from "~modules-core/customHooks/useSession";
 import { Footer, Header, Sidebar } from "~modules-dashboard/components/layout";
 import styles from "~modules-dashboard/styles/layout/layout.module.css";
 import { TNextPageWithLayout } from "~types/_app";

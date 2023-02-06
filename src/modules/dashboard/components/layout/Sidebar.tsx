@@ -4,7 +4,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
 } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
 import React, { useCallback, useState } from "react";

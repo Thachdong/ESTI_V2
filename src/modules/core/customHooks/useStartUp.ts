@@ -22,39 +22,39 @@ export const useStartUp = () => {
   useEffect(() => {
     // SET TOKEN EVERYTIME APP INITIALIZE
     setBearerToken();
+
+    // PREVENT USER ACCESS INDEX PAGE
+    handleRedirectFromIndex();
   }, []);
 
   useEffect(() => {
     // SAVE CALLBACK URL
     handleCatchCallbackUrl();
-
-    // PREVENT USER ACCESS INDEX PAGE
-    handleRedirectFromIndex();
   }, [router.isReady]);
 
   const handleRedirectFromIndex = useCallback(() => {
-    const { asPath } = router;
+    const { pathname } = router;
 
     const token = localStorage.getItem("accessToken");
 
-    switch (true) {
-      case !token: {
-        const callbackUrl = (!asPath && asPath === "/") ? defaultRoute : asPath;
+    if (pathname !== "/") return;
 
-        router.push(`/auth/login/${callbackUrl}`);
-        break;
-      }
-      case asPath === "/" || !asPath:
-        router.push(defaultRoute);
-        break;
-      default:
-        break;
+    if (!!token) {
+      router.push(defaultRoute);
+    } else {
+      router.push("/auth/login/");
     }
-  }, [router.isReady]);
+  }, []);
 
   const handleCatchCallbackUrl = useCallback(() => {
     const { pathname } = router;
 
-    localStorage.setItem("callbackUrl", pathname);
+    if (
+      pathname !== "/" ||
+      !pathname.includes("login") ||
+      !pathname.includes("/404")
+    ) {
+      localStorage.setItem("callbackUrl", pathname);
+    }
   }, [router.isReady]);
 };
