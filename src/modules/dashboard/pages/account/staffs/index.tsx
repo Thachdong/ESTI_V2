@@ -135,7 +135,7 @@ export const StaffsPage = () => {
             className="mr-3"
             onClick={() => setDialog({ open: true, type: "Add" })}
           >
-            Tạo nhà nhân viên
+            Tạo nhân viên
           </AddButton>
         </div>
       </div>

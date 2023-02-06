@@ -219,6 +219,7 @@ export const accountTypeOptions = [
 ];
 
 export const discountTypeOptions = [
+  { id: 0, name: "Theo báo giá" },
   { id: 1, name: "Hoa Hồng" },
   { id: 2, name: "Tích điểm" },
 ];
