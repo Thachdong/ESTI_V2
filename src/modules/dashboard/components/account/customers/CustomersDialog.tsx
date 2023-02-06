@@ -76,6 +76,9 @@ export const CustomersDialog: React.FC<TDialog> = ({
       curatorCreate: curatorInfo.map((curator: any) => ({
         id: curator?.id,
         userName: curator?.userName,
+        typeAccount: curator?.typeAccount,
+        typeDiscount: curator?.typeDiscount,
+
         curatorName: curator?.curatorName,
         curatorDepartment: curator?.curatorDepartment,
         curatorGender: curator?.curatorGender,

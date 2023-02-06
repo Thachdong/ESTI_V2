@@ -212,3 +212,13 @@ export const businessAreas = [
 ];
 
 export const defaultRoute = "/dashboard/quotation/quote-list";
+
+export const accountTypeOptions = [
+  { id: 1, name: "Normal" },
+  { id: 2, name: "VIP" },
+];
+
+export const discountTypeOptions = [
+  { id: 1, name: "Hoa Hồng" },
+  { id: 2, name: "Tích điểm" },
+];

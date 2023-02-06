@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { useMutation, useQuery } from "react-query";
@@ -125,17 +125,17 @@ export const UnitConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
+      <Box className="flex mb-3">
+        <Box className="w-1/2">
           <SearchBox label="Tìm kiếm tên đơn vị" />
-        </div>
+        </Box>
 
-        <div className="w-1/2 flex items-center justify-end">
+        <Box className="w-1/2 flex items-center justify-end">
           <AddButton variant="contained" onClick={onAdd}>
             Tạo đơn vị
           </AddButton>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       <DataTable
         rows={data?.items as []}
