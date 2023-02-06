@@ -22,6 +22,10 @@ export type TCreateCustomerType = {
   accountType: number;
 };
 
+export type TUpdateCustomerType = TCreateCustomerType & {
+  id: string
+}
+
 const BASE_URL = "AccountLevel";
 
 export const customerType = {
@@ -29,4 +33,8 @@ export const customerType = {
     request.get<TCustomerType[]>(BASE_URL, { ...params }),
 
   create: (payload: TCreateCustomerType) => request.post<TCreateCustomerType, any>(BASE_URL, payload),
+
+  update: (payload: TUpdateCustomerType) => request.put<TUpdateCustomerType, any>(BASE_URL, payload),
+
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
 };
