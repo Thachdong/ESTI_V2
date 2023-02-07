@@ -1,4 +1,5 @@
 import { Box, Paper, Typography } from "@mui/material";
+import _ from "lodash";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
@@ -33,7 +34,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
   const { watch, setValue } = useFormContext();
 
-  const productList = watch("productList") || [];
+  const { productList = [] } = watch();
 
   const disabled = importStatus !== undefined;
 
@@ -47,18 +48,6 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   );
 
   // METHODS
-  const handleRemoveProduct = useCallback(() => {
-    const {productName, no} = defaultValue.current || {};
-
-    if (confirm("Xác nhận xóa SP: " + productName)) {
-      const updatedProductList = productList.filter(
-        (p: any) => p?.no !== no
-      );
-
-      setValue("productList", updatedProductList);
-    }
-  }, [productList, defaultValue]);
-
   const handleClose = useCallback(() => {
     setDialog({ open: false });
   }, []);
@@ -67,11 +56,25 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
     setDialog({ open: true, type });
   }, []);
 
+  const handleRemoveProduct = useCallback(() => {
+    const { productName, no } = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa SP: " + productName)) {
+      const updatedProductList = productList.filter((p: any) => p?.no !== no);
+
+      setValue("productList", updatedProductList);
+    }
+  }, [productList, defaultValue]);
+
   const handleAddProduct = useCallback(
     (product: any) => {
       setValue("productList", [
         ...productList,
-        { ...product, no: productList.length + 1, id: dialog.type === "Copy" ? null : product?.id },
+        {
+          ...product,
+          no: productList.length + 1,
+          id: dialog.type === "Copy" ? null : product?.id,
+        },
       ]);
     },
     [productList, setValue, dialog.type]
@@ -275,7 +278,12 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
       <ImportDetailProductDialog
         onClose={handleClose}
-        open={dialog.open && (dialog?.type === "Add" || dialog?.type === "Update" || dialog?.type === "Copy")}
+        open={
+          dialog.open &&
+          (dialog?.type === "Add" ||
+            dialog?.type === "Update" ||
+            dialog?.type === "Copy")
+        }
         type={dialog?.type}
         addProduct={handleAddProduct}
         updateProduct={handleUpdateProduct}

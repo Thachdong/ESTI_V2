@@ -35,7 +35,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
   };
 
   const renderValue = useCallback(() => {
-    if (!value) return restProps.multiple ? [] : "";
+    if (!value) return restProps.multiple ? [] : null;
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>
@@ -46,14 +46,14 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
 
       return valueList;
     } else {
-      const valueObj = options.find((opt) => opt?.[valueKey] === value) || "";
+      const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
       callback?.(valueObj);
 
       return valueObj;
     }
   }, [value, options, callback]);
-
+  
   // DEFFAULT PROPS
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",

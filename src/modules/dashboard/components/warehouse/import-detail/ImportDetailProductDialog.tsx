@@ -1,7 +1,10 @@
 import { Box } from "@mui/material";
+import _ from "lodash";
 import moment from "moment";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
 import { position, products } from "src/api";
 import {
   BaseButton,
@@ -30,6 +33,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
+  const { id } = useRouter().query;
+
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
@@ -40,15 +45,36 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    if (type === "Add") {
-      reset({});
-    } else {
-      !!defaultValue && reset(defaultValue);
+  const { watch: contextWatch } = useFormContext();
+
+  const {
+    productList = [],
+    supplierId,
+    productOrderId,
+  } = contextWatch();
+
+  // DATA FETCHING
+  const { data: supplerProducts = [] } = useQuery(
+    ["GetProductsBySupplier_" + supplierId],
+    () => products.getProductBySupplier(supplierId).then((res) => res.data),
+    {
+      enabled: !!supplierId && !productOrderId,
     }
-  }, [defaultValue, type]);
+  );
 
   // METHODS
+  const getProductOptions = useCallback(() => {
+    // Màn chi tiết
+    // Màn tạo chọn đơn mua hàng
+    // ==> data update trực tiếp vào react-hook-form trong useEffect
+    if (!!id || !!productOrderId) {
+      return _.uniqBy(productList, (prod: any) => prod?.id);
+    }
+
+    // Màn tạo không qua đơn mua hàng
+    return supplerProducts;
+  }, [id, productOrderId, productList, supplerProducts]);
+
   const cleanup = () => {
     reset();
 
@@ -148,6 +174,15 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
     [selectedPosition, updateProduct]
   );
 
+  // SIDE EFFECT
+  useEffect(() => {
+    if (type === "Add") {
+      reset({});
+    } else {
+      !!defaultValue && reset(defaultValue);
+    }
+  }, [defaultValue, type]);
+
   return (
     <Dialog
       open={open}
@@ -157,8 +192,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
       title={title}
     >
       <Box className="grid grid-cols-2 gap-4">
-        <FormSelectAsync
-          fetcher={products.getList}
+        <FormSelect
+          options={getProductOptions()}
           callback={getSelectedProduct}
           controlProps={{
             control,
@@ -167,10 +202,11 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
           }}
           label="Mã SP"
           labelKey="productCode"
+          valueKey="productId"
         />
 
-        <FormSelectAsync
-          fetcher={products.getList}
+        <FormSelect
+          options={getProductOptions()}
           callback={getSelectedProduct}
           controlProps={{
             control,
@@ -179,6 +215,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
           }}
           label="Tên SP"
           labelKey="productName"
+          valueKey="productId"
         />
 
         <FormInputBase
