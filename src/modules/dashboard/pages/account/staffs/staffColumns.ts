@@ -1,4 +1,5 @@
 import moment from "moment";
+import { accountStatus } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
 
 export const staffColumns: TGridColDef[] = [
@@ -85,9 +86,6 @@ export const staffColumns: TGridColDef[] = [
     sortDescValue: 10,
     sortAscValue: 21,
     type: "select",
-    options: [
-      {value: 1, label: "Chưa kích hoạt"},
-      {value: 2, label: "Đã kích hoạt"},
-    ]
+    options: accountStatus
   },
 ];

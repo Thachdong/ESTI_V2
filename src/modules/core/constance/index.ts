@@ -223,3 +223,9 @@ export const discountTypeOptions = [
   { id: 1, name: "Hoa Hồng" },
   { id: 2, name: "Tích điểm" },
 ];
+
+export const accountStatus = [
+  { value: 0, label: "Chưa kích hoạt" },
+  { value: 1, label: "Đã kích hoạt" },
+  { value: 2, label: "Đã khóa" },
+];
