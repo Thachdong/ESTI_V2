@@ -1,25 +1,24 @@
 import { Box, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import { useMutation } from "react-query";
 import { useCallback, useState } from "react";
-import { exportWarehouse, TExportWarehouseStatusPayload } from "src/api";
+import { useMutation } from "react-query";
+import { staff, TUpdateStaffStatus } from "src/api";
 import { BaseButton, Dialog } from "~modules-core/components";
-// import { purchaseRequestStatus } from "~modules-core/constance";
+import { accountStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
-  open,
+export const StaffsStatusDialog: React.FC<TDialog> = ({
   onClose,
-  defaultValue,
+  open,
   refetch,
+  defaultValue,
 }) => {
-  const [status, setStatus] = useState(defaultValue?.status);
+  const [status, setStatus] = useState<number>(defaultValue?.status || 0);
 
-  const purchaseRequestStatus: any = [];
-  
+  const title = "Cập nhật trạng thái nhân viên";
+
   const mutateUpdate = useMutation(
-    (payload: TExportWarehouseStatusPayload) =>
-      exportWarehouse.updateStatus(payload),
+    (payload: TUpdateStaffStatus) => staff.updateStatus(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -34,25 +33,19 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
   const handleUpdate = useCallback(async () => {
     if (defaultValue?.id) {
       await mutateUpdate.mutateAsync({
-        warehouseSessionId: defaultValue?.id,
+        id: defaultValue?.id,
         status: +status,
       });
     }
   }, [defaultValue?.id, status]);
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-      title={"Trạng thái đơn mua hàng - " + defaultValue?.code}
-      headerClassName="text-center"
-    >
+    <Dialog onClose={onClose} open={open} maxWidth="sm" title={title}>
       <RadioGroup
         defaultValue={defaultValue?.status}
-        onChange={(e) => setStatus(e.target.value)}
+        onChange={(e) => setStatus(+e.target.value)}
       >
-        {purchaseRequestStatus?.map((status: any) => (
+        {accountStatus?.map((status: any) => (
           <FormControlLabel
             key={status.value}
             value={status.value}

@@ -11,6 +11,7 @@ import {
   FormInputPassword,
   FormSelect,
 } from "~modules-core/components";
+import { staffDepartments } from "~modules-core/constance";
 import { TDialog } from "~types/dialog";
 import { DialogButtons } from "./DialogButtons";
 
@@ -81,6 +82,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
               label="Tên tài khoản"
               className="mb-4"
               disabled={type === "View" && !isUpdate}
+              shrinkLabel
             />
 
             {type === "Add" && (
@@ -93,6 +95,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                   }}
                   label="Mật khẩu"
                   className="mb-4"
+                  shrinkLabel
                 />
 
                 <FormInputPassword
@@ -102,6 +105,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                     rules: { required: "Nhập lại mật khẩu không khớp" },
                   }}
                   label="Nhập lại mật khẩu"
+                  shrinkLabel
                 />
               </>
             )}
@@ -117,6 +121,30 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 }}
                 label="Tên nhân viên"
                 disabled={type === "View" && !isUpdate}
+                shrinkLabel
+              />
+
+              <FormInput
+                controlProps={{
+                  name: "code",
+                  control,
+                  rules: { required: "Phải nhập mã nhân viên" },
+                }}
+                label="Mã nhân viên"
+                disabled={type === "View" && !isUpdate}
+                shrinkLabel
+              />
+
+              <FormSelect
+                controlProps={{
+                  name: "department",
+                  control,
+                  rules: { required: "Phải chọn phòng ban" },
+                }}
+                options={staffDepartments || []}
+                label="Phòng ban"
+                disabled={type === "View" && !isUpdate}
+                shrinkLabel
               />
 
               <FormSelect
@@ -128,7 +156,8 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 options={branchsList || []}
                 label="Chọn chi nhánh"
                 disabled={type === "View" && !isUpdate}
-                getOptionLabel={(option) => option?.code}
+                labelKey="code"
+                shrinkLabel
               />
 
               <FormSelect
@@ -141,6 +170,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 label="Chọn chức vụ"
                 disabled={type === "View" && !isUpdate}
                 valueKey="code"
+                shrinkLabel
               />
 
               <FormDatepicker
@@ -151,6 +181,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 }}
                 label="Ngày sinh"
                 disabled={type === "View" && !isUpdate}
+                shrinkLabel
               />
 
               <FormInput
@@ -162,6 +193,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 label="Email"
                 type="email"
                 disabled={type === "View" && !isUpdate}
+                shrinkLabel
               />
 
               <FormInput
@@ -173,6 +205,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 label="Số điện thoại"
                 type="tel"
                 disabled={type === "View" && !isUpdate}
+                shrinkLabel
               />
 
               <FormInput
@@ -187,6 +220,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
                 multiline
                 minRows={3}
                 disabled={type === "View" && !isUpdate}
+                shrinkLabel
               />
             </Box>
           </Box>
