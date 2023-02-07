@@ -438,7 +438,7 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                     control,
                   }}
                   label=""
-                  getOptionLabel={(option) => option?.fullName}
+                  labelKey="fullName"
                 />
               </div>
             </div>
@@ -454,7 +454,7 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   }}
                   label=""
                   options={listSaleData}
-                  getOptionLabel={(option) => option?.fullName}
+                  labelKey="fullName"
                   defaultValue={
                     customerDetailData?.customer?.itemModel?.salesId
                   }
@@ -473,7 +473,7 @@ export const InfoCreateOrderRequest: React.FC<TProps> = ({
                   }}
                   label=""
                   options={listDeliveryStaffData}
-                  getOptionLabel={(option) => option?.fullName}
+                  labelKey="fullName"
                 />
               </div>
             </div>

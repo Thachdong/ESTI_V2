@@ -79,7 +79,7 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
           }}
           options={warehouseExportStatus}
           valueKey="value"
-          getOptionLabel={(option) => option?.label}
+          labelKey="label"
           label={"Trạng thái xuất kho"}
           disabled={data?.exportStatus > 0}
         />

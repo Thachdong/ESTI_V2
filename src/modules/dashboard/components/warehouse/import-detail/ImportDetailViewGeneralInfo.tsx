@@ -117,7 +117,7 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
           }}
           options={warehouseImportStatus}
           valueKey="value"
-          getOptionLabel={(option) => option?.label}
+          labelKey="label"
           label={"Trạng thái nhập kho"}
           disabled={data?.importStatus > 0}
         />

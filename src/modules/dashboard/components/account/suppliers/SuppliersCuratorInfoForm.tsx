@@ -27,7 +27,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({isDisable}) => {
         controlProps={{ control, name: "curatorGender", rules: {required: "Phải chọn giới tính"} }}
         label="Giới tính"
         disabled={isDisable}
-        getOptionLabel={option => option?.name}
+        labelKey="name"
       />
 
       <FormSelect
@@ -35,7 +35,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({isDisable}) => {
         controlProps={{ control, name: "curatorPosition", rules: {required: "Phải chọn chức vụ"} }}
         label="Chức vụ"
         disabled={isDisable}
-        getOptionLabel={option => option?.name}
+        labelKey="name"
       />
 
       <FormInput

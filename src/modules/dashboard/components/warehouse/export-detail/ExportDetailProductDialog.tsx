@@ -57,7 +57,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   const { data: lotOptions } = useQuery(
     [
       "getLotOptions_" + selectedProduct?.productId,
-      { selectedProduct, warehouseConfig },
+      { productId: selectedProduct?.productId, warehouseConfig },
     ],
     () =>
       products
@@ -192,8 +192,8 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           options={lotOptions || []}
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
-          getOptionLabel={(option) => option?.lotNumber}
           valueKey="lotNumber"
+          labelKey="lotNumber"
         />
 
         <FormInputBase value={selectedLot?.quantity} label="Tồn kho" disabled />

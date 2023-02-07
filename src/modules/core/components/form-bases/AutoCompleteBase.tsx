@@ -35,7 +35,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
   };
 
   const renderValue = useCallback(() => {
-    if (!value) return restProps.multiple ? [] : undefined;
+    if (!value) return restProps.multiple ? [] : "";
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>
@@ -46,7 +46,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
 
       return valueList;
     } else {
-      const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
+      const valueObj = options.find((opt) => opt?.[valueKey] === value) || "";
 
       callback?.(valueObj);
 
@@ -59,8 +59,11 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     size: "small",
     noOptionsText: "Không có lựa chọn",
     disableCloseOnSelect: restProps.multiple,
-    getOptionLabel: (option: any) =>
-      option?.[labelKey] || "Incorrect label key",
+    getOptionLabel: (option: any) => {
+      if (!option) return "";
+      
+      return option?.[labelKey] || "Incorrect label key"
+    },
     ...restProps,
   };
 
@@ -84,7 +87,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         color: "#747474",
       },
     },
-    ...inputProps,
+    // ...inputProps,
   };
 
   const defaultSx: any = shrinkLabel

@@ -85,10 +85,10 @@ export const StaffsPage = () => {
   const mutateDelete = useMutation((id: string) => staff.deleteStaff(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
-
-      refetch();
     },
     onSuccess: (data) => {
+      refetch();
+      
       toast.success(data.resultMessage);
     },
   });
