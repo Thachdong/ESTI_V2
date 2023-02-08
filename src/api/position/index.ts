@@ -37,8 +37,12 @@ export const position = {
   update: (payload: Partial<TPosition>) =>
     request.put<Partial<TPosition>, any>(BASE_URL, payload),
 
-  getProductsByPositionId: (params?: any) =>
-    request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // positionId is required
+  getProductByPositionId: (params?: any) =>
+  request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: products list
 
-  getHistoryByPositionId: (params?: any) => request.getPagination<any>(`${BASE_URL}/GetHistory`, {...params})
+  getPositionByProduct: (params?: any) =>
+  request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: position list
+
+  getHistoryByPositionId: (params?: any) =>
+    request.getPagination<any>(`${BASE_URL}/GetHistory`, { ...params }),
 };

@@ -50,7 +50,7 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
     ],
     () =>
       position
-        .getProductsByPositionId({
+        .getProductByPositionId({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           positionId,

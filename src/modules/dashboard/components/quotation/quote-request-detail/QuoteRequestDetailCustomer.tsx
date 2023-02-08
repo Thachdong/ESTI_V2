@@ -11,9 +11,6 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
 
   const customerAvailable = watch("customerAvailable");
 
-  console.log(watch("curatorDepartmentId"));
-  
-
   useQuery(
     ["customerDetail", customerId],
     () =>

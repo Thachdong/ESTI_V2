@@ -219,6 +219,22 @@ export const accountTypeOptions = [
 ];
 
 export const discountTypeOptions = [
+  { id: 0, name: "Theo báo giá" },
   { id: 1, name: "Hoa Hồng" },
   { id: 2, name: "Tích điểm" },
+];
+
+export const accountStatus = [
+  { value: 1, label: "Chưa kích hoạt" },
+  { value: 0, label: "Đã kích hoạt" },
+  { value: 2, label: "Đã khóa" },
+];
+
+export const staffDepartments = [
+  { id: 1, name: "Phòng kế toán" },
+  { id: 2, name: "Phòng kinh doanh" },
+  { id: 3, name: "Phòng chăm sóc khách hàng" },
+  { id: 4, name: "Phòng hành chánh" },
+  { id: 5, name: "Phòng Marketing" },
+  { id: 6, name: "Phòng kiểm soát chất lượng" },
 ];

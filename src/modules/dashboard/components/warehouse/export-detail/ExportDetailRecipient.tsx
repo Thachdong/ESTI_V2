@@ -108,7 +108,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
           label="Chứng từ thanh toán"
           options={paymentOptions || []}
           disabled={!!transactionId}
-          getOptionLabel={(option) => option?.paymentDocumentName}
+          labelKey="paymentDocumentName"
           multiple
         />
       </Box>

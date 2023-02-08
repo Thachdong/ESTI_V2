@@ -52,4 +52,7 @@ export const products = {
     request.get<any>(
       `${BASE_URL}/GetLot?productId=${productId}&warehouseConfigId=${warehouseConfigId}`
     ),
+
+  getProductBySupplier: (supplierId: string) =>
+    request.get<any>(`${BASE_URL}/ProductInSupplier?supplierId=${supplierId}`),
 };

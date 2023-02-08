@@ -160,7 +160,7 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
           label="Chọn chi nhánh"
           className="mb-4"
           disabled={type === "View" && !isUpdate}
-          getOptionLabel={option => option?.code}
+          labelKey="code"
         />
 
         <FormInput

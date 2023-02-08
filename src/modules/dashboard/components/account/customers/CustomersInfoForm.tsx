@@ -64,7 +64,7 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Sales Admin phụ trách"
           disabled={isDisable}
-          getOptionLabel={(option) => option?.fullName}
+          labelKey="fullName"
           shrinkLabel
         />
 
@@ -77,7 +77,7 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Giao nhận phụ trách"
           disabled={isDisable}
-          getOptionLabel={(option) => option?.fullName}
+          labelKey="fullName"
           shrinkLabel
         />
       </Box>

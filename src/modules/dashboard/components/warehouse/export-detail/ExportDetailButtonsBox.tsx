@@ -81,8 +81,8 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatu
           dateManufacture: prod?.dateManufacture,
           dateExpiration: prod?.dateExpiration,
           quantity: prod?.quantity,
-          price: prod?.price,
-          vat: prod?.vat,
+          price: prod?.price || 0,
+          vat: prod?.vat || 0,
           positionId: prod?.positionId,
         };
       }
@@ -133,7 +133,7 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatu
 
   return (
     <Box className="flex justify-end my-4">
-      {!query.transactionId ? (
+      {!query.id ? (
         <BaseButton
           type="button"
           onClick={handleSubmit(handleCreate)}

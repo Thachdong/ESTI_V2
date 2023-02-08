@@ -239,9 +239,6 @@ export const SuppliersDialog: React.FC<TDialog> = ({
                 label="Ảnh đại diện của nhà cung cấp"
               />
             </Box>
-            <Box>
-              <FormDatepicker controlProps={{ control, name: "Date" }} />
-            </Box>
             <Box className="flex flex-col items-center justify-center">
               {renderButtons()}
             </Box>
