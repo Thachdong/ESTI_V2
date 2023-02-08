@@ -11,7 +11,7 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputBase } from "./FormInputBase";
 
 export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
-  const { controlProps, loader, renderTitle, multiple = false } = props;
+  const { controlProps, loader, renderTitle, multiple = false, disabled = false } = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -58,6 +58,7 @@ export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
           type="file"
           inputProps={{ multiple }}
           onChange={handleUpload}
+          disabled={disabled}
         />
       </>
     );

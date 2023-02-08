@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
@@ -14,6 +15,8 @@ import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
 export const QuoteRequestDetailProduct: React.FC = () => {
+  const {id} = useRouter().query;
+
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const defaultValue = useRef<any>();
@@ -35,10 +38,12 @@ export const QuoteRequestDetailProduct: React.FC = () => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
+              disabled: !!id
             },
             {
               action: handleDelete,
               label: "Xóa",
+              disabled: !!id
             },
           ]}
         />
@@ -79,7 +84,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
       <Box className="flex items-center mb-3">
         <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
 
-        <AddButton onClick={() => onOpen("Add")}>Thêm SP báo giá </AddButton>
+        <AddButton disabled={!!id} onClick={() => onOpen("Add")}>Thêm SP báo giá </AddButton>
       </Box>
 
       <Box className="bg-white">
@@ -87,10 +92,10 @@ export const QuoteRequestDetailProduct: React.FC = () => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item id="view-product" onClick={() => onOpen("Update")}>
+              <Item id="view-product" disabled={!!id} onClick={() => onOpen("Update")}>
                 Cập nhật
               </Item>
-              <Item id="delete-product" onClick={handleDelete}>
+              <Item id="delete-product" disabled={!!id} onClick={handleDelete}>
                 Xóa
               </Item>
             </Menu>
@@ -108,7 +113,6 @@ export const QuoteRequestDetailProduct: React.FC = () => {
                 onMouseEnter: onMouseEnterRow,
               },
             }}
-            rowCount={products?.length}
             paginationMode="client"
           />
         </ContextMenuWrapper>

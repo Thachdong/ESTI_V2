@@ -14,4 +14,5 @@ type TFormUploadBase = {
     controlProps: TControllerProps;
     renderTitle: (loading: boolean) => ReactNode;
     multiple?: boolean;
+    disabled?: boolean;
 }
