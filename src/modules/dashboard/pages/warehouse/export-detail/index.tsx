@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { bookingOrder, warehouse } from "src/api";
@@ -69,24 +69,26 @@ export const ExportDetailPage = () => {
     }
   );
 
-  let warehouseConfig: any = {};
+  const getWarehouseConfig = useCallback(() => {
+    switch(true) {
+      case !!id:
+        return {
+          warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
+          warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
+        }
+      case !!isForDelete:
+        return {
+          warehouseConfigId: selectedBranch?.warehouseConfigId,
+          warehouseConfigCode: selectedBranch?.warehouseConfigCode,
+        }
+      default:
+        return {
+          warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
+          warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
+        }
 
-  if (!!id) {
-    warehouseConfig = {
-      warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
-      warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
-    };
-  } else if (isForDelete) {
-    warehouseConfig = {
-      warehouseConfigId: selectedBranch?.warehouseConfigId,
-      warehouseConfigCode: selectedBranch?.warehouseConfigCode,
-    };
-  } else {
-    warehouseConfig = {
-      warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
-      warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
-    };
-  }
+    }
+  }, [transactionData, selectedBranch, orderDetailData])
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -174,7 +176,7 @@ export const ExportDetailPage = () => {
 
         <ExportDetailProducts
           exportStatus={transactionData?.productOrder?.exportStatus}
-          warehouseConfig={warehouseConfig}
+          getWarehouseConfig={getWarehouseConfig}
           productOptions={
             id
               ? transactionData?.productOrderDetail || []

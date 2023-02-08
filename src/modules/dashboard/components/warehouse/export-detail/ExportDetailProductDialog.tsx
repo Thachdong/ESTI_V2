@@ -14,11 +14,13 @@ import { position, products } from "src/api";
 import { useEffect, useState } from "react";
 import { toast } from "~modules-core/toast";
 import _ from "lodash";
-import { useRouter } from "next/router";
 
 type TProps = {
   productOptions: any[];
-  warehouseConfig: any;
+  getWarehouseConfig: () => {
+    warehouseConfigId: string;
+    warehouseConfigCode: string;
+  };
   productListOperators: any;
 };
 
@@ -27,12 +29,10 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   onClose,
   type,
   defaultValue,
-  warehouseConfig,
+  getWarehouseConfig,
   productOptions,
   productListOperators,
 }) => {
-  const {id} = useRouter().query;
-
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedLot, setSelectedLot] = useState<any>();
@@ -41,44 +41,42 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const { control, handleSubmit, reset, setError, watch } = useForm();
 
+  const {productId} = watch();
+
   const { watch: globalWatch } = useFormContext();
 
   const isForDelete = globalWatch("isForDelete");
 
   const title = type === "Update" ? "Cập nhật sản phẩm" : "Thêm sản phẩm";
-  
+
+  const { warehouseConfigId, warehouseConfigCode } = getWarehouseConfig();
+
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
       reset({});
     } else {
-      const {productId, lotNumber, positionId, quantity} = defaultValue || {};
+      const { productId, lotNumber, positionId, quantity } = defaultValue || {};
 
-      reset({productId, lotNumber, positionId, quantity});
+      reset({ productId, lotNumber, positionId, quantity });
     }
   }, [type]);
 
   // DATA FETCHING
   const { data: lotOptions } = useQuery(
     [
-      "getLotOptions_" + selectedProduct?.productId,
-      { productId: selectedProduct?.productId, warehouseConfig, isForDelete },
+      "getLotOptions_" + productId,
+      productId,
+      warehouseConfigId
     ],
-    () => {
-      let productId;
-
-      if (!id) {
-        productId = selectedProduct?.id;
-      }
-      return products
-      .getLot(productId, warehouseConfig?.warehouseConfigId)
-      .then((res) => res.data)
-    },
+    () => products
+    .getLot(productId, warehouseConfigId)
+    .then((res) => res.data),
     {
-      enabled: (!!selectedProduct && !!warehouseConfig?.warehouseConfigId) || isForDelete,
+      enabled: !!productId,
     }
   );
-  
+
   // METHODS
   const handleCreateProduct = (data: any) => {
     // 1. DATA VALIDATION
@@ -218,8 +216,8 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           fetcher={position.getPositionByProduct}
           fetcherParams={{
             lotNumber: selectedLot?.lotNumber,
-            warehouseConfigCode: warehouseConfig?.warehouseConfigCode,
-            productCode: selectedProduct?.productCode
+            warehouseConfigCode,
+            productCode: selectedProduct?.productCode,
           }}
           callback={(opt) => setSelectedPosition(opt)}
           label="Chọn vị trí"
