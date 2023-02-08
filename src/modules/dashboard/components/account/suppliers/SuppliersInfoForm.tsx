@@ -148,7 +148,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {
             rules: { required: "Phải chọn nhân viên phụ trách" },
           }}
           label="Nhân viên phụ trách"
-          getOptionLabel={option => option?.fullName}
+          labelKey="fullName"
           disabled={isDisable}
         />
 
@@ -160,7 +160,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
-          getOptionLabel={option => option?.fullName}
+          labelKey="fullName"
           disabled={isDisable}
         />
       </Box>

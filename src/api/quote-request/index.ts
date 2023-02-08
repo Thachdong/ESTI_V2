@@ -42,5 +42,7 @@ export const quoteRequest = {
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
 
-  create: (payload: TCreateQuoteRequest) => request.post<TCreateQuoteRequest, any>(BASE_URL, payload)
+  create: (payload: TCreateQuoteRequest) => request.post<TCreateQuoteRequest, any>(BASE_URL, payload),
+
+  getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`)
 };

@@ -17,14 +17,17 @@ import { ExportDetailProductDialog } from "./ExportDetailProductDialog";
 
 type TProps = {
   productOptions: any[];
-  warehouseConfig: any;
-  exportStatus: number
+  getWarehouseConfig: () => {
+    warehouseConfigId: string;
+    warehouseConfigCode: string;
+  };
+  exportStatus: number;
 };
 
 export const ExportDetailProducts: React.FC<TProps> = ({
   productOptions,
-  warehouseConfig,
-  exportStatus
+  getWarehouseConfig,
+  exportStatus,
 }) => {
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -33,7 +36,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
 
   const { watch, setValue } = useFormContext();
 
-  const { transactionId } = useRouter().query;
+  const { id } = useRouter().query;
 
   const productList =
     watch("productList")?.map((prod: any, index: number) => ({
@@ -80,7 +83,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   };
 
   const handleDeleteProduct = useCallback(() => {
-    const {productCode, no} = defaultValue.current || {};
+    const { productCode, no } = defaultValue.current || {};
 
     if (!productCode) return;
 
@@ -219,7 +222,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         </Typography>
 
         <AddButton
-          disabled={!!transactionId}
+          disabled={!!id}
           onClick={() => handleOpen("Add")}
           variant="contained"
         >
@@ -257,7 +260,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         open={!!dialog?.open}
         type={dialog?.type}
         defaultValue={defaultValue.current}
-        warehouseConfig={warehouseConfig}
+        getWarehouseConfig={getWarehouseConfig}
         productOptions={productOptions}
         productListOperators={productListOperators}
       />

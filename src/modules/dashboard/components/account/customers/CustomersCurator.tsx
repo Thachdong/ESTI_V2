@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useCallback } from "react";
+import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customerType } from "src/api/customer-type";
 import { FormInput, FormSelect } from "~modules-core/components";
 import {
+  accountTypeOptions,
   curatorDepartments,
   discountTypeOptions,
   genderData,
@@ -15,6 +17,10 @@ type TProps = {
 };
 
 export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
+  const { control: accountGroupControl, watch: accountGroupWatch } = useForm();
+
+  const accountGroup = accountGroupWatch("accountGroup");
+
   const { control } = useFormContext();
 
   useFieldArray({
@@ -22,8 +28,33 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
     name: "curatorCreate",
   });
 
-  const { data: customerTypeOptions = [] } = useQuery(["CustomerTypesList"], () =>
-    customerType.getAll().then((res) => res.data)
+  const { data: customerTypeOptions = [] } = useQuery(
+    ["CustomerTypesList"],
+    () => customerType.getAll().then((res) => res.data)
+  );
+
+  const renderDiscountTypeOptions = useCallback(
+    (discountTypeOptions: any[]) => {
+      if (accountGroup === 1) {
+        return discountTypeOptions.slice(1, 3);
+      }
+
+      if (accountGroup === 2) {
+        return [{ ...discountTypeOptions[0] }];
+      }
+
+      return [];
+    },
+    [accountGroup]
+  );
+
+  const renderCustomerTypeOptions = useCallback(
+    (customerTypeOptions: any[]) => {
+      return customerTypeOptions.filter(
+        (type) => type?.accountType === accountGroup
+      );
+    },
+    [accountGroup]
   );
 
   return (
@@ -47,13 +78,25 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
 
         <FormSelect
           controlProps={{
+            control: accountGroupControl,
+            name: "accountGroup",
+            rules: { required: "Phải chọn nhóm tài khoản" },
+          }}
+          options={accountTypeOptions}
+          label="Nhóm tài khoản"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormSelect
+          controlProps={{
             control,
             name: `curatorCreate.${index}.typeAccount`,
             rules: { required: "Phải chọn loại tài khoản" },
           }}
-          options={customerTypeOptions}
+          options={renderCustomerTypeOptions(customerTypeOptions)}
           label="Loại tài khoản"
-          disabled={isDisable}
+          disabled={isDisable || !accountGroup}
           shrinkLabel
           labelKey="levelName"
         />
@@ -64,9 +107,9 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
             name: `curatorCreate.${index}.typeDiscount`,
             rules: { required: "Phải chọn loại chiết khấu" },
           }}
-          options={discountTypeOptions}
+          options={renderDiscountTypeOptions(discountTypeOptions)}
           label="Loại chiết khấu"
-          disabled={isDisable}
+          disabled={isDisable || !accountGroup}
           shrinkLabel
         />
       </Box>

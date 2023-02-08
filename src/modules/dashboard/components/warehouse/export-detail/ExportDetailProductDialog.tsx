@@ -17,7 +17,10 @@ import _ from "lodash";
 
 type TProps = {
   productOptions: any[];
-  warehouseConfig: any;
+  getWarehouseConfig: () => {
+    warehouseConfigId: string;
+    warehouseConfigCode: string;
+  };
   productListOperators: any;
 };
 
@@ -26,7 +29,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   onClose,
   type,
   defaultValue,
-  warehouseConfig,
+  getWarehouseConfig,
   productOptions,
   productListOperators,
 }) => {
@@ -36,7 +39,9 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const { control, handleSubmit, reset, setError } = useForm();
+  const { control, handleSubmit, reset, setError, watch } = useForm();
+
+  const {productId} = watch();
 
   const { watch: globalWatch } = useFormContext();
 
@@ -44,27 +49,31 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const title = type === "Update" ? "Cập nhật sản phẩm" : "Thêm sản phẩm";
 
+  const { warehouseConfigId, warehouseConfigCode } = getWarehouseConfig();
+
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
       reset({});
     } else {
-      reset({ ...defaultValue });
+      const { productId, lotNumber, positionId, quantity } = defaultValue || {};
+
+      reset({ productId, lotNumber, positionId, quantity });
     }
   }, [type]);
 
   // DATA FETCHING
   const { data: lotOptions } = useQuery(
     [
-      "getLotOptions_" + selectedProduct?.productId,
-      { selectedProduct, warehouseConfig },
+      "getLotOptions_" + productId,
+      productId,
+      warehouseConfigId
     ],
-    () =>
-      products
-        .getLot(selectedProduct?.productId, warehouseConfig?.warehouseConfigId)
-        .then((res) => res.data),
+    () => products
+    .getLot(productId, warehouseConfigId)
+    .then((res) => res.data),
     {
-      enabled: !!selectedProduct && !!warehouseConfig?.warehouseConfigId,
+      enabled: !!productId,
     }
   );
 
@@ -192,8 +201,8 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           options={lotOptions || []}
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
-          getOptionLabel={(option) => option?.lotNumber}
           valueKey="lotNumber"
+          labelKey="lotNumber"
         />
 
         <FormInputBase value={selectedLot?.quantity} label="Tồn kho" disabled />
@@ -204,11 +213,11 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             name: "positionId",
             rules: { required: "Phải chọn vị trí" },
           }}
-          fetcher={position.getProductsByPositionId}
+          fetcher={position.getPositionByProduct}
           fetcherParams={{
             lotNumber: selectedLot?.lotNumber,
-            warehouseConfigCode: warehouseConfig?.warehouseConfigCode,
-            productCode: selectedProduct?.productCode
+            warehouseConfigCode,
+            productCode: selectedProduct?.productCode,
           }}
           callback={(opt) => setSelectedPosition(opt)}
           label="Chọn vị trí"

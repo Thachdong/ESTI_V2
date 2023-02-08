@@ -24,10 +24,11 @@ export const QuoteRequestDetailButtons: React.FC = () => {
   );
 
   const handleCreate = useCallback(async(data: any) => {
-    const { products = [], ...rest } = data || {};
+    const { products = [], attachFile = [], customerAvailable, ...rest } = data || {};
 
     const payload = {
       ...rest,
+      attachFile: attachFile.join(","),
       preOrderDetailCreate: products.map((prod: any) => ({
         productId: prod?.id,
         quantity: prod?.quantity,
@@ -36,7 +37,6 @@ export const QuoteRequestDetailButtons: React.FC = () => {
     };
 
     await mutateCreate.mutateAsync(payload);
-    
   }, []);
 
   return (

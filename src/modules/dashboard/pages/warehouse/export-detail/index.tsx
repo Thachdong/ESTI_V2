@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { bookingOrder, warehouse } from "src/api";
@@ -21,7 +21,7 @@ export const ExportDetailPage = () => {
 
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
-  const { transactionId } = router.query;
+  const { id } = router.query;
 
   const methods = useForm<any>({
     defaultValues: {
@@ -59,34 +59,36 @@ export const ExportDetailPage = () => {
   );
 
   const { data: transactionData, refetch: refetchTransactionDetail } = useQuery(
-    ["warehouseExportDetail_" + transactionId],
+    ["warehouseExportDetail_" + id],
     () =>
       warehouse
-        .getExportSessionById(transactionId as string)
+        .getExportSessionById(id as string)
         .then((res) => res.data),
     {
-      enabled: !!transactionId,
+      enabled: !!id,
     }
   );
 
-  let warehouseConfig: any = {};
+  const getWarehouseConfig = useCallback(() => {
+    switch(true) {
+      case !!id:
+        return {
+          warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
+          warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
+        }
+      case !!isForDelete:
+        return {
+          warehouseConfigId: selectedBranch?.warehouseConfigId,
+          warehouseConfigCode: selectedBranch?.warehouseConfigCode,
+        }
+      default:
+        return {
+          warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
+          warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
+        }
 
-  if (!!transactionId) {
-    warehouseConfig = {
-      warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
-      warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
-    };
-  } else if (isForDelete) {
-    warehouseConfig = {
-      warehouseConfigId: selectedBranch?.warehouseConfigId,
-      warehouseConfigCode: selectedBranch?.warehouseConfigCode,
-    };
-  } else {
-    warehouseConfig = {
-      warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
-      warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
-    };
-  }
+    }
+  }, [transactionData, selectedBranch, orderDetailData])
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -124,7 +126,7 @@ export const ExportDetailPage = () => {
   return (
     <Box className="container-center">
       <FormProvider {...methods}>
-        {transactionId ? (
+        {id ? (
           <ExportViewGeneralInfo
             refetch={refetchTransactionDetail}
             data={transactionData?.productOrder}
@@ -152,7 +154,7 @@ export const ExportDetailPage = () => {
           <Box className="grid grid-cols-2 gap-4 mb-4">
             <ExportDetailCustomer
               customerData={
-                transactionId
+                id
                   ? transactionData?.productOrder
                   : orderDetailData?.mainOrder
               }
@@ -160,7 +162,7 @@ export const ExportDetailPage = () => {
 
             <ExportDetailRecipient
               orderData={
-                transactionId
+                id
                   ? transactionData?.productOrder
                   : orderDetailData?.mainOrder
               }
@@ -174,9 +176,9 @@ export const ExportDetailPage = () => {
 
         <ExportDetailProducts
           exportStatus={transactionData?.productOrder?.exportStatus}
-          warehouseConfig={warehouseConfig}
+          getWarehouseConfig={getWarehouseConfig}
           productOptions={
-            transactionId
+            id
               ? transactionData?.productOrderDetail || []
               : orderDetailData?.mainOrderDetail || []
           }

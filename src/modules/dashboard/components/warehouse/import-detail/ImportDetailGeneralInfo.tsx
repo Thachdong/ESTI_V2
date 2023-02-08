@@ -101,7 +101,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
             control,
             name: "deliveryId",
           }}
-          getOptionLabel={(opt) => opt.fullName}
+          labelKey="fullName"
           label="Giao nhận phụ trách"
         />
 
@@ -112,7 +112,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
             name: "purchaseId",
             rules: { required: "Phải chọn nhân viên mua hàng" },
           }}
-          getOptionLabel={(opt) => opt.fullName}
+          labelKey="fullName"
           label="Nhân viên mua hàng"
         />
 
@@ -123,7 +123,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
             name: "stockerId",
             rules: { required: "Phải chọn thủ kho" },
           }}
-          getOptionLabel={(opt) => opt.fullName}
+          labelKey="fullName"
           label="Thủ kho"
         />
 

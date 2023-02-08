@@ -68,12 +68,14 @@ export const ImportDetailPage = () => {
 
   // SIDE EFFECTS
   useEffect(() => {
+    // Update khi check/ bỏ check thông qua đơn mua hàng
     if (withoutPurchaseInvoice && !query.id) {
       methods.reset({ productList: [], withoutPurchaseInvoice });
     }
   }, [withoutPurchaseInvoice]);
 
   useEffect(() => {
+    // Update mỗi khi chọn đơn mua hàng
     if (!query.id) {
       if (!!orderDetailData) {
         const { deliveryId, branchId, supplierId } =
@@ -107,6 +109,7 @@ export const ImportDetailPage = () => {
   }, [orderDetailData, query.id]);
 
   useEffect(() => {
+    // Update đối với màn chi tiết
     if (!!transactionData) {
       const { warehouse = [], warehouseSession } = transactionData || {};
 

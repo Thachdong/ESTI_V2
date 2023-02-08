@@ -1,6 +1,12 @@
 import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState, MouseEvent, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  MouseEvent,
+  useRef,
+} from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { staff, TStaff } from "src/api";
@@ -15,13 +21,13 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StaffsDialog } from "~modules-dashboard/components/account";
+import { StaffsDialog, StaffsStatusDialog } from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
 import { staffColumns } from "./staffColumns";
 
 type TDialog = {
   open: boolean;
-  type?: "View" | "Add";
+  type?: "View" | "Add" | "UpdateStatus";
 };
 
 export const StaffsPage = () => {
@@ -41,6 +47,14 @@ export const StaffsPage = () => {
   const onUpdate = useCallback(() => {
     setDialog({ open: true, type: "View" });
   }, []);
+
+  const onClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  const onOpenStatus = useCallback(() => {
+    setDialog({ open: true, type: "UpdateStatus" });
+  }, [])
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -71,16 +85,16 @@ export const StaffsPage = () => {
   const mutateDelete = useMutation((id: string) => staff.deleteStaff(id), {
     onError: (error: any) => {
       toast.error(error?.resultMessage);
-
-      refetch();
     },
     onSuccess: (data) => {
+      refetch();
+      
       toast.success(data.resultMessage);
     },
   });
 
   const onDelete = useCallback(async () => {
-    const {username, id} = defaultValue.current || {};
+    const { username, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa nhân viên: " + username)) {
       await mutateDelete.mutateAsync(id as string);
@@ -101,6 +115,10 @@ export const StaffsPage = () => {
             {
               action: onUpdate,
               label: "Thông tin chi tiết",
+            },
+            {
+              action: onOpenStatus,
+              label: "Cập nhật trạng thái",
             },
             {
               action: onDelete,
@@ -135,7 +153,7 @@ export const StaffsPage = () => {
             className="mr-3"
             onClick={() => setDialog({ open: true, type: "Add" })}
           >
-            Tạo nhà nhân viên
+            Tạo nhân viên
           </AddButton>
         </div>
       </div>
@@ -149,6 +167,9 @@ export const StaffsPage = () => {
               onClick={() => setDialog({ open: true, type: "View" })}
             >
               Xem chi tiết
+            </Item>
+            <Item id="delete-product" onClick={onOpenStatus}>
+              Cập nhật trạng thái
             </Item>
             <Item id="delete-product" onClick={onDelete}>
               Xóa
@@ -172,10 +193,18 @@ export const StaffsPage = () => {
       </ContextMenuWrapper>
 
       <StaffsDialog
-        onClose={() => setDialog({ open: false })}
-        open={dialog.open}
-        type={dialog.type}
+        onClose={onClose}
+        open={dialog.open && dialog?.type !== "UpdateStatus"}
         defaultValue={defaultValue.current}
+        refetch={refetch}
+        type={dialog.type}
+      />
+
+      <StaffsStatusDialog
+        onClose={onClose}
+        open={dialog.open && dialog?.type === "UpdateStatus"}
+        defaultValue={defaultValue.current}
+        refetch={refetch}
       />
     </Paper>
   );
