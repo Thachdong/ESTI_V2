@@ -3,6 +3,7 @@ import {
   ControllerRenderProps,
   FieldValues,
   UseFormStateReturn,
+  RegisterOptions
 } from "react-hook-form";
 
 type TRenderControllerParams = {

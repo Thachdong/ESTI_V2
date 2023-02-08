@@ -4,18 +4,24 @@ import { DeleteButton, FormUploadBase } from "~modules-core/components";
 import AttachFileIcon from "@mui/icons-material/AttachFileRounded";
 import { useCallback } from "react";
 import { quoteRequest } from "src/api";
+import { useRouter } from "next/router";
 
 export const QuoteRequestDetailAttach: React.FC = () => {
   const { control, setValue, watch } = useFormContext();
 
+  const { id } = useRouter().query;
+
   const attachFile = watch("attachFile");
 
   // METHODS
-  const removeFile = useCallback((file: string) => {
-    const newFiles = attachFile.filter((f: string) => f !== file);
+  const removeFile = useCallback(
+    (file: string) => {
+      const newFiles = attachFile.filter((f: string) => f !== file);
 
-    setValue("attachFile", newFiles);
-  }, [attachFile])
+      setValue("attachFile", newFiles);
+    },
+    [attachFile]
+  );
 
   const renderAttachFile = useCallback(() => {
     if (!attachFile || attachFile?.length === 0) {
@@ -39,7 +45,11 @@ export const QuoteRequestDetailAttach: React.FC = () => {
                 {file}
               </Typography>
 
-              <DeleteButton onClick={() => removeFile(file)} className="min-w-[24px] text-error" />
+              <DeleteButton
+                disabled={!!id}
+                onClick={() => removeFile(file)}
+                className="min-w-[24px] text-error"
+              />
             </ListItem>
           ))}
         </List>
@@ -74,6 +84,7 @@ export const QuoteRequestDetailAttach: React.FC = () => {
           loader={quoteRequest.uploadFile}
           renderTitle={renderTitle}
           multiple
+          disabled={!!id}
         />
       </Box>
     </Box>

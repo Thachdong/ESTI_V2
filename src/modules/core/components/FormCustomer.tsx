@@ -11,12 +11,14 @@ type TProps = {
   controlProps: TControllerProps;
   label?: string;
   labelKey?: string;
+  disabled?: boolean;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
   controlProps,
   label = "Mã khách hàng",
   labelKey = "customerCode",
+  disabled = false
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -35,9 +37,10 @@ export const FormCustomer: React.FC<TProps> = ({
         fetcher={customer.getList}
         labelKey={labelKey}
         className="flex-grow"
+        disabled={disabled}
       />
 
-      <AddButton onClick={onOpen} className="min-w-[32px] mb-1 ml-2" />
+      <AddButton disabled={disabled} onClick={onOpen} className="min-w-[32px] mb-1 ml-2" />
 
       <CustomersDialog
         onClose={onClose}
