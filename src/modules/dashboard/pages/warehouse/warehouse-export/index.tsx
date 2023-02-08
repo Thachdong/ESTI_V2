@@ -53,7 +53,7 @@ export const WarehouseExportPage: React.FC = () => {
   const onNavigationToDetail = useCallback(() => {
     const { id } = defaultValue.current || {};
 
-    router.push(`/dashboard/warehouse/export-detail?transactionId=${id}`);
+    router.push(`/dashboard/warehouse/export-detail?id=${id}`);
   }, [router, defaultValue]);
 
   // DATA FETCHING

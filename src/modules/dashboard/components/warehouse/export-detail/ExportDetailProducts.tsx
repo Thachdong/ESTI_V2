@@ -33,7 +33,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
 
   const { watch, setValue } = useFormContext();
 
-  const { transactionId } = useRouter().query;
+  const { id } = useRouter().query;
 
   const productList =
     watch("productList")?.map((prod: any, index: number) => ({
@@ -219,7 +219,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         </Typography>
 
         <AddButton
-          disabled={!!transactionId}
+          disabled={!!id}
           onClick={() => handleOpen("Add")}
           variant="contained"
         >

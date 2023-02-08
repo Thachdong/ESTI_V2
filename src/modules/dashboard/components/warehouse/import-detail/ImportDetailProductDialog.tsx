@@ -270,7 +270,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
           controlProps={{
             control,
             name: "dateManufacture",
-            rules: { required: "Phải nhập ngày SX" },
+            // rules: { required: "Phải nhập ngày SX" },
           }}
           label="Ngày SX"
         />
@@ -279,7 +279,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
           controlProps={{
             control,
             name: "dateExpiration",
-            rules: { required: "Phải nhập hạn SD" },
+            // rules: { required: "Phải nhập hạn SD" },
           }}
           label="Hạn SD"
         />

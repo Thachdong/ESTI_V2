@@ -21,7 +21,7 @@ export const ExportDetailPage = () => {
 
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
-  const { transactionId } = router.query;
+  const { id } = router.query;
 
   const methods = useForm<any>({
     defaultValues: {
@@ -59,19 +59,19 @@ export const ExportDetailPage = () => {
   );
 
   const { data: transactionData, refetch: refetchTransactionDetail } = useQuery(
-    ["warehouseExportDetail_" + transactionId],
+    ["warehouseExportDetail_" + id],
     () =>
       warehouse
-        .getExportSessionById(transactionId as string)
+        .getExportSessionById(id as string)
         .then((res) => res.data),
     {
-      enabled: !!transactionId,
+      enabled: !!id,
     }
   );
 
   let warehouseConfig: any = {};
 
-  if (!!transactionId) {
+  if (!!id) {
     warehouseConfig = {
       warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
       warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
@@ -124,7 +124,7 @@ export const ExportDetailPage = () => {
   return (
     <Box className="container-center">
       <FormProvider {...methods}>
-        {transactionId ? (
+        {id ? (
           <ExportViewGeneralInfo
             refetch={refetchTransactionDetail}
             data={transactionData?.productOrder}
@@ -152,7 +152,7 @@ export const ExportDetailPage = () => {
           <Box className="grid grid-cols-2 gap-4 mb-4">
             <ExportDetailCustomer
               customerData={
-                transactionId
+                id
                   ? transactionData?.productOrder
                   : orderDetailData?.mainOrder
               }
@@ -160,7 +160,7 @@ export const ExportDetailPage = () => {
 
             <ExportDetailRecipient
               orderData={
-                transactionId
+                id
                   ? transactionData?.productOrder
                   : orderDetailData?.mainOrder
               }
@@ -176,7 +176,7 @@ export const ExportDetailPage = () => {
           exportStatus={transactionData?.productOrder?.exportStatus}
           warehouseConfig={warehouseConfig}
           productOptions={
-            transactionId
+            id
               ? transactionData?.productOrderDetail || []
               : orderDetailData?.mainOrderDetail || []
           }

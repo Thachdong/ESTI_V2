@@ -14,6 +14,7 @@ import { position, products } from "src/api";
 import { useEffect, useState } from "react";
 import { toast } from "~modules-core/toast";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 type TProps = {
   productOptions: any[];
@@ -30,26 +31,30 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   productOptions,
   productListOperators,
 }) => {
+  const {id} = useRouter().query;
+
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedLot, setSelectedLot] = useState<any>();
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const { control, handleSubmit, reset, setError } = useForm();
+  const { control, handleSubmit, reset, setError, watch } = useForm();
 
   const { watch: globalWatch } = useFormContext();
 
   const isForDelete = globalWatch("isForDelete");
 
   const title = type === "Update" ? "Cập nhật sản phẩm" : "Thêm sản phẩm";
-
+  
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
       reset({});
     } else {
-      reset({ ...defaultValue });
+      const {productId, lotNumber, positionId, quantity} = defaultValue || {};
+
+      reset({productId, lotNumber, positionId, quantity});
     }
   }, [type]);
 
@@ -57,17 +62,23 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   const { data: lotOptions } = useQuery(
     [
       "getLotOptions_" + selectedProduct?.productId,
-      { productId: selectedProduct?.productId, warehouseConfig },
+      { productId: selectedProduct?.productId, warehouseConfig, isForDelete },
     ],
-    () =>
-      products
-        .getLot(selectedProduct?.productId, warehouseConfig?.warehouseConfigId)
-        .then((res) => res.data),
+    () => {
+      let productId;
+
+      if (!id) {
+        productId = selectedProduct?.id;
+      }
+      return products
+      .getLot(productId, warehouseConfig?.warehouseConfigId)
+      .then((res) => res.data)
+    },
     {
-      enabled: !!selectedProduct && !!warehouseConfig?.warehouseConfigId,
+      enabled: (!!selectedProduct && !!warehouseConfig?.warehouseConfigId) || isForDelete,
     }
   );
-
+  
   // METHODS
   const handleCreateProduct = (data: any) => {
     // 1. DATA VALIDATION
@@ -204,7 +215,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             name: "positionId",
             rules: { required: "Phải chọn vị trí" },
           }}
-          fetcher={position.getProductsByPositionId}
+          fetcher={position.getPositionByProduct}
           fetcherParams={{
             lotNumber: selectedLot?.lotNumber,
             warehouseConfigCode: warehouseConfig?.warehouseConfigCode,
