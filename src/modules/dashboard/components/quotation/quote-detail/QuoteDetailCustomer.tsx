@@ -1,29 +1,37 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customer as customerApi } from "src/api";
-import { FormCustomer, FormInput } from "~modules-core/components";
+import {
+  FormCustomer,
+  FormInputBase,
+} from "~modules-core/components";
 
-export const QuoteDetailCustomer: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
+  const [customer, setCustomer] = useState<any>();
+
   const { control, watch } = useFormContext();
 
-  const customerId = watch("customerId");
+  const { customerId, isQuoteRequest } = watch();
 
-  const customerAvailable = watch("customerAvailable");
-
-  useQuery(
-    ["customerDetail"],
-    () =>
-      customerApi.getById(customerId).then((res) => {
-        const { companyInfo, curatorInfo } = res.data;
-
-        const { name, taxCode, address } = companyInfo || {};
-        console.log(companyInfo, curatorInfo);
-      }),
+  // DATA FETCHING
+  const { data } = useQuery(
+    ["customerDetail_" + customerId],
+    () => customerApi.getById(customerId).then((res) => res.data),
     {
       enabled: !!customerId,
     }
   );
+
+  // SIDE EFFECT
+  useEffect(() => {
+    setCustomer(data?.companyInfo || {});
+  }, [data]);
 
   return (
     <Box className="flex flex-col">
@@ -38,49 +46,30 @@ export const QuoteDetailCustomer: React.FC = () => {
             control: control,
             rules: { required: "Phải chọn mã khách hàng" },
           }}
+          disabled={isQuoteRequest || disabled}
         />
 
-        <FormInput
-          controlProps={{
-            name: "companyName",
-            control: control,
-            rules: { required: "Phải nhập tên khách hàng" },
-          }}
+        <FormInputBase
           label="Tên khách hàng"
           className="my-4"
+          disabled
+          value={customer?.name}
         />
 
-        <FormInput
-          controlProps={{
-            name: "companyTaxCode",
-            control: control,
-            rules: { required: "Phải nhập mã số thuế" },
-          }}
+        <FormInputBase
           label="Mã số thuế"
           className="mb-4"
+          disabled
+          value={customer?.taxCode}
         />
 
-        <FormInput
-          controlProps={{
-            name: "companyAddress",
-            control: control,
-            rules: { required: "Phải nhập địa chỉ khách hàng" },
-          }}
+        <FormInputBase
           label="Địa chỉ khách hàng"
           className="mb-4"
           multiline
           minRows={2}
-        />
-
-        <FormInput
-          controlProps={{
-            name: "receiverAdress",
-            control: control,
-            rules: { required: "Phải nhập địa chỉ nhận hàng" },
-          }}
-          label="Địa chỉ nhận hàng"
-          multiline
-          minRows={2}
+          disabled
+          value={customer?.address}
         />
       </Box>
     </Box>

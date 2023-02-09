@@ -1,13 +1,44 @@
 import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
-import {
-  FormInput,
-  FormSelect,
-} from "~modules-core/components";
+import { useQuery } from "react-query";
+import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
+import { customer as customerApi } from "src/api";
+import { useEffect, useState } from "react";
 
-export const QuoteDetailContact: React.FC = () => {
-  const { control } = useFormContext();
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailContact: React.FC<TProps> = ({disabled}) => {
+  const [curator, setCurator] = useState<any>();
+
+  const { control, watch, setValue } = useFormContext();
+
+  const { customerId, isQuoteRequest } = watch();
+
+  // DATA FETCHING
+  const { data } = useQuery(
+    ["customerDetail_", customerId],
+    () => customerApi.getById(customerId).then((res) => res.data),
+    {
+      enabled: !!customerId,
+    }
+  );
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    const { curatorName, curatorPhone, curatorEmail, curatorDepartment } =
+      curator || {};
+
+    setValue("curatorName", curatorName);
+
+    setValue("curatorPhone", curatorPhone);
+
+    setValue("curatorEmail", curatorEmail);
+
+    setValue("curatorDepartmentId", curatorDepartment);
+  }, [curator]);
 
   return (
     <Box className="flex flex-col">
@@ -16,14 +47,18 @@ export const QuoteDetailContact: React.FC = () => {
       </Typography>
 
       <Box className="bg-white rounded-sm flex-grow p-3">
-        <FormInput
+        <FormSelect
           controlProps={{
-            name: "curatorName",
+            name: "curatorId",
             control: control,
-            rules: { required: "Phải nhập người phụ trách" },
+            rules: { required: "Phải chọn người liên hệ" },
           }}
+          options={data?.curatorInfo || []}
           label="Người phụ trách"
           className="mb-4"
+          labelKey="curatorName"
+          callback={(opt: any) => setCurator(opt)}
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormSelect
@@ -35,6 +70,7 @@ export const QuoteDetailContact: React.FC = () => {
           options={curatorDepartments}
           label="Phòng ban"
           className="mb-4"
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormInput
@@ -45,6 +81,7 @@ export const QuoteDetailContact: React.FC = () => {
           }}
           label="Điện thoại"
           className="mb-4"
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormInput
@@ -54,6 +91,8 @@ export const QuoteDetailContact: React.FC = () => {
             rules: { required: "Phải nhập Email" },
           }}
           label="Email"
+          className="mb-4"
+          disabled={isQuoteRequest || disabled}
         />
       </Box>
     </Box>

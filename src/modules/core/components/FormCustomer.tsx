@@ -12,13 +12,15 @@ type TProps = {
   label?: string;
   labelKey?: string;
   disabled?: boolean;
+  callback?: (opt: any) => void;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
   controlProps,
   label = "Mã khách hàng",
   labelKey = "customerCode",
-  disabled = false
+  disabled = false,
+  callback
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -38,6 +40,7 @@ export const FormCustomer: React.FC<TProps> = ({
         labelKey={labelKey}
         className="flex-grow"
         disabled={disabled}
+        callback={callback}
       />
 
       <AddButton disabled={disabled} onClick={onOpen} className="min-w-[32px] mb-1 ml-2" />
