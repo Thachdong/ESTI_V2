@@ -1,4 +1,6 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { paymentDocument } from "src/api";
@@ -9,7 +11,13 @@ import {
 } from "~modules-core/components";
 import { paymentTypes } from "~modules-core/constance";
 
-export const QuoteDetailTerms = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailTerms: React.FC<TProps> = ({disabled}) => {
+  const { id } = useRouter().query;
+
   const { control, watch } = useFormContext();
 
   const paymentTypesValue = watch("paymentType");
@@ -17,6 +25,70 @@ export const QuoteDetailTerms = () => {
   const { data } = useQuery(["PaymentDocument"], () =>
     paymentDocument.getList().then((res) => res.data)
   );
+
+  const renderPaymentTypeTags = useCallback(() => {
+    switch (true) {
+      case !!id:
+        return (
+          <FormInput
+            controlProps={{
+              control,
+              name: "paymentType",
+            }}
+            label=""
+            className="max-w-[200px] ml-2"
+            shrinkLabel
+            disabled={disabled}
+          />
+        );
+      case paymentTypesValue !== "Khác":
+        return (
+          <FormSelect
+            options={paymentTypes}
+            label=""
+            placeholder="Chọn"
+            controlProps={{
+              control,
+              name: "paymentType",
+            }}
+            className="min-w-[200px] ml-2"
+            valueKey="name"
+            shrinkLabel
+            disabled={disabled}
+          />
+        );
+      default:
+        return (
+          <>
+            <FormSelect
+              options={paymentTypes}
+              label=""
+              placeholder="Chọn"
+              controlProps={{
+                control,
+                name: "paymentType",
+              }}
+              className="min-w-[200px] ml-2"
+              valueKey="name"
+              shrinkLabel
+              disabled={disabled}
+            />
+
+            <FormInput
+              controlProps={{
+                control,
+                name: "paymentTypeDescript",
+              }}
+              label=""
+              placeholder="Mô tả"
+              className="max-w-[200px] ml-2"
+              shrinkLabel
+              disabled={disabled}
+            />
+          </>
+        );
+    }
+  }, [!!id, paymentTypesValue]);
 
   return (
     <Box className="flex flex-col">
@@ -33,30 +105,7 @@ export const QuoteDetailTerms = () => {
 
           <ListItem disableGutters className="pb-0">
             - Hình thức thanh toán/ Payment term:
-            <FormSelect
-              options={paymentTypes}
-              label=""
-              placeholder="Chọn"
-              controlProps={{
-                control,
-                name: "paymentType",
-              }}
-              className="min-w-[200px] ml-2"
-              valueKey="name"
-              shrinkLabel
-            />
-            {paymentTypesValue === "Khác" && (
-              <FormInput
-                controlProps={{
-                  control,
-                  name: "paymentTypeDescript",
-                }}
-                label=""
-                placeholder="Mô tả"
-                className="max-w-[200px] ml-2"
-                shrinkLabel
-              />
-            )}
+            {renderPaymentTypeTags()}
           </ListItem>
 
           <ListItem disableGutters className="pb-0">
@@ -68,6 +117,7 @@ export const QuoteDetailTerms = () => {
                 name: "deliverDate",
               }}
               className="min-w-[200px] ml-2"
+              disabled={disabled}
             />
           </ListItem>
 
@@ -80,6 +130,7 @@ export const QuoteDetailTerms = () => {
                 name: "expireDate",
               }}
               className="min-w-[200px] ml-2"
+              disabled={disabled}
             />
           </ListItem>
 
@@ -94,6 +145,7 @@ export const QuoteDetailTerms = () => {
               className="min-w-[200px] ml-2"
               fullWidth={false}
               shrinkLabel
+              disabled={disabled}
             />
           </ListItem>
 
@@ -110,6 +162,7 @@ export const QuoteDetailTerms = () => {
               labelKey="paymentDocumentName"
               shrinkLabel
               multiple
+              disabled={disabled}
             />
           </ListItem>
         </List>

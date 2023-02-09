@@ -19,8 +19,6 @@ export type TCreatePreQuote = {
   paymentDocument: string;
   smgNote: string;
   salesNote: string;
-  commission: number;
-  discount: string;
   preQuoteDetail: TCreatePreQuoteProduct[];
 };
 

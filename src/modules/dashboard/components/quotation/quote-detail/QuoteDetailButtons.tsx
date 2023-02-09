@@ -5,10 +5,8 @@ import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
   preQuote,
-  quoteRequest,
   TCreatePreQuote,
-  TCreateQuoteRequest,
-  TUpdateQuoteRequest,
+  TUpdatePreQuote,
 } from "src/api";
 import { AddButton, BaseButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
@@ -16,11 +14,13 @@ import { toast } from "~modules-core/toast";
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
+  refetch: () => void;
 };
 
 export const QuoteDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
+  refetch
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
@@ -72,27 +72,60 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
       attachFile: attachFile.join(","),
       paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
       paymentDocument: paymentDocument.join(","),
-      preQuoteDetail: productPayload
+      preQuoteDetail: productPayload,
     };
 
     await mutateCreate.mutateAsync(payload);
   }, []);
 
   const mutateUpdate = useMutation(
-    (payload: TUpdateQuoteRequest) => quoteRequest.update(payload),
+    (payload: TUpdatePreQuote) => preQuote.update(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
 
         setIsUpdate(false);
+
+        refetch?.();
       },
     }
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const { id, salesId, curatorId, customerId } = data || {};
+    const {
+      attachFile,
+      products,
+      isQuoteRequest,
+      paymentType,
+      paymentTypeDescript,
+      paymentDocument,
+      ...rest
+    } = data || {};
 
-    await mutateUpdate.mutateAsync({ id, salesId, curatorId, customerId });
+    if (products.length === 0) {
+      toast.error("Phải chọn sản phẩm để báo giá");
+
+      return;
+    }
+
+    const productPayload = products.map((prod: any) => ({
+      id: prod?.id,
+      productId: prod?.productId,
+      quantity: prod?.quantity,
+      price: prod?.price,
+      vat: prod?.vat,
+      note: prod?.note,
+    }));
+
+    const payload = {
+      ...rest,
+      attachFile: attachFile.join(","),
+      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      paymentDocument: paymentDocument.join(","),
+      preQuoteDetailUpdate: productPayload,
+    };
+
+    await mutateUpdate.mutateAsync(payload);
   }, []);
 
   const renderButtons = useCallback(() => {

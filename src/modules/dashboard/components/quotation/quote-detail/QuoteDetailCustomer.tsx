@@ -5,11 +5,14 @@ import { useQuery } from "react-query";
 import { customer as customerApi } from "src/api";
 import {
   FormCustomer,
-  FormInput,
   FormInputBase,
 } from "~modules-core/components";
 
-export const QuoteDetailCustomer: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
   const [customer, setCustomer] = useState<any>();
 
   const { control, watch } = useFormContext();
@@ -43,7 +46,7 @@ export const QuoteDetailCustomer: React.FC = () => {
             control: control,
             rules: { required: "Phải chọn mã khách hàng" },
           }}
-          disabled={isQuoteRequest}
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormInputBase

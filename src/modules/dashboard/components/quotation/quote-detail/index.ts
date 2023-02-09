@@ -10,3 +10,4 @@ export * from "./QuoteDetailShopManagerNote";
 export * from "./QuoteDetailSaleNote";
 export * from "./QuoteDetailSupplier";
 export * from "./QuoteDetailButtons";
+export * from "./QuoteDetailGeneralView";

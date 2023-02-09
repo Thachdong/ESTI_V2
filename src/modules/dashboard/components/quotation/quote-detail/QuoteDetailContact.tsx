@@ -6,7 +6,11 @@ import { curatorDepartments } from "~modules-core/constance";
 import { customer as customerApi } from "src/api";
 import { useEffect, useState } from "react";
 
-export const QuoteDetailContact: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailContact: React.FC<TProps> = ({disabled}) => {
   const [curator, setCurator] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -54,7 +58,7 @@ export const QuoteDetailContact: React.FC = () => {
           className="mb-4"
           labelKey="curatorName"
           callback={(opt: any) => setCurator(opt)}
-          disabled={isQuoteRequest}
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormSelect
@@ -66,7 +70,7 @@ export const QuoteDetailContact: React.FC = () => {
           options={curatorDepartments}
           label="Phòng ban"
           className="mb-4"
-          disabled={isQuoteRequest}
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormInput
@@ -77,7 +81,7 @@ export const QuoteDetailContact: React.FC = () => {
           }}
           label="Điện thoại"
           className="mb-4"
-          disabled={isQuoteRequest}
+          disabled={isQuoteRequest || disabled}
         />
 
         <FormInput
@@ -88,7 +92,7 @@ export const QuoteDetailContact: React.FC = () => {
           }}
           label="Email"
           className="mb-4"
-          disabled={isQuoteRequest}
+          disabled={isQuoteRequest || disabled}
         />
       </Box>
     </Box>

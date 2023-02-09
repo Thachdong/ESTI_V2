@@ -1,5 +1,6 @@
-import { Box, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { Box, List, ListItem, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
 import {
@@ -8,12 +9,19 @@ import {
   DataTable,
   DropdownButton,
 } from "~modules-core/components";
+import { _format } from "~modules-core/utility/fomat";
 import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { QuoteDetailDialog } from "./QuoteDetailDialog";
 
-export const QuoteDetailProduct: React.FC = () => {
+type TProps = {
+  data?: any;
+};
+
+export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
+  const { id } = useRouter().query;
+
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const defaultValue = useRef<any>();
@@ -74,12 +82,44 @@ export const QuoteDetailProduct: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const getPrice = useMemo(() => {
+    if (data) {
+      return {
+        totalPrice: _format.getVND(data?.totalPriceNotTax),
+        totalTax: _format.getVND(data?.totalTax),
+        finalPrice: _format.getVND(data?.totalPrice),
+      };
+    } else {
+      const initResult = {
+        totalPrice: 0,
+        totalTax: 0,
+        finalPrice: 0,
+      };
+      return products.reduce(
+        (result: any, { price, quantity, vat }: any) => {
+          const total = quantity * price;
+
+          const tax = (total * vat) / 100;
+
+          return {
+            totalPrice: result?.totalPrice + total,
+            totalTax: result?.totalTax + tax,
+            finalPrice: result?.finalPrice + total + tax,
+          };
+        },
+        initResult
+      );
+    }
+  }, [data, products]);
+
   return (
     <Box className="flex flex-col col-span-2">
       <Box className="flex items-center mb-3">
         <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
 
-        <AddButton onClick={() => onOpen("Add")}>Thêm SP</AddButton>
+        <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
+          Thêm SP
+        </AddButton>
       </Box>
 
       <Box className="bg-white">
@@ -113,6 +153,17 @@ export const QuoteDetailProduct: React.FC = () => {
             paginationMode="client"
           />
         </ContextMenuWrapper>
+
+        <List className="border-0 border-t border-solid">
+          <ListItem>
+            Thành tiền chưa có thuế(VNĐ):{" "}
+            {getPrice.totalPrice}
+          </ListItem>
+          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
+          <ListItem>
+            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          </ListItem>
+        </List>
       </Box>
 
       <QuoteDetailDialog

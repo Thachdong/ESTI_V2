@@ -2,7 +2,11 @@ import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
-export const QuoteDetailSaleNote: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailSaleNote: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (
@@ -20,6 +24,7 @@ export const QuoteDetailSaleNote: React.FC = () => {
           label="Nhập sale note"
           multiline
           minRows={3}
+          disabled={disabled}
         />
       </Box>
     </Box>
