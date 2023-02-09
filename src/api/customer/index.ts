@@ -56,6 +56,11 @@ type BillRecipientCreate = {
   note: string;
 };
 
+export type TActivateCustomer = {
+  id: string;
+  status: number;
+}
+
 export type TUpdateCustomer = any;
 
 const BASE_URL = "Customer";
@@ -74,5 +79,8 @@ export const customer = {
 
   update: (payload: TUpdateCustomer) =>
     request.patch<TUpdateCustomer, any>(BASE_URL, payload),
-  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
+
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  updateStatus: (payload: TActivateCustomer) => request.post<TActivateCustomer, any>(`${BASE_URL}/IsActive`, payload)
 };

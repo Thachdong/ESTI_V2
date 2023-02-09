@@ -78,6 +78,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
         userName: curator?.userName,
         typeAccount: curator?.typeAccount,
         typeDiscount: curator?.typeDiscount,
+        status: curator?.status,
 
         curatorName: curator?.curatorName,
         curatorDepartment: curator?.curatorDepartment,
@@ -176,7 +177,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                 </TabList>
               </Box>
 
-              <Box className="tabpanel-container relative py-4">
+              <Box className="tabpanel-container relative pb-4 pt-2">
                 <TabPanelContainForm value="1" index={"1"}>
                   <CustomersInfoForm isDisable={type === "View" && !isUpdate} />
                 </TabPanelContainForm>
