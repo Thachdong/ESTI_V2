@@ -1,9 +1,12 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
 export const QuoteRequestDetailAddition: React.FC = () => {
   const { control } = useFormContext();
+
+  const {id} = useRouter().query;
 
   return (
     <Box className="flex flex-col">
@@ -20,6 +23,7 @@ export const QuoteRequestDetailAddition: React.FC = () => {
           label="Nhập yêu cầu bổ sung"
           multiline
           minRows={3}
+          disabled={!!id}
         />
       </Box>
     </Box>

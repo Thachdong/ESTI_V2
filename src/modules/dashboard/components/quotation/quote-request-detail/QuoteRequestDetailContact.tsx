@@ -1,10 +1,116 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
 import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
+import { customer as customerApi } from "src/api";
+import { useCallback, useEffect, useState } from "react";
 
-export const QuoteRequestDetailContact: React.FC = () => {
-  const { control } = useFormContext();
+type TProps = {
+  disabled: boolean;
+};
+
+export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
+  const [curators, setCurators] = useState<any[]>([]);
+
+  const { control, watch, setValue } = useFormContext();
+
+  const { customerId, customerAvailable, curatorId } = watch();
+
+  const { id } = useRouter().query;
+
+  const { data } = useQuery(
+    ["customerDetail", customerId],
+    () => customerApi.getById(customerId).then((res) => res.data),
+    {
+      enabled: !!customerId,
+    }
+  );
+
+  useEffect(() => {
+    const { curatorInfo = [] } = data || {};
+
+    setCurators([...curatorInfo]);
+  }, [data]);
+
+  useEffect(() => {
+    const selectedCurator = curators.find((cur) => cur.id === curatorId);
+
+    if (!!selectedCurator) {
+      const {
+        curatorName,
+        curatorDepartment,
+        curatorPhone,
+        curatorEmail,
+        id,
+        receiverById,
+      } = selectedCurator;
+
+      setValue("curatorName", curatorName);
+
+      setValue("curatorDepartmentId", curatorDepartment);
+
+      setValue("curatorPhone", curatorPhone);
+
+      setValue("curatorEmail", curatorEmail);
+
+      setValue("curatorId", id);
+
+      setValue("receiverAdress", receiverById?.address);
+    }
+  }, [curatorId, curators]);
+
+  const renderCuratorTag = useCallback(() => {
+    if (!!id) {
+      if (customerId) {
+        return (
+          <FormSelect
+            controlProps={{
+              name: "curatorId",
+              control: control,
+              rules: { required: "Phải chọn người phụ trách" },
+            }}
+            options={curators}
+            label="Người phụ trách"
+            className="mb-4"
+            disabled={disabled}
+            labelKey="curatorName"
+          />
+        );
+      } else {
+        return (
+          <FormInput
+            controlProps={{
+              name: "curatorName",
+              control: control,
+              rules: { required: "Phải nhập người phụ trách" },
+            }}
+            label="Người phụ trách"
+            className="mb-4"
+            disabled={disabled}
+          />
+        );
+      }
+    }
+
+    if (customerAvailable || !!id) {
+      return (
+        <FormSelect
+          controlProps={{
+            name: "curatorId",
+            control: control,
+            rules: { required: "Phải chọn người phụ trách" },
+          }}
+          options={curators}
+          label="Người phụ trách"
+          className="mb-4"
+          disabled={disabled}
+          labelKey="curatorName"
+        />
+      );
+    }
+  }, [customerId, customerAvailable, curators, curatorId, disabled]);
 
   return (
     <Box className="flex flex-col">
@@ -13,15 +119,7 @@ export const QuoteRequestDetailContact: React.FC = () => {
       </Typography>
 
       <Box className="bg-white rounded-sm flex-grow p-3">
-        <FormInput
-          controlProps={{
-            name: "curatorName",
-            control: control,
-            rules: { required: "Phải nhập người phụ trách" },
-          }}
-          label="Người phụ trách"
-          className="mb-4"
-        />
+        {renderCuratorTag()}
 
         <FormSelect
           controlProps={{
@@ -32,6 +130,7 @@ export const QuoteRequestDetailContact: React.FC = () => {
           options={curatorDepartments}
           label="Phòng ban"
           className="mb-4"
+          disabled={!!id}
         />
 
         <FormInput
@@ -42,6 +141,7 @@ export const QuoteRequestDetailContact: React.FC = () => {
           }}
           label="Điện thoại"
           className="mb-4"
+          disabled={!!id}
         />
 
         <FormInput
@@ -51,6 +151,7 @@ export const QuoteRequestDetailContact: React.FC = () => {
             rules: { required: "Phải nhập Email" },
           }}
           label="Email"
+          disabled={!!id}
         />
       </Box>
     </Box>

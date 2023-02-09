@@ -1,51 +1,76 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customer as customerApi } from "src/api";
 import { FormCustomer, FormInput } from "~modules-core/components";
 
-export const QuoteRequestDetailCustomer: React.FC = () => {
-  const { control, watch, reset, setValue } = useFormContext();
+type TProps = {
+  disabled: boolean;
+};
 
-  const customerId = watch("customerId");
+export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
+  const { control, watch, setValue } = useFormContext();
 
-  const customerAvailable = watch("customerAvailable");
+  const { id } = useRouter().query;
 
-  useQuery(
+  const { customerId, customerAvailable } = watch();
+
+  const { data } = useQuery(
     ["customerDetail", customerId],
-    () =>
-      customerApi.getById(customerId).then((res) => {
-        const { companyInfo, curatorInfo = [] } = res.data;
-
-        console.log(curatorInfo);
-        
-
-        const { name, taxCode, address } = companyInfo || {};
-
-        setValue("companyName", name);
-
-        setValue("companyTaxCode", taxCode);
-
-        setValue("companyAddress", address);
-
-        const {curatorName, curatorDepartment, curatorPhone, curatorEmail, id, receiverById} = curatorInfo[0] || {};
-
-        setValue("curatorName", curatorName);
-
-        setValue("curatorDepartmentId", curatorDepartment);
-
-        setValue("curatorPhone", curatorPhone);
-
-        setValue("curatorEmail", curatorEmail);
-
-        setValue("curatorId", id);
-
-        setValue("receiverAdress", receiverById?.address);
-      }),
+    () => customerApi.getById(customerId).then((res) => res.data),
     {
       enabled: !!customerId,
     }
   );
+
+  useEffect(() => {
+    const { companyInfo, customer } = data || {};
+
+    const { name, taxCode, address } = companyInfo || {};
+
+    setValue("companyName", name);
+
+    setValue("companyTaxCode", taxCode);
+
+    setValue("companyAddress", address);
+
+    const { salesId } = customer || {};
+
+    setValue("salesId", salesId);
+  }, [data]);
+
+  const renderCustomerTag = useCallback(() => {
+    if (!!id || customerAvailable) {
+      return (
+        <Box className="mb-4">
+          <FormCustomer
+            controlProps={{
+              name: "customerId",
+              control: control,
+              rules: { required: "Phải chọn mã khách hàng" },
+            }}
+            disabled={disabled}
+          />
+        </Box>
+      );
+    }
+
+    if (!id && !customerApi) {
+      return (
+        <FormInput
+          controlProps={{
+            name: "customerCode",
+            control: control,
+          }}
+          label="Mã khách hàng"
+          className="mb-4"
+          disabled={disabled}
+        />
+      );
+    }
+  }, [customerAvailable, id, disabled]);
 
   return (
     <Box className="flex flex-col">
@@ -54,15 +79,7 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
       </Typography>
 
       <Box className="flex-grow bg-white rounded-sm p-3">
-        {customerAvailable && (
-          <FormCustomer
-            controlProps={{
-              name: "customerId",
-              control: control,
-              rules: { required: "Phải chọn mã khách hàng" },
-            }}
-          />
-        )}
+        {renderCustomerTag()}
 
         <FormInput
           controlProps={{
@@ -71,7 +88,8 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
             rules: { required: "Phải nhập tên khách hàng" },
           }}
           label="Tên khách hàng"
-          className="my-4"
+          className="mb-4"
+          disabled={!!id}
         />
 
         <FormInput
@@ -82,6 +100,7 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
           }}
           label="Mã số thuế"
           className="mb-4"
+          disabled={!!id}
         />
 
         <FormInput
@@ -94,6 +113,7 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
           className="mb-4"
           multiline
           minRows={2}
+          disabled={!!id}
         />
 
         <FormInput
@@ -105,6 +125,7 @@ export const QuoteRequestDetailCustomer: React.FC = () => {
           label="Địa chỉ nhận hàng"
           multiline
           minRows={2}
+          disabled={!!id}
         />
       </Box>
     </Box>

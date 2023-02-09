@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
-  quoteRequest,
-  TCreateQuoteRequest,
-  TUpdateQuoteRequest,
+  preQuote,
+  TCreatePreQuote,
+  TUpdatePreQuote,
 } from "src/api";
 import { AddButton, BaseButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
@@ -14,70 +14,118 @@ import { toast } from "~modules-core/toast";
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
+  refetch: () => void;
 };
 
-export const QuoteRequestDetailButtons: React.FC<TProps> = ({
+export const QuoteDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
+  refetch
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
 
   const { id } = router.query;
 
-  const {
-    handleSubmit,
-    formState: { isDirty },
-  } = useFormContext();
+  const { handleSubmit } = useFormContext();
 
   // METHODS
   const mutateCreate = useMutation(
-    (payload: TCreateQuoteRequest) => quoteRequest.create(payload),
+    (payload: TCreatePreQuote) => preQuote.create(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
 
-        router.push("/dashboard/quotation/quote-request");
+        router.push("/dashboard/quotation/quote-list");
       },
     }
   );
 
   const handleCreate = useCallback(async (data: any) => {
     const {
-      products = [],
-      attachFile = [],
-      customerAvailable,
+      attachFile,
+      products,
+      isQuoteRequest,
+      paymentType,
+      paymentTypeDescript,
+      paymentDocument,
       ...rest
     } = data || {};
+
+    if (products.length === 0) {
+      toast.error("Phải chọn sản phẩm để báo giá");
+
+      return;
+    }
+
+    const productPayload = products.map((prod: any) => ({
+      productId: prod?.productId,
+      quantity: prod?.quantity,
+      price: prod?.price,
+      vat: prod?.vat,
+      totalPrice: prod?.totalPrice,
+      note: prod?.note,
+    }));
 
     const payload = {
       ...rest,
       attachFile: attachFile.join(","),
-      preOrderDetailCreate: products.map((prod: any) => ({
-        productId: prod?.id,
-        quantity: prod?.quantity,
-        note: prod?.note,
-      })),
+      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      paymentDocument: paymentDocument.join(","),
+      preQuoteDetail: productPayload,
     };
 
     await mutateCreate.mutateAsync(payload);
   }, []);
 
   const mutateUpdate = useMutation(
-    (payload: TUpdateQuoteRequest) => quoteRequest.update(payload),
+    (payload: TUpdatePreQuote) => preQuote.update(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
 
         setIsUpdate(false);
+
+        refetch?.();
       },
     }
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const { id, salesId, curatorId, customerId } = data || {};
+    const {
+      attachFile,
+      products,
+      isQuoteRequest,
+      paymentType,
+      paymentTypeDescript,
+      paymentDocument,
+      ...rest
+    } = data || {};
 
-    await mutateUpdate.mutateAsync({ id, salesId, curatorId, customerId });
+    if (products.length === 0) {
+      toast.error("Phải chọn sản phẩm để báo giá");
+
+      return;
+    }
+
+    const productPayload = products.map((prod: any) => ({
+      id: prod?.id,
+      productId: prod?.productId,
+      quantity: prod?.quantity,
+      price: prod?.price,
+      vat: prod?.vat,
+      note: prod?.note,
+    }));
+
+    const payload = {
+      ...rest,
+      attachFile: attachFile.join(","),
+      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      paymentDocument: paymentDocument.join(","),
+      preQuoteDetailUpdate: productPayload,
+    };
+
+    await mutateUpdate.mutateAsync(payload);
   }, []);
 
   const renderButtons = useCallback(() => {
@@ -85,7 +133,7 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
       case !id:
         return (
           <AddButton onClick={handleSubmit(handleCreate)}>
-            Tạo yêu cầu
+            Tạo báo giá
           </AddButton>
         );
       case !!id && isUpdate:

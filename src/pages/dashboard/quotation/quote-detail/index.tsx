@@ -3,12 +3,12 @@ import { TNextPageWithLayout } from "~types/_app";
 
 const Index: TNextPageWithLayout = () => <QuoteDetailPage />
 
-Index.displayName = "Yêu cầu báo giá";
+Index.displayName = "Tạo đơn báo giá";
 
 Index.layoutName = "Dashboard";
 
 Index.data = {
-    title: "BÁO GIÁ / YÊU CẦU BÁO GIÁ"
+    title: "BÁO GIÁ / TẠO ĐƠN BÁO GIÁ"
   }
 
 export default Index;
