@@ -69,7 +69,7 @@ export const QuoteDetailProduct: React.FC = () => {
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = products.find((item: any) => item.no?.toString() === id);
+    const currentRow = products.find((item: any) => item.id === id);
 
     defaultValue.current = currentRow;
   };
@@ -98,11 +98,13 @@ export const QuoteDetailProduct: React.FC = () => {
         >
           <DataTable
             columns={columns}
-            rows={products}
+            rows={products.map((prod: any, index: number) => ({
+              ...prod,
+              no: index + 1,
+            }))}
             hideFooter
             hideSearchbar
             autoHeight
-            getRowId={(row) => row.no}
             componentsProps={{
               row: {
                 onMouseEnter: onMouseEnterRow,

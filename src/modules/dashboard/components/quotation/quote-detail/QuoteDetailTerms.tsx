@@ -1,13 +1,22 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
+import { paymentDocument } from "src/api";
 import {
   FormDatepicker,
   FormInput,
   FormSelect,
 } from "~modules-core/components";
+import { paymentTypes } from "~modules-core/constance";
 
 export const QuoteDetailTerms = () => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+
+  const paymentTypesValue = watch("paymentType");
+
+  const { data } = useQuery(["PaymentDocument"], () =>
+    paymentDocument.getList().then((res) => res.data)
+  );
 
   return (
     <Box className="flex flex-col">
@@ -25,14 +34,29 @@ export const QuoteDetailTerms = () => {
           <ListItem disableGutters className="pb-0">
             - Hình thức thanh toán/ Payment term:
             <FormSelect
-              options={[]}
+              options={paymentTypes}
               label=""
+              placeholder="Chọn"
               controlProps={{
                 control,
-                name: "paymentMethod",
+                name: "paymentType",
               }}
               className="min-w-[200px] ml-2"
+              valueKey="name"
+              shrinkLabel
             />
+            {paymentTypesValue === "Khác" && (
+              <FormInput
+                controlProps={{
+                  control,
+                  name: "paymentTypeDescript",
+                }}
+                label=""
+                placeholder="Mô tả"
+                className="max-w-[200px] ml-2"
+                shrinkLabel
+              />
+            )}
           </ListItem>
 
           <ListItem disableGutters className="pb-0">
@@ -53,7 +77,7 @@ export const QuoteDetailTerms = () => {
               label=""
               controlProps={{
                 control,
-                name: "quoteValidDate",
+                name: "expireDate",
               }}
               className="min-w-[200px] ml-2"
             />
@@ -65,23 +89,27 @@ export const QuoteDetailTerms = () => {
               label=""
               controlProps={{
                 control,
-                name: "receiverAddress",
+                name: "receiverAdress",
               }}
               className="min-w-[200px] ml-2"
               fullWidth={false}
+              shrinkLabel
             />
           </ListItem>
 
           <ListItem disableGutters>
             - Chứng từ thanh toán / Payment documents:
             <FormSelect
-              options={[]}
+              options={data}
               label=""
               controlProps={{
                 control,
                 name: "paymentDocument",
               }}
               className="min-w-[200px] ml-2"
+              labelKey="paymentDocumentName"
+              shrinkLabel
+              multiple
             />
           </ListItem>
         </List>

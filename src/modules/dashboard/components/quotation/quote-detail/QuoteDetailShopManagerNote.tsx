@@ -14,7 +14,7 @@ export const QuoteDetailShopManagerNote: React.FC = () => {
       <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
         <FormInput
           controlProps={{
-            name: "shopManagerNote",
+            name: "smgNote",
             control: control,
           }}
           label="Nhập shop manager note"
