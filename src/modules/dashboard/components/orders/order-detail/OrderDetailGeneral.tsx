@@ -56,7 +56,7 @@ export const OrderDetailGeneral: React.FC = () => {
               control,
               rules: { required: "Phải chọn đơn báo giá" },
             }}
-            fetcherParams={{ status: 0 }}
+            fetcherParams={{ status: 1 }}
             label="Đơn báo giá:"
             fetcher={preQuote.getList}
             labelKey="preQuoteCode"

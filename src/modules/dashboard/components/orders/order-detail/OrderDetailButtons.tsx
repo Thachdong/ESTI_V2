@@ -3,12 +3,7 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  mainOrder,
-  preQuote,
-  TCreateOrder,
-  TUpdatePreQuote,
-} from "src/api";
+import { mainOrder, preQuote, TCreateOrder, TUpdatePreQuote } from "src/api";
 import { AddButton, BaseButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 
@@ -21,7 +16,7 @@ type TProps = {
 export const OrderDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
-  refetch
+  refetch,
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
@@ -43,11 +38,21 @@ export const OrderDetailButtons: React.FC<TProps> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const {smgNote, salesNote, saleAdminNote, deliveryNote, attachFile, notFromQuote, defaultReceiver, products, ...rest} = data;
+    const {
+      smgNote,
+      salesNote,
+      saleAdminNote,
+      deliveryNote,
+      attachFile,
+      notFromQuote,
+      defaultReceiver,
+      products,
+      ...rest
+    } = data;
 
     if (!notFromQuote && !rest.preQuoteId) {
       console.log(rest);
-      
+
       toast.error("Bạn chưa chọn báo giá");
 
       return;
@@ -64,7 +69,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
     const payload = {
       ...rest,
-      preQuoteDetail: productPayload,
+      mainOrderDetail: productPayload,
     };
 
     await mutateCreate.mutateAsync(payload);

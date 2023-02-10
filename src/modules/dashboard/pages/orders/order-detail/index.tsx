@@ -14,6 +14,8 @@ import {
   OrderDetailNote,
   OrderDetailProducts,
   OrderDetailReciever,
+  QuoteDetailDeliveryHistory,
+  QuoteDetailInvoiceHistory,
 } from "~modules-dashboard/components";
 
 export const OrderDetailPage: React.FC = () => {
@@ -27,7 +29,7 @@ export const OrderDetailPage: React.FC = () => {
       notFromQuote: false,
     },
   });
-  
+
   return (
     <FormProvider {...method}>
       <Box className="container-center grid grid-cols-2 gap-4">
@@ -87,6 +89,14 @@ export const OrderDetailPage: React.FC = () => {
             controlName={"deliveryNote"}
             title={"GIAO NHẬN NOTE"}
           />
+        </Box>
+
+        <Box className="col-span-2">
+          <QuoteDetailDeliveryHistory />
+        </Box>
+
+        <Box className="col-span-2">
+          <QuoteDetailInvoiceHistory />
         </Box>
       </Box>
 
