@@ -1,10 +1,23 @@
 import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
+import { customer } from "src/api";
 import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
 
 export const OrderDetailCurator: React.FC = () => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+
+  const { customerId } = watch();
+
+  // DATA FETCHING
+  const { data: customerDetail = [] } = useQuery(
+    ["customerDetail", customerId],
+    () => customer.getById(customerId).then((res) => res.data),
+    {
+      enabled: !!customerId,
+    }
+  );
 
   return (
     <Box className="flex flex-col">
@@ -14,14 +27,14 @@ export const OrderDetailCurator: React.FC = () => {
 
       <Box className="grid gap-4 bg-white rounded-sm flex-grow p-3">
         <FormSelect
-          options={[]}
+          options={customerDetail?.curatorInfo}
           controlProps={{
             name: "curatorId",
             control,
             rules: { required: "Phải chọn người phụ trách" },
           }}
-          label="Người phụ trách"
-          labelKey="fullName"
+          label="Người phụ trách:"
+          labelKey="curatorName"
         />
 
         <FormSelect

@@ -1,9 +1,27 @@
 import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
+import { useQueries } from "react-query";
+import { staff } from "src/api";
 import {  FormSelect } from "~modules-core/components";
 
 export const OrderDetailImplement: React.FC = () => {
   const { control } = useFormContext();
+
+  // DATA FETCHING
+  const selectOptions = useQueries([
+    {
+      queryKey: "SaleAdminList",
+      queryFn: () => staff.getListSaleAdmin().then((res) => res.data),
+    },
+    {
+      queryKey: "SaleList",
+      queryFn: () => staff.getListSale().then((res) => res.data),
+    },
+    {
+      queryKey: "DeliveryStaffList",
+      queryFn: () => staff.getListDeliveryStaff().then((res) => res.data),
+    },
+  ]);
 
   return (
     <Box className="flex flex-col">
@@ -13,7 +31,7 @@ export const OrderDetailImplement: React.FC = () => {
 
       <Box className="bg-white rounded-sm flex-grow p-3">
         <FormSelect
-          options={[]}
+          options={selectOptions[0]?.data as []}
           controlProps={{
             name: "salesAdminId",
             control,
@@ -25,25 +43,25 @@ export const OrderDetailImplement: React.FC = () => {
         />
 
         <FormSelect
-          options={[]}
+          options={selectOptions[1]?.data as []}
           controlProps={{
             name: "salesId",
             control,
             rules: {required: "Phải chọn sale"}
           }}
-          label="Sale"
+          label="Sale:"
           labelKey="fullName"
           className="mb-4"
         />
 
         <FormSelect
-          options={[]}
+          options={selectOptions[2]?.data as []}
           controlProps={{
             name: "deliveryId",
             control,
             rules: {required: "Phải chọn giao nhận"}
           }}
-          label="Giao nhận"
+          label="Giao nhận:"
           labelKey="fullName"
         />
       </Box>

@@ -4,8 +4,9 @@ import { Dispatch, SetStateAction, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
+  mainOrder,
   preQuote,
-  TCreatePreQuote,
+  TCreateOrder,
   TUpdatePreQuote,
 } from "src/api";
 import { AddButton, BaseButton } from "~modules-core/components";
@@ -14,7 +15,7 @@ import { toast } from "~modules-core/toast";
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
-  refetch: () => void;
+  refetch?: () => void;
 };
 
 export const OrderDetailButtons: React.FC<TProps> = ({
@@ -31,29 +32,23 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
   // METHODS
   const mutateCreate = useMutation(
-    (payload: TCreatePreQuote) => preQuote.create(payload),
+    (payload: TCreateOrder) => mainOrder.create(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
 
-        router.push("/dashboard/quotation/quote-list");
+        router.push("/dashboard/orders/booking-order");
       },
     }
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const {
-      attachFile,
-      products,
-      isQuoteRequest,
-      paymentType,
-      paymentTypeDescript,
-      paymentDocument,
-      ...rest
-    } = data || {};
+    const {smgNote, salesNote, saleAdminNote, deliveryNote, attachFile, notFromQuote, defaultReceiver, products, ...rest} = data;
 
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
+    if (!notFromQuote && !rest.preQuoteId) {
+      console.log(rest);
+      
+      toast.error("Bạn chưa chọn báo giá");
 
       return;
     }
@@ -69,9 +64,6 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
     const payload = {
       ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
-      paymentDocument: paymentDocument.join(","),
       preQuoteDetail: productPayload,
     };
 

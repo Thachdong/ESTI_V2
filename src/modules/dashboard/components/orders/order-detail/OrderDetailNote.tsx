@@ -29,6 +29,7 @@ export const OrderDetailNote: React.FC<TProps> = ({
           multiline
           minRows={3}
           disabled={disabled}
+          shrinkLabel
         />
       </Box>
     </Box>
