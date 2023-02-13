@@ -6,7 +6,6 @@ import { useMutation } from "react-query";
 import {
   preQuote,
   TCreatePreQuote,
-  TPreQuoteSendMail,
   TUpdatePreQuote,
 } from "src/api";
 import {
@@ -145,12 +144,14 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
   }, []);
 
   const mutateSendMail = useMutation(
-    (payload: TPreQuoteSendMail) => preQuote.sendMail(payload),
+    (payload: TSendMailProps) => preQuote.sendMail(payload),
     {
       onSuccess: (response: any) => {
         toast.success(response?.resultMessage);
 
         refetch?.();
+
+        setDialog({open: false});
       },
     }
   );

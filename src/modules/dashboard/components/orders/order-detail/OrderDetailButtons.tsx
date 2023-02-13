@@ -8,7 +8,6 @@ import {
   preQuote,
   TCreateOrder,
   TUpdateOrder,
-  TUpdatePreQuote,
 } from "src/api";
 import {
   AddButton,
@@ -16,6 +15,7 @@ import {
   EditButton,
   PrintButton,
   SendButton,
+  SendMailDialog,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDefaultDialogState } from "~types/dialog";
@@ -38,7 +38,9 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
   const { id } = router.query;
 
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, watch } = useFormContext();
+
+  const {curatorEmail} = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -133,6 +135,36 @@ export const OrderDetailButtons: React.FC<TProps> = ({
     });
   }, []);
 
+  const mutateSendMail = useMutation(
+    (payload: TSendMailProps) => mainOrder.sendMail(payload),
+    {
+      onSuccess: (response: any) => {
+        toast.success(response?.resultMessage);
+
+        refetch?.();
+
+        setDialog({open: false});
+      },
+    }
+  );
+
+  const handleSendMail = useCallback(
+    async (data: any) => {
+      const { cc, bcc, content, title } = data || {};
+
+      const payload = {
+        id: id as string,
+        cc: cc as string[],
+        bcc: bcc as string[],
+        title: title as string,
+        content,
+      };
+
+      await mutateSendMail.mutateAsync(payload);
+    },
+    [id]
+  );
+
   const renderButtons = useCallback(() => {
     switch (true) {
       case !id:
@@ -173,5 +205,15 @@ export const OrderDetailButtons: React.FC<TProps> = ({
     }
   }, [id, isUpdate]);
 
-  return <Box className="flex justify-end mt-4">{renderButtons()}</Box>;
+  return (
+    <Box className="flex justify-end mt-4">
+      {renderButtons()}
+      <SendMailDialog
+        onClose={() => setDialog({ open: false })}
+        open={dialog.open}
+        sendMailHandler={handleSendMail}
+        defaultValue={{ to: curatorEmail } as any}
+      />
+    </Box>
+  );
 };

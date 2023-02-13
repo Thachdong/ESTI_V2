@@ -43,14 +43,6 @@ export type TUpdatePreQuoteProduct = Omit<
   id: string;
 };
 
-export type TPreQuoteSendMail = {
-  id: string;
-  title: string;
-  cc: string[];
-  bcc: string[];
-  content: string;
-};
-
 const BASE_URL = "PreQuote";
 
 export const preQuote = {
@@ -76,6 +68,6 @@ export const preQuote = {
       { productIds: query }
     ),
 
-  sendMail: (payload: TPreQuoteSendMail) =>
-    request.post<TPreQuoteSendMail, any>(`${BASE_URL}/SendMail`, payload),
+  sendMail: (payload: TSendMailProps) =>
+    request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
 };

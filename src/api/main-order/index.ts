@@ -46,7 +46,6 @@ export type TUpdateOrder = {
   paymentType: string;
   paymentLimit: string;
   receiverAddress: string;
-  // attachFile: string;
   requirements: string;
 };
 
@@ -65,4 +64,7 @@ export const mainOrder = {
     request.put<TUpdateOrder, any>(BASE_URL, payload),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
+
+  sendMail: (payload: TSendMailProps) =>
+    request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
 };
