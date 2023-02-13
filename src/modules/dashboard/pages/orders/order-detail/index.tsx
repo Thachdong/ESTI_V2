@@ -125,7 +125,8 @@ export const OrderDetailPage: React.FC = () => {
       <Box className="container-center grid grid-cols-2 gap-4">
         {!!id ? (
           <>
-            <OrderDetailStatus />
+            <OrderDetailStatus currentStatus={orderDetail?.mainOrder?.status} refetch={refetch} />
+
             <OrderDetailGeneralView data={orderDetail?.mainOrder} />
           </>
         ) : (

@@ -67,4 +67,10 @@ export const mainOrder = {
 
   sendMail: (payload: TSendMailProps) =>
     request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
+
+  updateStatus: (payload: {id: string, status: number}) =>
+    request.post<any, any>(
+      `${BASE_URL}/UpdateStatus?mainOrderId=${payload.id}&status=${payload.status}`,
+      {}
+    ),
 };
