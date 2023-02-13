@@ -56,7 +56,7 @@ export const QuoteDetailPage: React.FC = () => {
       attachFile,
       customerId,
       curatorId,
-      receiverAdress,
+      receiverAddress,
       expireDate,
       id,
       status
@@ -75,7 +75,7 @@ export const QuoteDetailPage: React.FC = () => {
       requirements,
       smgNote,
       salesNote,
-      receiverAdress,
+      receiverAddress,
       deliverDate,
       expireDate,
       paymentType,

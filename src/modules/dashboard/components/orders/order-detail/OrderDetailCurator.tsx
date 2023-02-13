@@ -1,11 +1,18 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customer } from "src/api";
 import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
 
-export const OrderDetailCurator: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const OrderDetailCurator: React.FC<TProps> = ({disabled}) => {
+  const {id} = useRouter().query;
+  
   const { control, watch } = useFormContext();
 
   const { customerId } = watch();
@@ -35,6 +42,7 @@ export const OrderDetailCurator: React.FC = () => {
           }}
           label="Người phụ trách:"
           labelKey="curatorName"
+          disabled={!!id}
         />
 
         <FormSelect
@@ -44,6 +52,7 @@ export const OrderDetailCurator: React.FC = () => {
           }}
           label="Phòng ban:"
           options={curatorDepartments}
+          disabled={!!id}
         />
 
         <FormInput
@@ -52,6 +61,7 @@ export const OrderDetailCurator: React.FC = () => {
             control,
           }}
           label="Điện thoại:"
+          disabled={disabled}
         />
 
         <FormInput
@@ -60,6 +70,7 @@ export const OrderDetailCurator: React.FC = () => {
             control,
           }}
           label="Email:"
+          disabled={disabled}
         />
       </Box>
     </Box>

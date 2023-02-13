@@ -4,7 +4,11 @@ import { useQueries } from "react-query";
 import { staff } from "src/api";
 import {  FormSelect } from "~modules-core/components";
 
-export const OrderDetailImplement: React.FC = () => {
+type TProps = {
+  disabled: boolean
+}
+
+export const OrderDetailImplement: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   // DATA FETCHING
@@ -40,6 +44,7 @@ export const OrderDetailImplement: React.FC = () => {
           label="Sale admin:"
           labelKey="fullName"
           className="mb-4"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -52,6 +57,7 @@ export const OrderDetailImplement: React.FC = () => {
           label="Sale:"
           labelKey="fullName"
           className="mb-4"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -63,6 +69,7 @@ export const OrderDetailImplement: React.FC = () => {
           }}
           label="Giao nhận:"
           labelKey="fullName"
+          disabled={disabled}
         />
       </Box>
     </Box>

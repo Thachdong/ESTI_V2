@@ -42,9 +42,6 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
   const { curatorEmail, status } = watch();
 
-  console.log();
-  
-
   // METHODS
   const mutateCreate = useMutation(
     (payload: TCreatePreQuote) => preQuote.create(payload),
@@ -103,6 +100,8 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
         setIsUpdate(false);
 
         refetch?.();
+
+        setDialog({open: false})
       },
     }
   );
@@ -162,7 +161,6 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
       const payload = {
         id: id as string,
-        to: curatorEmail,
         cc: cc as string[],
         bcc: bcc as string[],
         title: title as string,

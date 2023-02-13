@@ -8,3 +8,5 @@ export * from "./OrderDetailCustomer";
 export * from "./OrderDetailProducts";
 export * from "./OrderDetailNote";
 export * from "./OrderDetailButtons";
+export * from "./OrderDetailGeneralView";
+export * from "./OrderDetailStatus";

@@ -45,7 +45,6 @@ export type TUpdatePreQuoteProduct = Omit<
 
 export type TPreQuoteSendMail = {
   id: string;
-  to: string;
   title: string;
   cc: string[];
   bcc: string[];

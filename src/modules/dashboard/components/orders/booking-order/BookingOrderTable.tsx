@@ -64,7 +64,11 @@ export const BookingOrderTable: React.FC = () => {
           id={row?.id as string}
           items={[
             {
-              action: () => undefined,
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/orders/order-detail/",
+                  query: { id: row?.id },
+                }),
               label: "Thông tin chi tiết",
             },
             {
@@ -93,11 +97,7 @@ export const BookingOrderTable: React.FC = () => {
         <Box>
           <AddButton
             variant="contained"
-            onClick={() =>
-              router.push(
-                "/dashboard/orders/order-detail"
-              )
-            }
+            onClick={() => router.push("/dashboard/orders/order-detail")}
           >
             TẠO MỚI ĐƠN ĐẶT HÀNG
           </AddButton>
@@ -107,7 +107,15 @@ export const BookingOrderTable: React.FC = () => {
         menuId="order_request_table_menu"
         menuComponent={
           <Menu className="p-0" id="order_request_table_menu">
-            <Item id="view-product" onClick={() => undefined}>
+            <Item
+              id="view-product"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/orders/order-detail/",
+                  query: { id: defaultValue.current?.id },
+                })
+              }
+            >
               Xem chi tiết
             </Item>
             <Item id="delete-product" onClick={() => undefined}>

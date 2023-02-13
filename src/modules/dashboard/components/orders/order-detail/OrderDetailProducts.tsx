@@ -17,9 +17,10 @@ import { OrderDetailProductsDialog } from "./OrderDetailProductsDialog";
 
 type TProps = {
   data?: any;
+  disabled?: boolean;
 };
 
-export const OrderDetailProducts: React.FC<TProps> = ({ data }) => {
+export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
   const { id } = useRouter().query;
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -43,10 +44,12 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data }) => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
+              disabled: !!id
             },
             {
               action: handleDelete,
               label: "Xóa",
+              disabled: !!id
             },
           ]}
         />
@@ -134,10 +137,10 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data }) => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item id="view-product" onClick={() => onOpen("Update")}>
+              <Item disabled={!!id} id="view-product" onClick={() => onOpen("Update")}>
                 Cập nhật
               </Item>
-              <Item id="delete-product" onClick={handleDelete}>
+              <Item disabled={!!id} id="delete-product" onClick={handleDelete}>
                 Xóa
               </Item>
             </Menu>

@@ -7,7 +7,11 @@ import {
 } from "~modules-core/components";
 import { paymentExpiredIn, paymentTypes } from "~modules-core/constance";
 
-export const OrderDetailReciever: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const OrderDetailReciever: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
   return (
     <Box>
@@ -23,6 +27,7 @@ export const OrderDetailReciever: React.FC = () => {
           }}
           label="Thông tin nhận hàng giống thông tin tài khoản khách hàng đăng kí"
           className="col-span-2"
+          disabled={disabled}
         />
 
         <FormInput
@@ -31,6 +36,7 @@ export const OrderDetailReciever: React.FC = () => {
             control,
           }}
           label="Họ, tên người nhận:"
+          disabled={disabled}
         />
 
         <FormInput
@@ -39,6 +45,7 @@ export const OrderDetailReciever: React.FC = () => {
             control,
           }}
           label="Số điện thoại:"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -48,6 +55,7 @@ export const OrderDetailReciever: React.FC = () => {
           }}
           label="Hình thức TT:"
           options={paymentTypes}
+          disabled={disabled}
         />
 
         <FormSelect
@@ -57,6 +65,7 @@ export const OrderDetailReciever: React.FC = () => {
           }}
           label="Thời hạn công nợ:"
           options={paymentExpiredIn}
+          disabled={disabled}
         />
 
         <FormInput
@@ -65,7 +74,7 @@ export const OrderDetailReciever: React.FC = () => {
             control,
           }}
           label="Đ/c nhận hàng:"
-          required
+          disabled={disabled}
         />
       </Box>
     </Box>

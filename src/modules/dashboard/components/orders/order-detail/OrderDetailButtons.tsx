@@ -1,11 +1,24 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import { mainOrder, preQuote, TCreateOrder, TUpdatePreQuote } from "src/api";
-import { AddButton, BaseButton } from "~modules-core/components";
+import {
+  mainOrder,
+  preQuote,
+  TCreateOrder,
+  TUpdateOrder,
+  TUpdatePreQuote,
+} from "src/api";
+import {
+  AddButton,
+  BaseButton,
+  EditButton,
+  PrintButton,
+  SendButton,
+} from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
   isUpdate: boolean;
@@ -18,6 +31,8 @@ export const OrderDetailButtons: React.FC<TProps> = ({
   setIsUpdate,
   refetch,
 }) => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+
   // EXTRACT PROPS
   const router = useRouter();
 
@@ -51,8 +66,6 @@ export const OrderDetailButtons: React.FC<TProps> = ({
     } = data;
 
     if (!notFromQuote && !rest.preQuoteId) {
-      console.log(rest);
-
       toast.error("Bạn chưa chọn báo giá");
 
       return;
@@ -76,7 +89,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
   }, []);
 
   const mutateUpdate = useMutation(
-    (payload: TUpdatePreQuote) => preQuote.update(payload),
+    (payload: TUpdateOrder) => mainOrder.update(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
@@ -90,39 +103,34 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
   const handleUpdate = useCallback(async (data: any) => {
     const {
-      attachFile,
-      products,
-      isQuoteRequest,
+      id,
+      salesAdminId,
+      salesId,
+      deliveryId,
+      curatorPhone,
+      curatorEmail,
+      receiverFullName,
+      receiverPhone,
       paymentType,
-      paymentTypeDescript,
-      paymentDocument,
-      ...rest
+      paymentLimit,
+      receiverAddress,
+      requirements,
     } = data || {};
 
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
-
-      return;
-    }
-
-    const productPayload = products.map((prod: any) => ({
-      id: prod?.id,
-      productId: prod?.productId,
-      quantity: prod?.quantity,
-      price: prod?.price,
-      vat: prod?.vat,
-      note: prod?.note,
-    }));
-
-    const payload = {
-      ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
-      paymentDocument: paymentDocument.join(","),
-      preQuoteDetailUpdate: productPayload,
-    };
-
-    await mutateUpdate.mutateAsync(payload);
+    await mutateUpdate.mutateAsync({
+      id,
+      salesAdminId,
+      salesId,
+      deliveryId,
+      curatorPhone,
+      curatorEmail,
+      receiverFullName,
+      receiverPhone,
+      paymentType,
+      paymentLimit,
+      receiverAddress,
+      requirements,
+    });
   }, []);
 
   const renderButtons = useCallback(() => {
@@ -149,7 +157,18 @@ export const OrderDetailButtons: React.FC<TProps> = ({
         );
       case !!id && !isUpdate:
         return (
-          <BaseButton onClick={() => setIsUpdate(true)}>Cập nhật</BaseButton>
+          <Box className="flex items-center justify-end gap-3">
+            <EditButton
+              tooltipText="Cập nhật"
+              onClick={() => setIsUpdate(true)}
+            />
+
+            <SendButton onClick={() => setDialog({ open: true })}>
+              Gửi khách hàng
+            </SendButton>
+
+            <PrintButton className="!bg-error">In</PrintButton>
+          </Box>
         );
     }
   }, [id, isUpdate]);

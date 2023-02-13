@@ -2,7 +2,11 @@ import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
-export const OrderDetailAddition: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const OrderDetailAddition: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (
@@ -21,6 +25,7 @@ export const OrderDetailAddition: React.FC = () => {
           multiline
           minRows={3}
           shrinkLabel
+          disabled={disabled}
         />
       </Box>
     </Box>

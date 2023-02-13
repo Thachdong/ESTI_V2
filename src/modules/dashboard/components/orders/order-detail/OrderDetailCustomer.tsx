@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
@@ -6,6 +7,8 @@ import { customer } from "src/api";
 import { FormCustomer, FormInputBase } from "~modules-core/components";
 
 export const OrderDetailCustomer: React.FC = () => {
+  const {id} = useRouter().query;
+
   const { control, watch, setValue } = useFormContext();
 
   const { customerId, notFromQuote, curatorId } = watch();
@@ -61,7 +64,7 @@ export const OrderDetailCustomer: React.FC = () => {
             control,
           }}
           label="Khách hàng:"
-          disabled={!notFromQuote}
+          disabled={!notFromQuote || !!id}
         />
 
         <FormInputBase

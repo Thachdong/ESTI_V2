@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-const TIMEOUT_IN_MILISECOND = 10000;
+const TIMEOUT_IN_MILISECOND = 30000;
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL + "api/",
