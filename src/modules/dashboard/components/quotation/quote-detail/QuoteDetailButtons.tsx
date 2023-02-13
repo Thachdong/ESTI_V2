@@ -1,15 +1,24 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
   preQuote,
   TCreatePreQuote,
+  TPreQuoteSendMail,
   TUpdatePreQuote,
 } from "src/api";
-import { AddButton, BaseButton } from "~modules-core/components";
+import {
+  AddButton,
+  BaseButton,
+  EditButton,
+  PrintButton,
+  SendButton,
+  SendMailDialog,
+} from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
   isUpdate: boolean;
@@ -20,14 +29,21 @@ type TProps = {
 export const QuoteDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
-  refetch
+  refetch,
 }) => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+
   // EXTRACT PROPS
   const router = useRouter();
 
   const { id } = router.query;
 
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, watch } = useFormContext();
+
+  const { curatorEmail, status } = watch();
+
+  console.log();
+  
 
   // METHODS
   const mutateCreate = useMutation(
@@ -99,6 +115,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
       paymentType,
       paymentTypeDescript,
       paymentDocument,
+      status,
       ...rest
     } = data || {};
 
@@ -128,6 +145,35 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
     await mutateUpdate.mutateAsync(payload);
   }, []);
 
+  const mutateSendMail = useMutation(
+    (payload: TPreQuoteSendMail) => preQuote.sendMail(payload),
+    {
+      onSuccess: (response: any) => {
+        toast.success(response?.resultMessage);
+
+        refetch?.();
+      },
+    }
+  );
+
+  const handleSendMail = useCallback(
+    async (data: any) => {
+      const { cc, bcc, content, title } = data || {};
+
+      const payload = {
+        id: id as string,
+        to: curatorEmail,
+        cc: cc as string[],
+        bcc: bcc as string[],
+        title: title as string,
+        content,
+      };
+
+      await mutateSendMail.mutateAsync(payload);
+    },
+    [id]
+  );
+
   const renderButtons = useCallback(() => {
     switch (true) {
       case !id:
@@ -152,10 +198,34 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
         );
       case !!id && !isUpdate:
         return (
-          <BaseButton onClick={() => setIsUpdate(true)}>Cập nhật</BaseButton>
+          <Box className="flex items-center justify-end gap-3">
+            {status <= 2 && (
+              <>
+                <EditButton
+                  tooltipText="Cập nhật"
+                  onClick={() => setIsUpdate(true)}
+                />
+                <SendButton onClick={() => setDialog({ open: true })}>
+                  Gửi khách hàng
+                </SendButton>
+              </>
+            )}
+
+            <PrintButton className="!bg-error">In</PrintButton>
+          </Box>
         );
     }
-  }, [id, isUpdate]);
+  }, [id, isUpdate, status]);
 
-  return <Box className="flex justify-end mt-4">{renderButtons()}</Box>;
+  return (
+    <Box className="flex justify-end mt-4">
+      {renderButtons()}
+      <SendMailDialog
+        onClose={() => setDialog({ open: false })}
+        open={dialog.open}
+        sendMailHandler={handleSendMail}
+        defaultValue={{ to: curatorEmail } as any}
+      />
+    </Box>
+  );
 };

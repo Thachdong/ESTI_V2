@@ -59,5 +59,5 @@ export const mainOrder = {
 
   create: (payload: TCreateOrder) => request.post<TCreateOrder, any>(BASE_URL, payload),
 
-  update: (payload: TUpdateOrder) => request.put<TUpdateOrder, any>(BASE_URL, payload)
+  update: (payload: TUpdateOrder) => request.put<TUpdateOrder, any>(BASE_URL, payload),
 };

@@ -59,6 +59,7 @@ export const QuoteDetailPage: React.FC = () => {
       receiverAdress,
       expireDate,
       id,
+      status
     } = preQuoteView;
 
     const documents = JSON.parse(paymentDocument || "[]").map(
@@ -67,6 +68,7 @@ export const QuoteDetailPage: React.FC = () => {
 
     method.reset({
       id,
+      status,
       salesId,
       customerId,
       curatorId,

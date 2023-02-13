@@ -43,6 +43,15 @@ export type TUpdatePreQuoteProduct = Omit<
   id: string;
 };
 
+export type TPreQuoteSendMail = {
+  id: string;
+  to: string;
+  title: string;
+  cc: string[];
+  bcc: string[];
+  content: string;
+};
+
 const BASE_URL = "PreQuote";
 
 export const preQuote = {
@@ -62,5 +71,12 @@ export const preQuote = {
   update: (payload: TUpdatePreQuote) =>
     request.put<TUpdatePreQuote, any>(BASE_URL, payload),
 
-  getProductStock: (query: string[]) => request.get<any>(`${BASE_URL}/GetProductStock?productIds=${query.join("&productIds=")}`, {productIds: query})
+  getProductStock: (query: string[]) =>
+    request.get<any>(
+      `${BASE_URL}/GetProductStock?productIds=${query.join("&productIds=")}`,
+      { productIds: query }
+    ),
+
+  sendMail: (payload: TPreQuoteSendMail) =>
+    request.post<TPreQuoteSendMail, any>(`${BASE_URL}/SendMail`, payload),
 };

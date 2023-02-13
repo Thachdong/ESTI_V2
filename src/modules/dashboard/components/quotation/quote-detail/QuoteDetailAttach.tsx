@@ -49,7 +49,7 @@ export const QuoteDetailAttach: React.FC<TProps> = ({disabled}) => {
         </List>
       );
     }
-  }, [attachFile]);
+  }, [attachFile, disabled]);
 
   const renderTitle = (loading: boolean) => (
     <InputLabel

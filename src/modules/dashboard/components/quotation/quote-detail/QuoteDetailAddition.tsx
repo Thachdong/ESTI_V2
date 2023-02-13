@@ -25,6 +25,7 @@ export const QuoteDetailAddition: React.FC<TProps> = ({disabled}) => {
           multiline
           minRows={3}
           disabled={disabled}
+          shrinkLabel
         />
       </Box>
     </Box>

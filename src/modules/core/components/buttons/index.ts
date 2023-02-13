@@ -7,3 +7,5 @@ export * from "./DownloadButton";
 export * from "./RefreshButton";
 export * from "./DropdownButton";
 export * from "./PrintButton";
+export * from "./EditButton";
+export * from "./SendButton";
