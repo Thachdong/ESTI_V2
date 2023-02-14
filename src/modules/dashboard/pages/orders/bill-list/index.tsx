@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Item } from "react-contexify";
 import { useForm } from "react-hook-form";
 import { useQuery } from "react-query";
-import { Bill, TWarehouseExport } from "src/api";
+import { bill, TWarehouseExport } from "src/api";
 import {
   AddButton,
   CardReport,
@@ -38,7 +38,7 @@ export const BillListPage: React.FC = () => {
       },
     ],
     () =>
-      Bill.getList({
+      bill.getList({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
         ...query,
