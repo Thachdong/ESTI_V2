@@ -6,3 +6,4 @@ export * from "./BillDetailAttach";
 export * from "./BillDetailReceiver";
 export * from "./BillDetailDialog";
 export * from "./BillDetailButtons";
+export * from "./BillDetailStatus";

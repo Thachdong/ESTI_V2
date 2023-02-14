@@ -13,6 +13,7 @@ import {
   BillDetailGeneral,
   BillDetailProducts,
   BillDetailReciever,
+  BillDetailStatus,
 } from "~modules-dashboard/components";
 
 export const BillDetailPage: React.FC = () => {
@@ -31,6 +32,7 @@ export const BillDetailPage: React.FC = () => {
   const { mainOrderId, defaultReceiver } = watch();
 
   // DATA FETCHING
+  // FETCH BILL DETAIL
   const { data: billDetail, refetch } = useQuery(
     ["billDetail", id],
     () => bill.getById(id as string).then((res) => res.data),
@@ -39,6 +41,9 @@ export const BillDetailPage: React.FC = () => {
     }
   );
 
+  const { BillView = {} } = billDetail || {};
+
+  // FETCH ORDER DETAIL
   const { data: orderDetail } = useQuery(
     ["orderDetail", mainOrderId],
     () => orderApi.getById(mainOrderId).then((res) => res.data),
@@ -90,6 +95,12 @@ export const BillDetailPage: React.FC = () => {
 
   return (
     <FormProvider {...method}>
+      {!!id && (
+        <BillDetailStatus
+          currentStatus={BillView.bill?.status}
+          refetch={refetch}
+        />
+      )}
       <BillDetailGeneral
         data={{
           saleAdmin: mainOrder.salesAdminCode,
