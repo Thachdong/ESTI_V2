@@ -41,5 +41,5 @@ export const billColumns: GridColDef<TWarehouseExport>[] = [
   },
   { field: "branchCode", headerName: "CHI NHÁNH", minWidth: 150 },
   { field: "salesCode", headerName: "NHÂN VIÊN KD", minWidth: 150 },
-  { field: "statusName", headerName: "TRẠNG THÁI", minWidth: 150 },
+  { field: "statusName", headerName: "TRẠNG THÁI", minWidth: 100 },
 ];

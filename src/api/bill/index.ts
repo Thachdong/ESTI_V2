@@ -12,9 +12,31 @@ export type TBillAddbill = {
   nextPaymentDate: number;
 };
 
+export type TCreateBill = {
+  mainOrderId: string;
+  billNumber: string;
+  billRecipientName: string;
+  billRecipientPhone: string;
+  billRecipientEmail: string;
+  billRecipientAddress: string;
+  attachFile: string;
+  billDetailCreate: TCreateBillProduct[];
+};
+
+export type TCreateBillProduct = {
+  productId: string;
+  quantity: number;
+  price: number;
+  vat: string;
+  totalPrice: number;
+};
+
 const BASE_URL = "Bill";
 
 export const bill = {
+  create: (payload: TCreateBill) =>
+    request.post<TCreateBill, any>(BASE_URL, payload),
+
   getList: (params: any) => request.getPagination<any>(BASE_URL, params),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),

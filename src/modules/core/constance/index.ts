@@ -136,10 +136,10 @@ export const warehouseImportStatus = [
 ];
 
 export const VAT = [
-  { id: 0, name: "0%" },
-  { id: 5, name: "5%" },
-  { id: 8, name: "8%" },
-  { id: 10, name: "10%" },
+  { id: "0", name: "0%" },
+  { id: "5", name: "5%" },
+  { id: "8", name: "8%" },
+  { id: "10", name: "10%" },
 ];
 
 export const warehouseExportStatus = [

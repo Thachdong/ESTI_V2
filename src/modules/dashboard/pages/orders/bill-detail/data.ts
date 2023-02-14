@@ -60,10 +60,4 @@ export const productColumns: TGridColDef[] = [
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row.totalPrice),
   },
-  {
-    field: "note",
-    headerName: "Ghi chú",
-    minWidth: 100,
-    flex: 1,
-  },
 ];
