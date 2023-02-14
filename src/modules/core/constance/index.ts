@@ -35,6 +35,7 @@ export const genderData = [
 export const paymentTypes = [
   { id: 1, name: "Tiền mặt" },
   { id: 2, name: "Chuyển khoản" },
+  { id: 3, name: "Khác" },
 ];
 
 export const paymentExpiredIn = [
@@ -237,4 +238,11 @@ export const staffDepartments = [
   { id: 4, name: "Phòng hành chánh" },
   { id: 5, name: "Phòng Marketing" },
   { id: 6, name: "Phòng kiểm soát chất lượng" },
+];
+
+export const orderStatus = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Hoàn thành" },
+  { value: 4, label: "Hủy" },
 ];

@@ -1,7 +1,7 @@
-import { OrderRequestPage } from "~modules-dashboard/pages";
+import { BookingOrderPage } from "~modules-dashboard/pages/orders/booking-order";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <OrderRequestPage />;
+const Index: TNextPageWithLayout = () => <BookingOrderPage />;
 
 Index.displayName = "Đơn đặt hàng";
 

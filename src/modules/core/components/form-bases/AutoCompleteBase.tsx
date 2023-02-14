@@ -35,7 +35,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
   };
 
   const renderValue = useCallback(() => {
-    if (!value) return restProps.multiple ? [] : null;
+    if (!value && value !== 0) return restProps.multiple ? [] : "";
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>

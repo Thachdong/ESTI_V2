@@ -8,6 +8,7 @@ type TDropdownButton = {
   items: {
     label: string;
     action: Function;
+    disabled?: boolean;
   }[];
   id: string;
 };
@@ -61,6 +62,7 @@ export const DropdownButton: React.FC<TDropdownButton> = ({ items, id }) => {
             key={index}
             className="font-semibold text-sm text-[#061E33]"
             onClick={() => handleClickItem(item?.action)}
+            disabled={item.disabled}
           >
             {item.label}
           </MenuItem>

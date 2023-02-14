@@ -2,7 +2,11 @@ import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
-export const QuoteDetailAddition: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailAddition: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (
@@ -20,6 +24,8 @@ export const QuoteDetailAddition: React.FC = () => {
           label="Nhập yêu cầu bổ sung"
           multiline
           minRows={3}
+          disabled={disabled}
+          shrinkLabel
         />
       </Box>
     </Box>

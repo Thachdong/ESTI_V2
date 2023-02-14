@@ -5,7 +5,11 @@ import AttachFileIcon from "@mui/icons-material/AttachFileRounded";
 import { useCallback } from "react";
 import { quoteRequest } from "src/api";
 
-export const QuoteDetailAttach: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const QuoteDetailAttach: React.FC<TProps> = ({disabled}) => {
   const { control, setValue, watch } = useFormContext();
 
   const attachFile = watch("attachFile");
@@ -39,13 +43,13 @@ export const QuoteDetailAttach: React.FC = () => {
                 {file}
               </Typography>
 
-              <DeleteButton onClick={() => removeFile(file)} className="min-w-[24px] text-error" />
+              <DeleteButton disabled={disabled} onClick={() => removeFile(file)} className="min-w-[24px] text-error" />
             </ListItem>
           ))}
         </List>
       );
     }
-  }, [attachFile]);
+  }, [attachFile, disabled]);
 
   const renderTitle = (loading: boolean) => (
     <InputLabel
@@ -74,6 +78,7 @@ export const QuoteDetailAttach: React.FC = () => {
           loader={quoteRequest.uploadFile}
           renderTitle={renderTitle}
           multiple
+          disabled={disabled}
         />
       </Box>
     </Box>

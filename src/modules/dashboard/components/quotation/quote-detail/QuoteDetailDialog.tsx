@@ -1,14 +1,11 @@
-import { Box, Typography } from "@mui/material";
+import { Box, List, ListItem } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
-import { products as productApi } from "src/api";
+import { useQuery } from "react-query";
+import { preQuote, products as productApi } from "src/api";
 import {
-  AddButton,
   BaseButton,
-  DataTable,
-  DeleteButton,
   Dialog,
-  DropdownButton,
   FormInput,
   FormInputBase,
   FormSelect,
@@ -16,10 +13,8 @@ import {
 } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 import { VAT } from "~modules-core/constance";
-import { supplierColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
-import { TGridColDef } from "~types/data-grid";
-import { TDefaultDialogState, TDialog } from "~types/dialog";
-import { QuoteDetailSupplierDialog } from "./QuoteDetailSupplierDialog";
+import { toast } from "~modules-core/toast";
+import { TDialog } from "~types/dialog";
 
 export const QuoteDetailDialog: React.FC<TDialog> = ({
   onClose,
@@ -27,17 +22,27 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
   type,
   defaultValue,
 }) => {
-  const [dialog, setDialog] = useState<TDefaultDialogState>();
-
   const [product, setProduct] = useState<any>();
 
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset, watch, setValue } = useForm();
 
   const { watch: contextWatch, setValue: setContextValue } = useFormContext();
 
   const products = contextWatch("products");
 
-  const title = type === "Add" ? "Thêm sản phẩm" : "Cập nhật sản phẩm";
+  const { productId, quantity = 0, price = 0, vat = 0 } = watch();
+
+  const title =
+    type === "Add" ? "Thêm sản phẩm báo giá" : "Cập nhật sản phẩm báo giá";
+
+  // DATA FETCHING
+  const { data: stock = [] } = useQuery(
+    ["GetStock", productId],
+    () => preQuote.getProductStock([productId]).then((res) => res.data),
+    {
+      enabled: !!productId,
+    }
+  );
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -49,18 +54,28 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
     }
   }, [type]);
 
+  useEffect(() => {
+    const total = quantity * price;
+
+    setValue("totalPrice", total + (total * vat) / 100);
+  }, [quantity, price, vat]);
+
+  useEffect(() => {
+    type === "Add" && isSelectedProduct();
+  }, [products, productId])
+
   // METHODS
-  const callback = useCallback(
-    (data: any) => {
-      setProduct(data);
-    },
-    [setProduct]
-  );
+  const callback = useCallback((data: any) => {
+    setProduct(data);
+  }, []);
 
   const addProduct = useCallback(
     (data: any) => {
-      const no = products.length + 1;
-      setContextValue("products", [...products, { ...product, ...data, no }]);
+      if (isSelectedProduct()) {
+        return;
+      }
+
+      setContextValue("products", [...products, { ...product, ...data }]);
 
       setProduct(null);
 
@@ -74,7 +89,7 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
   const updateProduct = useCallback(
     (data: any) => {
       const updatedProducts = products.map((prod: any) =>
-        prod?.no === data?.no ? { ...product, ...data } : { ...prod }
+        prod?.productId === data?.productId ? { ...product, ...data } : { ...prod }
       );
 
       setContextValue("products", updatedProducts);
@@ -84,53 +99,39 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
     [products]
   );
 
-  const onOpenSupplierDialog = useCallback((type: string) => {
-    setDialog({ open: true, type });
-  }, []);
+  const renderStock = useCallback(() => {
+    if (stock.length === 0) {
+      return <ListItem>Không có tồn kho</ListItem>;
+    }
 
-  const onCloseSupplierDialog = useCallback(() => {
-    setDialog({ open: false });
-  }, []);
+    return stock[0]?.stock?.map((stc: any, index: number) => (
+      <ListItem>
+        {stc.warehouseConfigCode}: {stc.quantityAvailabilityStock}
+      </ListItem>
+    ));
+  }, [stock]);
 
-  const columns: TGridColDef[] = [
-    ...supplierColumns,
-    {
-      field: "action",
-      headerName: "",
-      width: 50,
-      renderCell: ({ row }) => (
-        <DropdownButton
-          id={row?.id}
-          items={[
-            {
-              action: () => onOpenSupplierDialog("Update"),
-              label: "Thông tin chi tiết",
-            },
-            {
-              action: () => console.log("delete"),
-              label: "Xóa",
-            },
-          ]}
-        />
-      ),
-    },
-  ];
+  const isSelectedProduct = useCallback(() => {
+    const index = products.findIndex((prod: any) => prod.id === productId);
+
+    if (index !== -1) {
+      toast.error(`SP ${products[index]?.productName} đã được nhập!`);
+
+      return true;
+    }
+
+    return false;
+  }, [products, productId])
 
   return (
     <Dialog
       onClose={onClose}
       open={open}
-      maxWidth="lg"
+      maxWidth="md"
       title={title}
       headerClassName="text-center"
     >
-      <Box className="grid grid-cols-3 gap-4 mb-4">
-        <Box className="col-span-3">
-          <Typography className="font-semibold uppercase">
-            Thông tin sản phẩm
-          </Typography>
-        </Box>
-
+      <Box className="grid grid-cols-2 gap-4 mb-4">
         <FormSelectAsync
           fetcher={productApi.getList}
           controlProps={{
@@ -200,6 +201,7 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập thành tiền" },
           }}
           label="Thành tiền"
+          disabled
         />
 
         <FormInput
@@ -210,25 +212,13 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
           label="Ghi chú"
           multiline
           minRows={2}
-          className="col-span-2"
         />
       </Box>
 
-      <Box className="col-span-2">
-        <AddButton onClick={() => onOpenSupplierDialog("Add")} className="mb-2">
-          Thêm nơi lấy hàng
-        </AddButton>
-
-        <DataTable
-          columns={columns}
-          rows={[]}
-          hideFooter
-          hideSearchbar
-          autoHeight
-          getRowId={(row) => row.no}
-          paginationMode="client"
-        />
-      </Box>
+      <List component="fieldset">
+        <legend>Thông tin tồn kho:</legend>
+        {renderStock()}
+      </List>
 
       <Box className="flex items-center justify-center mt-4">
         {type === "Add" ? (
@@ -243,12 +233,6 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
           Đóng
         </BaseButton>
       </Box>
-
-      <QuoteDetailSupplierDialog
-        onClose={onCloseSupplierDialog}
-        open={!!dialog?.open}
-        type={dialog?.type}
-      />
     </Dialog>
   );
 };

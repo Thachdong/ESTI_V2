@@ -29,7 +29,7 @@ export const menu = [
     childrens: [
       {
         title: "Đơn đặt hàng",
-        link: "orders/order-request",
+        link: "orders/booking-order",
       },
       {
         title: "Hóa đơn",

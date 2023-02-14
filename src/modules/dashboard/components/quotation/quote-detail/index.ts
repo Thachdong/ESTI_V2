@@ -9,3 +9,7 @@ export * from "./QuoteDetailTerms";
 export * from "./QuoteDetailShopManagerNote";
 export * from "./QuoteDetailSaleNote";
 export * from "./QuoteDetailSupplier";
+export * from "./QuoteDetailButtons";
+export * from "./QuoteDetailGeneralView";
+export * from "./QuoteDetailDeliveryHistory";
+export * from "./QuoteDetailInvoiceHistory";

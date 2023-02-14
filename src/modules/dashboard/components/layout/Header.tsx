@@ -13,28 +13,30 @@ type TProps = {
 
 export const Header: React.FC<TProps> = ({ data }) => {
   const { title, pageName } = data || {};
+
   const router = useRouter();
-  const { query } = router;
+
+  const { id } = router.query;
 
   const { data: warehouseImportDetail } = useQuery(
-    ["ImportWarehouseDetail_" + query?.id, { ...query }],
+    ["ImportWarehouseDetail_" + id],
     () =>
       warehouse
-        .getImportSessionById(query?.id as string)
+        .getImportSessionById(id as string)
         .then((res) => res.data),
     {
-      enabled: pageName === "warehouse-import-detail" && !!query.id,
+      enabled: pageName === "warehouse-import-detail" && !!id,
     }
   );
 
   const { data: warehouseExportDetail } = useQuery(
-    ["warehouseExportDetail_" + query.id],
+    ["warehouseExportDetail_" + id],
     () =>
       warehouse
-        .getExportSessionById(query.id as string)
+        .getExportSessionById(id as string)
         .then((res) => res.data),
     {
-      enabled: pageName === "warehouse-export-detail" && !!query.id,
+      enabled: pageName === "warehouse-export-detail" && !!id,
     }
   );
 
@@ -42,7 +44,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
 
   switch (pageName) {
     case "warehouse-export-detail":
-      if (query.id) {
+      if (id) {
         extractedTitle = `XUẤT KHO / CHI TIẾT XUẤT KHO / ${
           warehouseExportDetail?.productOrder?.code || ""
         }`;
@@ -52,7 +54,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
       break;
 
     case "warehouse-import-detail":
-      if (query.id) {
+      if (id) {
         extractedTitle = `NHẬP KHO / CHI TIẾT / ${
           warehouseImportDetail?.warehouseSession?.code || ""
         }`;
