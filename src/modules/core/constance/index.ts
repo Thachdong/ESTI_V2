@@ -246,3 +246,10 @@ export const orderStatus = [
   { value: 3, label: "Hoàn thành" },
   { value: 4, label: "Hủy" },
 ];
+
+export const billStatus = [
+  { value: 0, label: "Chưa thanh toán" },
+  { value: 1, label: "Hoàn thành" },
+  { value: 2, label: "Quá hạn" },
+  { value: 3, label: "Hủy" },
+];

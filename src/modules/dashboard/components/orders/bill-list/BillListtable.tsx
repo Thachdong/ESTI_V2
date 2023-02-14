@@ -1,9 +1,9 @@
-import { Box, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
-import { useMutation, useQuery } from "react-query";
-import { mainOrder } from "src/api";
+import { useQuery } from "react-query";
+import { bill } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -13,12 +13,17 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import { toast } from "~modules-core/toast";
-import { orderColumns } from "~modules-dashboard/pages/orders/booking-order/orderColumns";
+import { _format } from "~modules-core/utility/fomat";
+import { billColumns } from "~modules-dashboard/pages/orders/bill-list/billColumns";
 import { TGridColDef } from "~types/data-grid";
+import { TDefaultDialogState } from "~types/dialog";
+import { BillListBillDialog } from "./BillListBillDialog";
+import { BillListStatusDialog } from "./BillListStatusDialog";
 
-export const BookingOrderTable: React.FC = () => {
+export const BillListTable: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
+
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const router = useRouter();
 
@@ -31,7 +36,7 @@ export const BookingOrderTable: React.FC = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "mainOrders",
+      "bills",
       "loading",
       {
         ...pagination,
@@ -39,7 +44,7 @@ export const BookingOrderTable: React.FC = () => {
       },
     ],
     () =>
-      mainOrder
+      bill
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -53,9 +58,18 @@ export const BookingOrderTable: React.FC = () => {
     }
   );
 
+  // METHODS
+  const onClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  const onOpen = useCallback((type: string) => {
+    setDialog({ open: true, type });
+  }, []);
+
   // DATA TABLE
   const columns: TGridColDef[] = [
-    ...orderColumns,
+    ...billColumns,
     {
       field: "action",
       headerName: "",
@@ -70,11 +84,16 @@ export const BookingOrderTable: React.FC = () => {
                   pathname: "/dashboard/orders/order-detail/",
                   query: { id: row?.id },
                 }),
-              label: "Thông tin chi tiết",
+              label: "Nội dung chi tiết",
             },
             {
-              action: handleDelete,
-              label: "Xóa",
+              action: () => onOpen("AddBill"),
+              label: "Thêm phiếu thanh toán",
+              disabled: !defaultValue.current?.unPaid,
+            },
+            {
+              action: () => onOpen("UpdateStatus"),
+              label: "Cập nhật trạng thái",
             },
           ]}
         />
@@ -92,52 +111,44 @@ export const BookingOrderTable: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
-  // METHODS
-  const mutateDelete = useMutation((id: string) => mainOrder.delete(id), {
-    onSuccess: (data: any) => {
-      toast.success(data?.resultMessage);
-
-      refetch();
-    },
-  });
-
-  const handleDelete = useCallback(async () => {
-    const { id, mainOrderCode } = defaultValue.current || {};
-
-    if (confirm("Xác nhận xóa đơn đặt hàng " + mainOrderCode)) {
-      await mutateDelete.mutateAsync(id as string);
-    }
-  }, [defaultValue]);
-
   return (
-    <Paper className="bgContainer p-2 shadow">
-      <Box className="flex gap-4 items-center mb-2">
-        <Box>
+    <Paper className="flex-grow h-full shadow bgContainer p-2">
+      <div className="flex gap-4 items-center mb-2">
+        <div>
           <AddButton
             variant="contained"
-            onClick={() => router.push("/dashboard/orders/order-detail")}
+            onClick={() =>
+              router.push("/dashboard/orders/bill-detail/")
+            }
           >
-            TẠO MỚI ĐƠN ĐẶT HÀNG
+            TẠO MỚI HOÁ ĐƠN
           </AddButton>
-        </Box>
-      </Box>
+        </div>
+      </div>
       <ContextMenuWrapper
-        menuId="order_request_table_menu"
+        menuId="bill_table_menu"
         menuComponent={
-          <Menu className="p-0" id="order_request_table_menu">
+          <Menu className="p-0" id="bill_table_menu">
             <Item
-              id="view-order"
+              id="view-bill"
               onClick={() =>
                 router.push({
-                  pathname: "/dashboard/orders/order-detail/",
+                  pathname: "/dashboard/orders/bill-detail",
                   query: { id: defaultValue.current?.id },
                 })
               }
             >
-              Xem chi tiết
+              Nội dung chi tiết
             </Item>
-            <Item id="delete-order" onClick={handleDelete}>
-              Xóa
+            <Item
+              disabled={!defaultValue.current?.unPaid}
+              id="add-bill"
+              onClick={() => onOpen("AddBill")}
+            >
+              Thêm phiếu thanh toán
+            </Item>
+            <Item id="update-bill" onClick={() => onOpen("UpdateStatus")}>
+              Cập nhật trạng thái
             </Item>
           </Menu>
         }
@@ -156,6 +167,20 @@ export const BookingOrderTable: React.FC = () => {
           }}
         />
       </ContextMenuWrapper>
+
+      <BillListBillDialog
+        onClose={onClose}
+        open={Boolean(dialog.open && dialog.type === "AddBill")}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+      />
+
+      <BillListStatusDialog
+        onClose={onClose}
+        open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+      />
     </Paper>
   );
 };
