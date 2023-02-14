@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { bill, mainOrder as orderApi } from "src/api";
@@ -16,11 +16,7 @@ import {
 } from "~modules-dashboard/components";
 
 export const BillDetailPage: React.FC = () => {
-  const [isUpdate, setIsUpdate] = useState(false);
-
   const { id } = useRouter().query;
-
-  const disabled = !!id && !isUpdate;
 
   const method = useForm<any>({
     mode: "onBlur",
@@ -124,12 +120,12 @@ export const BillDetailPage: React.FC = () => {
       <BillDetailProducts productList={orderDetail?.mainOrderDetail || []} />
 
       <Box className="grid grid-cols-2 gap-4 my-4">
-        <BillDetailReciever disabled={false} />
+        <BillDetailReciever />
 
-        <BillDetailAttach disabled={false} />
+        <BillDetailAttach />
       </Box>
 
-      <BillDetailButtons isUpdate={isUpdate} setIsUpdate={setIsUpdate} />
+      <BillDetailButtons refetch={refetch} />
     </FormProvider>
   );
 };

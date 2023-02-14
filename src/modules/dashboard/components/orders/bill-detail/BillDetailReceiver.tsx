@@ -2,11 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { FormCheckbox, FormInput } from "~modules-core/components";
 
-type TProps = {
-  disabled: boolean;
-};
-
-export const BillDetailReciever: React.FC<TProps> = ({ disabled }) => {
+export const BillDetailReciever: React.FC = () => {
   const { control, watch } = useFormContext();
 
   const { defaultReceiver } = watch();
@@ -32,7 +28,7 @@ export const BillDetailReciever: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập người nhận" },
           }}
           label="Người nhận: "
-          disabled={disabled || defaultReceiver}
+          disabled={defaultReceiver}
         />
 
         <FormInput
@@ -42,7 +38,7 @@ export const BillDetailReciever: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập số điện thoại" },
           }}
           label="Số điện thoại:"
-          disabled={disabled || defaultReceiver}
+          disabled={defaultReceiver}
         />
 
         <FormInput
@@ -52,7 +48,7 @@ export const BillDetailReciever: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập email" },
           }}
           label="Email:"
-          disabled={disabled || defaultReceiver}
+          disabled={defaultReceiver}
         />
 
         <FormInput
@@ -62,7 +58,7 @@ export const BillDetailReciever: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập địa chỉ" },
           }}
           label="Địa chỉ:"
-          disabled={disabled || defaultReceiver}
+          disabled={defaultReceiver}
         />
       </Box>
     </Box>

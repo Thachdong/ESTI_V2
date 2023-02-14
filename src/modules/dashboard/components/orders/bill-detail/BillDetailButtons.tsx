@@ -1,18 +1,11 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  bill,
-  mainOrder,
-  TCreateBill,
-  TUpdateOrder,
-} from "src/api";
+import { bill, mainOrder, TCreateBill } from "src/api";
 import {
   AddButton,
-  BaseButton,
-  EditButton,
   PrintButton,
   SendButton,
   SendMailDialog,
@@ -21,14 +14,10 @@ import { toast } from "~modules-core/toast";
 import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
-  isUpdate: boolean;
-  setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch?: () => void;
 };
 
 export const BillDetailButtons: React.FC<TProps> = ({
-  isUpdate,
-  setIsUpdate,
   refetch,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -40,7 +29,7 @@ export const BillDetailButtons: React.FC<TProps> = ({
 
   const { handleSubmit, watch } = useFormContext();
 
-  const { curatorEmail, status } = watch();
+  const { curatorEmail } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -68,55 +57,10 @@ export const BillDetailButtons: React.FC<TProps> = ({
     const payload = {
       ...rest,
       billDetailCreate: productPayload,
-      attachFile: attachFile.join(",")
+      attachFile: attachFile.join(","),
     };
 
     await mutateCreate.mutateAsync(payload);
-  }, []);
-
-  const mutateUpdate = useMutation(
-    (payload: TUpdateOrder) => mainOrder.update(payload),
-    {
-      onSuccess: (data: any) => {
-        toast.success(data?.resultMessage);
-
-        setIsUpdate(false);
-
-        refetch?.();
-      },
-    }
-  );
-
-  const handleUpdate = useCallback(async (data: any) => {
-    const {
-      id,
-      salesAdminId,
-      salesId,
-      deliveryId,
-      curatorPhone,
-      curatorEmail,
-      receiverFullName,
-      receiverPhone,
-      paymentType,
-      paymentLimit,
-      receiverAddress,
-      requirements,
-    } = data || {};
-
-    await mutateUpdate.mutateAsync({
-      id,
-      salesAdminId,
-      salesId,
-      deliveryId,
-      curatorPhone,
-      curatorEmail,
-      receiverFullName,
-      receiverPhone,
-      paymentType,
-      paymentLimit,
-      receiverAddress,
-      requirements,
-    });
   }, []);
 
   const mutateSendMail = useMutation(
@@ -150,48 +94,21 @@ export const BillDetailButtons: React.FC<TProps> = ({
   );
 
   const renderButtons = useCallback(() => {
-    switch (true) {
-      case !id:
-        return (
-          <AddButton onClick={handleSubmit(handleCreate)}>
-            Tạo báo giá
-          </AddButton>
-        );
-      case !!id && isUpdate:
-        return (
-          <>
-            <BaseButton onClick={handleSubmit(handleUpdate)}>
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              className="!bg-main-1 ml-3"
-              onClick={() => setIsUpdate(false)}
-            >
-              Quay lại
-            </BaseButton>
-          </>
-        );
-      case !!id && !isUpdate:
-        return (
-          <Box className="flex items-center justify-end gap-3">
-            {status <= 2 && (
-              <>
-                <EditButton
-                  tooltipText="Cập nhật"
-                  onClick={() => setIsUpdate(true)}
-                />
-
-                <SendButton onClick={() => setDialog({ open: true })}>
-                  Gửi khách hàng
-                </SendButton>
-              </>
-            )}
-
-            <PrintButton className="!bg-error">In</PrintButton>
-          </Box>
-        );
+    if (!!id) {
+      return (
+        <Box className="flex items-center justify-end gap-3">
+          <SendButton onClick={() => setDialog({ open: true })}>
+            Gửi khách hàng
+          </SendButton>
+          <PrintButton className="!bg-error">In</PrintButton>
+        </Box>
+      );
+    } else {
+      return (
+        <AddButton onClick={handleSubmit(handleCreate)}>Tạo báo giá</AddButton>
+      );
     }
-  }, [id, isUpdate]);
+  }, [id]);
 
   return (
     <Box className="flex justify-end mt-4">
