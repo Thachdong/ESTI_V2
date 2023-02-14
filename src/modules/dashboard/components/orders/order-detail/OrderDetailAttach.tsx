@@ -9,7 +9,7 @@ type TProps = {
   disabled: boolean;
 }
 
-export const QuoteDetailAttach: React.FC<TProps> = ({disabled}) => {
+export const OrderDetailAttach: React.FC<TProps> = ({disabled}) => {
   const { control, setValue, watch } = useFormContext();
 
   const attachFile = watch("attachFile");
@@ -49,7 +49,7 @@ export const QuoteDetailAttach: React.FC<TProps> = ({disabled}) => {
         </List>
       );
     }
-  }, [attachFile, disabled]);
+  }, [attachFile]);
 
   const renderTitle = (loading: boolean) => (
     <InputLabel

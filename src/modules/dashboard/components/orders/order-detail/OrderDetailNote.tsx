@@ -4,24 +4,28 @@ import { FormInput } from "~modules-core/components";
 
 type TProps = {
   disabled: boolean;
-}
+  title: string;
+  controlName: string;
+};
 
-export const QuoteDetailAddition: React.FC<TProps> = ({disabled}) => {
+export const OrderDetailNote: React.FC<TProps> = ({
+  disabled,
+  title,
+  controlName,
+}) => {
   const { control } = useFormContext();
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
-        YÊU CẦU BỔ SUNG
-      </Typography>
+      <Typography className="font-bold uppercase mb-3">{title}</Typography>
 
       <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
         <FormInput
           controlProps={{
-            name: "requirements",
+            name: controlName,
             control: control,
           }}
-          label="Nhập yêu cầu bổ sung"
+          label=""
           multiline
           minRows={3}
           disabled={disabled}

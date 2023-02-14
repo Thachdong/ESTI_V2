@@ -62,5 +62,12 @@ export const preQuote = {
   update: (payload: TUpdatePreQuote) =>
     request.put<TUpdatePreQuote, any>(BASE_URL, payload),
 
-  getProductStock: (query: string[]) => request.get<any>(`${BASE_URL}/GetProductStock?productIds=${query.join("&productIds=")}`, {productIds: query})
+  getProductStock: (query: string[]) =>
+    request.get<any>(
+      `${BASE_URL}/GetProductStock?productIds=${query.join("&productIds=")}`,
+      { productIds: query }
+    ),
+
+  sendMail: (payload: TSendMailProps) =>
+    request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
 };

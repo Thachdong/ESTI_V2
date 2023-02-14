@@ -6,7 +6,7 @@ type TProps = {
   disabled: boolean;
 }
 
-export const QuoteDetailAddition: React.FC<TProps> = ({disabled}) => {
+export const OrderDetailAddition: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (
@@ -15,17 +15,17 @@ export const QuoteDetailAddition: React.FC<TProps> = ({disabled}) => {
         YÊU CẦU BỔ SUNG
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+      <Box className="grid gap-4 bg-white rounded-sm flex-grow p-3">
         <FormInput
           controlProps={{
             name: "requirements",
-            control: control,
+            control,
           }}
-          label="Nhập yêu cầu bổ sung"
+          label=""
           multiline
           minRows={3}
-          disabled={disabled}
           shrinkLabel
+          disabled={disabled}
         />
       </Box>
     </Box>

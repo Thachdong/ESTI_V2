@@ -56,9 +56,10 @@ export const QuoteDetailPage: React.FC = () => {
       attachFile,
       customerId,
       curatorId,
-      receiverAdress,
+      receiverAddress,
       expireDate,
       id,
+      status
     } = preQuoteView;
 
     const documents = JSON.parse(paymentDocument || "[]").map(
@@ -67,13 +68,14 @@ export const QuoteDetailPage: React.FC = () => {
 
     method.reset({
       id,
+      status,
       salesId,
       customerId,
       curatorId,
       requirements,
       smgNote,
       salesNote,
-      receiverAdress,
+      receiverAddress,
       deliverDate,
       expireDate,
       paymentType,

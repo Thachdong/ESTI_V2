@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 type TProps = {
   title: string;
   BgImage: string;
-  value: number;
+  value: number | string;
 };
 
 export const CardReport: React.FC<TProps> = ({

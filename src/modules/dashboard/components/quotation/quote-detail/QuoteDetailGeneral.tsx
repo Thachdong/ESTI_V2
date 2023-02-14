@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { branchs, quoteRequest as quoteRequestApi, staff } from "src/api";
 import {
   FormDatepickerBase,
+  FormInputCreatableBase,
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
@@ -33,11 +34,7 @@ export const QuoteDetailGeneral: React.FC = () => {
   // SIDE EFFECTS
   useEffect(() => {
     if (!!quoteRequestDetail) {
-
       const { preOrderView, preOrderDetailView } = quoteRequestDetail || {};
-
-      console.log(preOrderDetailView);
-      
 
       const { salesId, curatorId, customerId, attachFile, requirements } =
         preOrderView || {};

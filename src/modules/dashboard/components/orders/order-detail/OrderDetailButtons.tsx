@@ -3,11 +3,7 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  preQuote,
-  TCreatePreQuote,
-  TUpdatePreQuote,
-} from "src/api";
+import { mainOrder, TCreateOrder, TUpdateOrder } from "src/api";
 import {
   AddButton,
   BaseButton,
@@ -22,10 +18,10 @@ import { TDefaultDialogState } from "~types/dialog";
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
-  refetch: () => void;
+  refetch?: () => void;
 };
 
-export const QuoteDetailButtons: React.FC<TProps> = ({
+export const OrderDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
@@ -43,29 +39,31 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
   // METHODS
   const mutateCreate = useMutation(
-    (payload: TCreatePreQuote) => preQuote.create(payload),
+    (payload: TCreateOrder) => mainOrder.create(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
 
-        router.push("/dashboard/quotation/quote-list");
+        router.push("/dashboard/orders/booking-order");
       },
     }
   );
 
   const handleCreate = useCallback(async (data: any) => {
     const {
+      smgNote,
+      salesNote,
+      saleAdminNote,
+      deliveryNote,
       attachFile,
+      notFromQuote,
+      defaultReceiver,
       products,
-      isQuoteRequest,
-      paymentType,
-      paymentTypeDescript,
-      paymentDocument,
       ...rest
-    } = data || {};
+    } = data;
 
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
+    if (!notFromQuote && !rest.preQuoteId) {
+      toast.error("Bạn chưa chọn báo giá");
 
       return;
     }
@@ -81,17 +79,14 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
     const payload = {
       ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
-      paymentDocument: paymentDocument.join(","),
-      preQuoteDetail: productPayload,
+      mainOrderDetail: productPayload,
     };
 
     await mutateCreate.mutateAsync(payload);
   }, []);
 
   const mutateUpdate = useMutation(
-    (payload: TUpdatePreQuote) => preQuote.update(payload),
+    (payload: TUpdateOrder) => mainOrder.update(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
@@ -99,59 +94,51 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
         setIsUpdate(false);
 
         refetch?.();
-
-        setDialog({open: false})
       },
     }
   );
 
   const handleUpdate = useCallback(async (data: any) => {
     const {
-      attachFile,
-      products,
-      isQuoteRequest,
+      id,
+      salesAdminId,
+      salesId,
+      deliveryId,
+      curatorPhone,
+      curatorEmail,
+      receiverFullName,
+      receiverPhone,
       paymentType,
-      paymentTypeDescript,
-      paymentDocument,
-      status,
-      ...rest
+      paymentLimit,
+      receiverAddress,
+      requirements,
     } = data || {};
 
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
-
-      return;
-    }
-
-    const productPayload = products.map((prod: any) => ({
-      id: prod?.id,
-      productId: prod?.productId,
-      quantity: prod?.quantity,
-      price: prod?.price,
-      vat: prod?.vat,
-      note: prod?.note,
-    }));
-
-    const payload = {
-      ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
-      paymentDocument: paymentDocument.join(","),
-      preQuoteDetailUpdate: productPayload,
-    };
-
-    await mutateUpdate.mutateAsync(payload);
+    await mutateUpdate.mutateAsync({
+      id,
+      salesAdminId,
+      salesId,
+      deliveryId,
+      curatorPhone,
+      curatorEmail,
+      receiverFullName,
+      receiverPhone,
+      paymentType,
+      paymentLimit,
+      receiverAddress,
+      requirements,
+    });
   }, []);
 
   const mutateSendMail = useMutation(
-    (payload: TSendMailProps) => preQuote.sendMail(payload),
+    (payload: TSendMailProps) => mainOrder.sendMail(payload),
     {
       onSuccess: (response: any) => {
         toast.success(response?.resultMessage);
 
         refetch?.();
 
-        setDialog({open: false});
+        setDialog({ open: false });
       },
     }
   );
@@ -204,6 +191,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
                   tooltipText="Cập nhật"
                   onClick={() => setIsUpdate(true)}
                 />
+
                 <SendButton onClick={() => setDialog({ open: true })}>
                   Gửi khách hàng
                 </SendButton>
@@ -214,7 +202,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
           </Box>
         );
     }
-  }, [id, isUpdate, status]);
+  }, [id, isUpdate]);
 
   return (
     <Box className="flex justify-end mt-4">
