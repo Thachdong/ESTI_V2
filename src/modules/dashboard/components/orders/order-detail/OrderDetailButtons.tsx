@@ -3,12 +3,7 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  mainOrder,
-  preQuote,
-  TCreateOrder,
-  TUpdateOrder,
-} from "src/api";
+import { mainOrder, TCreateOrder, TUpdateOrder } from "src/api";
 import {
   AddButton,
   BaseButton,
@@ -40,7 +35,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
   const { handleSubmit, watch } = useFormContext();
 
-  const {curatorEmail} = watch();
+  const { curatorEmail, status } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -143,7 +138,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({open: false});
+        setDialog({ open: false });
       },
     }
   );
@@ -190,14 +185,18 @@ export const OrderDetailButtons: React.FC<TProps> = ({
       case !!id && !isUpdate:
         return (
           <Box className="flex items-center justify-end gap-3">
-            <EditButton
-              tooltipText="Cập nhật"
-              onClick={() => setIsUpdate(true)}
-            />
+            {status <= 2 && (
+              <>
+                <EditButton
+                  tooltipText="Cập nhật"
+                  onClick={() => setIsUpdate(true)}
+                />
 
-            <SendButton onClick={() => setDialog({ open: true })}>
-              Gửi khách hàng
-            </SendButton>
+                <SendButton onClick={() => setDialog({ open: true })}>
+                  Gửi khách hàng
+                </SendButton>
+              </>
+            )}
 
             <PrintButton className="!bg-error">In</PrintButton>
           </Box>

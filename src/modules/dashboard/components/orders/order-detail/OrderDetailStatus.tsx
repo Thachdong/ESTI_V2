@@ -26,7 +26,7 @@ export const OrderDetailStatus: React.FC<TProps> = ({ currentStatus, refetch }) 
   });
 
   const handleUpdateStatus = useCallback(async() => {
-    if (status >= currentStatus) {
+    if (status <= currentStatus) {
       toast.error("Trạng thái cần cập nhật không hợp lệ !");
 
       return;

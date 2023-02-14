@@ -73,4 +73,6 @@ export const mainOrder = {
       `${BASE_URL}/UpdateStatus?mainOrderId=${payload.id}&status=${payload.status}`,
       {}
     ),
+
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
 };

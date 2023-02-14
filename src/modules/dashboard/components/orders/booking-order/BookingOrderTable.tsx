@@ -1,8 +1,8 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { mainOrder } from "src/api";
 import {
   AddButton,
@@ -13,6 +13,7 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
+import { toast } from "~modules-core/toast";
 import { orderColumns } from "~modules-dashboard/pages/orders/booking-order/orderColumns";
 import { TGridColDef } from "~types/data-grid";
 
@@ -28,7 +29,7 @@ export const BookingOrderTable: React.FC = () => {
   usePathBaseFilter(pagination);
 
   // DATA FETCHING
-  const { data, isLoading, isFetching } = useQuery(
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "mainOrders",
       "loading",
@@ -72,7 +73,7 @@ export const BookingOrderTable: React.FC = () => {
               label: "Thông tin chi tiết",
             },
             {
-              action: () => undefined,
+              action: handleDelete,
               label: "Xóa",
             },
           ]}
@@ -90,6 +91,23 @@ export const BookingOrderTable: React.FC = () => {
 
     defaultValue.current = currentRow;
   };
+
+  // METHODS
+  const mutateDelete = useMutation((id: string) => mainOrder.delete(id), {
+    onSuccess: (data: any) => {
+      toast.success(data?.resultMessage);
+
+      refetch();
+    },
+  });
+
+  const handleDelete = useCallback(async () => {
+    const { id, mainOrderCode } = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa đơn đặt hàng " + mainOrderCode)) {
+      await mutateDelete.mutateAsync(id as string);
+    }
+  }, [defaultValue]);
 
   return (
     <Paper className="bgContainer p-2 shadow">
@@ -118,7 +136,7 @@ export const BookingOrderTable: React.FC = () => {
             >
               Xem chi tiết
             </Item>
-            <Item id="delete-product" onClick={() => undefined}>
+            <Item id="delete-product" onClick={handleDelete}>
               Xóa
             </Item>
           </Menu>

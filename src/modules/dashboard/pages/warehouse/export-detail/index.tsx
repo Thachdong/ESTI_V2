@@ -21,11 +21,12 @@ export const ExportDetailPage = () => {
 
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
-  const { id } = router.query;
+  const { id, fromOrderId } = router.query;
 
   const methods = useForm<any>({
     defaultValues: {
       isDefaultReceiver: true,
+      mainOrderId: fromOrderId
     },
   });
 
