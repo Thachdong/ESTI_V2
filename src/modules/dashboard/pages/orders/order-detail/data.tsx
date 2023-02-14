@@ -1,3 +1,5 @@
+import moment from "moment";
+import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
 export const detailColumns: TGridColDef[] = [
@@ -56,43 +58,45 @@ export const detailColumns: TGridColDef[] = [
 
 export const deliveryColumns: TGridColDef[] = [
   {
-    field: "no1",
+    field: "no",
     headerName: "Lần giao",
-    minWidth: 120,
+    minWidth: 80,
     flex: 1,
   },
   {
-    field: "no2",
+    field: "created",
     headerName: "Ngày gửi hàng",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => moment(row?.created).format("DD/MM/YYYY")
   },
   {
-    field: "no3",
+    field: "warehouseSessionCode",
     headerName: "Mã phiếu xuất kho",
     minWidth: 120,
     flex: 1,
   },
   {
-    field: "no4",
+    field: "importTotalPrice",
     headerName: "Giá trị hàng bán",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => _format.getVND(row?.importTotalPrice)
   },
   {
-    field: "no5",
+    field: "deliveryCode",
     headerName: "Đơn vị vận chuyển",
     minWidth: 120,
     flex: 1,
   },
   {
-    field: "no6",
+    field: "codeVD",
     headerName: "Số vận đơn",
     minWidth: 120,
     flex: 1,
   },
   {
-    field: "no7",
+    field: "exportStatusName",
     headerName: "Trạng thái",
     minWidth: 120,
     flex: 1,
@@ -101,43 +105,47 @@ export const deliveryColumns: TGridColDef[] = [
 
 export const invoiceColumns: TGridColDef[] = [
   {
-    field: "no1",
+    field: "no",
     headerName: "Lần xuất",
-    minWidth: 120,
+    minWidth: 80,
     flex: 1,
   },
   {
-    field: "no2",
+    field: "created",
     headerName: "Ngày hóa đơn",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => moment(row?.created).format("DD/MM/YYYY")
   },
   {
-    field: "no3",
+    field: "billCode",
     headerName: "Mã hóa đơn",
     minWidth: 120,
     flex: 1,
   },
   {
-    field: "no4",
+    field: "nextPaymentDate",
     headerName: "Hạn thanh toán",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => moment(row?.nextPaymentDate).format("DD/MM/YYYY")
   },
   {
-    field: "no5",
+    field: "totalPrice",
     headerName: "Giá trị hóa đơn",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => _format.getVND(row?.totalPrice)
   },
   {
-    field: "no6",
+    field: "paid",
     headerName: "Đã thanh toán",
     minWidth: 120,
     flex: 1,
+    renderCell: ({row}) => _format.getVND(row?.totalPrice)
   },
   {
-    field: "no7",
+    field: "statusName",
     headerName: "Trạng thái",
     minWidth: 120,
     flex: 1,

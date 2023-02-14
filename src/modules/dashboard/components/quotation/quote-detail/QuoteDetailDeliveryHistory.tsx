@@ -1,18 +1,51 @@
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { AddButton, DataTable } from "~modules-core/components";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { exportWarehouse } from "src/api";
+import {
+  AddButton,
+  DataTable,
+  generatePaginationProps,
+} from "~modules-core/components";
+import { defaultPagination } from "~modules-core/constance";
 import { deliveryColumns } from "~modules-dashboard/pages/orders/order-detail/data";
 
 type TProps = {
   orderStatus: number;
+  orderCode: string;
 };
 
 export const QuoteDetailDeliveryHistory: React.FC<TProps> = ({
   orderStatus,
+  orderCode,
 }) => {
   const router = useRouter();
 
+  const [pagination, setPagination] = useState(defaultPagination);
+
   const { id } = router.query;
+
+  // DATA FETCHING
+  const {
+    data: exportHistory,
+    isLoading,
+    isFetching,
+  } = useQuery(
+    ["ExportHistory", orderCode, { ...pagination }],
+    () =>
+      exportWarehouse
+        .getList({ mainOrderCode: orderCode, ...pagination })
+        .then((res) => res.data),
+    {
+      onSuccess: (data) => {
+        setPagination({ ...pagination, total: data.totalItem });
+      },
+      enabled: !!orderCode,
+    }
+  );
+
+  const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <Box className="flex flex-col">
@@ -22,11 +55,19 @@ export const QuoteDetailDeliveryHistory: React.FC<TProps> = ({
 
       <Box className="bg-white grid gap-4 rounded-sm">
         <DataTable
-          rows={[]}
+          rows={
+            exportHistory?.items?.map?.((item: any, index: number) => ({
+              ...item,
+              no: index + 1,
+            })) || []
+          }
           columns={deliveryColumns}
-          autoHeight
           hideSearchbar
-          hideFooter
+          autoHeight
+          gridProps={{
+            loading: isLoading || isFetching,
+            ...paginationProps,
+          }}
         />
       </Box>
 

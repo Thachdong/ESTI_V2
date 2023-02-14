@@ -196,11 +196,15 @@ export const OrderDetailPage: React.FC = () => {
         <Box className="col-span-2">
           <QuoteDetailDeliveryHistory
             orderStatus={orderDetail?.mainOrder?.status}
+            orderCode={orderDetail?.mainOrder?.mainOrderCode}
           />
         </Box>
 
         <Box className="col-span-2">
-          <QuoteDetailInvoiceHistory />
+          <QuoteDetailInvoiceHistory
+            orderStatus={orderDetail?.mainOrder?.status}
+            orderCode={orderDetail?.mainOrder?.mainOrderCode}
+          />
         </Box>
       </Box>
 
