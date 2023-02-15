@@ -253,3 +253,9 @@ export const billStatus = [
   { value: 2, label: "Quá hạn" },
   { value: 3, label: "Hủy" },
 ];
+
+export const purchasePlanStatus = [
+  {value: 0, label: "Chưa thực hiện"},
+  {value: 1, label: "Đã kết chuyển"},
+  {value: 2, label: "Hủy"},
+]
