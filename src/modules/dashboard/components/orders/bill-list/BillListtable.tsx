@@ -180,6 +180,7 @@ export const BillListTable: React.FC = () => {
         open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
         type={dialog.type}
         defaultValue={defaultValue.current}
+        refetch={refetch}
       />
     </Paper>
   );
