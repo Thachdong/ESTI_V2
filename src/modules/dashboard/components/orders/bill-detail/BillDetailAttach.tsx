@@ -4,18 +4,24 @@ import { DeleteButton, FormUploadBase } from "~modules-core/components";
 import AttachFileIcon from "@mui/icons-material/AttachFileRounded";
 import { useCallback } from "react";
 import { quoteRequest } from "src/api";
+import { useRouter } from "next/router";
 
 export const BillDetailAttach: React.FC = () => {
+  const { id } = useRouter().query;
+
   const { control, setValue, watch } = useFormContext();
 
   const attachFile = watch("attachFile");
 
   // METHODS
-  const removeFile = useCallback((file: string) => {
-    const newFiles = attachFile.filter((f: string) => f !== file);
+  const removeFile = useCallback(
+    (file: string) => {
+      const newFiles = attachFile.filter((f: string) => f !== file);
 
-    setValue("attachFile", newFiles);
-  }, [attachFile])
+      setValue("attachFile", newFiles);
+    },
+    [attachFile]
+  );
 
   const renderAttachFile = useCallback(() => {
     if (!attachFile || attachFile?.length === 0) {
@@ -28,18 +34,22 @@ export const BillDetailAttach: React.FC = () => {
       return (
         <List>
           {attachFile?.map((file: string) => (
-            <ListItem key={file} className="flex py-0" disableGutters>
+            <ListItem key={file} className="flex w-full py-0" disableGutters>
               <Typography
                 component="a"
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate"
+                className="flex-grow truncate"
               >
                 {file}
               </Typography>
 
-              <DeleteButton onClick={() => removeFile(file)} className="min-w-[24px] text-error" />
+              <DeleteButton
+                disabled={!!id}
+                onClick={() => removeFile(file)}
+                className="min-w-[24px] text-error"
+              />
             </ListItem>
           ))}
         </List>
@@ -66,15 +76,18 @@ export const BillDetailAttach: React.FC = () => {
 
       <Box className="bg-white rounded-sm flex-grow p-3">
         {renderAttachFile()}
-        <FormUploadBase
-          controlProps={{
-            control,
-            name: "attachFile",
-          }}
-          loader={quoteRequest.uploadFile}
-          renderTitle={renderTitle}
-          multiple
-        />
+
+        {!id && (
+          <FormUploadBase
+            controlProps={{
+              control,
+              name: "attachFile",
+            }}
+            loader={quoteRequest.uploadFile}
+            renderTitle={renderTitle}
+            multiple
+          />
+        )}
       </Box>
     </Box>
   );

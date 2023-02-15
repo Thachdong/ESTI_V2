@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import { bill, mainOrder, TCreateBill } from "src/api";
+import { bill, TCreateBill } from "src/api";
 import {
   AddButton,
   PrintButton,
@@ -15,10 +15,15 @@ import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
   refetch?: () => void;
+  sendMailData: {
+    to: string;
+    status: number;
+  };
 };
 
 export const BillDetailButtons: React.FC<TProps> = ({
   refetch,
+  sendMailData,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -64,7 +69,7 @@ export const BillDetailButtons: React.FC<TProps> = ({
   }, []);
 
   const mutateSendMail = useMutation(
-    (payload: TSendMailProps) => mainOrder.sendMail(payload),
+    (payload: TSendMailProps) => bill.sendMail(payload),
     {
       onSuccess: (response: any) => {
         toast.success(response?.resultMessage);
@@ -97,9 +102,12 @@ export const BillDetailButtons: React.FC<TProps> = ({
     if (!!id) {
       return (
         <Box className="flex items-center justify-end gap-3">
-          <SendButton onClick={() => setDialog({ open: true })}>
-            Gửi khách hàng
-          </SendButton>
+          {sendMailData.status <= 2 && (
+            <SendButton onClick={() => setDialog({ open: true })}>
+              Gửi khách hàng
+            </SendButton>
+          )}
+
           <PrintButton className="!bg-error">In</PrintButton>
         </Box>
       );
@@ -117,7 +125,7 @@ export const BillDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: curatorEmail } as any}
+        defaultValue={{ to: sendMailData?.to } as any}
       />
     </Box>
   );

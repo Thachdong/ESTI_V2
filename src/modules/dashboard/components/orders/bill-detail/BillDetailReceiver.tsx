@@ -1,8 +1,11 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
 import { FormCheckbox, FormInput } from "~modules-core/components";
 
 export const BillDetailReciever: React.FC = () => {
+  const { id } = useRouter().query;
+
   const { control, watch } = useFormContext();
 
   const { defaultReceiver } = watch();
@@ -12,14 +15,17 @@ export const BillDetailReciever: React.FC = () => {
         THÔNG TIN NHẬN HÓA ĐƠN
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded-sm p-3">
-        <FormCheckbox
-          controlProps={{
-            name: "defaultReceiver",
-            control,
-          }}
-          label="Thông tin nhận hóa đơn giống thông tin nhận hàng"
-        />
+      <Box className="bg-white rounded-sm p-3">
+        {!id && (
+          <FormCheckbox
+            controlProps={{
+              name: "defaultReceiver",
+              control,
+            }}
+            label="Thông tin nhận hóa đơn giống thông tin nhận hàng"
+            className="mb-4"
+          />
+        )}
 
         <FormInput
           controlProps={{
@@ -28,7 +34,8 @@ export const BillDetailReciever: React.FC = () => {
             rules: { required: "Phải nhập người nhận" },
           }}
           label="Người nhận: "
-          disabled={defaultReceiver}
+          disabled={defaultReceiver || !!id}
+          className="mb-4"
         />
 
         <FormInput
@@ -38,7 +45,8 @@ export const BillDetailReciever: React.FC = () => {
             rules: { required: "Phải nhập số điện thoại" },
           }}
           label="Số điện thoại:"
-          disabled={defaultReceiver}
+          disabled={defaultReceiver || !!id}
+          className="mb-4"
         />
 
         <FormInput
@@ -48,7 +56,8 @@ export const BillDetailReciever: React.FC = () => {
             rules: { required: "Phải nhập email" },
           }}
           label="Email:"
-          disabled={defaultReceiver}
+          disabled={defaultReceiver || !!id}
+          className="mb-4"
         />
 
         <FormInput
@@ -58,7 +67,8 @@ export const BillDetailReciever: React.FC = () => {
             rules: { required: "Phải nhập địa chỉ" },
           }}
           label="Địa chỉ:"
-          disabled={defaultReceiver}
+          disabled={defaultReceiver || !!id}
+          
         />
       </Box>
     </Box>

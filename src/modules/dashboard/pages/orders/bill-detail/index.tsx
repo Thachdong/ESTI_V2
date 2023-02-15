@@ -11,8 +11,11 @@ import {
   BillDetailCurator,
   BillDetailCustomer,
   BillDetailGeneral,
+  BillDetailGeneralView,
+  BillDetailPaymentStatus,
   BillDetailProducts,
   BillDetailReciever,
+  BillDetailRecieverView,
   BillDetailStatus,
 } from "~modules-dashboard/components";
 
@@ -45,15 +48,24 @@ export const BillDetailPage: React.FC = () => {
 
   // FETCH ORDER DETAIL
   const { data: orderDetail } = useQuery(
-    ["orderDetail", mainOrderId],
-    () => orderApi.getById(mainOrderId).then((res) => res.data),
+    ["orderDetail", mainOrderId, billDetail],
+    () => {
+      if (!!id) {
+        return orderApi
+          .getById(billDetail?.BillView?.bill?.mainOrderId)
+          .then((res) => res.data);
+      } else {
+        return orderApi.getById(mainOrderId).then((res) => res.data);
+      }
+    },
     {
-      enabled: !!mainOrderId,
+      enabled: !!mainOrderId || !!billDetail?.BillView?.bill?.mainOrderId,
     }
   );
 
   const { mainOrder = {} } = orderDetail || {};
 
+  // METHODS
   const handleCoppyReceiver = useCallback(() => {
     const { receiverFullName, receiverPhone, receiverEmail, receiverAddress } =
       mainOrder;
@@ -95,18 +107,32 @@ export const BillDetailPage: React.FC = () => {
 
   return (
     <FormProvider {...method}>
-      {!!id && (
-        <BillDetailStatus
-          currentStatus={BillView.bill?.status}
-          refetch={refetch}
+      {!!id ? (
+        <Box className="grid grid-cols-1 gap-y-4 mb-4">
+          <BillDetailStatus
+            currentStatus={BillView.bill?.status}
+            refetch={refetch}
+          />
+
+          <BillDetailGeneralView
+            data={{
+              orderCode: BillView?.mainOrder?.mainOrderCode,
+              salesAdminName: BillView?.mainOrder?.salesAdminName,
+              branchCode: BillView?.mainOrder?.branchCode,
+              billCode: BillView?.bill?.billCode,
+              billNumber: BillView?.bill?.billNumber,
+              billCreatedAt: BillView?.bill?.created,
+            }}
+          />
+        </Box>
+      ) : (
+        <BillDetailGeneral
+          data={{
+            saleAdmin: mainOrder.salesAdminCode,
+            branchCode: mainOrder.branchCode,
+          }}
         />
       )}
-      <BillDetailGeneral
-        data={{
-          saleAdmin: mainOrder.salesAdminCode,
-          branchCode: mainOrder.branchCode,
-        }}
-      />
 
       <Box className="grid grid-cols-2 gap-4 my-4">
         <BillDetailCustomer
@@ -131,12 +157,33 @@ export const BillDetailPage: React.FC = () => {
       <BillDetailProducts productList={orderDetail?.mainOrderDetail || []} />
 
       <Box className="grid grid-cols-2 gap-4 my-4">
-        <BillDetailReciever />
+        {!!id ? (
+          <BillDetailRecieverView
+            data={{
+              name: BillView?.bill?.billRecipientName,
+              phone: BillView?.bill?.billRecipientPhone,
+              email: BillView?.bill?.billRecipientEmail,
+              address: BillView?.bill?.billRecipientAddress,
+            }}
+          />
+        ) : (
+          <BillDetailReciever />
+        )}
 
-        <BillDetailAttach />
+        <Box>
+          <BillDetailAttach />
+          {!!id && (
+            <BillDetailPaymentStatus
+              data={{
+                paid: BillView?.paid,
+                unPaid: BillView?.collectedPaid,
+              }}
+            />
+          )}
+        </Box>
       </Box>
 
-      <BillDetailButtons refetch={refetch} />
+      <BillDetailButtons refetch={refetch} sendMailData={{to: BillView?.bill?.billRecipientEmail, status: BillView?.bill?.status}} />
     </FormProvider>
   );
 };

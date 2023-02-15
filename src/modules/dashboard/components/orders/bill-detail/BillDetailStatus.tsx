@@ -62,7 +62,7 @@ export const BillDetailStatus: React.FC<TProps> = ({
 
       <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
         <FormSelect
-          options={billStatus}
+          options={billStatus.filter(s => s.value >= currentStatus)}
           controlProps={{
             control,
             name: "status",

@@ -87,7 +87,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         color: "#747474",
       },
     },
-    // ...inputProps,
+    ...inputProps,
   };
 
   const defaultSx: any = shrinkLabel

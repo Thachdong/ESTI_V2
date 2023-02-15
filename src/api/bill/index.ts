@@ -1,3 +1,4 @@
+import { instance } from "../instance";
 import { request } from "../method";
 
 export type TBillUpdateStatus = {
@@ -53,4 +54,9 @@ export const bill = {
 
   addBill: (payload: TBillAddbill) =>
     request.post<TBillAddbill, any>("PaymentHistory", payload),
+
+  sendMail: (payload: TSendMailProps) => {
+    instance.defaults.timeout = undefined;
+    return request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload)
+  },
 };

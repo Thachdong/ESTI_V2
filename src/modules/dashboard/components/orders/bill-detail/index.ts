@@ -7,3 +7,6 @@ export * from "./BillDetailReceiver";
 export * from "./BillDetailDialog";
 export * from "./BillDetailButtons";
 export * from "./BillDetailStatus";
+export * from "./BillDetailGeneralView";
+export * from "./BillDetailPaymentStatus";
+export * from "./BillDetailRecieverView";

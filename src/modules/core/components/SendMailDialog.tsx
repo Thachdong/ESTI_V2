@@ -61,6 +61,7 @@ export const SendMailDialog: React.FC<TProps> = ({
           <Box className="flex-grow">
             <FormInputCreatableBase
               callback={(chips) => handleSendList("cc", chips)}
+              defaultChips={["ketoan@esti.vn"]}
             />
           </Box>
         </Box>
