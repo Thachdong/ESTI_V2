@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
-import { bookingOrder, warehouse } from "src/api";
+import { mainOrder, warehouse } from "src/api";
 import { FormCheckbox } from "~modules-core/components";
 import {
   ExportDetailButtonsBox,
@@ -26,7 +26,6 @@ export const ExportDetailPage = () => {
   const methods = useForm<any>({
     defaultValues: {
       isDefaultReceiver: true,
-      mainOrderId: fromOrderId
     },
   });
 
@@ -40,7 +39,7 @@ export const ExportDetailPage = () => {
   const { data: orderDetailData } = useQuery(
     ["orderDetail", { orderId }],
     () =>
-      bookingOrder.getById(orderId).then((res) => {
+      mainOrder.getById(orderId).then((res) => {
         const { mainOrderDetail = [], mainOrder = {} } = res.data || {};
 
         // REMOVE ALL PRODUCTS WITH STATUS 2 - ĐÃ HOÀN THÀNH
@@ -122,6 +121,10 @@ export const ExportDetailPage = () => {
       productList: productOrderDetail,
     });
   }, [transactionData]);
+
+  useEffect(() => {
+    setValue("mainOrderId", fromOrderId);
+  }, [fromOrderId])
 
   // DOM RENDERING
   return (

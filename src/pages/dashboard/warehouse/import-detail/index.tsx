@@ -8,7 +8,7 @@ Index.displayName = "Nhập kho";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  pageName: "warehouse-import-detail"
+  pageName: "warehouse-import-detail-page"
 };
 
 export default Index;

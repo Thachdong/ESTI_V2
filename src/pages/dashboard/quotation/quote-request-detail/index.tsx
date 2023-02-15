@@ -8,7 +8,7 @@ Index.displayName = "Tạo yêu cầu báo giá";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-    title: "BÁO GIÁ / TẠO YÊU CẦU BÁO GIÁ"
+    pageName: "quote-request-detail-page"
   }
 
 export default Index;

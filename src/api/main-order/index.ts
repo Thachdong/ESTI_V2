@@ -49,6 +49,11 @@ export type TUpdateOrder = {
   requirements: string;
 };
 
+export type TUpdateOrderStatus = {
+  id: string;
+  status: number;
+}
+
 const BASE_URL = "MainOrder";
 
 export const mainOrder = {
@@ -68,11 +73,10 @@ export const mainOrder = {
   sendMail: (payload: TSendMailProps) =>
     request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
 
-  updateStatus: (payload: {id: string, status: number}) =>
+  updateStatus: (payload: TUpdateOrderStatus) =>
     request.post<any, any>(
       `${BASE_URL}/UpdateStatus?mainOrderId=${payload.id}&status=${payload.status}`,
       {}
     ),
-
-  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
+      
 };
