@@ -20,7 +20,7 @@ import {
 } from "~modules-dashboard/components";
 
 export const BillDetailPage: React.FC = () => {
-  const { id } = useRouter().query;
+  const { id, fromOrderId } = useRouter().query;
 
   const method = useForm<any>({
     mode: "onBlur",
@@ -104,6 +104,12 @@ export const BillDetailPage: React.FC = () => {
   useEffect(() => {
     defaultReceiver && handleCoppyReceiver();
   }, [defaultReceiver]);
+
+  useEffect(() => {
+    console.log(fromOrderId);
+    
+    !!fromOrderId && setValue("mainOrderId", fromOrderId)
+  }, [fromOrderId])
 
   return (
     <FormProvider {...method}>
