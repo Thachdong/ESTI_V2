@@ -4,9 +4,14 @@ import { LoadingButton } from "@mui/lab";
 import styles from "~modules-dashboard/styles/layout/header.module.css";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import { warehouse } from "src/api";
-import { WarehouseExportDetailTitle, WarehouseImportDetailTitle } from "./titles";
+import {
+  BillDetailTitle,
+  OrderDetailTitle,
+  QuoteDetailTitle,
+  QuoteRequestDetailTitle,
+  WarehouseExportDetailTitle,
+  WarehouseImportDetailTitle,
+} from "./titles";
 import { useCallback } from "react";
 
 type TProps = {
@@ -18,64 +23,24 @@ export const Header: React.FC<TProps> = ({ data }) => {
 
   const router = useRouter();
 
-  const { id } = router.query;
-
-  const { data: warehouseImportDetail } = useQuery(
-    ["ImportWarehouseDetail_" + id],
-    () =>
-      warehouse
-        .getImportSessionById(id as string)
-        .then((res) => res.data),
-    {
-      enabled: pageName === "warehouse-import-detail" && !!id,
-    }
-  );
-
-  const { data: warehouseExportDetail } = useQuery(
-    ["warehouseExportDetail_" + id],
-    () =>
-      warehouse
-        .getExportSessionById(id as string)
-        .then((res) => res.data),
-    {
-      enabled: pageName === "warehouse-export-detail" && !!id,
-    }
-  );
-
   const renderTitle = useCallback(() => {
-    switch(pageName) {
-      case "warehouse-export-detail":
-        return <WarehouseExportDetailTitle />
-      case "warehouse-import-detail":
-        return <WarehouseImportDetailTitle />
+    switch (pageName) {
+      case "warehouse-export-detail-page":
+        return <WarehouseExportDetailTitle />;
+      case "warehouse-import-detail-page":
+        return <WarehouseImportDetailTitle />;
+      case "quote-request-detail-page":
+        return <QuoteRequestDetailTitle />;
+      case "quote-detail-page":
+        return <QuoteDetailTitle />;
+      case "order-detail-page":
+        return <OrderDetailTitle />;
+      case "bill-detail-page":
+        return <BillDetailTitle />;
       default:
         return title;
     }
-  }, [data])
-
-  let extractedTitle = "";
-
-  switch (pageName) {
-    case "warehouse-export-detail":
-      if (id) {
-        extractedTitle = `XUẤT KHO / CHI TIẾT XUẤT KHO / ${
-          warehouseExportDetail?.productOrder?.code || ""
-        }`;
-      } else {
-        extractedTitle = "XUẤT KHO / TẠO XUẤT KHO";
-      }
-      break;
-
-    case "warehouse-import-detail":
-      if (id) {
-        extractedTitle = `NHẬP KHO / CHI TIẾT / ${
-          warehouseImportDetail?.warehouseSession?.code || ""
-        }`;
-      } else {
-        extractedTitle = "NHẬP KHO / TẠO NHẬP KHO";
-      }
-      break;
-  }
+  }, [data]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -93,19 +58,6 @@ export const Header: React.FC<TProps> = ({ data }) => {
         className="flex-grow pl-[64px] text-xl font-medium uppercase"
       >
         {renderTitle()}
-        {/* {title ? (
-          <>
-            <div className="flex items-center">
-              <span>{title.split("/")[0]}</span>
-              {title.split("/")[1] ? (
-                <span className="text-[#DDDDDD] !font-normal px-2">/</span>
-              ) : null}
-              <span className="text-main-2">{title.split("/")[1]}</span>
-            </div>
-          </>
-        ) : (
-          <>{extractedTitle}</>
-        )} */}
       </Typography>
 
       <LoadingButton

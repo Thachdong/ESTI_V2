@@ -46,7 +46,7 @@ export type TUpdatePreQuoteProduct = Omit<
 const BASE_URL = "PreQuote";
 
 export const preQuote = {
-  getList: (params: any) => request.getPagination(BASE_URL, { ...params }),
+  getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 

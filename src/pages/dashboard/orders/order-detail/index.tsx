@@ -8,7 +8,7 @@ Index.displayName = "Tạo đơn đặt hàng";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  title: "ĐƠN HÀNG/ TẠO ĐƠN ĐẶT HÀNG"
+  pageName: "order-detail-page"
 };
 
 export default Index;
