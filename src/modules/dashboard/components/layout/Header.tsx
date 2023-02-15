@@ -6,6 +6,8 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { warehouse } from "src/api";
+import { WarehouseExportDetailTitle, WarehouseImportDetailTitle } from "./titles";
+import { useCallback } from "react";
 
 type TProps = {
   data: any;
@@ -39,6 +41,17 @@ export const Header: React.FC<TProps> = ({ data }) => {
       enabled: pageName === "warehouse-export-detail" && !!id,
     }
   );
+
+  const renderTitle = useCallback(() => {
+    switch(pageName) {
+      case "warehouse-export-detail":
+        return <WarehouseExportDetailTitle />
+      case "warehouse-import-detail":
+        return <WarehouseImportDetailTitle />
+      default:
+        return title;
+    }
+  }, [data])
 
   let extractedTitle = "";
 
@@ -79,7 +92,8 @@ export const Header: React.FC<TProps> = ({ data }) => {
         variant="h5"
         className="flex-grow pl-[64px] text-xl font-medium uppercase"
       >
-        {title ? (
+        {renderTitle()}
+        {/* {title ? (
           <>
             <div className="flex items-center">
               <span>{title.split("/")[0]}</span>
@@ -91,7 +105,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
           </>
         ) : (
           <>{extractedTitle}</>
-        )}
+        )} */}
       </Typography>
 
       <LoadingButton
