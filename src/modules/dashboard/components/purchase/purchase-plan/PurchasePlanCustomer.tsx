@@ -6,7 +6,11 @@ import { suppliers } from "src/api";
 import { FormInputBase, FormSelectAsync } from "~modules-core/components";
 import { productTypes } from "~modules-core/constance";
 
-export const PurchasePlanCustomer: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const PurchasePlanCustomer: React.FC<TProps> = ({disabled}) => {
   const [supplier, setSupplier] = useState<any>();
 
   const { control } = useFormContext();
@@ -43,6 +47,7 @@ export const PurchasePlanCustomer: React.FC = () => {
             callback={(opt) => setSupplier(opt)}
             label="Chọn nhà cung cấp:"
             labelKey="supplierCode"
+            disabled={disabled}
           />
 
           <FormInputBase

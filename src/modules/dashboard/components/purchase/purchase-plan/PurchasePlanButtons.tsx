@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { purchasePlan } from "src/api";
+import { purchasePlan, TCreatePurchasePlan, TUpdatePurchasePlan } from "src/api";
 import { BaseButton } from "~modules-core/components";
 
 type TProps = {
@@ -23,7 +23,7 @@ export const PurchasePlanButtons: React.FC<TProps> = ({
 
   // METHODS
   const muatateCreate = useMutation(
-    (payload: any) => purchasePlan.create(payload),
+    (payload: TCreatePurchasePlan[]) => purchasePlan.create(payload),
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
@@ -36,11 +36,32 @@ export const PurchasePlanButtons: React.FC<TProps> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    await muatateCreate.mutateAsync([{ ...data }]);
+    // case type === clone => remove id
+    const {id, ...rest} = data || {};
+    await muatateCreate.mutateAsync([{ ...rest }]);
+  }, []);
+
+  const muatateUpdate = useMutation(
+    (payload: TUpdatePurchasePlan) => purchasePlan.update(payload),
+    {
+      onSuccess: (data: any) => {
+        toast.success(data?.resultMessage);
+
+        refetch?.();
+
+        setIsUpdate(false),
+
+        onClose();
+      },
+    }
+  );
+
+  const handleUpdate = useCallback(async (data: any) => {
+    await muatateUpdate.mutateAsync({...data});
   }, []);
 
   switch (true) {
-    case type === "Add":
+    case type === "Add" || type === "Clone":
       return (
         <>
           <BaseButton className="mr-2" onClick={handleSubmit(handleCreate)}>
@@ -70,7 +91,7 @@ export const PurchasePlanButtons: React.FC<TProps> = ({
       return (
         <>
           <BaseButton
-            onClick={handleSubmit((data) => console.log("cập nhật"))}
+            onClick={handleSubmit(handleUpdate)}
             className="mr-2"
           >
             Cập nhật

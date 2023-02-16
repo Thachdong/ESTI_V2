@@ -12,7 +12,11 @@ import {
 } from "~modules-core/components";
 import { VAT } from "~modules-core/constance";
 
-export const PurchasePlanProduct: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -65,6 +69,7 @@ export const PurchasePlanProduct: React.FC = () => {
           valueKey="productId"
           options={productBySupplier || []}
           callback={callback}
+          disabled={disabled}
         />
 
         <FormSelect
@@ -75,6 +80,7 @@ export const PurchasePlanProduct: React.FC = () => {
           }}
           options={VAT}
           label="Thuế GTGT:"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -87,6 +93,7 @@ export const PurchasePlanProduct: React.FC = () => {
           valueKey="productId"
           options={productBySupplier || []}
           callback={callback}
+          disabled={disabled}
         />
 
         <FormInputNumber
@@ -96,6 +103,7 @@ export const PurchasePlanProduct: React.FC = () => {
             rules: { required: "Phải nhập đơn giá" },
           }}
           label="Đơn giá:"
+          disabled={disabled}
         />
 
         <FormInputBase
@@ -111,6 +119,7 @@ export const PurchasePlanProduct: React.FC = () => {
             rules: { required: "Phải nhập số lượng" },
           }}
           label="Số lượng:"
+          disabled={disabled}
         />
         <Box>
           <FormInputBase
@@ -144,6 +153,7 @@ export const PurchasePlanProduct: React.FC = () => {
           label="Ghi chú:"
           multiline
           minRows={6}
+          disabled={disabled}
         />
       </Box>
     </Box>

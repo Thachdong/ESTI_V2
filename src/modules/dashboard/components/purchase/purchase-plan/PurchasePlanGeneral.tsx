@@ -3,7 +3,11 @@ import { useFormContext } from "react-hook-form";
 import { branchs } from "src/api";
 import { FormSelectAsync } from "~modules-core/components";
 
-export const PurchasePlanGeneral: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const PurchasePlanGeneral: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (
@@ -21,6 +25,7 @@ export const PurchasePlanGeneral: React.FC = () => {
           }}
           label="Chọn chi nhánh:"
           labelKey="code"
+          disabled={disabled}
         />
       </Box>
     </Box>

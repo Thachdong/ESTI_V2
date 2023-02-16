@@ -4,13 +4,16 @@ export type TCreatePurchasePlan = {
   branchId: string;
   supplierId: string;
   productId: string;
-  referencePriceId: string;
   quantity: number;
   price: number;
   vat: string;
   totalPrice: number;
   note: string;
 };
+
+export type TUpdatePurchasePlan = TCreatePurchasePlan & {
+  id: string;
+}
 
 const BASE_URL = "NeedToBuy";
 
@@ -19,8 +22,11 @@ export const purchasePlan = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
-  create: (payload: any) =>
-    request.post<any, any>(BASE_URL, payload),
+  create: (payload: TCreatePurchasePlan[]) =>
+    request.post<TCreatePurchasePlan[], any>(BASE_URL, payload),
 
-  delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
+  update: (payload: TUpdatePurchasePlan) =>
+    request.put<TUpdatePurchasePlan, any>(BASE_URL, payload),
+
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
 };
