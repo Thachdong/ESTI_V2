@@ -5,7 +5,7 @@ import { BillListStatistic, BillListTable } from "~modules-dashboard/components"
 
 export const BillListPage: React.FC = () => {
   return (
-    <Box className="flex flex-col h-full">
+    <Box className="flex flex-col h-[calc(100vh + 200px)] xl:h-full">
       <BillListStatistic />
 
       <BillListTable />

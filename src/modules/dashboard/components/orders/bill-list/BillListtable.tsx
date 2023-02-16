@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
@@ -112,9 +112,9 @@ export const BillListTable: React.FC = () => {
   };
 
   return (
-    <Paper className="flex-grow h-full shadow bgContainer p-2">
-      <div className="flex gap-4 items-center mb-2">
-        <div>
+    <Paper className="flex-grow !h-screen shadow bgContainer p-2">
+      <Box className="flex gap-4 items-center mb-2">
+        <Box>
           <AddButton
             variant="contained"
             onClick={() =>
@@ -123,8 +123,8 @@ export const BillListTable: React.FC = () => {
           >
             TẠO MỚI HOÁ ĐƠN
           </AddButton>
-        </div>
-      </div>
+        </Box>
+      </Box>
       <ContextMenuWrapper
         menuId="bill_table_menu"
         menuComponent={

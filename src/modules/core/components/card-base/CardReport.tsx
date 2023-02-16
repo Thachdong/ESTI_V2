@@ -42,9 +42,9 @@ export const CardReport: React.FC<TProps> = ({
           alt="Thẻ báo cáo"
         />
       </div>
-      <div className="absolute z-40 top-4 left-5 grid font-bold uppercase">
-        <span className="mb-[16px] text-base">{title}</span>
-        <span className="text-3xl">{value}</span>
+      <div className="absolute z-40 top-3 left-5 grid font-bold uppercase">
+        <span className="mb-3 text-base truncate">{title}</span>
+        <span className="text-2xl">{value}</span>
       </div>
     </div>
   );
