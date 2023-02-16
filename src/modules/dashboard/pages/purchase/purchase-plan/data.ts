@@ -13,7 +13,7 @@ export const purchasePlanColumns: TGridColDef[] = [
     sortDescValue: 3,
     sortAscValue: 15,
     filterKey: "createdDate",
-    type: "date"
+    type: "date",
   },
   {
     field: "branchCode",
@@ -80,7 +80,7 @@ export const purchasePlanColumns: TGridColDef[] = [
     sortAscValue: 23,
     filterKey: "status",
     type: "select",
-    options: purchasePlanStatus
+    options: purchasePlanStatus,
   },
 ];
 
@@ -104,6 +104,11 @@ export const dialogColumns: TGridColDef[] = [
     renderCell: ({ row }) => _format.getVND(row?.price),
   },
   { field: "vat", headerName: "VAT %", minWidth: 75 },
-  { field: "totalPrice", headerName: "THÀNH TIỀN", minWidth: 120 },
+  {
+    field: "totalPrice",
+    headerName: "THÀNH TIỀN",
+    minWidth: 120,
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
+  },
   { field: "note", headerName: "GHI CHÚ", minWidth: 120 },
 ];

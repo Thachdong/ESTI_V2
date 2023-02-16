@@ -38,6 +38,7 @@ export const products = {
   update: (payload: TProduct) => request.put<TProduct, any>(BASE_URL, payload),
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
   getById: (id: string) => request.get<TProduct>(`${BASE_URL}/${id}`),
+  getBySupplierId: (id: string) => request.get<TProduct[]>(`${BASE_URL}/ProductInSupplier?supplierId=${id}`),
 
   // DANH SÁCH NHÓM SẢN PHẨM
   getProductGroups: () => request.get<any>(BASE_URL + "/ProductGroupList"),

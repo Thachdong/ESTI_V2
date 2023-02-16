@@ -19,8 +19,8 @@ export const purchasePlan = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
-  create: (payload: TCreatePurchasePlan) =>
-    request.post<TCreatePurchasePlan, any>(BASE_URL, payload),
+  create: (payload: any) =>
+    request.post<any, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`)
 };
