@@ -10,12 +10,12 @@ export const PurchaseDetailTerms = () => {
   const { control } = useFormContext();
 
   return (
-    <Box className="bg-white p-4 mb-4">
-      <Typography className="font-semibold">
+    <Box className="flex flex-col mb-4">
+      <Typography className="font-bold uppercase mb-3">
         Điều khoản của đơn đặt hàng/ Terms and conditions of purchasing order:
       </Typography>
 
-      <List className="p-0">
+      <List className="bg-white rounded-sm flex-grow p-3">
         <ListItem className="px-2 pb-0">
           - Tổng cộng tiền thanh toán đã bao đồm thuế GTGT và chi phí giao hàng/
           Total amount are included VAT and delivery fee

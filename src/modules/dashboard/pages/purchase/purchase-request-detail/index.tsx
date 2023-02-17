@@ -1,27 +1,37 @@
-import { Box, List, ListItem, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useQueries } from "react-query";
-import { branchs, staff, suppliers } from "src/api";
+import { useQuery } from "react-query";
+import { purchaseOrder } from "src/api";
 import {
-  FormDatepicker,
-  FormDatepickerBase,
-  FormInput,
-  FormInputBase,
-  FormSelect,
-  FormSelectAsync,
-} from "~modules-core/components";
-import {
+  PurchaseDetailGeneral,
+  PurchaseDetailImplement,
+  PurchaseDetailSupplier,
   PurchaseDetailTable,
   PurchaseDetailTerms,
 } from "~modules-dashboard/components";
+import { PurchaseDetailButtons } from "~modules-dashboard/components/purchase/purchase-request-detail/PurchaseDetailButtons";
 
 export const PurchaseRequestDetailPage = () => {
+  const [isUpdate, setIsUpdate] = useState(false);
+
   const [supplier, setSupplier] = useState<any>();
+
+  const {id} = useRouter().query;
 
   const method = useForm();
 
   const { control, setValue, watch } = method;
+
+   // DATA FETCHING
+   const { data: PurchaseRequestDetail, refetch } = useQuery(
+    ["QuoteDetail", id],
+    () => purchaseOrder.getById(id as string).then((res) => res.data),
+    {
+      enabled: !!id,
+    }
+  );
 
   useEffect(() => {
     if (!!supplier) {
@@ -33,140 +43,20 @@ export const PurchaseRequestDetailPage = () => {
     }
   }, [supplier]);
 
-  const selectOptions = useQueries([
-    {
-      queryKey: "SaleAdminList",
-      queryFn: () => staff.getListSaleAdmin().then((res) => res.data),
-    },
-    {
-      queryKey: "DeliveryStaffList",
-      queryFn: () => staff.getListDeliveryStaff().then((res) => res.data),
-    },
-  ]);
-
   return (
     <Box className="container-center">
       <FormProvider {...method}>
-        <Box className="bg-white p-4 my-4">
-          <Typography className="font-semibold text-sm mb-2">
-            THÔNG TIN CHUNG
-          </Typography>
-          <Box className="grid grid-cols-2 gap-4">
-            <FormSelectAsync
-              fetcher={branchs.getList}
-              controlProps={{
-                name: "branchId",
-                control,
-              }}
-              label="Chọn chi nhánh"
-              labelKey="code"
-            />
-          </Box>
-        </Box>
+        <PurchaseDetailGeneral disabled={false} />
 
-        <Box className="grid grid-cols-2 gap-4 mb-4">
-          <Box className="bg-white p-4">
-            <Typography className="font-semibold text-sm mb-2">
-              THÔNG TIN NHÀ CUNG CẤP
-            </Typography>
+        <PurchaseDetailSupplier disabled={false} />
 
-            <Box className="grid gap-4">
-              <FormSelectAsync
-                fetcher={suppliers.getList}
-                controlProps={{
-                  name: "supplierId",
-                  control,
-                }}
-                callback={(opt) => setSupplier(opt)}
-                label="Chọn nhà cung cấp"
-                labelKey="supplierCode"
-              />
-
-              <FormInputBase
-                label="Địa chỉ"
-                value={supplier?.address}
-                disabled
-              />
-
-              <FormInputBase
-                label="Mã số thuế"
-                value={supplier?.taxCode}
-                disabled
-              />
-
-              <FormInputBase
-                label="Nhóm sản phẩm cung cấp"
-                value={supplier?.address}
-                disabled
-              />
-            </Box>
-          </Box>
-
-          <Box className="bg-white p-4">
-            <Typography className="font-semibold text-sm mb-2">
-              THÔNG TIN LIÊN HỆ
-            </Typography>
-
-            <Box className="grid gap-4">
-              <FormInputBase
-                label="Người phụ trách"
-                value={supplier?.curatorName}
-                disabled
-              />
-
-              <FormInputBase
-                label="Chức vụ"
-                value={supplier?.curatorPositionName}
-                disabled
-              />
-
-              <FormInputBase
-                label="Điện thoại"
-                value={supplier?.curatorPhone}
-                disabled
-              />
-
-              <FormInputBase
-                label="Email"
-                value={supplier?.curatorEmail}
-                disabled
-              />
-            </Box>
-          </Box>
-        </Box>
-
-        <Box className="bg-white p-4 mb-4">
-          <Typography className="font-semibold text-sm mb-2">
-            PHÂN CÔNG VIỆC
-          </Typography>
-          <Box className="grid grid-cols-2 gap-4">
-            <FormSelect
-              options={selectOptions[0].data || []}
-              controlProps={{
-                name: "salesAdminId",
-                control,
-                rules: { required: "Phải chọn admin phụ trách" },
-              }}
-              label="Admin phụ trách"
-              labelKey="fullName"
-            />
-
-            <FormSelect
-              options={selectOptions[1].data || []}
-              controlProps={{
-                name: "deliveryId",
-                control,
-                rules: { required: "Phải chọn giao nhận phụ trách" },
-              }}
-              label="Giao nhận phụ trách"
-              labelKey="fullName"
-            />
-          </Box>
-        </Box>
+        <PurchaseDetailImplement disabled={false} />
 
         <PurchaseDetailTable />
 
         <PurchaseDetailTerms />
+
+        <PurchaseDetailButtons isUpdate={isUpdate} setIsUpdate={setIsUpdate} refetch={refetch} />
       </FormProvider>
     </Box>
   );
