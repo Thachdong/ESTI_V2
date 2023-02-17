@@ -146,6 +146,10 @@ export const menu = [
         title: "Chi nhánh",
         link: "settings/branch-config",
       },
+      {
+        title: "Hình thức thanh toán",
+        link: "settings/payment-type",
+      },
     ],
   },
 ];
