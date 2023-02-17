@@ -1,5 +1,7 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
+import { useQueries } from "react-query";
+import { documentType, paymentDocument, paymentType } from "src/api";
 import {
   FormDatepicker,
   FormInput,
@@ -9,6 +11,17 @@ import {
 export const PurchaseDetailTerms = () => {
   const { control } = useFormContext();
 
+  const selectOptions = useQueries([
+    {
+      queryKey: "paymentTypes",
+      queryFn: () => paymentType.getList().then((res) => res.data),
+    },
+    {
+      queryKey: "paymentDocument",
+      queryFn: () => paymentDocument.getList().then((res) => res.data),
+    },
+  ]);
+  
   return (
     <Box className="flex flex-col mb-4">
       <Typography className="font-bold uppercase mb-3">
@@ -24,13 +37,14 @@ export const PurchaseDetailTerms = () => {
         <ListItem className="px-2 pb-0">
           - Hình thức thanh toán/ Payment term:
           <FormSelect
-            options={[]}
+            options={selectOptions[0].data || []}
             label=""
             controlProps={{
               control,
-              name: "paymentMethod",
+              name: "paymentType",
             }}
             className="min-w-[200px] ml-2"
+            labelKey="paymentTypeName"
           />
         </ListItem>
 
@@ -56,19 +70,23 @@ export const PurchaseDetailTerms = () => {
             }}
             className="min-w-[200px] ml-2"
             fullWidth={false}
+            shrinkLabel
           />
         </ListItem>
 
         <ListItem className="px-2 pb-0">
           - Chứng từ thanh toán / Payment documents:
           <FormSelect
-            options={[]}
+            options={selectOptions[1].data || []}
             label=""
             controlProps={{
               control,
               name: "paymentDocument",
             }}
             className="min-w-[200px] ml-2"
+            shrinkLabel
+            multiple
+            labelKey="paymentDocumentName"
           />
         </ListItem>
       </List>

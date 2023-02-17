@@ -57,38 +57,22 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const {
-      attachFile,
-      products,
-      isQuoteRequest,
-      paymentType,
-      paymentTypeDescript,
-      paymentDocument,
-      ...rest
-    } = data || {};
-
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
-
-      return;
-    }
+    const {products = [], paymentDocument, ...rest} = data || {};
 
     const productPayload = products.map((prod: any) => ({
+      needToBuyId: prod?.id,
       productId: prod?.productId,
       quantity: prod?.quantity,
       price: prod?.price,
       vat: prod?.vat,
-      totalPrice: prod?.totalPrice,
       note: prod?.note,
     }));
 
     const payload = {
       ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
       paymentDocument: paymentDocument.join(","),
-      preQuoteDetail: productPayload,
-    };
+      productOrderDetailCreate: productPayload
+    }
 
     await mutateCreate.mutateAsync(payload);
   }, []);

@@ -29,7 +29,6 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
   const { quantity, price, vat } = watch();
 
   const {
-    watch: watchProduct,
     setValue: setProductsValue,
     getValues,
   } = useFormContext();
@@ -67,15 +66,19 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
 
       const products = getValues("products") || [];
 
-      setProductsValue("products", [
+      const addedProducts = [
         ...products,
-        ...data,
-        manufactor,
-        specs,
-        productCode,
-        productName,
-        unitName,
-      ]);
+        {
+          ...data,
+          manufactor,
+          specs,
+          productCode,
+          productName,
+          unitName,
+        },
+      ];
+
+      setProductsValue("products", addedProducts);
 
       toast.success(`Cập nhật SP ${productCode} thành công !`);
 

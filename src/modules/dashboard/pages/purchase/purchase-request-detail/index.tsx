@@ -20,9 +20,13 @@ export const PurchaseRequestDetailPage = () => {
 
   const {id} = useRouter().query;
 
-  const method = useForm();
+  const method = useForm<any>({
+    defaultValues: {
+      paymentDocument: []
+    }
+  });
 
-  const { control, setValue, watch } = method;
+  const { setValue } = method;
 
    // DATA FETCHING
    const { data: PurchaseRequestDetail, refetch } = useQuery(

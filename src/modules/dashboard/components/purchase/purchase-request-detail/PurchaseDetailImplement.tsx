@@ -20,6 +20,15 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
       queryKey: "DeliveryStaffList",
       queryFn: () => staff.getListDeliveryStaff().then((res) => res.data),
     },
+    {
+      queryKey: "stockerList",
+      queryFn: () => staff.getListStockerStaff().then((res) => res.data),
+    },
+
+    {
+      queryKey: "purchaseList",
+      queryFn: () => staff.getListPurchaseStaff().then((res) => res.data),
+    },
   ]);
 
   return (
@@ -48,6 +57,28 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
+          labelKey="fullName"
+        />
+
+        <FormSelect
+          options={selectOptions[2].data || []}
+          controlProps={{
+            name: "stockerId",
+            control,
+            rules: { required: "Phải chọn nhân viên thủ kho" },
+          }}
+          label="Thủ kho phụ trách"
+          labelKey="fullName"
+        />
+
+        <FormSelect
+          options={selectOptions[3].data || []}
+          controlProps={{
+            name: "purchaseId",
+            control,
+            rules: { required: "Phải chọn nhân viên mua hàng" },
+          }}
+          label="Mua hàng phụ trách"
           labelKey="fullName"
         />
       </Box>

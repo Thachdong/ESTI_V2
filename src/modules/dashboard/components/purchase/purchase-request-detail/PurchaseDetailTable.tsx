@@ -127,17 +127,26 @@ export const PurchaseDetailTable = () => {
       finalPrice: 0,
     };
 
-    return products.reduce((result: any, { price, quantity, vat }: any) => {
-      const total = quantity * price;
+    const resultObj = products.reduce(
+      (result: any, { price, quantity, vat }: any) => {
+        const total = quantity * price;
 
-      const tax = (total * vat) / 100;
+        const tax = (total * vat) / 100;
 
-      return {
-        totalPrice: _format.getVND(result?.totalPrice + total),
-        totalTax: _format.getVND(result?.totalTax + tax),
-        finalPrice: _format.getVND(result?.finalPrice + total + tax),
-      };
-    }, initResult);
+        return {
+          totalPrice: result?.totalPrice + total,
+          totalTax: result?.totalTax + tax,
+          finalPrice: result?.finalPrice + total + tax,
+        };
+      },
+      initResult
+    );
+
+    return {
+      totalPrice: _format.getVND(resultObj.totalPrice),
+      totalTax: _format.getVND(resultObj.totalTax),
+      finalPrice: _format.getVND(resultObj.finalPrice),
+    };
   }, [products]);
 
   return (
