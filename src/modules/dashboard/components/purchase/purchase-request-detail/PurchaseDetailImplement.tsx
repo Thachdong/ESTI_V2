@@ -45,8 +45,9 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
             control,
             rules: { required: "Phải chọn admin phụ trách" },
           }}
-          label="Admin phụ trách"
+          label="Admin phụ trách:"
           labelKey="fullName"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -56,8 +57,9 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
             control,
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
-          label="Giao nhận phụ trách"
+          label="Giao nhận phụ trách:"
           labelKey="fullName"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -67,8 +69,9 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
             control,
             rules: { required: "Phải chọn nhân viên thủ kho" },
           }}
-          label="Thủ kho phụ trách"
+          label="Thủ kho phụ trách:"
           labelKey="fullName"
+          disabled={disabled}
         />
 
         <FormSelect
@@ -78,8 +81,9 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
             control,
             rules: { required: "Phải chọn nhân viên mua hàng" },
           }}
-          label="Mua hàng phụ trách"
+          label="Mua hàng phụ trách:"
           labelKey="fullName"
+          disabled={disabled}
         />
       </Box>
     </Box>

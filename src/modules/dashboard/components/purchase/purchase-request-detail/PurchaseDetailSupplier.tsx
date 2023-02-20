@@ -1,15 +1,14 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { branchs, suppliers } from "src/api";
+import { suppliers } from "src/api";
 import { FormInputBase, FormSelectAsync } from "~modules-core/components";
 
-type TProps = {
-  disabled: boolean;
-};
-
-export const PurchaseDetailSupplier: React.FC<TProps> = ({ disabled }) => {
+export const PurchaseDetailSupplier: React.FC = () => {
   const [supplier, setSupplier] = useState<any>();
+
+  const {id} = useRouter().query;
 
   const { control } = useFormContext();
 
@@ -29,20 +28,21 @@ export const PurchaseDetailSupplier: React.FC<TProps> = ({ disabled }) => {
               rules: { required: "Phải chọn nhà cung cấp" },
             }}
             callback={(opt) => setSupplier(opt)}
-            label="Chọn nhà cung cấp"
+            label="Chọn nhà cung cấp:"
             labelKey="supplierCode"
+            disabled={!!id}
           />
 
-          <FormInputBase label="Địa chỉ" value={supplier?.address} disabled />
+          <FormInputBase label="Địa chỉ:" value={supplier?.address} disabled />
 
           <FormInputBase
-            label="Mã số thuế"
+            label="Mã số thuế:"
             value={supplier?.taxCode}
             disabled
           />
 
           <FormInputBase
-            label="Nhóm sản phẩm cung cấp"
+            label="Nhóm sản phẩm cung cấp:"
             value={supplier?.address}
             disabled
           />
@@ -56,25 +56,25 @@ export const PurchaseDetailSupplier: React.FC<TProps> = ({ disabled }) => {
 
         <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
           <FormInputBase
-            label="Người phụ trách"
+            label="Người phụ trách:"
             value={supplier?.curatorName}
             disabled
           />
 
           <FormInputBase
-            label="Chức vụ"
+            label="Chức vụ:"
             value={supplier?.curatorPositionName}
             disabled
           />
 
           <FormInputBase
-            label="Điện thoại"
+            label="Điện thoại:"
             value={supplier?.curatorPhone}
             disabled
           />
 
           <FormInputBase
-            label="Email"
+            label="Email:"
             value={supplier?.curatorEmail}
             disabled
           />

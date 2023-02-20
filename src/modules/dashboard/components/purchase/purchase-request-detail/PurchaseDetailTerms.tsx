@@ -1,14 +1,18 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { useQueries } from "react-query";
-import { documentType, paymentDocument, paymentType } from "src/api";
+import { paymentDocument, paymentType } from "src/api";
 import {
   FormDatepicker,
   FormInput,
   FormSelect,
 } from "~modules-core/components";
 
-export const PurchaseDetailTerms = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const PurchaseDetailTerms: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   const selectOptions = useQueries([
@@ -43,8 +47,10 @@ export const PurchaseDetailTerms = () => {
               control,
               name: "paymentType",
             }}
-            className="min-w-[200px] ml-2"
+            className="min-w-[250px] ml-2"
             labelKey="paymentTypeName"
+            disabled={disabled}
+            shrinkLabel
           />
         </ListItem>
 
@@ -57,6 +63,8 @@ export const PurchaseDetailTerms = () => {
               name: "deliverDate",
             }}
             className="min-w-[200px] ml-2"
+            disabled={disabled}
+            shrinkLabel
           />
         </ListItem>
 
@@ -71,6 +79,7 @@ export const PurchaseDetailTerms = () => {
             className="min-w-[200px] ml-2"
             fullWidth={false}
             shrinkLabel
+            disabled={disabled}
           />
         </ListItem>
 
@@ -87,6 +96,7 @@ export const PurchaseDetailTerms = () => {
             shrinkLabel
             multiple
             labelKey="paymentDocumentName"
+            disabled={disabled}
           />
         </ListItem>
       </List>

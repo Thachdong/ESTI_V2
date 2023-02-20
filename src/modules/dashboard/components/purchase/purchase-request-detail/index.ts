@@ -5,3 +5,7 @@ export * from "./PurchaseDetailGeneral";
 export * from "./PurchaseDetailSupplier";
 export * from "./PurchaseDetailImplement";
 export * from "./PurchaseDetailButtons";
+export * from "./PurchaseDetailGeneralView";
+export * from "./PurchaseDetailStatus";
+export * from "./PurchaseDetailNote";
+export * from "./PurchaseDetailImportHistory";

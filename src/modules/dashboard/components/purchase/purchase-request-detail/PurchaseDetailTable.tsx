@@ -1,5 +1,6 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import moment from "moment";
+import { useRouter } from "next/router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
@@ -26,6 +27,8 @@ export const PurchaseDetailTable = () => {
     formDate: moment().startOf("day").valueOf(),
     toDate: moment().endOf("day").valueOf(),
   });
+
+  const { id } = useRouter().query;
 
   const defaultValue = useRef<any>();
 
@@ -99,10 +102,12 @@ export const PurchaseDetailTable = () => {
             {
               action: () => setDialog({ open: true, type: "View" }),
               label: "Thông tin chi tiết",
+              disabled: !!id
             },
             {
               action: () => handleRemoveProduct(row?.id || row?.productId),
               label: "Xóa",
+              disabled: !!id
             },
           ]}
         />
@@ -156,32 +161,36 @@ export const PurchaseDetailTable = () => {
           THÔNG TIN SẢN PHẨM
         </Typography>
 
-        <AddButton onClick={() => handleOpenDialog("Add")}>Thêm SP</AddButton>
+        {!id && (
+          <AddButton onClick={() => handleOpenDialog("Add")}>Thêm SP</AddButton>
+        )}
       </Box>
 
       <Box className="bg-white">
-        <Box className="grid grid-cols-5 gap-4 rounded-sm mb-4 p-3">
-          <FormDatepickerBase
-            label="Từ ngày"
-            onChange={(e: any) =>
-              setPlanDate((prev) => ({ ...prev, formDate: e }))
-            }
-            value={planDate.formDate}
-            className="col-span-2"
-          />
-          <FormDatepickerBase
-            label="Đến ngày"
-            onChange={(e: any) =>
-              setPlanDate((prev) => ({ ...prev, toDate: e }))
-            }
-            value={planDate.toDate}
-            className="col-span-2"
-          />
+        {!id && (
+          <Box className="grid grid-cols-5 gap-4 rounded-sm mb-4 p-3">
+            <FormDatepickerBase
+              label="Từ ngày"
+              onChange={(e: any) =>
+                setPlanDate((prev) => ({ ...prev, formDate: e }))
+              }
+              value={planDate.formDate}
+              className="col-span-2"
+            />
+            <FormDatepickerBase
+              label="Đến ngày"
+              onChange={(e: any) =>
+                setPlanDate((prev) => ({ ...prev, toDate: e }))
+              }
+              value={planDate.toDate}
+              className="col-span-2"
+            />
 
-          <BaseButton className="truncate" onClick={getPurchasePlan}>
-            Lọc SP cần mua
-          </BaseButton>
-        </Box>
+            <BaseButton className="truncate" onClick={getPurchasePlan}>
+              Lọc SP cần mua
+            </BaseButton>
+          </Box>
+        )}
 
         <ContextMenuWrapper
           menuId="product_table_menu"
@@ -189,12 +198,14 @@ export const PurchaseDetailTable = () => {
             <Menu className="p-0" id="product_table_menu">
               <Item
                 id="view-product"
+                disabled={!!id}
                 onClick={() => handleOpenDialog("Update")}
               >
                 Cập nhật
               </Item>
               <Item
                 id="delete-product"
+                disabled={!!id}
                 onClick={() =>
                   handleRemoveProduct(
                     defaultValue.current?.id || defaultValue.current?.productId

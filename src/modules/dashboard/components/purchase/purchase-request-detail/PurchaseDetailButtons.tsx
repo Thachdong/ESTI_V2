@@ -4,11 +4,8 @@ import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
-  preQuote,
   purchaseOrder,
-  TCreatePreQuote,
   TCreatePurchase,
-  TUpdatePreQuote,
   TUpdatePurchase,
 } from "src/api";
 import {
@@ -42,7 +39,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
 
   const { handleSubmit, watch } = useFormContext();
 
-  const { curatorEmail, status } = watch();
+  const { curatorEmail, status = 1 } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -94,37 +91,15 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
 
   const handleUpdate = useCallback(async (data: any) => {
     const {
-      attachFile,
       products,
-      isQuoteRequest,
-      paymentType,
-      paymentTypeDescript,
       paymentDocument,
-      status,
       ...rest
     } = data || {};
 
-    if (products.length === 0) {
-      toast.error("Phải chọn sản phẩm để báo giá");
-
-      return;
-    }
-
-    const productPayload = products.map((prod: any) => ({
-      id: prod?.id,
-      productId: prod?.productId,
-      quantity: prod?.quantity,
-      price: prod?.price,
-      vat: prod?.vat,
-      note: prod?.note,
-    }));
-
     const payload = {
       ...rest,
-      attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      id,
       paymentDocument: paymentDocument.join(","),
-      preQuoteDetailUpdate: productPayload,
     };
 
     await mutateUpdate.mutateAsync(payload);
@@ -206,6 +181,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
   return (
     <Box className="flex justify-end mt-4">
       {renderButtons()}
+      
       <SendMailDialog
         onClose={() => setDialog({ open: false })}
         open={dialog.open}

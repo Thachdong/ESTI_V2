@@ -42,7 +42,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     } else {
       const { productId, quantity, price, vat, note, id } = defaultValue || {};
 
-      reset({ productId, quantity, price, vat, note, id });
+      reset({ productId, quantity, price, vat: String(vat), note, id });
     }
   }, [defaultValue, type]);
 
@@ -91,7 +91,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
 
   const handleUpdateProduct = useCallback(
     (data: any) => {
-      const { manufactor, specs, productCode, productName } =
+      const { manufactor, specs, productCode, productName, unitName } =
         selectedProduct || {};
 
       const { id, productId } = data || {};
@@ -106,6 +106,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
               specs,
               productCode,
               productName,
+              unitName
             }
           : { ...prod };
       });

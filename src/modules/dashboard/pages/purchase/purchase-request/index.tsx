@@ -85,7 +85,13 @@ export const PurchaseRequestPage = () => {
           id={row?.id}
           items={[
             {
-              action: () => console.log(""),
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/purchase/purchase-request-detail/",
+                  query: {
+                    id: row?.id,
+                  },
+                }),
               label: "Nội dung đơn hàng",
             },
             {
@@ -132,7 +138,17 @@ export const PurchaseRequestPage = () => {
         menuId="customer_table_menu"
         menuComponent={
           <Menu className="p-0" id="customer_table_menu">
-            <Item id="view" onClick={() => console.log("")}>
+            <Item
+              id="view"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/purchase/purchase-request-detail/",
+                  query: {
+                    id: defaultValue.current?.id,
+                  },
+                })
+              }
+            >
               Nội dung đơn hàng
             </Item>
             <Item id="note" onClick={() => handleOpenDialog("Note")}>
