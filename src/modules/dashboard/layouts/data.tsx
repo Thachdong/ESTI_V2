@@ -50,6 +50,10 @@ export const menu = [
         title: "Đơn mua hàng",
         link: "purchase/purchase-request",
       },
+      {
+        title: "Hóa đơn",
+        link: "purchase/purchase-bill",
+      },
     ],
   },
   {

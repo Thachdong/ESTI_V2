@@ -78,7 +78,7 @@ export const ImportDetailPage = () => {
     // Update mỗi khi chọn đơn mua hàng
     if (!query.id) {
       if (!!orderDetailData) {
-        const { deliveryId, branchId, supplierId } =
+        const { deliveryId, branchId, supplierId, stockerId, purchaseId } =
           orderDetailData?.productOrder?.productOrder || {};
 
         const { productOrderDetail = [] } = orderDetailData || {};
@@ -88,6 +88,10 @@ export const ImportDetailPage = () => {
         setValue("deliveryId", deliveryId);
 
         setValue("supplierId", supplierId);
+
+        setValue("stockerId", stockerId);
+
+        setValue("purchaseId", purchaseId);
 
         setValue(
           "productList",
@@ -123,6 +127,10 @@ export const ImportDetailPage = () => {
       });
     }
   }, [transactionData]);
+
+  useEffect(() => {
+    query.fromPurchaseOrderId && setValue("productOrderId", query.fromPurchaseOrderId)
+  }, [query.fromPurchaseOrderId])
 
   return (
     <Box className="container-center">

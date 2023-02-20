@@ -1,17 +1,24 @@
 import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
 import { suppliers } from "src/api";
-import { FormInputBase, FormSelectAsync } from "~modules-core/components";
+import { FormInputBase } from "~modules-core/components";
 import { productTypes } from "~modules-core/constance";
 
-export const PurchaseDetailSupplier: React.FC = () => {
-  const [supplier, setSupplier] = useState<any>();
+export const PurchaseBillDetailSupplier: React.FC = () => {
+  const { watch } = useFormContext();
 
-  const {id} = useRouter().query;
+  const { supplierId } = watch();
 
-  const { control } = useFormContext();
+  // DATA FETCHING
+  const { data: supplierDetail } = useQuery(
+    ["supplierDetail", supplierId],
+    () => suppliers.getById(supplierId).then((res) => res.data),
+    {
+      enabled: !!supplierId
+    }
+  );
 
   // METHODS
   const convertProductSupply = useCallback((key: string) => {
@@ -28,30 +35,19 @@ export const PurchaseDetailSupplier: React.FC = () => {
         </Typography>
 
         <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
-          <FormSelectAsync
-            fetcher={suppliers.getList}
-            controlProps={{
-              name: "supplierId",
-              control,
-              rules: { required: "Phải chọn nhà cung cấp" },
-            }}
-            callback={(opt) => setSupplier(opt)}
-            label="Chọn nhà cung cấp:"
-            labelKey="supplierCode"
-            disabled={!!id}
-          />
+          <FormInputBase label="Nhà cung cấp:" value={supplierDetail?.supplierCode} disabled />
 
-          <FormInputBase label="Địa chỉ:" value={supplier?.address} disabled />
+          <FormInputBase label="Địa chỉ:" value={supplierDetail?.address} disabled />
 
           <FormInputBase
             label="Mã số thuế:"
-            value={supplier?.taxCode}
+            value={supplierDetail?.taxCode}
             disabled
           />
 
           <FormInputBase
             label="Nhóm sản phẩm cung cấp:"
-            value={convertProductSupply(supplier?.productSupply)}
+            value={convertProductSupply(supplierDetail?.productSupply)}
             disabled
           />
         </Box>
@@ -65,25 +61,25 @@ export const PurchaseDetailSupplier: React.FC = () => {
         <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
           <FormInputBase
             label="Người phụ trách:"
-            value={supplier?.curatorName}
+            value={supplierDetail?.curatorName}
             disabled
           />
 
           <FormInputBase
             label="Chức vụ:"
-            value={supplier?.curatorPositionName}
+            value={supplierDetail?.curatorPositionName}
             disabled
           />
 
           <FormInputBase
             label="Điện thoại:"
-            value={supplier?.curatorPhone}
+            value={supplierDetail?.curatorPhone}
             disabled
           />
 
           <FormInputBase
             label="Email:"
-            value={supplier?.curatorEmail}
+            value={supplierDetail?.curatorEmail}
             disabled
           />
         </Box>

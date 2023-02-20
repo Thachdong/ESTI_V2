@@ -16,7 +16,12 @@ export type TCreatePurchaseOrderBillProduct = {
   totalPrice: number;
 };
 
-const BASE_URL = "/ProductOrderBill";
+export type TPurchaseOrderBillUpdateStatus = {
+  id: string;
+  status: number;
+};
+
+const BASE_URL = "ProductOrderBill";
 
 export const purchaseOrderBill = {
   getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
@@ -27,4 +32,10 @@ export const purchaseOrderBill = {
     request.post<TCreatePurchaseOrderBill, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  updateStatus: (payload: TPurchaseOrderBillUpdateStatus) =>
+    request.post<any, any>(
+      `${BASE_URL}/UpdateStatus?id=${payload.id}&status=${payload.status}`,
+      {}
+    ),
 };
