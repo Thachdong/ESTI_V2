@@ -136,10 +136,10 @@ export const warehouseImportStatus = [
 ];
 
 export const VAT = [
-  { id: 0, name: "0%" },
-  { id: 5, name: "5%" },
-  { id: 8, name: "8%" },
-  { id: 10, name: "10%" },
+  { id: "0", name: "0%" },
+  { id: "5", name: "5%" },
+  { id: "8", name: "8%" },
+  { id: "10", name: "10%" },
 ];
 
 export const warehouseExportStatus = [
@@ -245,4 +245,31 @@ export const orderStatus = [
   { value: 2, label: "Đang thực hiện" },
   { value: 3, label: "Hoàn thành" },
   { value: 4, label: "Hủy" },
+];
+
+export const billStatus = [
+  { value: 0, label: "Chưa thanh toán" },
+  { value: 1, label: "Hoàn thành" },
+  { value: 2, label: "Quá hạn" },
+  { value: 3, label: "Hủy" },
+];
+
+export const purchasePlanStatus = [
+  {value: 0, label: "Chưa thực hiện"},
+  {value: 1, label: "Đã kết chuyển"},
+  {value: 2, label: "Hủy"},
+];
+
+export const purchaseOrderStatus = [
+  {value: 1, label: "Chưa thực hiện"},
+  {value: 2, label: "Đang thực hiện"},
+  {value: 3, label: "Hoàn thành"},
+  {value: 4, label: "Hủy"},
+];
+
+export const purchaseOrderBillStatus = [
+  {value: 0, label: "Chưa thanh toán"},
+  {value: 1, label: "Hoàn thành"},
+  {value: 2, label: "Quá hạn"},
+  {value: 3, label: "Hủy"},
 ];

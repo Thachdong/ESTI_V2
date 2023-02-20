@@ -2,7 +2,7 @@ import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { mainOrder } from "src/api";
 import {
   AddButton,
@@ -13,11 +13,14 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import { toast } from "~modules-core/toast";
+import { BookingOrderNoteDialog, BookingOrderStatusDialog } from "~modules-dashboard/components";
 import { orderColumns } from "~modules-dashboard/pages/orders/booking-order/orderColumns";
 import { TGridColDef } from "~types/data-grid";
+import { TDefaultDialogState } from "~types/dialog";
 
 export const BookingOrderTable: React.FC = () => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+
   const [pagination, setPagination] = useState(defaultPagination);
 
   const router = useRouter();
@@ -73,8 +76,29 @@ export const BookingOrderTable: React.FC = () => {
               label: "Thông tin chi tiết",
             },
             {
-              action: handleDelete,
-              label: "Xóa",
+              action: () => onOpen("UpdateStatus"),
+              label: "Trạng thái",
+            },
+            {
+              action: () => onOpen("AddNote"),
+              label: "Ghi chú",
+            },
+            {
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/warehouse/export-detail/",
+                  query: { fromOrderId: row?.id },
+                }),
+              label: "Tạo phiếu xuất kho",
+              disabled: row?.status !== 2,
+            },
+            {
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/orders/bill-detail/",
+                  query: { fromOrderId: row?.id },
+                }),
+              label: "Tạo hóa đơn",
             },
           ]}
         />
@@ -93,22 +117,13 @@ export const BookingOrderTable: React.FC = () => {
   };
 
   // METHODS
-  const mutateDelete = useMutation((id: string) => mainOrder.delete(id), {
-    onSuccess: (data: any) => {
-      toast.success(data?.resultMessage);
+  const onClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
 
-      refetch();
-    },
-  });
-
-  const handleDelete = useCallback(async () => {
-    const { id, mainOrderCode } = defaultValue.current || {};
-
-    if (confirm("Xác nhận xóa đơn đặt hàng " + mainOrderCode)) {
-      await mutateDelete.mutateAsync(id as string);
-    }
-  }, [defaultValue]);
-
+  const onOpen = useCallback((type: string) => {
+    setDialog({ open: true, type });
+  }, []);
   return (
     <Paper className="bgContainer p-2 shadow">
       <Box className="flex gap-4 items-center mb-2">
@@ -126,7 +141,7 @@ export const BookingOrderTable: React.FC = () => {
         menuComponent={
           <Menu className="p-0" id="order_request_table_menu">
             <Item
-              id="view-product"
+              id="view-order"
               onClick={() =>
                 router.push({
                   pathname: "/dashboard/orders/order-detail/",
@@ -136,8 +151,38 @@ export const BookingOrderTable: React.FC = () => {
             >
               Xem chi tiết
             </Item>
-            <Item id="delete-product" onClick={handleDelete}>
-              Xóa
+
+            <Item id="update-status" onClick={() => onOpen("UpdateStatus")}>
+              Trạng thái
+            </Item>
+
+            <Item id="order-note" onClick={() => onOpen("AddNote")}>
+              Ghi chú
+            </Item>
+
+            <Item
+              id="warehouse-export"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/warehouse/export-detail/",
+                  query: { fromOrderId: defaultValue.current?.id },
+                })
+              }
+              disabled={defaultValue.current?.status !== 2}
+            >
+              Tạo phiếu xuất kho
+            </Item>
+
+            <Item
+              id="delete-order"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/orders/bill-detail/",
+                  query: { fromOrderId: defaultValue.current?.id },
+                })
+              }
+            >
+              Tạo hóa đơn
             </Item>
           </Menu>
         }
@@ -156,6 +201,20 @@ export const BookingOrderTable: React.FC = () => {
           }}
         />
       </ContextMenuWrapper>
+
+      <BookingOrderStatusDialog
+        onClose={onClose}
+        open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+      />
+
+      <BookingOrderNoteDialog
+        onClose={onClose}
+        open={Boolean(dialog.open && dialog.type === "AddNote")}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+      />
     </Paper>
   );
 };

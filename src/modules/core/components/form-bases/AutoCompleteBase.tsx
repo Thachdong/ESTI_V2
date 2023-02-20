@@ -1,4 +1,4 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, TextField, TextFieldProps } from "@mui/material";
 import _ from "lodash";
 import { SyntheticEvent, useCallback } from "react";
 import { TAutocompleteProps } from "~types/form-controlled/form-select";
@@ -69,7 +69,9 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
 
   const shrink = shrinkLabel ? {} : { shrink: false };
 
-  const defaultInputProps = {
+  const {helperText, error, ...restInputPRops} = inputProps || {};
+  
+  const defaultInputProps: TextFieldProps = {
     InputLabelProps: { ...shrink },
     label,
     sx: {
@@ -87,8 +89,13 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         color: "#747474",
       },
     },
-    // ...inputProps,
+    error: !!error,
+    ...restInputPRops,
   };
+
+  if (!!error) {
+    defaultInputProps.helperText = helperText;
+  }
 
   const defaultSx: any = shrinkLabel
     ? {}

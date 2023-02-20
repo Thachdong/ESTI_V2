@@ -6,6 +6,7 @@ import { toast } from "~modules-core/toast";
 type TProps = TextFieldProps & {
   initChips?: string[];
   callback?: (chips: string[]) => void;
+  defaultChips?: string[];
 };
 
 export const FormInputCreatableBase: React.FC<TProps> = ({
@@ -15,9 +16,10 @@ export const FormInputCreatableBase: React.FC<TProps> = ({
   initChips,
   callback,
   className,
+  defaultChips,
   ...props
 }) => {
-  const [chips, setChips] = useState<string[]>([]);
+  const [chips, setChips] = useState<string[]>(defaultChips || []);
 
   const [text, setText] = useState<string>("");
 

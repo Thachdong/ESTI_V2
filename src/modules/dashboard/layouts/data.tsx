@@ -50,6 +50,10 @@ export const menu = [
         title: "Đơn mua hàng",
         link: "purchase/purchase-request",
       },
+      {
+        title: "Hóa đơn",
+        link: "purchase/purchase-bill",
+      },
     ],
   },
   {
@@ -145,6 +149,10 @@ export const menu = [
       {
         title: "Chi nhánh",
         link: "settings/branch-config",
+      },
+      {
+        title: "Hình thức thanh toán",
+        link: "settings/payment-type",
       },
     ],
   },

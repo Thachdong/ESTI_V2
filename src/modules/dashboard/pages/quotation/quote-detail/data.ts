@@ -15,7 +15,7 @@ export const productColumns: TGridColDef[] = [
   {
     field: "productName",
     headerName: "Tên SP",
-    minWidth: 100,
+    minWidth: 200,
     flex: 1,
   },
   {

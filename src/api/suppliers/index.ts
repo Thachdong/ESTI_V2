@@ -29,6 +29,7 @@ const BASE_URL = "Supplier";
 
 export const suppliers = {
   getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
+  getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
   uploadAvatar: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
   create: (payload: TSupplier) =>
