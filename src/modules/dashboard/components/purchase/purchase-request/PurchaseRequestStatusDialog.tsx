@@ -1,11 +1,11 @@
 import { Box, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useMutation } from "react-query";
 import { useCallback, useState } from "react";
-import { exportWarehouse, TExportWarehouseStatusPayload } from "src/api";
+import { purchaseOrder, TUpdatePurchaseStatus } from "src/api";
 import { BaseButton, Dialog } from "~modules-core/components";
-// import { purchaseRequestStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
+import { purchaseOrderStatus } from "~modules-core/constance";
 
 export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
   open,
@@ -14,12 +14,10 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
   refetch,
 }) => {
   const [status, setStatus] = useState(defaultValue?.status);
-
-  const purchaseRequestStatus: any = [];
   
   const mutateUpdate = useMutation(
-    (payload: TExportWarehouseStatusPayload) =>
-      exportWarehouse.updateStatus(payload),
+    (payload: TUpdatePurchaseStatus) =>
+      purchaseOrder.updateStatus(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -32,9 +30,11 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
   );
 
   const handleUpdate = useCallback(async () => {
+    console.log(defaultValue);
+    
     if (defaultValue?.id) {
       await mutateUpdate.mutateAsync({
-        warehouseSessionId: defaultValue?.id,
+        id: defaultValue?.id,
         status: +status,
       });
     }
@@ -52,12 +52,13 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
         defaultValue={defaultValue?.status}
         onChange={(e) => setStatus(e.target.value)}
       >
-        {purchaseRequestStatus?.map((status: any) => (
+        {purchaseOrderStatus?.map((status: any) => (
           <FormControlLabel
             key={status.value}
             value={status.value}
             control={<Radio />}
             label={status.label}
+            disabled={defaultValue?.status > status.value}
           />
         ))}
       </RadioGroup>

@@ -258,4 +258,18 @@ export const purchasePlanStatus = [
   {value: 0, label: "Chưa thực hiện"},
   {value: 1, label: "Đã kết chuyển"},
   {value: 2, label: "Hủy"},
-]
+];
+
+export const purchaseOrderStatus = [
+  {value: 1, label: "Chưa thực hiện"},
+  {value: 2, label: "Đang thực hiện"},
+  {value: 3, label: "Hoàn thành"},
+  {value: 4, label: "Hủy"},
+];
+
+export const purchaseOrderBillStatus = [
+  {value: 0, label: "Chưa thanh toán"},
+  {value: 1, label: "Hoàn thành"},
+  {value: 2, label: "Quá hạn"},
+  {value: 3, label: "Hủy"},
+];

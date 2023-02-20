@@ -24,11 +24,14 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
-  const { control, reset, watch, handleSubmit } = useForm();
+  const { control, reset, watch, handleSubmit, setValue } = useForm<any>();
 
-  const { watch: watchProduct, setValue: setProductsValue } = useFormContext();
+  const { quantity, price, vat } = watch();
 
-  const products = watchProduct("products") || [];
+  const {
+    setValue: setProductsValue,
+    getValues,
+  } = useFormContext();
 
   const title = type === "Add" ? "Thêm SP" : "Cập nhật SP";
 
@@ -37,70 +40,86 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     if (type === "Add") {
       reset({});
     } else {
-      reset({ ...defaultValue });
+      const { productId, quantity, price, vat, note, id } = defaultValue || {};
+
+      reset({ productId, quantity, price, vat: String(vat), note, id });
     }
   }, [defaultValue, type]);
 
+  useEffect(() => {
+    if (!quantity || !price) {
+      setValue("totalPrice", 0);
+    } else {
+      const total = quantity * price;
+
+      const tax = (total * vat) / 100;
+
+      setValue("totalPrice", total + tax);
+    }
+  }, [quantity, price, vat]);
+
   // METHODS
-  const calculatePrice = useCallback(() => {
-    const quantity = watch("quantity") || 0;
-
-    const price = watch("price") || 0;
-
-    const vat = watch("vat") || 0;
-
-    if (!quantity || !price || !vat) return 0;
-
-    return (price + (price * vat / 100)) * quantity
-  }, [])
-
-  const callback = useCallback((opt: any) => {
-    setSelectedProduct(opt);
-  }, []);
-
-  const getProduct = useCallback((productData: any) => {
-    return {
-      id: selectedProduct?.id,
-      productCode: selectedProduct?.productCode,
-      productName: selectedProduct?.productName,
-      manufactor: selectedProduct?.manufactor,
-      specs: selectedProduct?.specs,
-      unitName: selectedProduct?.unitName,
-      unitId: selectedProduct?.unitId,
-      vat: productData?.vat,
-      note: productData?.note,
-      quantity: productData?.quantity,
-      price: productData?.price,
-      totalPrice: calculatePrice(),
-    };
-  }, [selectedProduct]);
-
   const handleAddProduct = useCallback(
     (data: any) => {
-      const index = products.findIndex((prod: any) => prod?.id === selectedProduct?.id);
+      const { manufactor, specs, productCode, productName, unitName } =
+        selectedProduct || {};
 
-      if (index !== -1) {
-        toast.error(`Sản phẩm ${selectedProduct?.productCode} đã được chọn !`);
+      const products = getValues("products") || [];
 
-        return;
-      }
+      const addedProducts = [
+        ...products,
+        {
+          ...data,
+          manufactor,
+          specs,
+          productCode,
+          productName,
+          unitName,
+        },
+      ];
 
-      setProductsValue("products", [...products, getProduct(data)]);
+      setProductsValue("products", addedProducts);
+
+      toast.success(`Cập nhật SP ${productCode} thành công !`);
+
+      reset({});
 
       onClose();
     },
-    [setProductsValue, selectedProduct]
+    [selectedProduct]
   );
 
   const handleUpdateProduct = useCallback(
     (data: any) => {
-      const updatedProducts = products.map((prod: any) =>
-        prod?.id === data?.id ? { ...data } : { ...prod }
-      );
+      const { manufactor, specs, productCode, productName, unitName } =
+        selectedProduct || {};
+
+      const { id, productId } = data || {};
+
+      const updatedProducts = getValues("products")?.map?.((prod: any) => {
+        const isUpdate = (prod?.id || prod?.productId) === (id || productId);
+
+        return isUpdate
+          ? {
+              ...data,
+              manufactor,
+              specs,
+              productCode,
+              productName,
+              unitName
+            }
+          : { ...prod };
+      });
 
       setProductsValue("products", updatedProducts);
+
+      toast.success(`Cập nhật SP ${productCode} thành công !`);
+
+      reset({});
+
+      onClose();
     },
-    [setProductsValue]
+    [selectedProduct]
   );
 
   return (
@@ -121,7 +140,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           label="Mã SP"
           labelKey="productCode"
           fetcher={productApi.getList}
-          callback={callback}
+          callback={(prod) => setSelectedProduct(prod)}
         />
 
         <FormSelectAsync
@@ -132,7 +151,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           label="Tên SP"
           labelKey="productName"
           fetcher={productApi.getList}
-          callback={callback}
+          callback={(prod) => setSelectedProduct(prod)}
         />
 
         <FormInputBase
@@ -181,16 +200,19 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           label="VAT"
         />
 
-        <FormInputBase
+        <FormInputNumber
           label="Thành tiền"
           disabled
-          value={calculatePrice()}
+          controlProps={{
+            control,
+            name: "totalPrice",
+          }}
         />
 
         <FormInput
           controlProps={{
             control,
-            name: "notee",
+            name: "note",
           }}
           label="Ghi chú"
           multiline
@@ -203,7 +225,12 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
             Thêm
           </BaseButton>
         ) : (
-          <BaseButton className="mr-2">Cập nhật</BaseButton>
+          <BaseButton
+            className="mr-2"
+            onClick={handleSubmit(handleUpdateProduct)}
+          >
+            Cập nhật
+          </BaseButton>
         )}
 
         <BaseButton type="button" className="!bg-main-1" onClick={onClose}>

@@ -25,3 +25,4 @@ export * from "./quote-request";
 export * from "./main-order";
 export * from "./bill";
 export * from "./pre-quote";
+export * from "./payment-type";
