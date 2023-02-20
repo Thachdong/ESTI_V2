@@ -50,9 +50,9 @@ export const purchaseOrder = {
     request.put<TUpdatePurchase, any>(BASE_URL, payload),
 
   updateStatus: (payload: TUpdatePurchaseStatus) =>
-    request.post<TUpdatePurchaseStatus, any>(
-      `${BASE_URL}/UpdateStatus`,
-      payload
+    request.post<any, any>(
+      `${BASE_URL}/UpdateStatus?id=${payload?.id}&status=${payload?.status}`,
+      {}
     ),
 
   getStatistic: () => request.get<any>(`${BASE_URL}/GetHeaderProductOrder`),

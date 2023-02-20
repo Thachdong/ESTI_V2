@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { purchaseOrder } from "src/api";
 import { FormInput } from "~modules-core/components";
 import {
+  PurchaseDetailBillHistory,
   PurchaseDetailButtons,
   PurchaseDetailGeneral,
   PurchaseDetailGeneralView,
@@ -40,9 +41,10 @@ export const PurchaseRequestDetailPage = () => {
     }
   );
 
+  const { status } = purchaseRequestDetail?.productOrder?.productOrder || {};
+
   // SIDE EFFECTS
   useEffect(() => {
-    console.log(purchaseRequestDetail);
     const {
       status,
       supplierId,
@@ -54,6 +56,7 @@ export const PurchaseRequestDetailPage = () => {
       deliverDate,
       receiverAddress,
       paymentDocument,
+      curatorEmail
     } = purchaseRequestDetail?.productOrder?.productOrder || {};
 
     const productOrderDetail = purchaseRequestDetail?.productOrderDetail || [];
@@ -72,6 +75,7 @@ export const PurchaseRequestDetailPage = () => {
       paymentType,
       deliverDate,
       receiverAddress,
+      curatorEmail,
       paymentDocument: documents,
       products: productOrderDetail?.map((prod: any) => {
         const { productManufactor, productSpecs, ...rest } = prod || {};
@@ -84,7 +88,7 @@ export const PurchaseRequestDetailPage = () => {
     <Box className="container-center">
       {!!id && (
         <>
-          <PurchaseDetailStatus currentStatus={1} refetch={refetch} />
+          <PurchaseDetailStatus currentStatus={status} refetch={refetch} />
 
           <PurchaseDetailGeneralView
             data={purchaseRequestDetail?.productOrder?.productOrder || {}}
@@ -131,7 +135,16 @@ export const PurchaseRequestDetailPage = () => {
               <PurchaseDetailNote title={"Ghi chú của cập nhật"} value={""} />
             </Box>
 
-            <PurchaseDetailImportHistory status={2} />
+            <PurchaseDetailImportHistory
+              status={status}
+            />
+
+            <PurchaseDetailBillHistory
+              purchaseCode={
+                purchaseRequestDetail?.productOrder?.productOrder?.code
+              }
+              status={status}
+            />
           </>
         )}
 

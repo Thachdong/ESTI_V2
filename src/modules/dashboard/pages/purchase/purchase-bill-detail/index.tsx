@@ -15,7 +15,7 @@ import {
 } from "~modules-dashboard/components";
 
 export const PurchaseBillDetailPage: React.FC = () => {
-  const { id } = useRouter().query;
+  const { id, fromPurchaseOrderId } = useRouter().query;
 
   const method = useForm<any>({
     mode: "onBlur",
@@ -63,6 +63,10 @@ export const PurchaseBillDetailPage: React.FC = () => {
 
     method.reset({productOrderId, billNumber, supplierId, attachFile: files, products});
   }, [billDetail]);
+
+  useEffect(() => {
+    !!fromPurchaseOrderId && method.setValue("productOrderId", fromPurchaseOrderId)
+  }, [fromPurchaseOrderId])
 
   return (
     <FormProvider {...method}>

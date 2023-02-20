@@ -35,12 +35,6 @@ export const purchaseDetailImportColumns: TGridColDef[] = [
     minWidth: 150,
     flex: 1,
   },
-  {
-    field: "codeVD",
-    headerName: "Hóa đơn",
-    minWidth: 120,
-    flex: 1,
-  },
 ];
 
 export const purchaseDetailBillColumns: TGridColDef[] = [
@@ -52,17 +46,22 @@ export const purchaseDetailBillColumns: TGridColDef[] = [
     renderCell: ({ row }) => moment(row?.created).format("DD/MM/YYYY"),
   },
   {
-    field: "value",
-    headerName: "Giá trị",
-    minWidth: 120,
-    flex: 1,
-    renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
+    field: "billNumber",
+    headerName: "MÃ HOÁ ĐƠN",
+    minWidth: 150,
   },
   {
-    field: "recieve",
+    field: "totalPrice",
+    headerName: "Giá trị hóa đơn",
+    minWidth: 120,
+    flex: 1,
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
+  },
+  {
+    field: "paid",
     headerName: "Đã nhận",
     minWidth: 120,
     flex: 1,
-    renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
+    renderCell: ({ row }) => _format.getVND(row?.paid),
   },
 ];
