@@ -14,11 +14,13 @@ import { toast } from "~modules-core/toast";
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
+  refetch: () => void;
 };
 
 export const QuoteRequestDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
+  refetch
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
@@ -70,6 +72,8 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
         toast.success(data?.resultMessage);
 
         setIsUpdate(false);
+
+        refetch();
       },
     }
   );

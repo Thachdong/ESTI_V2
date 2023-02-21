@@ -1,4 +1,5 @@
 import moment from "moment";
+import { StatusChip } from "~modules-core/components";
 import { quoteStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -47,7 +48,7 @@ export const quoteListColumns: TGridColDef[] = [
     isFilter: false,
     sortAscValue: 12,
     sortDescValue: 4,
-    renderCell: ({row}) => _format.getVND(row.totalPrice)
+    renderCell: ({ row }) => _format.getVND(row.totalPrice),
   },
   {
     field: "branchCode",
@@ -74,6 +75,17 @@ export const quoteListColumns: TGridColDef[] = [
     sortDescValue: 7,
     type: "select",
     options: quoteStatus,
-    renderCell: ({row}) => quoteStatus.find(status => status.value === row?.status)?.label
+    renderCell: ({ row }) => {
+      const label = quoteStatus.find(
+        (status) => status.value === row?.status
+      )?.label;
+
+      const color =
+        row.status === 3 ? "success" : row.status > 3 ? "error" : undefined;
+
+      return (
+        <StatusChip label={label as string} status={row.status} color={color} />
+      );
+    },
   },
 ];

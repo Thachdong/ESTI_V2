@@ -1,6 +1,8 @@
+import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { quoteRequest } from "src/api";
+import { StatusChip } from "~modules-core/components";
 
 export const QuoteRequestDetailTitle: React.FC = () => {
   const router = useRouter();
@@ -17,9 +19,21 @@ export const QuoteRequestDetailTitle: React.FC = () => {
   );
 
   if (!!id) {
-    const code = requestDetail?.preOrderView?.preOrderCode;
+    const { preOrderCode, preOrderStatus, preOrderStatusName } =
+      requestDetail?.preOrderView || {};
 
-    return <>BÁO GIÁ / CHI TIẾT YÊU CẦU BÁO GIÁ / {code}</>;
+    return (
+      <Box>
+        BÁO GIÁ / CHI TIẾT YÊU CẦU BÁO GIÁ / {preOrderCode}
+        {preOrderStatusName && (
+          <StatusChip
+            status={preOrderStatus}
+            label={preOrderStatusName}
+            color={preOrderStatus === 4 ? "error" : undefined}
+          />
+        )}
+      </Box>
+    );
   } else {
     return <>BÁO GIÁ / TẠO YÊU CẦU BÁO GIÁ</>;
   }

@@ -16,9 +16,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import {
-  QuoteRequestHeader,
-} from "~modules-dashboard/components";
+import { QuoteRequestHeader } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { quotationRequestColumns } from "./data";
 
@@ -83,8 +81,8 @@ export const QuotationRequestsPage = () => {
     },
   });
 
-  const handleCancel = useCallback(async() => {
-    const {id, preOrderCode} = defaultValue.current || {};
+  const handleCancel = useCallback(async () => {
+    const { id, preOrderCode } = defaultValue.current || {};
 
     if (!id) {
       toast.error("Có lỗi xãy ra, vui lòng thử lại!");
@@ -92,13 +90,13 @@ export const QuotationRequestsPage = () => {
       return;
     }
 
-    if(confirm("Xác nhận tạm dừng yêu cầu " + preOrderCode)) {
+    if (confirm("Xác nhận tạm dừng yêu cầu " + preOrderCode)) {
       await muatateCancel.mutateAsync(id);
     }
   }, [defaultValue]);
 
-  const handleDelete = useCallback(async() => {
-    const {id, preOrderCode} = defaultValue.current || {};
+  const handleDelete = useCallback(async () => {
+    const { id, preOrderCode } = defaultValue.current || {};
 
     if (!id) {
       toast.error("Có lỗi xãy ra, vui lòng thử lại!");
@@ -106,14 +104,21 @@ export const QuotationRequestsPage = () => {
       return;
     }
 
-    if(confirm("Xác nhận xóa yêu cầu " + preOrderCode)) {
+    if (confirm("Xác nhận xóa yêu cầu " + preOrderCode)) {
       await muatateDelete.mutateAsync(id);
     }
   }, [defaultValue]);
 
   const handleRedirect = useCallback((url: string) => {
+    const status = defaultValue.current?.preOrderStatus;
+
+    if (status > 0) {
+      toast.error("Yêu cầu đã được xử lý!");
+
+      return;
+    }
     router.push(url);
-  }, [])
+  }, [defaultValue.current]);
 
   // DATA TABLE
   const columns: TGridColDef[] = [
@@ -138,12 +143,19 @@ export const QuotationRequestsPage = () => {
           id={row?.id}
           items={[
             {
-              action: () => handleRedirect(`quote-request-detail?id=${defaultValue.current?.id}`),
+              action: () =>
+                handleRedirect(
+                  `quote-request-detail?id=${defaultValue.current?.id}`
+                ),
               label: "Nội dung chi tiết",
             },
             {
-              action: () => handleRedirect(`quote-detail?requestId=${defaultValue.current?.id}`),
+              action: () =>
+                handleRedirect(
+                  `quote-detail?fromRequestId=${defaultValue.current?.id}`
+                ),
               label: "Tạo báo giá",
+              disabled: row?.preOrderStatus > 0,
             },
             {
               action: handleCancel,
@@ -158,13 +170,26 @@ export const QuotationRequestsPage = () => {
       ),
     },
   ];
-
+  
   const contextMenu = (
     <Menu className="p-0" id="quote-request_table_menu">
-      <Item id="view" onClick={() => handleRedirect(`quote-request-detail?id=${defaultValue.current?.id}`)}>
+      <Item
+        id="view"
+        onClick={() =>
+          handleRedirect(`quote-request-detail?id=${defaultValue.current?.id}`)
+        }
+      >
         Nội dung chi tiết
       </Item>
-      <Item id="note" onClick={() => handleRedirect(`quote-detail?requestId=${defaultValue.current?.id}`)}>
+      <Item
+        id="note"
+        disabled={defaultValue.current?.preOrderStatus > 0}
+        onClick={() =>
+          handleRedirect(
+            `quote-detail?fromRequestId=${defaultValue.current?.id}`
+          )
+        }
+      >
         Tạo báo giá
       </Item>
       <Item id="status" onClick={handleCancel}>
@@ -192,7 +217,12 @@ export const QuotationRequestsPage = () => {
 
       <Paper className="bgContainer">
         <Box className="flex items-center w-3/4 mb-3">
-          <AddButton onClick={() => handleRedirect("quote-request-detail")} className="w-1/2 mr-3">Tạo yêu cầu</AddButton>
+          <AddButton
+            onClick={() => handleRedirect("quote-request-detail")}
+            className="w-1/2 mr-3"
+          >
+            Tạo yêu cầu
+          </AddButton>
 
           <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
         </Box>

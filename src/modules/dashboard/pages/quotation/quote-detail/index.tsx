@@ -28,6 +28,7 @@ export const QuoteDetailPage: React.FC = () => {
   const method = useForm<any>({
     defaultValues: {
       products: [],
+      isQuoteRequest: true,
     },
   });
 
@@ -59,7 +60,10 @@ export const QuoteDetailPage: React.FC = () => {
       receiverAddress,
       expireDate,
       id,
-      status
+      status,
+      curatorPhone,
+      curatorEmail,
+      curatorDepartmentId,
     } = preQuoteView;
 
     const documents = JSON.parse(paymentDocument || "[]").map(
@@ -79,6 +83,9 @@ export const QuoteDetailPage: React.FC = () => {
       deliverDate,
       expireDate,
       paymentType,
+      curatorPhone,
+      curatorEmail,
+      curatorDepartmentId,
       products: [...preQuoteDetailView],
       attachFile: !attachFile ? [] : attachFile.split(","),
       paymentDocument: documents,
@@ -115,7 +122,7 @@ export const QuoteDetailPage: React.FC = () => {
           <QuoteDetailAddition disabled={disabled} />
 
           <Box className="col-span-2">
-            <QuoteDetailProduct data={quoteDetail?.preQuoteView} />
+            <QuoteDetailProduct data={quoteDetail?.preQuoteView} disabled={disabled} />
           </Box>
 
           <Box className="col-span-2">

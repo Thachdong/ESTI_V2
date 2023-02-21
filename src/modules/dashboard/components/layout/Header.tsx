@@ -25,12 +25,12 @@ export const Header: React.FC<TProps> = ({ data }) => {
 
   const renderTitle = useCallback(() => {
     switch (pageName) {
+      case "quote-request-detail-page":
+        return <QuoteRequestDetailTitle />;
       case "warehouse-export-detail-page":
         return <WarehouseExportDetailTitle />;
       case "warehouse-import-detail-page":
         return <WarehouseImportDetailTitle />;
-      case "quote-request-detail-page":
-        return <QuoteRequestDetailTitle />;
       case "quote-detail-page":
         return <QuoteDetailTitle />;
       case "order-detail-page":
