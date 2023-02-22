@@ -66,9 +66,14 @@ export const QuoteDetailPage: React.FC = () => {
       curatorDepartmentId,
     } = preQuoteView;
 
-    const documents = JSON.parse(paymentDocument || "[]").map(
-      (doc: any) => doc?.id
-    );
+    let documents = []
+    try {
+      documents = JSON.parse(paymentDocument || "[]").map(
+        (doc: any) => doc?.id
+      );
+    } catch(error) {
+      console.log(error);
+    }
 
     method.reset({
       id,

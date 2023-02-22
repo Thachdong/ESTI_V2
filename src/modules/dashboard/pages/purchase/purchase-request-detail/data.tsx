@@ -1,4 +1,6 @@
 import moment from "moment";
+import Link from "next/link";
+import { StatusChip } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -21,6 +23,17 @@ export const purchaseDetailImportColumns: TGridColDef[] = [
     headerName: "Mã phiếu nhập kho",
     minWidth: 150,
     flex: 1,
+    renderCell: ({ row }) => (
+      <Link href={`/dashboard/warehouse/import-detail/?id=${row?.id}`}>
+        <a className="no-underline">
+          <StatusChip
+            status={row?.status}
+            label={row?.warehouseSessionCode}
+            className="cursor-pointer"
+          />
+        </a>
+      </Link>
+    ),
   },
   {
     field: "importTotalPrice",
@@ -49,6 +62,17 @@ export const purchaseDetailBillColumns: TGridColDef[] = [
     field: "billNumber",
     headerName: "MÃ HOÁ ĐƠN",
     minWidth: 150,
+    renderCell: ({ row }) => (
+      <Link href={`/dashboard/purchase/purchase-bill-detail/?id=${row?.id}`}>
+        <a className="no-underline">
+          <StatusChip
+            status={row?.status}
+            label={row?.billNumber}
+            className="cursor-pointer"
+          />
+        </a>
+      </Link>
+    ),
   },
   {
     field: "totalPrice",

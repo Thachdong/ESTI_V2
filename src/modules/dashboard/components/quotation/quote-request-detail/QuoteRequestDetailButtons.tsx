@@ -13,6 +13,7 @@ import {
   BaseButton,
   EditButton,
   PrintButton,
+  ViewButton,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 
@@ -113,13 +114,13 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
       case !!id && !isUpdate:
         return (
           <Box className="flex items-center justify-end gap-3">
-            {status === 0 && (
+            {status === 0 ? (
               <>
                 <EditButton
                   tooltipText="Cập nhật"
                   onClick={() => setIsUpdate(true)}
                 />
-                
+
                 <AddButton
                   onClick={() =>
                     router.push(`quote-detail?fromRequestId=${id}`)
@@ -128,6 +129,8 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
                   Tạo báo giá
                 </AddButton>
               </>
+            ) : (
+              <ViewButton variant="contained"> Xem báo giá</ViewButton>
             )}
             <PrintButton className="!bg-error">In</PrintButton>
           </Box>

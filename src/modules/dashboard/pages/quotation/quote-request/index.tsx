@@ -109,16 +109,19 @@ export const QuotationRequestsPage = () => {
     }
   }, [defaultValue]);
 
-  const handleRedirect = useCallback((url: string) => {
-    const status = defaultValue.current?.preOrderStatus;
+  const handleRedirect = useCallback(
+    (url: string) => {
+      const status = defaultValue.current?.preOrderStatus;
 
-    if (status > 0) {
-      toast.error("Yêu cầu đã được xử lý!");
+      if (status > 0) {
+        toast.error("Yêu cầu đã được xử lý!");
 
-      return;
-    }
-    router.push(url);
-  }, [defaultValue.current]);
+        return;
+      }
+      router.push(url);
+    },
+    [defaultValue.current]
+  );
 
   // DATA TABLE
   const columns: TGridColDef[] = [
@@ -144,7 +147,7 @@ export const QuotationRequestsPage = () => {
           items={[
             {
               action: () =>
-                handleRedirect(
+                router.push(
                   `quote-request-detail?id=${defaultValue.current?.id}`
                 ),
               label: "Nội dung chi tiết",
@@ -170,7 +173,7 @@ export const QuotationRequestsPage = () => {
       ),
     },
   ];
-  
+
   const contextMenu = (
     <Menu className="p-0" id="quote-request_table_menu">
       <Item
@@ -218,7 +221,7 @@ export const QuotationRequestsPage = () => {
       <Paper className="bgContainer">
         <Box className="flex items-center w-3/4 mb-3">
           <AddButton
-            onClick={() => handleRedirect("quote-request-detail")}
+            onClick={() => router.push("quote-request-detail")}
             className="w-1/2 mr-3"
           >
             Tạo yêu cầu

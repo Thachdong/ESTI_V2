@@ -102,7 +102,7 @@ export const QuoteListPage = () => {
           items={[
             {
               action: () =>
-                handleRedirect(`quote-detail?id=${defaultValue.current?.id}`),
+              router.push(`quote-detail?id=${defaultValue.current?.id}`),
               label: "Nội dung chi tiết",
             },
             {
