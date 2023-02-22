@@ -10,7 +10,19 @@ import {
 import { AddButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 
-export const PurchaseBillDetailButtons: React.FC = () => {
+type TProps = {
+  refetch?: () => void;
+  sendMailData: {
+    to: string;
+    status: number;
+    cc: string[];
+  };
+};
+
+export const PurchaseBillDetailButtons: React.FC<TProps> = ({
+  refetch,
+  sendMailData,
+}) => {
   // EXTRACT PROPS
   const router = useRouter();
 

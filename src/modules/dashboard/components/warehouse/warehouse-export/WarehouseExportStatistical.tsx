@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useQuery } from "react-query";
 import { warehouse } from "src/api";
 import { CardReport } from "~modules-core/components";
@@ -9,7 +9,7 @@ export const WarehouseExportStatistical = () => {
   );
 
   return (
-    <Box className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+    <Box className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
       <CardReport
         title={"ĐANG ĐÓNG GÓI"}
         BgImage={"Orange"}

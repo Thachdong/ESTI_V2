@@ -21,7 +21,6 @@ type TProps = {
     warehouseConfigId: string;
     warehouseConfigCode: string;
   };
-  productListOperators: any;
 };
 
 export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
@@ -31,7 +30,6 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
   getWarehouseConfig,
   productOptions,
-  productListOperators,
 }) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
@@ -41,11 +39,11 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const { control, handleSubmit, reset, setError, watch } = useForm();
 
-  const {productId} = watch();
+  const { productId } = watch();
 
-  const { watch: globalWatch } = useFormContext();
+  const { watch: globalWatch, setValue: setGlobalValue } = useFormContext();
 
-  const isForDelete = globalWatch("isForDelete");
+  const { isForDelete, productList } = globalWatch();
 
   const title = type === "Update" ? "Cập nhật sản phẩm" : "Thêm sản phẩm";
 
@@ -64,14 +62,8 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   // DATA FETCHING
   const { data: lotOptions } = useQuery(
-    [
-      "getLotOptions_" + productId,
-      productId,
-      warehouseConfigId
-    ],
-    () => products
-    .getLot(productId, warehouseConfigId)
-    .then((res) => res.data),
+    ["getLotOptions_" + productId, productId, warehouseConfigId],
+    () => products.getLot(productId, warehouseConfigId).then((res) => res.data),
     {
       enabled: !!productId,
     }
@@ -108,7 +100,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
       selectedPosition,
     };
 
-    productListOperators.add({ ...product });
+    setGlobalValue("productList", [...productList, { ...product }]);
 
     //3. CLEAN UP
     toast.success("Thêm sản phẩm thành công!");
@@ -146,7 +138,11 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
       selectedPosition,
     };
 
-    productListOperators.update({ ...product });
+    const updatedProductList = productList.map((prod: any) =>
+      prod?.id === product?.id ? { ...product } : { ...prod }
+    );
+
+    setGlobalValue("productList", updatedProductList);
 
     //3. CLEAN UP
     toast.success("Cập nhật sản phẩm thành công!");
