@@ -37,7 +37,7 @@ export const PurchaseBillDetailPage: React.FC = () => {
 
   const purchaseData = purchaseDetail?.productOrder?.productOrder || {};
 
-  const { data: billDetail } = useQuery(
+  const { data: billDetail, refetch } = useQuery(
     ["PurchaseOrderBillDetail", id],
     () => purchaseOrderBill.getById(id as string).then((res) => res.data),
     {
@@ -55,18 +55,26 @@ export const PurchaseBillDetailPage: React.FC = () => {
   }, [purchaseDetail]);
 
   useEffect(() => {
-    const {productOrderId, billNumber, supplierId, attachFile} = billDetail?.productOrderBillById || {};
+    const { productOrderId, billNumber, supplierId, attachFile } =
+      billDetail?.productOrderBillById || {};
 
     const files = !attachFile ? [] : attachFile.split?.(",");
 
     const products = billDetail?.productOrderBillDetailList || [];
 
-    method.reset({productOrderId, billNumber, supplierId, attachFile: files, products});
+    method.reset({
+      productOrderId,
+      billNumber,
+      supplierId,
+      attachFile: files,
+      products,
+    });
   }, [billDetail]);
 
   useEffect(() => {
-    !!fromPurchaseOrderId && method.setValue("productOrderId", fromPurchaseOrderId)
-  }, [fromPurchaseOrderId])
+    !!fromPurchaseOrderId &&
+      method.setValue("productOrderId", fromPurchaseOrderId);
+  }, [fromPurchaseOrderId]);
 
   return (
     <FormProvider {...method}>
@@ -88,7 +96,14 @@ export const PurchaseBillDetailPage: React.FC = () => {
         </Box>
       </Box>
 
-      <PurchaseBillDetailButtons />
+      <PurchaseBillDetailButtons
+        refetch={refetch}
+        sendMailData={{
+          to: billDetail?.productOrderBillById?.curatorEmail,
+          status: billDetail?.productOrderBillById?.status,
+          cc: [billDetail?.productOrderBillById?.salesAdminEmail],
+        }}
+      />
     </FormProvider>
   );
 };

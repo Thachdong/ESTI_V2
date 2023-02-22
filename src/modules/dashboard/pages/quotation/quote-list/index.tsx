@@ -12,7 +12,7 @@ import {
   generatePaginationProps,
   SearchBox,
 } from "~modules-core/components";
-import { defaultPagination } from "~modules-core/constance";
+import { defaultPagination, quoteStatus } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { TGridColDef } from "~types/data-grid";
@@ -78,8 +78,15 @@ export const QuoteListPage = () => {
   }, [defaultValue]);
 
   const handleRedirect = useCallback((url: string) => {
+    const {status} = defaultValue.current || {};
+
+    if (status !== 1) {
+      toast.error("Không thể tạo đơn hàng từ trạng thái " + quoteStatus[status]?.label);
+
+      return;
+    }
     router.push(url);
-  }, []);
+  }, [defaultValue.current]);
 
   // DATA TABLE
   const columns: TGridColDef[] = [
@@ -95,12 +102,13 @@ export const QuoteListPage = () => {
           items={[
             {
               action: () =>
-                handleRedirect(`quote-detail?id=${defaultValue.current?.id}`),
+              router.push(`quote-detail?id=${defaultValue.current?.id}`),
               label: "Nội dung chi tiết",
             },
             {
               action: () => handleRedirect("/dashboard/orders/order-request"),
               label: "Tạo đơn đặt hàng",
+              disabled: defaultValue.current?.status !== 1
             },
             {
               action: handleCancel,
@@ -117,7 +125,7 @@ export const QuoteListPage = () => {
       <Item
         id="view"
         onClick={() =>
-          handleRedirect(`quote-detail?id=${defaultValue.current?.id}`)
+          router.push(`quote-detail?id=${defaultValue.current?.id}`)
         }
       >
         Nội dung chi tiết
@@ -151,7 +159,7 @@ export const QuoteListPage = () => {
       <Paper className="bgContainer">
         <Box className="flex items-center w-3/4 mb-3">
           <AddButton
-            onClick={() => handleRedirect("quote-detail")}
+            onClick={() => router.push("quote-detail")}
             className="w-1/2 mr-3"
           >
             Tạo yêu cầu

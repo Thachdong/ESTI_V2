@@ -72,7 +72,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
               rules: { required: "Phải chọn người phụ trách" },
             }}
             options={curators}
-            label="Người phụ trách"
+            label="Người phụ trách:"
             className="mb-4"
             disabled={disabled}
             labelKey="curatorName"
@@ -86,7 +86,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
               control: control,
               rules: { required: "Phải nhập người phụ trách" },
             }}
-            label="Người phụ trách"
+            label="Người phụ trách:"
             className="mb-4"
             disabled={disabled}
           />
@@ -103,7 +103,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn người phụ trách" },
           }}
           options={curators}
-          label="Người phụ trách"
+          label="Người phụ trách:"
           className="mb-4"
           disabled={disabled}
           labelKey="curatorName"
@@ -128,7 +128,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn phòng ban" },
           }}
           options={curatorDepartments}
-          label="Phòng ban"
+          label="Phòng ban:"
           className="mb-4"
           disabled={!!id}
         />
@@ -139,7 +139,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập điện thoại" },
           }}
-          label="Điện thoại"
+          label="Điện thoại:"
           className="mb-4"
           disabled={!!id}
         />
@@ -150,7 +150,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập Email" },
           }}
-          label="Email"
+          label="Email:"
           disabled={!!id}
         />
       </Box>

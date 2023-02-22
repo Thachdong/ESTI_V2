@@ -1,10 +1,10 @@
 import moment from "moment";
-import { TWarehouseExport } from "src/api";
+import { StatusChip } from "~modules-core/components";
 import { warehouseImportStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
-export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
+export const importWarehouseColumns: TGridColDef[] = [
   {
     field: "created",
     headerName: "NGÀY TẠO",
@@ -94,6 +94,7 @@ export const importWarehouseColumns: TGridColDef<TWarehouseExport>[] = [
     filterKey: "importStatus",
     type: "select",
     options: warehouseImportStatus,
-    isSort: false
+    isSort: false,
+    renderCell: ({row}) => <StatusChip status={row?.importStatus} label={row?.importStatusName} />
   },
 ];

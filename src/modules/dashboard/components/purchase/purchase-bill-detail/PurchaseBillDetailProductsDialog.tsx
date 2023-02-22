@@ -4,7 +4,6 @@ import { useForm, useFormContext } from "react-hook-form";
 import {
   BaseButton,
   Dialog,
-  FormInput,
   FormInputBase,
   FormSelect,
 } from "~modules-core/components";
@@ -32,7 +31,7 @@ export const PurchaseBillDetailProductsDialog: React.FC<TProps> = ({
 
   const products = contextWatch("products");
 
-  const { productId, quantity = 0, price = 0, vat = 0 } = watch();
+  const { quantity = 0, price = 0, vat = 0 } = watch();
 
   const title =
     type === "Add" ? "Thêm sản phẩm" : "Cập nhật sản phẩm";
@@ -55,7 +54,7 @@ export const PurchaseBillDetailProductsDialog: React.FC<TProps> = ({
 
   useEffect(() => {
     type === "Add" && isSelectedProduct();
-  }, [products, productId])
+  }, [products, product])
 
   // METHODS
   const callback = useCallback((data: any) => {
@@ -93,16 +92,16 @@ export const PurchaseBillDetailProductsDialog: React.FC<TProps> = ({
   );
 
   const isSelectedProduct = useCallback(() => {
-    const index = products.findIndex((prod: any) => prod.id === productId);
+    const index = products.findIndex((prod: any) => prod.id === product.id);
 
     if (index !== -1) {
-      toast.error(`SP ${products[index]?.productName} đã được nhập!`);
+      toast.error(`SP ${product?.productName} đã được nhập!`);
 
       return true;
     }
 
     return false;
-  }, [products, productId])
+  }, [products, product])
 
   return (
     <Dialog

@@ -17,9 +17,10 @@ import { QuoteDetailDialog } from "./QuoteDetailDialog";
 
 type TProps = {
   data?: any;
+  disabled: boolean;
 };
 
-export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
+export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
   const { id } = useRouter().query;
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -43,10 +44,12 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
+              disabled: disabled
             },
             {
               action: handleDelete,
               label: "Xóa",
+              disabled: disabled
             },
           ]}
         />
@@ -85,9 +88,9 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
   const getPrice = useMemo(() => {
     if (data) {
       return {
-        totalPrice: _format.getVND(data?.totalPriceNotTax),
-        totalTax: _format.getVND(data?.totalTax),
-        finalPrice: _format.getVND(data?.totalPrice),
+        totalPrice: _format.getVND(data?.totalPriceNotTax || 0),
+        totalTax: _format.getVND(data?.totalTax || 0),
+        finalPrice: _format.getVND(data?.totalPrice || 0),
       };
     } else {
       const initResult = {
@@ -96,7 +99,7 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
         finalPrice: 0,
       };
       return products.reduce(
-        (result: any, { price, quantity, vat }: any) => {
+        (result: any, { price = 0, quantity = 0, vat = 0 }: any) => {
           const total = quantity * price;
 
           const tax = (total * vat) / 100;
@@ -127,10 +130,10 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item id="view-product" onClick={() => onOpen("Update")}>
+              <Item disabled={disabled} id="view-product" onClick={() => onOpen("Update")}>
                 Cập nhật
               </Item>
-              <Item id="delete-product" onClick={handleDelete}>
+              <Item disabled={disabled} id="delete-product" onClick={handleDelete}>
                 Xóa
               </Item>
             </Menu>
@@ -157,11 +160,11 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data }) => {
         <List className="border-0 border-t border-solid">
           <ListItem>
             Thành tiền chưa có thuế(VNĐ):{" "}
-            {getPrice.totalPrice}
+            {_format.getVND(getPrice.totalPrice)}
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
+          <ListItem>Thuế GTGT(VNĐ): {_format.getVND(getPrice.totalTax)}</ListItem>
           <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+            Tổng cộng tiền thanh toán(VNĐ): {_format.getVND(getPrice.finalPrice)}
           </ListItem>
         </List>
       </Box>

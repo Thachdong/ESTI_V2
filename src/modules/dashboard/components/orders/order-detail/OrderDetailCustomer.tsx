@@ -51,6 +51,8 @@ export const OrderDetailCustomer: React.FC = () => {
     setValue("receiverAddress", address);
   }, [customerDetail, curatorId]);
 
+  const {address, taxCode, professionName} = customerDetail?.companyInfo || {};
+
   return (
     <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3">
@@ -70,19 +72,19 @@ export const OrderDetailCustomer: React.FC = () => {
         <FormInputBase
           label="Địa chỉ:"
           disabled
-          value={customerDetail?.companyInfo?.address}
+          value={customerId ? address : ""}
         />
 
         <FormInputBase
           label="Mã số thuế:"
           disabled
-          value={customerDetail?.companyInfo?.taxCode}
+          value={customerId ? taxCode: ""}
         />
 
         <FormInputBase
           label="Lĩnh vực KD:"
           disabled
-          value={customerDetail?.companyInfo?.professionName}
+          value={customerId ? professionName : ""}
         />
       </Box>
     </Box>

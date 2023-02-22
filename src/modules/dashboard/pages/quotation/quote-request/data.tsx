@@ -1,4 +1,5 @@
 import moment from "moment";
+import { StatusChip } from "~modules-core/components";
 import { quoteOrderStatus } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
 
@@ -47,6 +48,13 @@ export const quotationRequestColumns: TGridColDef[] = [
     sortAscValue: 15,
     sortDescValue: 7,
     type: "select",
-    options: quoteOrderStatus
+    options: quoteOrderStatus,
+    renderCell: ({ row }) => (
+      <StatusChip
+        status={row.preOrderStatus}
+        label={row.preOrderStatusName}
+        color={row.preOrderStatus === 4 ? "error" : undefined}
+      />
+    ),
   },
 ];

@@ -28,9 +28,9 @@ export const QuoteDetailGeneralView: React.FC<TProps> = ({ data, disabled }) => 
       </Typography>
 
       <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
-        <FormInputBase label="Mã YCBG" value={data?.preOrderCode} disabled />
+        <FormInputBase label="Mã YCBG" value={data?.preOrderCode || "__"} disabled />
 
-        <FormInputBase label="Ngày YC" value={moment(data?.preOrderCreated).format("DD/MM/YYYY")} disabled />
+        <FormInputBase label="Ngày YC" value={data?.preOrderCreated ? moment(data?.preOrderCreated).format("DD/MM/YYYY") : "__"} disabled />
 
         <FormInputBase label="Mã BG" value={data?.preQuoteCode} disabled />
 

@@ -1,4 +1,5 @@
 import moment from "moment";
+import { StatusChip } from "~modules-core/components";
 import { purchaseOrderBillStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -80,6 +81,7 @@ export const billColumns: TGridColDef[] = [
     isSort: false,
     filterKey: "status",
     type: "select",
-    options: purchaseOrderBillStatus
+    options: purchaseOrderBillStatus,
+    renderCell: ({row}) => <StatusChip status={row?.status} label={row?.statusName} />
   },
 ];

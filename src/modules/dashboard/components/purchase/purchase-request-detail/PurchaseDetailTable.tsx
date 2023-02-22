@@ -20,7 +20,7 @@ import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { PurchaseDetailDialog } from "./PurchaseDetailDialog";
 
-export const PurchaseDetailTable = () => {
+export const PurchaseDetailTable: React.FC = () => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const [planDate, setPlanDate] = useState({

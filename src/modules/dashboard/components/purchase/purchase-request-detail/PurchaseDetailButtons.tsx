@@ -186,7 +186,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: curatorEmail } as any}
+        defaultValue={{ to: curatorEmail, cc: [] } as any}
       />
     </Box>
   );
