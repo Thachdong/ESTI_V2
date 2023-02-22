@@ -12,6 +12,7 @@ import {
   BillDetailCustomer,
   BillDetailGeneral,
   BillDetailGeneralView,
+  BillDetailPaymentHistory,
   BillDetailPaymentStatus,
   BillDetailProducts,
   BillDetailReciever,
@@ -106,10 +107,8 @@ export const BillDetailPage: React.FC = () => {
   }, [defaultReceiver]);
 
   useEffect(() => {
-    console.log(fromOrderId);
-    
-    !!fromOrderId && setValue("mainOrderId", fromOrderId)
-  }, [fromOrderId])
+    !!fromOrderId && setValue("mainOrderId", fromOrderId);
+  }, [fromOrderId]);
 
   return (
     <FormProvider {...method}>
@@ -189,7 +188,26 @@ export const BillDetailPage: React.FC = () => {
         </Box>
       </Box>
 
-      <BillDetailButtons refetch={refetch} sendMailData={{to: BillView?.bill?.billRecipientEmail, status: BillView?.bill?.status}} />
+      {!!id && (
+        <BillDetailPaymentHistory
+          refetch={refetch}
+          data={BillView?.paymentHistory || []}
+          paidData={{
+            id,
+            nextPaymentDate: 0,
+            unPaid: BillView?.collectedPaid,
+          }}
+        />
+      )}
+
+      <BillDetailButtons
+        refetch={refetch}
+        sendMailData={{
+          to: BillView?.bill?.billRecipientEmail,
+          status: BillView?.bill?.status,
+          cc: [BillView?.mainOrder?.curatorEmail]
+        }}
+      />
     </FormProvider>
   );
 };

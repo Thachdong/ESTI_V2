@@ -1,3 +1,4 @@
+import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -19,12 +20,12 @@ export const productColumns: TGridColDef[] = [
     flex: 1,
   },
   {
-    field: "manufactor",
+    field: "productManufactor",
     headerName: "Hãng SX",
     minWidth: 100,
   },
   {
-    field: "specs",
+    field: "productSpecs",
     headerName: "Quy cách",
     minWidth: 100,
   },
@@ -59,5 +60,40 @@ export const productColumns: TGridColDef[] = [
     minWidth: 100,
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row.totalPrice),
+  },
+];
+
+export const paymentHistoryColumns: TGridColDef[] = [
+  {
+    field: "no",
+    headerName: "STT",
+    width: 50,
+  },
+  {
+    field: "created",
+    headerName: "Ngày tạo",
+    minWidth: 100,
+    flex: 1,
+    renderCell: ({row}) => row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__"
+  },
+  {
+    field: "createdByName",
+    headerName: "Người tạo",
+    minWidth: 100,
+    flex: 1,
+  },
+  {
+    field: "paymentDate",
+    headerName: "Ngày thanh toán",
+    minWidth: 100,
+    flex: 1,
+    renderCell: ({row}) => row?.paymentDate ? moment(row?.paymentDate).format("DD/MM/YYYY") : "__"
+  },
+  {
+    field: "paid",
+    headerName: "Số tiền thanh toán",
+    minWidth: 100,
+    flex: 1,
+    renderCell: ({row}) => _format.getVND(row?.paid)
   },
 ];

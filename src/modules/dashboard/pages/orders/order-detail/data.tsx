@@ -128,7 +128,7 @@ export const invoiceColumns: TGridColDef[] = [
     headerName: "Hạn thanh toán",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => moment(row?.nextPaymentDate).format("DD/MM/YYYY")
+    renderCell: ({row}) => row?.nextPaymentDate ? moment(row?.nextPaymentDate).format("DD/MM/YYYY") : "__"
   },
   {
     field: "totalPrice",

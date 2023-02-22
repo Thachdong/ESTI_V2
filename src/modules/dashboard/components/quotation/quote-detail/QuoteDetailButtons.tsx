@@ -23,12 +23,14 @@ type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch: () => void;
+  sendMailData: any;
 };
 
 export const QuoteDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
+  sendMailData
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -39,7 +41,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
   const { handleSubmit, watch } = useFormContext();
 
-  const { curatorEmail, status } = watch();
+  const { status } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -223,7 +225,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: curatorEmail } as any}
+        defaultValue={{ to: sendMailData?.to, cc: [...sendMailData?.cc] } as any}
       />
     </Box>
   );

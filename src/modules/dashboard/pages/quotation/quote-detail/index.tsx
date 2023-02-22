@@ -96,7 +96,10 @@ export const QuoteDetailPage: React.FC = () => {
     <Box className="container-center">
       <FormProvider {...method}>
         {!!id ? (
-          <QuoteDetailGeneralView data={quoteDetail?.preQuoteView} disabled={disabled} />
+          <QuoteDetailGeneralView
+            data={quoteDetail?.preQuoteView}
+            disabled={disabled}
+          />
         ) : (
           <>
             <Box className="mb-3">
@@ -122,7 +125,10 @@ export const QuoteDetailPage: React.FC = () => {
           <QuoteDetailAddition disabled={disabled} />
 
           <Box className="col-span-2">
-            <QuoteDetailProduct data={quoteDetail?.preQuoteView} disabled={disabled} />
+            <QuoteDetailProduct
+              data={quoteDetail?.preQuoteView}
+              disabled={disabled}
+            />
           </Box>
 
           <Box className="col-span-2">
@@ -138,6 +144,14 @@ export const QuoteDetailPage: React.FC = () => {
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           refetch={refetch}
+          sendMailData={{
+            to: quoteDetail?.preQuoteView?.curatorEmail,
+            cc: [
+              quoteDetail?.preQuoteView?.curatorEmail,
+              quoteDetail?.preQuoteView?.salesEmail,
+              quoteDetail?.preQuoteView?.receiverEmail,
+            ],
+          }}
         />
       </FormProvider>
     </Box>

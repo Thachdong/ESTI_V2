@@ -159,7 +159,7 @@ export const OrderDetailPage: React.FC = () => {
           <OrderDetailImplement disabled={disabled} />
         </Box>
 
-        <OrderDetailAttach disabled={true} />
+        <OrderDetailAttach disabled={disabled} />
 
         <OrderDetailAddition disabled={disabled} />
 
@@ -193,22 +193,33 @@ export const OrderDetailPage: React.FC = () => {
           />
         </Box>
 
-        <Box className="col-span-2">
-          <QuoteDetailDeliveryHistory
-            orderStatus={orderDetail?.mainOrder?.status}
-            orderCode={orderDetail?.mainOrder?.mainOrderCode}
-          />
-        </Box>
+        {!!id && (
+          <>
+            <Box className="col-span-2">
+              <QuoteDetailDeliveryHistory
+                orderStatus={orderDetail?.mainOrder?.status}
+                orderCode={orderDetail?.mainOrder?.mainOrderCode}
+              />
+            </Box>
 
-        <Box className="col-span-2">
-          <QuoteDetailInvoiceHistory
-            orderStatus={orderDetail?.mainOrder?.status}
-            orderCode={orderDetail?.mainOrder?.mainOrderCode}
-          />
-        </Box>
+            <Box className="col-span-2">
+              <QuoteDetailInvoiceHistory
+                orderStatus={orderDetail?.mainOrder?.status}
+                orderCode={orderDetail?.mainOrder?.mainOrderCode}
+              />
+            </Box>
+          </>
+        )}
       </Box>
 
-      <OrderDetailButtons isUpdate={isUpdate} setIsUpdate={setIsUpdate} />
+      <OrderDetailButtons
+        isUpdate={isUpdate}
+        setIsUpdate={setIsUpdate}
+        sendMailData={{
+          to: orderDetail?.mainOrder?.receiverEmail,
+          cc: [orderDetail?.mainOrder?.curatorEmail],
+        }}
+      />
     </FormProvider>
   );
 };

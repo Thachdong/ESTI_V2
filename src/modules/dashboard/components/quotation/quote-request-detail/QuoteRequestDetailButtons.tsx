@@ -8,7 +8,12 @@ import {
   TCreateQuoteRequest,
   TUpdateQuoteRequest,
 } from "src/api";
-import { AddButton, BaseButton } from "~modules-core/components";
+import {
+  AddButton,
+  BaseButton,
+  EditButton,
+  PrintButton,
+} from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 
 type TProps = {
@@ -20,17 +25,16 @@ type TProps = {
 export const QuoteRequestDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
-  refetch
+  refetch,
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
 
   const { id } = router.query;
 
-  const {
-    handleSubmit,
-    formState: { isDirty },
-  } = useFormContext();
+  const { handleSubmit, watch } = useFormContext();
+
+  const { status } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -108,10 +112,28 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
         );
       case !!id && !isUpdate:
         return (
-          <BaseButton onClick={() => setIsUpdate(true)}>Cập nhật</BaseButton>
+          <Box className="flex items-center justify-end gap-3">
+            {status === 0 && (
+              <>
+                <EditButton
+                  tooltipText="Cập nhật"
+                  onClick={() => setIsUpdate(true)}
+                />
+                
+                <AddButton
+                  onClick={() =>
+                    router.push(`quote-detail?fromRequestId=${id}`)
+                  }
+                >
+                  Tạo báo giá
+                </AddButton>
+              </>
+            )}
+            <PrintButton className="!bg-error">In</PrintButton>
+          </Box>
         );
     }
-  }, [id, isUpdate]);
+  }, [id, isUpdate, status]);
 
   return <Box className="flex justify-end mt-4">{renderButtons()}</Box>;
 };
