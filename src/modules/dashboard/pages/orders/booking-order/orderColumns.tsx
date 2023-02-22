@@ -1,5 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
+import { StatusChip } from "~modules-core/components";
 import { orderStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -93,6 +94,10 @@ export const orderColumns: TGridColDef[] = [
     sortDescValue: 10,
     filterKey: "status",
     type: "select",
-    options: orderStatus
+    options: orderStatus,
+    renderCell: ({row}) => {
+      const colors = ["default", "info", "success", "error"]
+      return <StatusChip label={row?.statusName} status={row?.status} color={colors[row?.status - 1] as any} />
+    }
   },
 ];

@@ -5,3 +5,4 @@ export * from "./QuoteRequestDetailAttach";
 export * from "./QuoteRequestDetailProduct";
 export * from "./QuoteRequestDetailDialog";
 export * from "./QuoteRequestDetailButtons";
+export * from "./QuoteRequestDetailGeneral";

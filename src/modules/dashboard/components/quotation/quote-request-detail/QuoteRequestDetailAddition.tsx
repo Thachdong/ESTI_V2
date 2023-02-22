@@ -24,6 +24,7 @@ export const QuoteRequestDetailAddition: React.FC = () => {
           multiline
           minRows={3}
           disabled={!!id}
+          shrinkLabel
         />
       </Box>
     </Box>

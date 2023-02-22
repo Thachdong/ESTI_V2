@@ -38,11 +38,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
 
   const { id } = useRouter().query;
 
-  const productList =
-    watch("productList")?.map((prod: any, index: number) => ({
-      ...prod,
-      no: index + 1,
-    })) || [];
+  const { productList = [] } = watch();
 
   const totalPrice = useMemo(
     () =>
@@ -62,35 +58,19 @@ export const ExportDetailProducts: React.FC<TProps> = ({
     setDialog({ open: false });
   }, []);
 
-  const productListOperators = {
-    add: (product: any) => {
-      setValue("productList", [...productList, { ...product }]);
-    },
-    update: (product: any) => {
-      const updatedProductList = productList.map((prod: any) =>
-        prod?.no === product?.no ? { ...product } : { ...prod }
-      );
-
-      setValue("productList", updatedProductList);
-    },
-    delete: (no: number) => {
-      const updatedProductList = productList.filter(
-        (prod: any) => prod?.no !== no
-      );
-
-      setValue("productList", updatedProductList);
-    },
-  };
-
   const handleDeleteProduct = useCallback(() => {
-    const { productCode, no } = defaultValue.current || {};
+    const { productCode, id } = defaultValue.current || {};
 
     if (!productCode) return;
 
     if (confirm("Xác nhận xóa SP: " + productCode)) {
-      productListOperators.delete(no);
+      const updatedProductList = productList.filter(
+        (prod: any) => prod?.id !== id
+      );
+
+      setValue("productList", updatedProductList);
     }
-  }, [defaultValue]);
+  }, [defaultValue, productList]);
 
   // DATA TABLE
   const renderContextMenu = useCallback(() => {
@@ -132,7 +112,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           </Menu>
         );
     }
-  }, [exportStatus]);
+  }, [exportStatus, productList, defaultValue.current]);
 
   const renderActionButtons = useCallback(
     (row: any) => {
@@ -207,9 +187,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = productList.find(
-      (item: any) => item.no?.toString() === id
-    );
+    const currentRow = productList.find((item: any) => item.id === id);
 
     defaultValue.current = currentRow;
   };
@@ -235,12 +213,14 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         menuComponent={renderContextMenu()}
       >
         <DataTable
-          rows={productList}
+          rows={productList?.map((prod: any, index: number) => ({
+            ...prod,
+            no: index + 1,
+          }))}
           columns={columns}
-          autoHeight={true}
-          hideSearchbar={true}
+          autoHeight
+          hideSearchbar
           hideFooter
-          getRowId={(row) => row.no}
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
@@ -262,7 +242,6 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         defaultValue={defaultValue.current}
         getWarehouseConfig={getWarehouseConfig}
         productOptions={productOptions}
-        productListOperators={productListOperators}
       />
     </Paper>
   );

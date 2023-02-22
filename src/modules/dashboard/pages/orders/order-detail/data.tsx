@@ -1,4 +1,6 @@
 import moment from "moment";
+import Link from "next/link";
+import { StatusChip } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -19,7 +21,7 @@ export const detailColumns: TGridColDef[] = [
     field: "productName",
     headerName: "Tên SP",
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
   { field: "manufactor", headerName: "Hãng SX", minWidth: 100 },
   {
@@ -52,7 +54,7 @@ export const detailColumns: TGridColDef[] = [
     field: "note",
     headerName: "Ghi chú",
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
 ];
 
@@ -68,20 +70,27 @@ export const deliveryColumns: TGridColDef[] = [
     headerName: "Ngày gửi hàng",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => moment(row?.created).format("DD/MM/YYYY")
+    renderCell: ({ row }) => moment(row?.created).format("DD/MM/YYYY"),
   },
   {
     field: "warehouseSessionCode",
     headerName: "Mã phiếu xuất kho",
     minWidth: 120,
     flex: 1,
+    renderCell: ({ row }) => (
+      <Link href={`/dashboard/warehouse/export-detail/?id=${row?.id}`}>
+        <a className="no-underline">
+          <StatusChip status={row?.status} label={row?.warehouseSessionCode} className="cursor-pointer" />
+        </a>
+      </Link>
+    ),
   },
   {
     field: "importTotalPrice",
     headerName: "Giá trị hàng bán",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => _format.getVND(row?.importTotalPrice)
+    renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
   },
   {
     field: "deliveryCode",
@@ -101,7 +110,7 @@ export const deliveryColumns: TGridColDef[] = [
     minWidth: 120,
     flex: 1,
   },
-]
+];
 
 export const invoiceColumns: TGridColDef[] = [
   {
@@ -115,34 +124,44 @@ export const invoiceColumns: TGridColDef[] = [
     headerName: "Ngày hóa đơn",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => moment(row?.created).format("DD/MM/YYYY")
+    renderCell: ({ row }) => moment(row?.created).format("DD/MM/YYYY"),
   },
   {
     field: "billCode",
-    headerName: "Mã hóa đơn",
+    headerName: "Số hóa đơn",
     minWidth: 120,
     flex: 1,
+    renderCell: ({ row }) => (
+      <Link href={`/dashboard/orders/bill-detail/?id=${row?.id}`}>
+        <a className="no-underline">
+          <StatusChip status={row?.status} label={row?.billCode} className="cursor-pointer" />
+        </a>
+      </Link>
+    ),
   },
   {
     field: "nextPaymentDate",
     headerName: "Hạn thanh toán",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => moment(row?.nextPaymentDate).format("DD/MM/YYYY")
+    renderCell: ({ row }) =>
+      row?.nextPaymentDate
+        ? moment(row?.nextPaymentDate).format("DD/MM/YYYY")
+        : "__",
   },
   {
     field: "totalPrice",
     headerName: "Giá trị hóa đơn",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => _format.getVND(row?.totalPrice)
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
   },
   {
     field: "paid",
     headerName: "Đã thanh toán",
     minWidth: 120,
     flex: 1,
-    renderCell: ({row}) => _format.getVND(row?.totalPrice)
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
   },
   {
     field: "statusName",
@@ -150,4 +169,4 @@ export const invoiceColumns: TGridColDef[] = [
     minWidth: 120,
     flex: 1,
   },
-]
+];

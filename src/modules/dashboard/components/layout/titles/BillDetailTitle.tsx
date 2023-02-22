@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { bill } from "src/api";
+import { StatusChip } from "~modules-core/components";
 
 export const BillDetailTitle: React.FC = () => {
   const router = useRouter();
@@ -17,9 +18,16 @@ export const BillDetailTitle: React.FC = () => {
   );
 
   if (!!id) {
-    const code = billDetail?.BillView?.bill?.billCode;
+    const {billCode, status, statusName} = billDetail?.BillView?.bill || {};
 
-    return <>ĐƠN HÀNG / CHI TIẾT HÓA ĐƠN / {code}</>;
+    return <>ĐƠN HÀNG / CHI TIẾT HÓA ĐƠN / {billCode} {statusName && (
+      <StatusChip
+        className="mb-4"
+        status={status}
+        label={statusName}
+        color={status === 4 ? "error" : undefined}
+      />
+    )}</>;
   } else {
     return <>ĐƠN HÀNG/ TẠO HÓA ĐƠN</>;
   }

@@ -1,5 +1,6 @@
 import moment from "moment";
 import { TWarehouseExport } from "src/api";
+import { StatusChip } from "~modules-core/components";
 import { warehouseExportStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -83,5 +84,12 @@ export const warehouseExportColumns: TGridColDef<TWarehouseExport>[] = [
     sortAscValue: 19,
     sortDescValue: 9,
     filterKey: "exportStatus",
+    renderCell: ({row}) => {
+      const {exportStatusName, exportStatus = 0} = row || {};
+
+      const colors = ["default", "primary", "secondary", "success", "warning", "error"]
+      
+      return <StatusChip status={exportStatus} label={exportStatusName} color={colors[+exportStatus] as any} />
+    }
   },
 ];

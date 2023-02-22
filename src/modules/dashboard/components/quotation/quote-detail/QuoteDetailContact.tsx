@@ -5,13 +5,16 @@ import { FormInput, FormSelect } from "~modules-core/components";
 import { curatorDepartments } from "~modules-core/constance";
 import { customer as customerApi } from "src/api";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const QuoteDetailContact: React.FC<TProps> = ({disabled}) => {
+export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
   const [curator, setCurator] = useState<any>();
+
+  const { id } = useRouter().query;
 
   const { control, watch, setValue } = useFormContext();
 
@@ -28,17 +31,19 @@ export const QuoteDetailContact: React.FC<TProps> = ({disabled}) => {
 
   // SIDE EFFECTS
   useEffect(() => {
-    const { curatorName, curatorPhone, curatorEmail, curatorDepartment } =
-      curator || {};
+    if (!id && !!curator) {
+      const { curatorName, curatorPhone, curatorEmail, curatorDepartment } =
+        curator || {};
 
-    setValue("curatorName", curatorName);
+      setValue("curatorName", curatorName);
 
-    setValue("curatorPhone", curatorPhone);
+      setValue("curatorPhone", curatorPhone);
 
-    setValue("curatorEmail", curatorEmail);
+      setValue("curatorEmail", curatorEmail);
 
-    setValue("curatorDepartmentId", curatorDepartment);
-  }, [curator]);
+      setValue("curatorDepartmentId", curatorDepartment);
+    }
+  }, [curator, id]);
 
   return (
     <Box className="flex flex-col">

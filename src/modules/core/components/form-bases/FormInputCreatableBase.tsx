@@ -1,5 +1,6 @@
 import { Box, Chip, TextField, TextFieldProps } from "@mui/material";
 import clsx from "clsx";
+import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "~modules-core/toast";
 
@@ -113,7 +114,7 @@ export const FormInputCreatableBase: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-wrap items-center gap-2">
-      {chips.map(renderChip)}
+      {_.compact(chips).map(renderChip)}
       <TextField
         InputLabelProps={defaultLabelProps}
         InputProps={defaultInputProps}

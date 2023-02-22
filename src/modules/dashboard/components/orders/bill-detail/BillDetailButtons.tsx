@@ -18,6 +18,7 @@ type TProps = {
   sendMailData: {
     to: string;
     status: number;
+    cc: string[];
   };
 };
 
@@ -33,8 +34,6 @@ export const BillDetailButtons: React.FC<TProps> = ({
   const { id } = router.query;
 
   const { handleSubmit, watch } = useFormContext();
-
-  const { curatorEmail } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -113,10 +112,10 @@ export const BillDetailButtons: React.FC<TProps> = ({
       );
     } else {
       return (
-        <AddButton onClick={handleSubmit(handleCreate)}>Tạo báo giá</AddButton>
+        <AddButton onClick={handleSubmit(handleCreate)}>Tạo hóa đơn</AddButton>
       );
     }
-  }, [id]);
+  }, [id, sendMailData]);
 
   return (
     <Box className="flex justify-end mt-4">
@@ -125,7 +124,7 @@ export const BillDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: sendMailData?.to } as any}
+        defaultValue={{ to: sendMailData?.to, cc: sendMailData?.cc } as any}
       />
     </Box>
   );

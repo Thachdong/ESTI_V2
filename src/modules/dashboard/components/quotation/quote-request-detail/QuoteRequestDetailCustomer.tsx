@@ -64,7 +64,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             name: "customerCode",
             control: control,
           }}
-          label="Mã khách hàng"
+          label="Mã khách hàng:"
           className="mb-4"
           disabled={disabled}
         />
@@ -87,7 +87,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập tên khách hàng" },
           }}
-          label="Tên khách hàng"
+          label="Tên khách hàng:"
           className="mb-4"
           disabled={!!id}
         />
@@ -98,7 +98,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập mã số thuế" },
           }}
-          label="Mã số thuế"
+          label="Mã số thuế:"
           className="mb-4"
           disabled={!!id}
         />
@@ -109,7 +109,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập địa chỉ khách hàng" },
           }}
-          label="Địa chỉ khách hàng"
+          label="Địa chỉ khách hàng:"
           className="mb-4"
           multiline
           minRows={2}
@@ -122,7 +122,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
             rules: { required: "Phải nhập địa chỉ nhận hàng" },
           }}
-          label="Địa chỉ nhận hàng"
+          label="Địa chỉ nhận hàng:"
           multiline
           minRows={2}
           disabled={!!id}

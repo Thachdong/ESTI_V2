@@ -126,7 +126,7 @@ export const CustomersPage = () => {
     <Paper className="bgContainer">
       <div className="flex mb-3">
         <div className="w-1/2">
-          <SearchBox label="Tìm kiếm sale phụ trách" />
+          <SearchBox label="Tìm kiếm" />
         </div>
 
         <div className="w-1/2 flex items-center justify-end">

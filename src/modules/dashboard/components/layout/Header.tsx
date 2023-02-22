@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import {
   BillDetailTitle,
   OrderDetailTitle,
+  PurchaseBillDetailTitle,
+  PurchaseRequestTitle,
   QuoteDetailTitle,
   QuoteRequestDetailTitle,
   WarehouseExportDetailTitle,
@@ -25,10 +27,6 @@ export const Header: React.FC<TProps> = ({ data }) => {
 
   const renderTitle = useCallback(() => {
     switch (pageName) {
-      case "warehouse-export-detail-page":
-        return <WarehouseExportDetailTitle />;
-      case "warehouse-import-detail-page":
-        return <WarehouseImportDetailTitle />;
       case "quote-request-detail-page":
         return <QuoteRequestDetailTitle />;
       case "quote-detail-page":
@@ -37,6 +35,14 @@ export const Header: React.FC<TProps> = ({ data }) => {
         return <OrderDetailTitle />;
       case "bill-detail-page":
         return <BillDetailTitle />;
+      case "purchase-request-detail-page":
+        return <PurchaseRequestTitle />
+      case "purchase-bill-detail-page":
+        return <PurchaseBillDetailTitle />
+      case "warehouse-export-detail-page":
+        return <WarehouseExportDetailTitle />;
+      case "warehouse-import-detail-page":
+        return <WarehouseImportDetailTitle />;
       default:
         return title;
     }

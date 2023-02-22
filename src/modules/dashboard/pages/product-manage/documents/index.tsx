@@ -151,7 +151,7 @@ export const DocumentsPage: React.FC = () => {
   return (
     <Paper className="bgContainer flex flex-col">
       <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
+        <SearchBox label="Tìm kiếm" />
 
         <Box className="flex items-center justify-end">
           <AddButton

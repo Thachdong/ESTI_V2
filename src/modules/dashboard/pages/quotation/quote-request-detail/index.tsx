@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import {
   QuoteRequestDetailButtons,
   QuoteRequestDetailContact,
   QuoteRequestDetailCustomer,
+  QuoteRequestDetailGeneral,
   QuoteRequestDetailProduct,
 } from "~modules-dashboard/components";
 
@@ -30,7 +31,7 @@ export const QuoteRequestDetailPage = () => {
   });
 
   // DATA FETCHING
-  const { data: requestDetail } = useQuery(
+  const { data: requestDetail, refetch } = useQuery(
     ["RequestDetail_" + id],
     () => quoteRequest.getById(id as string).then((res) => res.data),
     {
@@ -61,7 +62,7 @@ export const QuoteRequestDetailPage = () => {
       requirements,
       curatorId,
       salesId,
-      id
+      preOrderStatus,
     } = preOrderView;
 
     const arrayFiles = attachFile ? attachFile?.split?.(",") : [];
@@ -81,14 +82,25 @@ export const QuoteRequestDetailPage = () => {
       requirements,
       curatorId,
       salesId,
-      id
+      status: preOrderStatus
     });
   }, [requestDetail]);
 
   return (
     <Box className="container-center">
+      {!!id && !requestDetail?.preOrderView?.customerId && (
+        <Alert severity="error" className="mb-4">
+          <strong>Khách hàng chưa có sẳn trong hệ thống! </strong>
+          Vui lòng tạo mới tài khoản trước khi tiến hành tạo báo giá!
+        </Alert>
+      )}
       <FormProvider {...method}>
-        {!id && (
+        {!!id ? (
+          <QuoteRequestDetailGeneral
+            code={requestDetail?.preOrderView?.preOrderCode}
+            createdAt={requestDetail?.preOrderView?.created}
+          />
+        ) : (
           <Box className="mb-3">
             <FormCheckbox
               label="Khách hàng có trong hệ thống"
@@ -115,6 +127,7 @@ export const QuoteRequestDetailPage = () => {
         <QuoteRequestDetailButtons
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
+          refetch={refetch}
         />
       </FormProvider>
     </Box>

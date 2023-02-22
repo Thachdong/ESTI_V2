@@ -9,7 +9,7 @@ export const AddButton: React.FC<ButtonProps> = ({ ref, ...props }) => {
       {...props}
       className={clsx(
         "bg-main-2 hover:bg-[#3182ce] px-3 shadow-none !font-bold",
-        props.disabled && "disable-form-input",
+        props.disabled && "disable-btn",
         props?.className
       )}
     >

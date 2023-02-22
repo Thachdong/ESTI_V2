@@ -21,9 +21,9 @@ export const BillDetailRecieverView: React.FC<TProps> = ({ data }) => {
       <Box className="bg-white rounded-sm p-3">
         <FormInputBase value={data.name} label="Người nhận: " className="mb-4" disabled />
 
-        <FormInputBase value={data.phone} label="Email:" className="mb-4" disabled />
+        <FormInputBase value={data.email} label="Email:" className="mb-4" disabled />
 
-        <FormInputBase value={data.email} label="Số điện thoại:" className="mb-4" disabled />
+        <FormInputBase value={data.phone} label="Số điện thoại:" className="mb-4" disabled />
 
         <FormInputBase value={data.address} label="Địa chỉ:" disabled />
       </Box>

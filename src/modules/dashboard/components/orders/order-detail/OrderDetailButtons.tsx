@@ -19,12 +19,14 @@ type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch?: () => void;
+  sendMailData: any
 };
 
 export const OrderDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
+  sendMailData
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -35,7 +37,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
 
   const { handleSubmit, watch } = useFormContext();
 
-  const { curatorEmail, status } = watch();
+  const { status } = watch();
 
   // METHODS
   const mutateCreate = useMutation(
@@ -165,7 +167,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
       case !id:
         return (
           <AddButton onClick={handleSubmit(handleCreate)}>
-            Tạo báo giá
+            Tạo đơn đặt hàng
           </AddButton>
         );
       case !!id && isUpdate:
@@ -202,7 +204,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
           </Box>
         );
     }
-  }, [id, isUpdate]);
+  }, [id, isUpdate, status]);
 
   return (
     <Box className="flex justify-end mt-4">
@@ -211,7 +213,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: curatorEmail } as any}
+        defaultValue={{ to: sendMailData.to, cc: [...sendMailData.cc] } as any}
       />
     </Box>
   );

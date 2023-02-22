@@ -113,10 +113,10 @@ export const CustomerTypeConfigPage: React.FC = () => {
               id="view-product"
               onClick={() => setDialog({ open: true, type: "View" })}
             >
-              Xem chi tiết SP
+              Xem chi tiết
             </Item>
             <Item id="delete-product" onClick={handleDelete}>
-              Xóa SP
+              Xóa
             </Item>
           </Menu>
         }

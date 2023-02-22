@@ -1,29 +1,29 @@
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { preQuote } from "src/api";
+import { purchaseOrder } from "src/api";
 import { StatusChip } from "~modules-core/components";
 
-export const QuoteDetailTitle: React.FC = () => {
+export const PurchaseRequestTitle: React.FC = () => {
   const router = useRouter();
 
   const { id } = router.query;
 
   // DATA FETCHING
-  const { data: quoteDetail } = useQuery(
+  const { data: purchaseRequestDetail, refetch } = useQuery(
     ["QuoteDetail", id],
-    () => preQuote.getById(id as string).then((res) => res.data),
+    () => purchaseOrder.getById(id as string).then((res) => res.data),
     {
       enabled: !!id,
     }
   );
 
   if (!!id) {
-    const { preQuoteCode, status, statusName } =
-      quoteDetail?.preQuoteView || {};
+    const { code, status, statusName } =
+    purchaseRequestDetail?.productOrder?.productOrder || {};
 
     return (
       <>
-        BÁO GIÁ / CHI TIẾT BÁO GIÁ / {preQuoteCode}{" "}
+        ĐƠN MUA HÀNG / CHI TIẾT ĐƠN MUA HÀNG / {code}{" "}
         {statusName && (
           <StatusChip
             className="mb-4"
@@ -35,6 +35,6 @@ export const QuoteDetailTitle: React.FC = () => {
       </>
     );
   } else {
-    return <>BÁO GIÁ / TẠO ĐƠN BÁO GIÁ</>;
+    return <>ĐƠN MUA HÀNG / TẠO ĐƠN MUA HÀNG</>;
   }
 };

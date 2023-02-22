@@ -10,3 +10,4 @@ export * from "./BillDetailStatus";
 export * from "./BillDetailGeneralView";
 export * from "./BillDetailPaymentStatus";
 export * from "./BillDetailRecieverView";
+export * from "./BillDetailPaymentHistory";

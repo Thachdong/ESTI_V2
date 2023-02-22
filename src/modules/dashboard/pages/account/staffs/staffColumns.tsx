@@ -1,4 +1,5 @@
 import moment from "moment";
+import { StatusChip } from "~modules-core/components";
 import { accountStatus } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
 
@@ -86,6 +87,10 @@ export const staffColumns: TGridColDef[] = [
     sortDescValue: 10,
     sortAscValue: 21,
     type: "select",
-    options: accountStatus
+    options: accountStatus,
+    renderCell: ({row}) => {
+      const colors = ["success", "default", "error"]
+      return <StatusChip status={row?.status} label={row?.statusName} color={colors[row?.status] as any} />
+    }
   },
 ];

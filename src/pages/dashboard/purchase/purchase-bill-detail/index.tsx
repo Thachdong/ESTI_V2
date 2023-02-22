@@ -8,7 +8,7 @@ Index.displayName = "Chi tiết hóa đơn";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  title: "ĐƠN MUA HÀNG / CHI TIẾT HÓA ĐƠN",
+  pageName: "purchase-bill-detail-page"
 };
 
 export default Index;

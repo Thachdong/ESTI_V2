@@ -67,12 +67,12 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
   }, []);
 
   const handleDelete = useCallback(() => {
-    const { productCode, no } = defaultValue.current || {};
+    const { productCode, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa SP: " + productCode)) {
       setValue(
         "products",
-        products.filter((prod: any) => prod?.no !== no)
+        products.filter((prod: any) => prod?.id !== id)
       );
     }
   }, [defaultValue, products]);

@@ -67,6 +67,7 @@ export const OrderDetailGeneral: React.FC = () => {
           controlProps={{
             name: "branchId",
             control,
+            rules: {required: "Phải chọn chi nhánh"}
           }}
           label="CN thực hiện:"
           labelKey="code"
