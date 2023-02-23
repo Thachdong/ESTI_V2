@@ -98,7 +98,7 @@ export const ImportDetailPage = () => {
           ...prod,
           rowId: prod?.id,
           manufactor: prod?.productManufactor,
-          specs: prod?.productSpecs
+          specs: prod?.productSpecs,
         }))
       );
     } else {
@@ -119,9 +119,9 @@ export const ImportDetailPage = () => {
 
       reset({
         ...warehouseSession,
-        productList: warehouse.map((prod: any, index: number) => ({
+        productList: warehouse.map((prod: any) => ({
           ...prod,
-          no: index + 1,
+          rowId: prod?.id,
         })),
         withoutPurchaseInvoice: warehouseSession?.productOrderId ? false : true,
       });

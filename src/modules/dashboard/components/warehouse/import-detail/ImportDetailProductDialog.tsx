@@ -135,7 +135,7 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
         totalPrice: data?.price * data?.quantity,
         productManufactor: selectedProduct?.manufactor,
         productSpecs: selectedProduct?.specs,
-        rowId: new Date().getTime().toString() // GENERATE UNIQUE ROW ID
+        rowId: new Date().getTime().toString(), // GENERATE UNIQUE ROW ID
       };
 
       setContextValue("productList", [...productList, { ...product }]);
@@ -173,10 +173,16 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
 
   // SIDE EFFECT
   useEffect(() => {
-    if (type === "AddProduct") {
-      reset({});
-    } else {
-      !!defaultValue && reset({ ...defaultValue });
+    switch (type) {
+      case "AddProduct":
+        reset({});
+        break;
+      case "CopyProduct":
+        !!defaultValue &&
+          reset({ ...defaultValue, rowId: new Date().getTime().toString() });
+        break;
+      default:
+        !!defaultValue && reset({ ...defaultValue });
     }
   }, [defaultValue, type]);
 
