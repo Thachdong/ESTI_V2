@@ -57,46 +57,19 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   }, []);
 
   const handleRemoveProduct = useCallback(() => {
-    const { productName, no } = defaultValue.current || {};
+    const { productName, rowId } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
-      const updatedProductList = productList.filter((p: any) => p?.no !== no);
+      const updatedProductList = productList.filter((p: any) => p?.rowId !== rowId);
 
       setValue("productList", updatedProductList);
     }
-  }, [productList, defaultValue]);
-
-  const handleAddProduct = useCallback(
-    (product: any) => {
-      setValue("productList", [
-        ...productList,
-        {
-          ...product,
-          no: productList.length + 1,
-          id: dialog.type === "Copy" ? null : product?.id,
-        },
-      ]);
-    },
-    [productList, setValue, dialog.type]
-  );
-
-  const handleUpdateProduct = useCallback(
-    (product: any) => {
-      const updatedProductList = productList.map((p: any) =>
-        p.no === product.no ? { ...product } : { ...p }
-      );
-
-      setValue("productList", updatedProductList);
-    },
-    [productList, setValue]
-  );
+  }, [productList, defaultValue.current]);
 
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = productList?.find(
-      (item: any) => item.no?.toString() === id
-    );
+    const currentRow = productList?.find((item: any) => item?.rowId === id);
 
     defaultValue.current = currentRow;
   };
@@ -107,7 +80,10 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       case importStatus === undefined:
         return (
           <Menu className="p-0" id="product_table_menu">
-            <Item id="update-product" onClick={() => handleOpen("Update")}>
+            <Item
+              id="update-product"
+              onClick={() => handleOpen("UpdateProduct")}
+            >
               Cập nhật
             </Item>
 
@@ -119,11 +95,14 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       case importStatus === 0:
         return (
           <Menu className="p-0" id="product_table_menu">
-            <Item id="update-product" onClick={() => handleOpen("Update")}>
+            <Item
+              id="update-product"
+              onClick={() => handleOpen("UpdateProduct")}
+            >
               Cập nhật
             </Item>
 
-            <Item id="delete-product" onClick={() => handleOpen("Copy")}>
+            <Item id="delete-product" onClick={() => handleOpen("CopyProduct")}>
               Sao chép SP
             </Item>
           </Menu>
@@ -154,7 +133,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           </Menu>
         );
     }
-  }, [importStatus]);
+  }, [importStatus, productList]);
 
   const renderActionButtons = useCallback(
     (row: any) => {
@@ -165,7 +144,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               id={row?.id}
               items={[
                 {
-                  action: () => handleOpen("Update"),
+                  action: () => handleOpen("UpdateProduct"),
                   label: "Cập nhật SP",
                 },
                 {
@@ -181,11 +160,11 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               id={row?.id}
               items={[
                 {
-                  action: () => handleOpen("Update"),
+                  action: () => handleOpen("UpdateProduct"),
                   label: "Cập nhật SP",
                 },
                 {
-                  action: () => handleOpen("Copy"),
+                  action: () => handleOpen("CopyProduct"),
                   label: "Sao chép SP",
                 },
               ]}
@@ -234,7 +213,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         </Typography>
         <Box className="flex justify-end">
           <AddButton
-            onClick={() => handleOpen("Add")}
+            onClick={() => handleOpen("AddProduct")}
             variant="contained"
             className="mr-3"
             disabled={disabled}
@@ -256,18 +235,21 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         menuComponent={renderContextMenu()}
       >
         <DataTable
-          rows={productList}
+          rows={productList?.map((prod: any, index: number) => ({
+            ...prod,
+            no: index + 1,
+          }))}
           columns={columns}
-          autoHeight={true}
-          hideSearchbar={true}
-          getRowId={(row) => row.no}
+          autoHeight
+          hideSearchbar
           hideFooter
+          hideFooterPagination
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
             },
           }}
-          paginationMode="client"
+          getRowId={(record) => record.rowId}
         />
       </ContextMenuWrapper>
 
@@ -276,26 +258,22 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         <strong> {_format.getVND(totalPrice)}</strong>
       </Typography>
 
+      {/* IMPLEMENT TRANSACTION DIALOG */}
       <ImportDetailProductDialog
         onClose={handleClose}
-        open={
-          dialog.open &&
-          (dialog?.type === "Add" ||
-            dialog?.type === "Update" ||
-            dialog?.type === "Copy")
-        }
+        open={Boolean(dialog.open && dialog?.type?.includes?.("Product"))}
         type={dialog?.type}
-        addProduct={handleAddProduct}
-        updateProduct={handleUpdateProduct}
         defaultValue={defaultValue.current}
       />
 
+      {/* ADD PRODUCT DIALOG */}
       <ProductsDialog
         onClose={handleClose}
         open={dialog.open && dialog?.type === "CreateProduct"}
         type="Add"
       />
 
+      {/* PRODUCT DOCUMENT DIALOG */}
       <DocumentDialog
         onClose={handleClose}
         open={!!dialog?.open && dialog?.type === "CreateDocument"}
@@ -303,6 +281,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         defaultValue={defaultValue.current}
       />
 
+      {/* STAMP DIALOG */}
       <StampDialog
         onClose={handleClose}
         open={dialog?.open && dialog?.type === "CreateLabel"}

@@ -97,7 +97,7 @@ export const ProductsInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Nhà cung cấp"
         disabled={isDisable}
         multiple={true}
-        labelKey="supplierName"
+        labelKey="supplierCode"
       />
 
       <FormInput

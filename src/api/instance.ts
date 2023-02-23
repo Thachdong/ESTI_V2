@@ -55,11 +55,11 @@ instance.interceptors.request.use(useRequestCongif, useRequestConfigError);
 const useResponseSuccess = (response: AxiosResponse) => {
   const { data, status, config } = response || {};
 
-  console.log(
-    `%c ${status} - ${getUrlFromConfig(config)}:`,
-    "color: #008000; font-weight: bold",
-    data
-  );
+  // console.log(
+  //   `%c ${status} - ${getUrlFromConfig(config)}:`,
+  //   "color: #008000; font-weight: bold",
+  //   data
+  // );
 
   return response;
 };
@@ -76,11 +76,11 @@ const useResponseError = (error: AxiosError) => {
 
     const errorMessage = response?.data?.resultMessage;
 
-    console.log(
-      `%c ${status} - ${url}:`,
-      "color: #a71d5d; font-weight: bold",
-      data
-    );
+    // console.log(
+    //   `%c ${status} - ${url}:`,
+    //   "color: #a71d5d; font-weight: bold",
+    //   data
+    // );
 
     // ABORT ALL REQUEST IF 401 | 408 | 403 MEET TWICE
     if (isAbort) {
