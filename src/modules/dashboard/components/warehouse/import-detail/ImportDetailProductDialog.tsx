@@ -19,17 +19,10 @@ import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNu
 import { VAT } from "~modules-core/constance";
 import { TDialog } from "~types/dialog";
 
-type TProps = {
-  addProduct: (product: any) => void;
-  updateProduct: (product: any) => void;
-};
-
-export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
+export const ImportDetailProductDialog: React.FC<TDialog> = ({
   open,
   onClose,
   type,
-  addProduct,
-  updateProduct,
   defaultValue,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
@@ -39,24 +32,23 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const title = type === "Update" ? "Cập nhật SP" : "Thêm SP";
+  const title = type === "UpdateProduct" ? "Cập nhật SP" : "Thêm SP";
 
   const { control, handleSubmit, setError, reset } = useForm({
     mode: "onBlur",
   });
 
-  const { watch: contextWatch } = useFormContext();
+  const { watch: contextWatch, setValue: setContextValue } = useFormContext();
 
-  const {
-    productList = [],
-    supplierId,
-    productOrderId,
-  } = contextWatch();
+  const { productList = [], supplierId, productOrderId } = contextWatch();
 
   // DATA FETCHING
   const { data: supplerProducts = [] } = useQuery(
     ["GetProductsBySupplier_" + supplierId],
-    () => products.getProductBySupplier(supplierId).then((res) => res.data),
+    () =>
+      products.getProductBySupplier(supplierId).then((res) => {
+        return res.data?.map((prod: any) => ({ ...prod, id: prod?.productId }));
+      }),
     {
       enabled: !!supplierId && !productOrderId,
     }
@@ -65,8 +57,8 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
   // METHODS
   const getProductOptions = useCallback(() => {
     // Màn chi tiết
-    // Màn tạo chọn đơn mua hàng
-    // ==> data update trực tiếp vào react-hook-form trong useEffect
+    // Tạo bằng đơn mua hàng
+    // ==> data update trực tiếp vào react-hook-form
     if (!!id || !!productOrderId) {
       return _.uniqBy(productList, (prod: any) => prod?.id);
     }
@@ -76,7 +68,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
   }, [id, productOrderId, productList, supplerProducts]);
 
   const cleanup = () => {
-    reset();
+    reset({});
 
     onClose();
 
@@ -143,13 +135,14 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
         totalPrice: data?.price * data?.quantity,
         productManufactor: selectedProduct?.manufactor,
         productSpecs: selectedProduct?.specs,
+        rowId: new Date().getTime().toString() // GENERATE UNIQUE ROW ID
       };
 
-      addProduct(product);
+      setContextValue("productList", [...productList, { ...product }]);
 
       cleanup();
     },
-    [selectedProduct, selectedPosition]
+    [selectedProduct, selectedPosition, productList]
   );
 
   const handleUpdateProduct = useCallback(
@@ -167,19 +160,23 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
         positionName: selectedPosition?.positionName,
       };
 
-      updateProduct(product);
+      const updatedProductList = productList.map((prod: any) =>
+        prod?.rowId === product?.rowId ? { ...product } : { ...prod }
+      );
+
+      setContextValue("productList", updatedProductList);
 
       cleanup();
     },
-    [selectedPosition, updateProduct]
+    [selectedPosition, productList]
   );
 
   // SIDE EFFECT
   useEffect(() => {
-    if (type === "Add") {
+    if (type === "AddProduct") {
       reset({});
     } else {
-      !!defaultValue && reset(defaultValue);
+      !!defaultValue && reset({ ...defaultValue });
     }
   }, [defaultValue, type]);
 
@@ -308,7 +305,7 @@ export const ImportDetailProductDialog: React.FC<TDialog & TProps> = ({
       </Box>
 
       <Box className="flex items-center justify-center my-4">
-        {type === "Update" ? (
+        {type === "UpdateProduct" ? (
           <BaseButton onClick={handleSubmit(handleUpdateProduct)}>
             Cập nhật
           </BaseButton>
