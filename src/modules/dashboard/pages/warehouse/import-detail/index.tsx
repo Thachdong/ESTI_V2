@@ -76,39 +76,39 @@ export const ImportDetailPage = () => {
 
   useEffect(() => {
     // Update mỗi khi chọn đơn mua hàng
-    if (!query.id) {
-      if (!!orderDetailData) {
-        const { deliveryId, branchId, supplierId, stockerId, purchaseId } =
-          orderDetailData?.productOrder?.productOrder || {};
+    if (!!orderDetailData && !query.id) {
+      const { deliveryId, branchId, supplierId, stockerId, purchaseId } =
+        orderDetailData?.productOrder?.productOrder || {};
 
-        const { productOrderDetail = [] } = orderDetailData || {};
+      const { productOrderDetail = [] } = orderDetailData || {};
 
-        setValue("branchId", branchId);
+      setValue("branchId", branchId);
 
-        setValue("deliveryId", deliveryId);
+      setValue("deliveryId", deliveryId);
 
-        setValue("supplierId", supplierId);
+      setValue("supplierId", supplierId);
 
-        setValue("stockerId", stockerId);
+      setValue("stockerId", stockerId);
 
-        setValue("purchaseId", purchaseId);
+      setValue("purchaseId", purchaseId);
 
-        setValue(
-          "productList",
-          productOrderDetail.map((prod: any, index: number) => ({
-            ...prod,
-            no: index + 1,
-          }))
-        );
-      } else {
-        setValue("branchId", undefined);
+      setValue(
+        "productList",
+        productOrderDetail.map((prod: any) => ({
+          ...prod,
+          rowId: prod?.id,
+          manufactor: prod?.productManufactor,
+          specs: prod?.productSpecs,
+        }))
+      );
+    } else {
+      setValue("branchId", undefined);
 
-        setValue("deliveryId", undefined);
+      setValue("deliveryId", undefined);
 
-        setValue("supplierId", undefined);
+      setValue("supplierId", undefined);
 
-        setValue("productList", []);
-      }
+      setValue("productList", []);
     }
   }, [orderDetailData, query.id]);
 
@@ -119,9 +119,9 @@ export const ImportDetailPage = () => {
 
       reset({
         ...warehouseSession,
-        productList: warehouse.map((prod: any, index: number) => ({
+        productList: warehouse.map((prod: any) => ({
           ...prod,
-          no: index + 1,
+          rowId: prod?.id,
         })),
         withoutPurchaseInvoice: warehouseSession?.productOrderId ? false : true,
       });
@@ -129,8 +129,9 @@ export const ImportDetailPage = () => {
   }, [transactionData]);
 
   useEffect(() => {
-    query.fromPurchaseOrderId && setValue("productOrderId", query.fromPurchaseOrderId)
-  }, [query.fromPurchaseOrderId])
+    query.fromPurchaseOrderId &&
+      setValue("productOrderId", query.fromPurchaseOrderId);
+  }, [query.fromPurchaseOrderId]);
 
   return (
     <Box className="container-center">
