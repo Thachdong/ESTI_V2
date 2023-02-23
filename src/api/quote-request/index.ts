@@ -7,7 +7,7 @@ export type TCreateQuoteRequest = {
   companyProfession: number;
   companyAddress: string;
   companyEmail: string;
-  receiverAdress: string;
+  receiverAddress: string;
   curatorId: string;
   curatorName: string;
   curatorDepartmentId: number;

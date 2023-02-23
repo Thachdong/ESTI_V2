@@ -15,7 +15,7 @@ export type TCreatePreQuote = {
   paymentType: string;
   deliverDate: number;
   expireDate: number;
-  receiverAdress: string;
+  receiverAddress: string;
   paymentDocument: string;
   smgNote: string;
   salesNote: string;

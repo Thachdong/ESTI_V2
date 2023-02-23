@@ -8,9 +8,9 @@ import { productTypes } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const PurchasePlanCustomer: React.FC<TProps> = ({disabled}) => {
+export const PurchasePlanCustomer: React.FC<TProps> = ({ disabled }) => {
   const [supplier, setSupplier] = useState<any>();
 
   const { control } = useFormContext();
@@ -46,7 +46,11 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({disabled}) => {
             }}
             callback={(opt) => setSupplier(opt)}
             label="Chọn nhà cung cấp:"
-            labelKey="supplierCode"
+            getOptionLabel={(supplier: any) =>
+              !!supplier
+                ? supplier?.supplierCode + " - " + supplier?.supplierName
+                : ""
+            }
             disabled={disabled}
           />
 

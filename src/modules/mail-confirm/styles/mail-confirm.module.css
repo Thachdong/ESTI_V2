@@ -1,0 +1,6 @@
+.mail-confirm-layout {
+    background-image: url(../../../../public/images/bg-confirm.jpg);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: cover;
+}

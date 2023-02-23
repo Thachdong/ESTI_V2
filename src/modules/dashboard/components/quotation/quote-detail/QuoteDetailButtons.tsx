@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -164,8 +165,8 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
       const payload = {
         id: id as string,
-        cc: cc as string[],
-        bcc: bcc as string[],
+        cc: _.compact(cc) as string[],
+        bcc: _.compact(bcc) as string[],
         title: title as string,
         content,
       };

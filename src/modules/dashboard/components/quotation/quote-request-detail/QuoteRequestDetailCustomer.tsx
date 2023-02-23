@@ -118,7 +118,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
         <FormInput
           controlProps={{
-            name: "receiverAdress",
+            name: "receiverAddress",
             control: control,
             rules: { required: "Phải nhập địa chỉ nhận hàng" },
           }}
