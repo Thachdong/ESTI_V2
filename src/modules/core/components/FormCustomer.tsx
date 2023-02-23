@@ -20,16 +20,16 @@ export const FormCustomer: React.FC<TProps> = ({
   label = "Mã khách hàng",
   labelKey = "customerCode",
   disabled = false,
-  callback
+  callback,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const onClose = useCallback(() => {
-    setDialog({open: false})
+    setDialog({ open: false });
   }, []);
 
   const onOpen = useCallback(() => {
-    setDialog({open: true, type: "Add"})
+    setDialog({ open: true, type: "Add" });
   }, []);
   return (
     <Box className="flex items-center w-full">
@@ -38,12 +38,21 @@ export const FormCustomer: React.FC<TProps> = ({
         label={label}
         fetcher={customer.getList}
         labelKey={labelKey}
+        getOptionLabel={(customer: any) =>
+          !!customer
+            ? customer?.customerCode + " - " + customer?.companyName
+            : ""
+        }
         className="flex-grow"
         disabled={disabled}
         callback={callback}
       />
 
-      <AddButton disabled={disabled} onClick={onOpen} className="min-w-[32px] mb-1 ml-2" />
+      <AddButton
+        disabled={disabled}
+        onClick={onOpen}
+        className="min-w-[32px] mb-1 ml-2"
+      />
 
       <CustomersDialog
         onClose={onClose}

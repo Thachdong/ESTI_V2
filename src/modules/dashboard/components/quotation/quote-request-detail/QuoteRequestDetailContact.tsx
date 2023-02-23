@@ -57,7 +57,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
 
       setValue("curatorId", id);
 
-      setValue("receiverAdress", receiverById?.address);
+      setValue("receiverAddress", receiverById?.address);
     }
   }, [curatorId, curators]);
 

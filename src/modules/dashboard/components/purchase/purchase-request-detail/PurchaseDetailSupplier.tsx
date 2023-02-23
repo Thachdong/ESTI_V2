@@ -9,14 +9,17 @@ import { productTypes } from "~modules-core/constance";
 export const PurchaseDetailSupplier: React.FC = () => {
   const [supplier, setSupplier] = useState<any>();
 
-  const {id} = useRouter().query;
+  const { id } = useRouter().query;
 
   const { control } = useFormContext();
 
   // METHODS
   const convertProductSupply = useCallback((key: string) => {
-    if(typeof key === "string" && !!key) {
-      return key.split(",")?.map((item: string) => productTypes[+item + 1]?.name)?.join(", ")
+    if (typeof key === "string" && !!key) {
+      return key
+        .split(",")
+        ?.map((item: string) => productTypes[+item + 1]?.name)
+        ?.join(", ");
     }
   }, []);
 
@@ -37,7 +40,11 @@ export const PurchaseDetailSupplier: React.FC = () => {
             }}
             callback={(opt) => setSupplier(opt)}
             label="Chọn nhà cung cấp:"
-            labelKey="supplierCode"
+            getOptionLabel={(supplier: any) =>
+              !!supplier
+                ? supplier?.supplierCode + " - " + supplier?.supplierName
+                : ""
+            }
             disabled={!!id}
           />
 

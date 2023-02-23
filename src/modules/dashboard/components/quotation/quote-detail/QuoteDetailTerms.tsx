@@ -140,7 +140,7 @@ export const QuoteDetailTerms: React.FC<TProps> = ({disabled}) => {
               label=""
               controlProps={{
                 control,
-                name: "receiverAdress",
+                name: "receiverAddress",
               }}
               className="min-w-[200px] ml-2"
               fullWidth={false}

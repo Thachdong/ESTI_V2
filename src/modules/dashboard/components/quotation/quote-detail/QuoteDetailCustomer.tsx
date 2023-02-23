@@ -50,15 +50,8 @@ export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
         />
 
         <FormInputBase
-          label="Tên khách hàng"
-          className="my-4"
-          disabled
-          value={customer?.name}
-        />
-
-        <FormInputBase
           label="Mã số thuế"
-          className="mb-4"
+          className="my-4"
           disabled
           value={customer?.taxCode}
         />
