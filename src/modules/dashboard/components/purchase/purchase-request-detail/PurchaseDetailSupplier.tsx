@@ -26,11 +26,11 @@ export const PurchaseDetailSupplier: React.FC = () => {
   return (
     <Box className="grid grid-cols-2 gap-4 mb-4">
       <Box className="flex flex-col">
-        <Typography className="font-bold uppercase mb-3">
+        <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
           <FormSelectAsync
             fetcher={suppliers.getList}
             controlProps={{
@@ -65,11 +65,11 @@ export const PurchaseDetailSupplier: React.FC = () => {
       </Box>
 
       <Box className="flex flex-col">
-        <Typography className="font-bold uppercase mb-3">
+        <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
           <FormInputBase
             label="Người phụ trách:"
             value={supplier?.curatorName}

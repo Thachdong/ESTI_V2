@@ -49,11 +49,11 @@ export const QuoteDetailDeliveryHistory: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         CẬP NHẬT ĐỢT GIAO HÀNG
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm">
+      <Box className="bg-white grid gap-4 rounded">
         <DataTable
           rows={
             exportHistory?.items?.map?.((item: any, index: number) => ({

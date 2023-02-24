@@ -210,16 +210,17 @@ export const OrderDetailPage: React.FC = () => {
             </Box>
           </>
         )}
+        <Box className="col-span-2">
+          <OrderDetailButtons
+            isUpdate={isUpdate}
+            setIsUpdate={setIsUpdate}
+            sendMailData={{
+              to: orderDetail?.mainOrder?.receiverEmail,
+              cc: [orderDetail?.mainOrder?.curatorEmail],
+            }}
+          />
+        </Box>
       </Box>
-
-      <OrderDetailButtons
-        isUpdate={isUpdate}
-        setIsUpdate={setIsUpdate}
-        sendMailData={{
-          to: orderDetail?.mainOrder?.receiverEmail,
-          cc: [orderDetail?.mainOrder?.curatorEmail],
-        }}
-      />
     </FormProvider>
   );
 };

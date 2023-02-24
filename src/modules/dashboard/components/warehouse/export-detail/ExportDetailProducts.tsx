@@ -193,7 +193,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   };
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Box className="">
       <Box className="flex justify-between items-center mb-3">
         <Typography className="text-sm font-medium flex-grow">
           SẢN PHẨM
@@ -227,6 +227,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
             },
           }}
           paginationMode="client"
+          className="bg-white"
         />
       </ContextMenuWrapper>
 
@@ -243,6 +244,6 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         getWarehouseConfig={getWarehouseConfig}
         productOptions={productOptions}
       />
-    </Paper>
+    </Box>
   );
 };

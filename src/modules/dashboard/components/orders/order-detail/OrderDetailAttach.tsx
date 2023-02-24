@@ -7,43 +7,57 @@ import { quoteRequest } from "src/api";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const OrderDetailAttach: React.FC<TProps> = ({disabled}) => {
+export const OrderDetailAttach: React.FC<TProps> = ({ disabled }) => {
   const { control, setValue, watch } = useFormContext();
 
   const attachFile = watch("attachFile");
 
   // METHODS
-  const removeFile = useCallback((file: string) => {
-    const newFiles = attachFile.filter((f: string) => f !== file);
+  const removeFile = useCallback(
+    (file: string) => {
+      const newFiles = attachFile.filter((f: string) => f !== file);
 
-    setValue("attachFile", newFiles);
-  }, [attachFile])
+      setValue("attachFile", newFiles);
+    },
+    [attachFile]
+  );
 
   const renderAttachFile = useCallback(() => {
     if (!attachFile || attachFile?.length === 0) {
       return (
-        <Typography className="font-semibold text-center text-grey mb-3">
+        <Typography className="text-center text-grey my-3">
           Không có file đính kèm
         </Typography>
       );
     } else {
       return (
-        <List>
+        <List className="grid gap-2">
           {attachFile?.map((file: string) => (
-            <ListItem key={file} className="flex py-0" disableGutters>
+            <ListItem
+              key={file}
+              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded "
+              disableGutters
+            >
               <Typography
                 component="a"
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate"
+                className="flex gap-2 items-center truncate no-underline  text-main w-[500px] "
               >
-                {file}
+                <AttachFileIcon className="rotate-90 text-xl" />{" "}
+                <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+                  {file}
+                </span>
               </Typography>
 
-              <DeleteButton disabled={disabled} onClick={() => removeFile(file)} className="min-w-[24px] text-error" />
+              <DeleteButton
+                disabled={disabled}
+                onClick={() => removeFile(file)}
+                className="min-w-[24px] text-error"
+              />
             </ListItem>
           ))}
         </List>
@@ -55,20 +69,20 @@ export const OrderDetailAttach: React.FC<TProps> = ({disabled}) => {
     <InputLabel
       disabled={loading}
       htmlFor="attachFile"
-      className="flex items-cetner justify-center text-main font-bold rounded-sm bg-[#2684C51A] border border-dashed border-main py-3 w-full h-[40px] cursor-pointer uppercase h-auto"
+      className="flex items-center justify-center text-main font-bold rounded bg-[#2684C51A] border border-solid border-main w-full h-[40px] cursor-pointer uppercase"
     >
-      <AttachFileIcon className="rotate-45" />
+      <AttachFileIcon className="rotate-45 text-sm font-semibold" />
       <Typography component="span">Thêm file đính kèm</Typography>
     </InputLabel>
   );
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         File đính kèm
       </Typography>
 
-      <Box className="bg-white rounded-sm flex-grow p-3">
+      <Box className="bg-white rounded flex-grow p-3">
         {renderAttachFile()}
         <FormUploadBase
           controlProps={{

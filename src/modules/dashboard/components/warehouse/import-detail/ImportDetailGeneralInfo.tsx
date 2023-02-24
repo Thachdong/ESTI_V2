@@ -14,9 +14,7 @@ type TProps = {
   orderDetail: any;
 };
 
-export const ImportDetailGeneralInfo: React.FC<TProps> = ({
-  orderDetail,
-}) => {
+export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
@@ -75,7 +73,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
   }, [withoutPurchaseInvoice, orderDetail]);
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Paper className="rounded p-3">
       <Typography className="text-sm font-medium mb-3">
         THÔNG TIN CHUNG
       </Typography>

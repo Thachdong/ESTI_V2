@@ -19,11 +19,11 @@ export const BillDetailGeneral: React.FC<TProps> = ({ data }) => {
 
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
         <FormSelectAsync
           controlProps={{
             name: "mainOrderId",
@@ -46,7 +46,11 @@ export const BillDetailGeneral: React.FC<TProps> = ({ data }) => {
 
         <FormInputBase value={data.saleAdmin} label="Sale admin: " disabled />
 
-        <FormInputBase value={data.branchCode} label="Mã chi nhánh: " disabled />
+        <FormInputBase
+          value={data.branchCode}
+          label="Mã chi nhánh: "
+          disabled
+        />
       </Box>
     </Box>
   );

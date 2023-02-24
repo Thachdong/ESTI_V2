@@ -119,8 +119,10 @@ export const BillDetailProducts: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+      <Box className="flex items-center mb-3 justify-between">
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
@@ -153,10 +155,10 @@ export const BillDetailProducts: React.FC<TProps> = ({
             autoHeight
             paginationMode="client"
             componentsProps={{
-                row: {
-                  onMouseEnter: onMouseEnterRow,
-                },
-              }}
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
           />
         </ContextMenuWrapper>
         <List className="border-0 border-t border-solid">

@@ -47,11 +47,11 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         thông tin liên hệ
       </Typography>
 
-      <Box className="bg-white rounded-sm flex-grow p-3">
+      <Box className="bg-white rounded grid gap-3 p-3">
         <FormSelect
           controlProps={{
             name: "curatorId",
@@ -60,7 +60,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={data?.curatorInfo || []}
           label="Người phụ trách"
-          className="mb-4"
           labelKey="curatorName"
           callback={(opt: any) => setCurator(opt)}
           disabled={isQuoteRequest || disabled}
@@ -74,7 +73,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={curatorDepartments}
           label="Phòng ban"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
 
@@ -85,7 +83,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập điện thoại" },
           }}
           label="Điện thoại"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
 
@@ -96,7 +93,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập Email" },
           }}
           label="Email"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
       </Box>

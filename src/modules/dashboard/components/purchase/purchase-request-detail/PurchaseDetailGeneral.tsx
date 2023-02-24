@@ -5,18 +5,18 @@ import { FormSelectAsync } from "~modules-core/components";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const PurchaseDetailGeneral: React.FC<TProps> = ({disabled}) => {
+export const PurchaseDetailGeneral: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="bg-white grid grid-cols-2 rounded-sm flex-grow p-3">
+      <Box className="bg-white grid grid-cols-2 rounded flex-grow p-3">
         <FormSelectAsync
           fetcher={branchs.getList}
           controlProps={{

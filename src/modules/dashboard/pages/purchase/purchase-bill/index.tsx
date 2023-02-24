@@ -107,7 +107,7 @@ export const PurchaseBill: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex gap-4 items-center mb-2">
+      <Box className="flex gap-4 items-center mb-3">
         <Box>
           <AddButton
             variant="contained"

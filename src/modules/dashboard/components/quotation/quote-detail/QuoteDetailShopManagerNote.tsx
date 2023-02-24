@@ -4,18 +4,18 @@ import { FormInput } from "~modules-core/components";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const QuoteDetailShopManagerNote: React.FC<TProps> = ({disabled}) => {
+export const QuoteDetailShopManagerNote: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         SHOP MANAGER NOTE
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+      <Box className="bg-white grid gap-3 rounded flex-grow p-3">
         <FormInput
           controlProps={{
             name: "smgNote",

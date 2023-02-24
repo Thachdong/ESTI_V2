@@ -21,7 +21,16 @@ export const OrderDetailGeneral: React.FC = () => {
   useEffect(() => {
     const { preQuoteDetailView = [], preQuoteView = {} } = quoteDetail || {};
 
-    const { customerId, curatorId, salesId, smgNote, salesNote, attachFile, requirements, performBranchId } = preQuoteView;
+    const {
+      customerId,
+      curatorId,
+      salesId,
+      smgNote,
+      salesNote,
+      attachFile,
+      requirements,
+      performBranchId,
+    } = preQuoteView;
 
     setValue("products", [...preQuoteDetailView]);
 
@@ -44,11 +53,11 @@ export const OrderDetailGeneral: React.FC = () => {
 
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         {!notFromQuote && (
           <FormSelectAsync
             controlProps={{
@@ -67,7 +76,7 @@ export const OrderDetailGeneral: React.FC = () => {
           controlProps={{
             name: "branchId",
             control,
-            rules: {required: "Phải chọn chi nhánh"}
+            rules: { required: "Phải chọn chi nhánh" },
           }}
           label="CN thực hiện:"
           labelKey="code"

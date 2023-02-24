@@ -119,13 +119,9 @@ export const WarehouseImportPage: React.FC = () => {
   );
 
   const handleDeleteTransaction = useCallback(async () => {
-    const {warehouseSessionCode, id} = defaultValue.current || {};
+    const { warehouseSessionCode, id } = defaultValue.current || {};
 
-    if (
-      confirm(
-        "Xác nhận xóa phiên nhập kho " + warehouseSessionCode
-      )
-    ) {
+    if (confirm("Xác nhận xóa phiên nhập kho " + warehouseSessionCode)) {
       await deleteMutation.mutateAsync(id);
     }
   }, [deleteMutation, defaultValue]);
@@ -134,7 +130,7 @@ export const WarehouseImportPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-right mb-2">
+      <Box className="text-right mb-3">
         <Link href="/dashboard/warehouse/import-detail">
           <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
         </Link>

@@ -29,11 +29,11 @@ export const BillDetailPaymentHistory: React.FC<TProps> = ({
 
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN THANH TOÁN
       </Typography>
 
-      <Box className="bg-white rounded-sm">
+      <Box className="bg-white rounded">
         <DataTable
           rows={data?.map((item: any, index: number) => ({
             ...item,
@@ -45,7 +45,7 @@ export const BillDetailPaymentHistory: React.FC<TProps> = ({
           autoHeight
         />
       </Box>
-      
+
       {paidData?.unPaid > 0 && (
         <Box className="flex justify-end">
           <AddButton onClick={onOpen} className="max-w-[250px] !ml-auto my-3">

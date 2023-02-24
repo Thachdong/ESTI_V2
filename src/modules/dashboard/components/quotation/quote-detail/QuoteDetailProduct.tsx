@@ -44,12 +44,12 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
-              disabled: disabled
+              disabled: disabled,
             },
             {
               action: handleDelete,
               label: "Xóa",
-              disabled: disabled
+              disabled: disabled,
             },
           ]}
         />
@@ -117,8 +117,10 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+      <Box className="flex items-center mb-3 justify-between">
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
@@ -130,10 +132,18 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item disabled={disabled} id="view-product" onClick={() => onOpen("Update")}>
+              <Item
+                disabled={disabled}
+                id="view-product"
+                onClick={() => onOpen("Update")}
+              >
                 Cập nhật
               </Item>
-              <Item disabled={disabled} id="delete-product" onClick={handleDelete}>
+              <Item
+                disabled={disabled}
+                id="delete-product"
+                onClick={handleDelete}
+              >
                 Xóa
               </Item>
             </Menu>
@@ -159,12 +169,14 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
 
         <List className="border-0 border-t border-solid">
           <ListItem>
-            Thành tiền chưa có thuế(VNĐ):{" "}
-            {_format.getVND(getPrice.totalPrice)}
+            Thành tiền chưa có thuế(VNĐ): {_format.getVND(getPrice.totalPrice)}
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {_format.getVND(getPrice.totalTax)}</ListItem>
           <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {_format.getVND(getPrice.finalPrice)}
+            Thuế GTGT(VNĐ): {_format.getVND(getPrice.totalTax)}
+          </ListItem>
+          <ListItem>
+            Tổng cộng tiền thanh toán(VNĐ):{" "}
+            {_format.getVND(getPrice.finalPrice)}
           </ListItem>
         </List>
       </Box>

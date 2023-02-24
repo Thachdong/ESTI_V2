@@ -2,13 +2,13 @@ import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { useQueries } from "react-query";
 import { staff } from "src/api";
-import {  FormSelect } from "~modules-core/components";
+import { FormSelect } from "~modules-core/components";
 
 type TProps = {
-  disabled: boolean
-}
+  disabled: boolean;
+};
 
-export const OrderDetailImplement: React.FC<TProps> = ({disabled}) => {
+export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   // DATA FETCHING
@@ -29,17 +29,17 @@ export const OrderDetailImplement: React.FC<TProps> = ({disabled}) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         PHÂN CÔNG VIỆC
       </Typography>
 
-      <Box className="bg-white rounded-sm flex-grow p-3">
+      <Box className="bg-white rounded flex-grow p-3">
         <FormSelect
           options={selectOptions[0]?.data as []}
           controlProps={{
             name: "salesAdminId",
             control,
-            rules: {required: "Phải chọn sale admin"}
+            rules: { required: "Phải chọn sale admin" },
           }}
           label="Sale admin:"
           labelKey="fullName"
@@ -52,7 +52,7 @@ export const OrderDetailImplement: React.FC<TProps> = ({disabled}) => {
           controlProps={{
             name: "salesId",
             control,
-            rules: {required: "Phải chọn sale"}
+            rules: { required: "Phải chọn sale" },
           }}
           label="Sale:"
           labelKey="fullName"
@@ -65,7 +65,7 @@ export const OrderDetailImplement: React.FC<TProps> = ({disabled}) => {
           controlProps={{
             name: "deliveryId",
             control,
-            rules: {required: "Phải chọn giao nhận"}
+            rules: { required: "Phải chọn giao nhận" },
           }}
           label="Giao nhận:"
           labelKey="fullName"

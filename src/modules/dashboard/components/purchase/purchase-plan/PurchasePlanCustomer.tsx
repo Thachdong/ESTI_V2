@@ -33,7 +33,7 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({ disabled }) => {
   return (
     <Box className="grid grid-cols-2 gap-4">
       <Box className="mb-4">
-        <Typography className="font-semibold text-sm mb-2">
+        <Typography className="font-semibold mb-2 text-sm">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
         <Box className="grid gap-4">

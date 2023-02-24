@@ -54,7 +54,7 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
         Trạng thái đơn hàng
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         <FormSelect
           options={purchaseOrderStatus}
           controlProps={{

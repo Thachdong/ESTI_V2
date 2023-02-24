@@ -16,28 +16,39 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
     ["supplierDetail", supplierId],
     () => suppliers.getById(supplierId).then((res) => res.data),
     {
-      enabled: !!supplierId
+      enabled: !!supplierId,
     }
   );
 
   // METHODS
   const convertProductSupply = useCallback((key: string) => {
-    if(typeof key === "string" && !!key) {
-      return key.split(",")?.map((item: string) => productTypes[+item + 1]?.name)?.join(", ")
+    if (typeof key === "string" && !!key) {
+      return key
+        .split(",")
+        ?.map((item: string) => productTypes[+item + 1]?.name)
+        ?.join(", ");
     }
   }, []);
 
   return (
     <Box className="grid grid-cols-2 gap-4 mb-4">
       <Box className="flex flex-col">
-        <Typography className="font-bold uppercase mb-3">
+        <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
-          <FormInputBase label="Nhà cung cấp:" value={supplierDetail?.supplierCode} disabled />
+        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
+          <FormInputBase
+            label="Nhà cung cấp:"
+            value={supplierDetail?.supplierCode}
+            disabled
+          />
 
-          <FormInputBase label="Địa chỉ:" value={supplierDetail?.address} disabled />
+          <FormInputBase
+            label="Địa chỉ:"
+            value={supplierDetail?.address}
+            disabled
+          />
 
           <FormInputBase
             label="Mã số thuế:"
@@ -54,11 +65,11 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
       </Box>
 
       <Box className="flex flex-col">
-        <Typography className="font-bold uppercase mb-3">
+        <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
           <FormInputBase
             label="Người phụ trách:"
             value={supplierDetail?.curatorName}

@@ -68,16 +68,20 @@ export const QuoteDetailGeneral: React.FC = () => {
       {!!preOrderId && !quoteRequestDetail?.preOrderView?.customerId && (
         <Alert severity="error" className="mb-4">
           <strong>Khách hàng chưa có sẳn trong hệ thống! </strong>
-          Vui lòng cập nhật tài khoản trước khi tiến hành tạo báo giá! {" "}
-          <Link href={"/dashboard/quotation/quote-request-detail/?id=" + preOrderId}>Cập nhật</Link>
+          Vui lòng cập nhật tài khoản trước khi tiến hành tạo báo giá!{" "}
+          <Link
+            href={"/dashboard/quotation/quote-request-detail/?id=" + preOrderId}
+          >
+            Cập nhật
+          </Link>
         </Alert>
       )}
       <Box className="flex flex-col">
-        <Typography className="font-bold uppercase mb-3">
+        <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN CHUNG
         </Typography>
 
-        <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+        <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
           {isQuoteRequest && (
             <>
               <FormSelectAsync

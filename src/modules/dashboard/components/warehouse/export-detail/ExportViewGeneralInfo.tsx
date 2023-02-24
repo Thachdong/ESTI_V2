@@ -38,16 +38,19 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
   );
 
   const _onSubmit = async (data: any) => {
-    await mutateUpdateStatus.mutateAsync({ id: transactionId, status: data.exportStatus });
+    await mutateUpdateStatus.mutateAsync({
+      id: transactionId,
+      status: data.exportStatus,
+    });
   };
 
   return (
-    <Paper className="rounded-sm p-3 mb-4">
+    <Box className="">
       <Typography className="text-sm font-medium mb-3">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-4 rounded p-3 mb-4 bg-white">
         <FormInputBase disabled value={data?.code} label="Mã đơn xuất kho" />
 
         <FormInputBase
@@ -94,6 +97,6 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
           </BaseButton>
         </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 };

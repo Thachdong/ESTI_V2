@@ -33,11 +33,11 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
 
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         PHÂN CÔNG VIỆC
       </Typography>
 
-      <Box className="bg-white grid grid-cols-2 gap-4 rounded-sm flex-grow p-3">
+      <Box className="bg-white grid grid-cols-2 gap-4 rounded flex-grow p-3">
         <FormSelect
           options={selectOptions[0].data || []}
           controlProps={{

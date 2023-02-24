@@ -8,12 +8,11 @@ type TProps = {
 };
 
 export const PurchaseDetailNote: React.FC<TProps> = ({ title, value }) => {
-
   return (
     <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3">{title}</Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+      <Box className="bg-white grid gap-4 rounded flex-grow p-3">
         <FormInputBase
           label=""
           disabled={true}

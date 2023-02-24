@@ -74,11 +74,11 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Thông tin doanh nghiệp
       </Typography>
 
-      <Box className="flex-grow bg-white rounded-sm p-3">
+      <Box className="grid gap-3 bg-white rounded p-3">
         {renderCustomerTag()}
 
         <FormInput
@@ -88,7 +88,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập tên khách hàng" },
           }}
           label="Tên khách hàng:"
-          className="mb-4"
           disabled={!!id}
         />
 
@@ -99,7 +98,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập mã số thuế" },
           }}
           label="Mã số thuế:"
-          className="mb-4"
           disabled={!!id}
         />
 
@@ -110,7 +108,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập địa chỉ khách hàng" },
           }}
           label="Địa chỉ khách hàng:"
-          className="mb-4"
           multiline
           minRows={2}
           disabled={!!id}

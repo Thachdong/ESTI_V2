@@ -10,6 +10,7 @@ module.exports = {
       info: "#0288d1",
       white: "#fff",
       grey: "#747474",
+      statusGreen: "#599F50",
       "grey-2": "rgba(0, 0, 0, 0.12)",
       "grey-3": "#e0e0e0",
       main: "#2684C5",
@@ -19,10 +20,10 @@ module.exports = {
       "main-4": "#23DBD3",
       // COLOR FOR INPUT TAGS
       "input-bg": "#f6f9fb",
-      "input-border": "#fcfdfd",
+      "input-border": "#fafbfc",
       "disabled-input-bg": "#dfe2e5",
       "disabled-input-border": "#dfe2e5",
-      "input-label": "#747474"
+      "input-label": "#747474",
     },
   },
   plugins: [],

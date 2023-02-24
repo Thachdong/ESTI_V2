@@ -148,7 +148,7 @@ export const ProductsPage = () => {
   };
 
   const handleDelete = useCallback(async () => {
-    const {productName, id} = defaultValue.current || {};
+    const { productName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -235,8 +235,11 @@ export const ProductsPage = () => {
             Thêm sản phẩm
           </AddButton>
 
-          <AddButton variant="contained" className="mr-3">
-            <InputLabel htmlFor="product-file" className="cursor-pointer font-semibold text-white">
+          <AddButton variant="contained" className="">
+            <InputLabel
+              htmlFor="product-file"
+              className="cursor-pointer font-semibold text-white"
+            >
               Thêm file excel
               <FormInputBase
                 id="product-file"

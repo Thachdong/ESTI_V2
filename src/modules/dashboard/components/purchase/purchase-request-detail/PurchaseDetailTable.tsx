@@ -102,12 +102,12 @@ export const PurchaseDetailTable: React.FC = () => {
             {
               action: () => setDialog({ open: true, type: "View" }),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: () => handleRemoveProduct(row?.id || row?.productId),
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -157,7 +157,7 @@ export const PurchaseDetailTable: React.FC = () => {
   return (
     <Box className="flex flex-col mb-4">
       <Box className="flex items-center mb-2">
-        <Typography className="font-bold uppercase mr-4">
+        <Typography className="font-bold uppercase mr-4 text-sm">
           THÔNG TIN SẢN PHẨM
         </Typography>
 
@@ -166,9 +166,9 @@ export const PurchaseDetailTable: React.FC = () => {
         )}
       </Box>
 
-      <Box className="bg-white">
+      <Box className="bg-white rounded">
         {!id && (
-          <Box className="grid grid-cols-5 gap-4 rounded-sm mb-4 p-3">
+          <Box className="grid grid-cols-5 gap-4 rounded mb-4 p-3">
             <FormDatepickerBase
               label="Từ ngày"
               onChange={(e: any) =>
@@ -186,7 +186,7 @@ export const PurchaseDetailTable: React.FC = () => {
               className="col-span-2"
             />
 
-            <BaseButton className="truncate" onClick={getPurchasePlan}>
+            <BaseButton className="truncate bg-main" onClick={getPurchasePlan}>
               Lọc SP cần mua
             </BaseButton>
           </Box>

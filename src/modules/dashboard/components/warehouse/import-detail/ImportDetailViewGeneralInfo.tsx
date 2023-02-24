@@ -5,7 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { warehouse } from "src/api";
-import { BaseButton, FormInputBase, FormSelect } from "~modules-core/components";
+import {
+  BaseButton,
+  FormInputBase,
+  FormSelect,
+} from "~modules-core/components";
 import { warehouseImportStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 
@@ -55,12 +59,12 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
     await mutateUpdateStatus.mutateAsync({ id, status: data.importStatus });
   };
 
-  const _onUpdate = async() => {
-    await mutateUpdateReceiveBill.mutateAsync(id as string)
-  }
+  const _onUpdate = async () => {
+    await mutateUpdateReceiveBill.mutateAsync(id as string);
+  };
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Paper className="rounded p-3">
       <Typography className="text-sm font-medium mb-3">
         THÔNG TIN CHUNG
       </Typography>

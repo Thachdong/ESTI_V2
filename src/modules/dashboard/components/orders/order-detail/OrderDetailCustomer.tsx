@@ -7,7 +7,7 @@ import { customer } from "src/api";
 import { FormCustomer, FormInputBase } from "~modules-core/components";
 
 export const OrderDetailCustomer: React.FC = () => {
-  const {id} = useRouter().query;
+  const { id } = useRouter().query;
 
   const { control, watch, setValue } = useFormContext();
 
@@ -51,15 +51,16 @@ export const OrderDetailCustomer: React.FC = () => {
     setValue("receiverAddress", address);
   }, [customerDetail, curatorId]);
 
-  const {address, taxCode, professionName} = customerDetail?.companyInfo || {};
+  const { address, taxCode, professionName } =
+    customerDetail?.companyInfo || {};
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN DOANH NGHIỆP
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded-sm flex-grow p-3">
+      <Box className="grid gap-4 bg-white rounded flex-grow p-3">
         <FormCustomer
           controlProps={{
             name: "customerId",
@@ -78,7 +79,7 @@ export const OrderDetailCustomer: React.FC = () => {
         <FormInputBase
           label="Mã số thuế:"
           disabled
-          value={customerId ? taxCode: ""}
+          value={customerId ? taxCode : ""}
         />
 
         <FormInputBase

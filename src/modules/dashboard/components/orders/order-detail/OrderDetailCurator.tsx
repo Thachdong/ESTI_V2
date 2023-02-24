@@ -8,11 +8,11 @@ import { curatorDepartments } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const OrderDetailCurator: React.FC<TProps> = ({disabled}) => {
-  const {id} = useRouter().query;
-  
+export const OrderDetailCurator: React.FC<TProps> = ({ disabled }) => {
+  const { id } = useRouter().query;
+
   const { control, watch } = useFormContext();
 
   const { customerId } = watch();
@@ -28,11 +28,11 @@ export const OrderDetailCurator: React.FC<TProps> = ({disabled}) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN LIÊN HỆ
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded-sm flex-grow p-3">
+      <Box className="grid gap-4 bg-white rounded flex-grow p-3">
         <FormSelect
           options={customerDetail?.curatorInfo}
           controlProps={{

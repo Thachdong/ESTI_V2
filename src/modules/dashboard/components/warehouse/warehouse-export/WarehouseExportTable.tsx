@@ -124,7 +124,7 @@ export const WarehouseExportTable: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-right mb-2">
+      <Box className="text-right mb-3">
         <AddButton
           variant="contained"
           onClick={() => router.push("/dashboard/warehouse/export-detail")}

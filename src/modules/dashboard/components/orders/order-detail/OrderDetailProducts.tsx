@@ -44,12 +44,12 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: handleDelete,
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -118,14 +118,16 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
         totalPrice: _format.getVND(resultObj.totalPrice),
         totalTax: _format.getVND(resultObj.totalTax),
         finalPrice: _format.getVND(resultObj.finalPrice),
-      }
+      };
     }
   }, [data, products]);
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+      <Box className="flex items-center mb-3 justify-between">
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
@@ -137,7 +139,11 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item disabled={!!id} id="view-product" onClick={() => onOpen("Update")}>
+              <Item
+                disabled={!!id}
+                id="view-product"
+                onClick={() => onOpen("Update")}
+              >
                 Cập nhật
               </Item>
               <Item disabled={!!id} id="delete-product" onClick={handleDelete}>
@@ -166,8 +172,7 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
 
         <List className="border-0 border-t border-solid">
           <ListItem>
-            Thành tiền chưa có thuế(VNĐ):{" "}
-            {getPrice.totalPrice}
+            Thành tiền chưa có thuế(VNĐ): {getPrice.totalPrice}
           </ListItem>
           <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
           <ListItem>

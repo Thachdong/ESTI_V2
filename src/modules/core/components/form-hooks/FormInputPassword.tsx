@@ -31,7 +31,7 @@ export const FormInputPassword: React.FC<TFormInputProps> = (props) => {
   }: TRenderControllerParams) => {
     const defaultProps = {
       id: controlProps.name,
-      label: "Mật khẩu",
+      label: "",
       type: showPassword ? "text" : "password",
       helperText: (
         <ErrorMessage

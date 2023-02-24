@@ -34,7 +34,10 @@ export const FormInputCreatableBase: React.FC<TProps> = ({
   };
 
   const defaultLabelProps = {
-    className: clsx("!bg-transparent", !props.error && "text-input-label"),
+    className: clsx(
+      "!bg-transparent font-bold uppercase text-[12px] mt-1",
+      !props.error && "text-input-label"
+    ),
     ...InputLabelProps,
   };
 

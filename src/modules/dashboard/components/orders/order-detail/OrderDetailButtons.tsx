@@ -19,14 +19,14 @@ type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch?: () => void;
-  sendMailData: any
+  sendMailData: any;
 };
 
 export const OrderDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
-  sendMailData
+  sendMailData,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -207,7 +207,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
   }, [id, isUpdate, status]);
 
   return (
-    <Box className="flex justify-end mt-4">
+    <Box className="flex justify-end">
       {renderButtons()}
       <SendMailDialog
         onClose={() => setDialog({ open: false })}

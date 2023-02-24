@@ -15,9 +15,7 @@ type TProps = {
   status: number;
 };
 
-export const PurchaseDetailImportHistory: React.FC<TProps> = ({
-  status,
-}) => {
+export const PurchaseDetailImportHistory: React.FC<TProps> = ({ status }) => {
   const router = useRouter();
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -51,7 +49,7 @@ export const PurchaseDetailImportHistory: React.FC<TProps> = ({
         CẬP NHẬT ĐƠN NHẬP HÀNG
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm">
+      <Box className="bg-white grid gap-4 rounded">
         <DataTable
           rows={
             exportHistory?.items?.map?.((item: any, index: number) => ({

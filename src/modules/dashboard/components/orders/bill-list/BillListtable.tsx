@@ -112,14 +112,12 @@ export const BillListTable: React.FC = () => {
   };
 
   return (
-    <Paper className="flex-grow !h-screen shadow bgContainer p-2">
-      <Box className="flex gap-4 items-center mb-2">
+    <Paper className="flex-grow !h-screen shadow bgContainer p-3">
+      <Box className="flex gap-4 items-center mb-3">
         <Box>
           <AddButton
             variant="contained"
-            onClick={() =>
-              router.push("/dashboard/orders/bill-detail/")
-            }
+            onClick={() => router.push("/dashboard/orders/bill-detail/")}
           >
             TẠO MỚI HOÁ ĐƠN
           </AddButton>

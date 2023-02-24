@@ -9,17 +9,25 @@ type TProps = {
   };
 };
 
-export const BillDetailPaymentStatus: React.FC<TProps> = ({data}) => {
+export const BillDetailPaymentStatus: React.FC<TProps> = ({ data }) => {
   return (
     <Box className="mt-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         TRẠNG THÁI THANH TOÁN
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded-sm p-3">
-        <FormInputBase value={_format.getVND(data.paid)} label="Số tiền đã thanh toán:" disabled />
+      <Box className="grid gap-4 bg-white rounded p-3">
+        <FormInputBase
+          value={_format.getVND(data.paid)}
+          label="Số tiền đã thanh toán:"
+          disabled
+        />
 
-        <FormInputBase value={_format.getVND(data.unPaid)} label="Số tiền còn phải thu:" disabled />
+        <FormInputBase
+          value={_format.getVND(data.unPaid)}
+          label="Số tiền còn phải thu:"
+          disabled
+        />
       </Box>
     </Box>
   );

@@ -36,9 +36,9 @@ export const Header: React.FC<TProps> = ({ data }) => {
       case "bill-detail-page":
         return <BillDetailTitle />;
       case "purchase-request-detail-page":
-        return <PurchaseRequestTitle />
+        return <PurchaseRequestTitle />;
       case "purchase-bill-detail-page":
-        return <PurchaseBillDetailTitle />
+        return <PurchaseBillDetailTitle />;
       case "warehouse-export-detail-page":
         return <WarehouseExportDetailTitle />;
       case "warehouse-import-detail-page":
@@ -61,7 +61,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
       <Typography
         component="h1"
         variant="h5"
-        className="flex-grow pl-[64px] text-xl font-medium uppercase"
+        className="flex-grow pl-[64px] text-[16px] font-medium uppercase"
       >
         {renderTitle()}
       </Typography>

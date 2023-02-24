@@ -60,7 +60,9 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
     const { productName, rowId } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
-      const updatedProductList = productList.filter((p: any) => p?.rowId !== rowId);
+      const updatedProductList = productList.filter(
+        (p: any) => p?.rowId !== rowId
+      );
 
       setValue("productList", updatedProductList);
     }
@@ -206,7 +208,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   ];
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Paper className="rounded p-3">
       <Box className="flex items-center mb-3">
         <Typography className="text-sm font-medium flex-grow">
           SẢN PHẨM

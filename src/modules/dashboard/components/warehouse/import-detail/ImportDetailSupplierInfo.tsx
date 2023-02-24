@@ -15,7 +15,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedSupplier, setSelectedSupplier] = useState<any>();
 
-  const {query} = useRouter();
+  const { query } = useRouter();
 
   const { control, watch } = useFormContext();
 
@@ -26,8 +26,8 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
   // DOM RENDERING
   return (
     <Box className="grid grid-cols-2 gap-4 my-4">
-      <Paper className="rounded-sm p-3">
-        <Typography className="text-sm font-medium mb-3">
+      <Paper className="rounded p-3">
+        <Typography className="text-sm font-medium mb-3 ">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
@@ -75,7 +75,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
         </Box>
       </Paper>
 
-      <Paper className="rounded-sm p-3">
+      <Paper className="rounded p-3">
         <Typography className="text-sm font-medium mb-3">
           THÔNG TIN LIÊN HỆ
         </Typography>

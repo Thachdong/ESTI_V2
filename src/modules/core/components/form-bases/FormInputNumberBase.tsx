@@ -12,7 +12,14 @@ type TProps = NumberFormatProps<TextFieldProps> & {
 
 export const FormInputNumberBase: React.FC<TProps> = (props) => {
   // EXTRACT PROPS
-  const { onChange, shrinkLabel = false, InputLabelProps, InputProps, inputProps, ...restProps } = props;
+  const {
+    onChange,
+    shrinkLabel = false,
+    InputLabelProps,
+    InputProps,
+    inputProps,
+    ...restProps
+  } = props;
 
   // METHODS
   const handleValueChange = (values: NumberFormatValues, _: SourceInfo) => {
@@ -33,23 +40,27 @@ export const FormInputNumberBase: React.FC<TProps> = (props) => {
     ...restProps,
   };
 
-  const shrink = shrinkLabel ? {} : {shrink: false}
+  const shrink = shrinkLabel ? {} : { shrink: false };
 
   const defaultLabelProps = {
-    className: "!bg-transparent text-input-label",
+    className:
+      "!bg-transparent text-input-label font-bold uppercase text-[12px] mt-1",
     ...shrink,
     ...InputLabelProps,
-  }
+  };
 
   const defaultInputProps = {
     ...InputProps,
     className: clsx("bg-input-bg border-input-border", InputProps?.className),
-  }
+  };
 
   const defaultInputTagProps = {
     ...inputProps,
-    className: clsx(!shrinkLabel && "pl-[40%] text-right", inputProps?.className),
-  }
+    className: clsx(
+      !shrinkLabel && "pl-[40%] text-right",
+      inputProps?.className
+    ),
+  };
 
   return (
     <NumberFormat

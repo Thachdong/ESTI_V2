@@ -10,7 +10,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -219,15 +221,21 @@ export const QuotationRequestsPage = () => {
       <QuoteRequestHeader />
 
       <Paper className="bgContainer">
-        <Box className="flex items-center w-3/4 mb-3">
-          <AddButton
-            onClick={() => router.push("quote-request-detail")}
-            className="w-1/2 mr-3"
-          >
-            Tạo yêu cầu
-          </AddButton>
+        <Box className="flex items-center w-full justify-between mb-3">
+          <Box className="flex gap-2 w-full max-w-[60%]">
+            <AddButton
+              onClick={() => router.push("quote-request-detail")}
+              className=""
+            >
+              Tạo yêu cầu
+            </AddButton>
 
-          <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+            <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+          </Box>
+          <Box className="flex gap-2">
+            <RefreshButton />
+            <FilterButton />
+          </Box>
         </Box>
 
         <ContextMenuWrapper

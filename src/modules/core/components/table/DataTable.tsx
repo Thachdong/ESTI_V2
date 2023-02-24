@@ -99,7 +99,9 @@ export const DataTable: React.FC<TDataGrid> = ({
         columns={columns}
         scrollbarSize={5}
         getRowClassName={({ id }) =>
-          expandedRows.includes(id as string) ? "expanded-row relative mb-[150px]" : ""
+          expandedRows.includes(id as string)
+            ? "expanded-row relative mb-[150px]"
+            : ""
         }
         {...defaultDataGridProps}
         {...gridProps}

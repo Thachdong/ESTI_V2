@@ -5,16 +5,22 @@ type TProps = {
   customerData: any;
 };
 
-export const ExportDetailCustomer: React.FC<TProps> = ({ customerData = {} }) => {
+export const ExportDetailCustomer: React.FC<TProps> = ({
+  customerData = {},
+}) => {
   return (
     <Box className="col-span-2 grid grid-cols-2 gap-4">
-      <Paper className="rounded-sm p-3">
+      <Box className="">
         <Typography className="text-sm font-medium mb-3">
           THÔNG TIN KHÁCH HÀNG
         </Typography>
 
-        <Box className="grid gap-4">
-          <FormInputBase value={customerData.companyName} disabled={true} label="Khách hàng" />
+        <Box className="grid gap-4 rounded p-3 bg-white">
+          <FormInputBase
+            value={customerData.companyName}
+            disabled={true}
+            label="Khách hàng"
+          />
 
           <FormInputBase
             value={customerData.companyAddress}
@@ -22,7 +28,11 @@ export const ExportDetailCustomer: React.FC<TProps> = ({ customerData = {} }) =>
             label="Đ/c nhận hàng"
           />
 
-          <FormInputBase value={customerData.companyTaxCode} disabled={true} label="Mã số thuế" />
+          <FormInputBase
+            value={customerData.companyTaxCode}
+            disabled={true}
+            label="Mã số thuế"
+          />
 
           <FormInputBase
             value={customerData.conpanyProfessionName}
@@ -30,14 +40,14 @@ export const ExportDetailCustomer: React.FC<TProps> = ({ customerData = {} }) =>
             label="Lĩnh vực KD"
           />
         </Box>
-      </Paper>
+      </Box>
 
-      <Paper className="rounded-sm p-3">
+      <Box className="">
         <Typography className="text-sm font-medium mb-3">
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="grid gap-4">
+        <Box className="grid gap-4 rounded p-3 bg-white">
           <FormInputBase
             value={customerData?.curatorName}
             disabled={true}
@@ -56,9 +66,13 @@ export const ExportDetailCustomer: React.FC<TProps> = ({ customerData = {} }) =>
             label="Điện thoại"
           />
 
-          <FormInputBase value={customerData?.curatorEmail} disabled={true} label="Email" />
+          <FormInputBase
+            value={customerData?.curatorEmail}
+            disabled={true}
+            label="Email"
+          />
         </Box>
-      </Paper>
+      </Box>
     </Box>
   );
 };

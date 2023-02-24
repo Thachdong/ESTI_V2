@@ -34,9 +34,7 @@ export const QuoteDetailInvoiceHistory: React.FC<TProps> = ({
   } = useQuery(
     ["InvoiceHistory", orderCode, { ...pagination }],
     () =>
-      bill
-        .getList({ mainOrderId: id, ...pagination })
-        .then((res) => res.data),
+      bill.getList({ mainOrderId: id, ...pagination }).then((res) => res.data),
     {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data.totalItem });
@@ -49,11 +47,11 @@ export const QuoteDetailInvoiceHistory: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         CẬP NHẬT HOÁ ĐƠN
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm flex-grow">
+      <Box className="bg-white grid gap-4 rounded flex-grow">
         <DataTable
           rows={
             billHistory?.items?.map?.((bill: any, index: number) => ({

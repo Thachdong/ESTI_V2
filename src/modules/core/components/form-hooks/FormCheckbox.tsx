@@ -5,7 +5,8 @@ import { TFormCheckbox } from "~types/form-controlled/form-checkbox";
 import clsx from "clsx";
 
 export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
-  const { controlProps, label, labelProps, disabled, ...textFieldProps } = props;
+  const { controlProps, label, labelProps, disabled, ...textFieldProps } =
+    props;
 
   const renderController = ({
     field: { value, onChange },
@@ -27,7 +28,10 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
       <FormControlLabel
         control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
-        className={clsx("!border !border-[#ffff] !rounded", textFieldProps?.className)}
+        className={clsx(
+          "!border !border-[#ffff] !rounded",
+          textFieldProps?.className
+        )}
         value={!!value}
         disabled={disabled}
         onChange={onChange}

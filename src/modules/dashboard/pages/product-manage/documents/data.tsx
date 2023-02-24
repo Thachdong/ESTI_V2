@@ -73,7 +73,12 @@ export const documentColumns: TGridColDef<TDocument>[] = [
     width: 125,
     renderCell: ({ row }) => (
       <Button variant="text" className="truncate">
-        <a href={row.attachFiles?.[0]} target="_blank" rel="noopener noreferrer">
+        <a
+          href={row.attachFiles?.[0]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="no-underline text-main text-sm font-semibold"
+        >
           Xem chi tiết
         </a>
       </Button>
