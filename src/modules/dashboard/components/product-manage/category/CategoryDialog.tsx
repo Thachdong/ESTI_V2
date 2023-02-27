@@ -49,7 +49,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
 
     if (type === "View" && defaultValue) {
       const productIds = defaultValue?.productIds || "[]";
-      
+
       const defaultCategory = {
         id: defaultValue.id,
         name: defaultValue.name,
@@ -59,8 +59,8 @@ export const CategoryDialog: React.FC<TDialog> = ({
         templateBanner: [defaultValue.templateBanner],
         parentId: defaultValue.parentId,
         templateProductId: defaultValue.templateProductId,
-        productIds: JSON.parse(productIds)?.map((product: any) => product?.id)
-      };      
+        productIds: JSON.parse(productIds)?.map((product: any) => product?.id),
+      };
 
       reset(defaultCategory);
     }
@@ -92,7 +92,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
   );
 
   const handleValidation = (payload: any) => {
-    const { productIds, templateBanner, thumbnail } = payload;    
+    const { productIds, templateBanner, thumbnail } = payload;
 
     payload.thumbnail = thumbnail?.join(",");
 
@@ -205,6 +205,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
               href={productTemplates[template - 1].url}
               target="_blank"
               rel="noopener noreferrer"
+              className="no-underline text-main font-semibold text-sm bg-[#f2f7fb] px-3 py-2 rounded-full"
             >
               Xem mẫu
             </a>
@@ -215,6 +216,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
             title="Tải ảnh"
             disabled={disabled}
             className="mb-3"
+            inputProps={{ multiple: false }}
           />
         </Box>
       );
@@ -310,6 +312,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
               title="Tải ảnh"
               disabled={disabled}
               className="mb-3"
+              inputProps={{ multiple: false }}
             />
           </Box>
 

@@ -93,9 +93,17 @@ export const SuppliersDialog: React.FC<TDialog> = ({
     }
 
     if (type === "View" && defaultValue) {
-      const productSupply = defaultValue?.productSupply || "";
+      console.log("defaultValue", defaultValue);
+      const productSupply =
+        defaultValue?.productSupply
+          .split(",")
+          .map((item: string) => parseInt(item)) || "";
 
-      reset({ ...defaultValue, productSupply: productSupply.split(", ") });
+      reset({
+        ...defaultValue,
+        productSupply: productSupply,
+        // paymentType: [defaultValue?.paymentType],
+      });
     }
   }, [type, defaultValue]);
 

@@ -91,7 +91,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
         </AddButton>
       </Box>
 
-      <Box className="bg-white">
+      <Box className="bg-white pb-3 rounded">
         <ContextMenuWrapper
           menuId="product_table_menu"
           menuComponent={

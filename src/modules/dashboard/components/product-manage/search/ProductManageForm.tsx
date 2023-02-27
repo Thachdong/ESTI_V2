@@ -19,8 +19,8 @@ export const ProductManageForm: React.FC = () => {
   );
 
   return (
-    <Box className="grid grid-cols-3 gap-4 py-3">
-      <Box className="grid grid-cols-2 col-span-2 gap-4">
+    <Box className="grid grid-cols-3 gap-3 py-3">
+      <Box className="grid grid-cols-2 col-span-2 gap-3">
         <FormInput
           controlProps={{
             control,
@@ -123,7 +123,7 @@ export const ProductManageForm: React.FC = () => {
 
         <Box
           component="fieldset"
-          className={clsx("!border-grey-2 !rounded-[4px] mb-4")}
+          className={clsx("!border-grey-2 !rounded-[4px] mb-3")}
         >
           <legend>Ảnh sản phẩm</legend>
           {!watch("image") && (

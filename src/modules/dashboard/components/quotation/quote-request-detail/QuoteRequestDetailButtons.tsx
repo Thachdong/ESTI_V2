@@ -130,7 +130,10 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
                 </AddButton>
               </>
             ) : (
-              <ViewButton variant="contained"> Xem báo giá</ViewButton>
+              <ViewButton variant="contained" className="bg-main">
+                {" "}
+                Xem báo giá
+              </ViewButton>
             )}
             <PrintButton className="!bg-error">In</PrintButton>
           </Box>

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  ButtonBase,
   InputLabel,
   LinearProgress,
   List,
@@ -12,6 +13,7 @@ import { ChangeEvent, useState } from "react";
 import { useMutation } from "react-query";
 import { ErrorMessage } from "@hookform/error-message";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { FormInputBase } from "../form-bases";
 import { TRenderControllerParams } from "~types/react-hook-form";
@@ -73,21 +75,25 @@ export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
     const renderFiles = () => {
       if (Array.isArray(value)) {
         return value.map((val: string, index: number) => (
-          <ListItem key={index}>
+          <ListItem
+            key={index}
+            className="w-full flex justify-between bg-[#f0f4f7] rounded"
+          >
             <a
               href={val}
               target="_blank"
               rel="noopener noreferrer"
+              className="2xl:max-w-[500px] max-w-[400px] text-ellipsis whitespace-nowrap overflow-hidden no-underline text-main font-semibold"
             >
               {val}
             </a>
-            <Button
+            <ButtonBase
               onClick={() => handleRemoveFile(val)}
-              variant="text"
-              className="underline text-warning"
+              // variant="text"
+              className="no-underline text-error bg-[#f4e4e4] rounded-full"
             >
-              Xóa
-            </Button>
+              <CloseIcon className="text-2xl p-1" />
+            </ButtonBase>
           </ListItem>
         ));
       }
@@ -95,7 +101,7 @@ export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
 
     return (
       <Box>
-        <List>{renderFiles()}</List>
+        <List className="grid gap-2">{renderFiles()}</List>
 
         <Button className={clsx(className, "bg-main-2")}>
           <InputLabel

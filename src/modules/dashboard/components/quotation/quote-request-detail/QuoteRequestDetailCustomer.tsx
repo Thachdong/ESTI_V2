@@ -44,7 +44,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
   const renderCustomerTag = useCallback(() => {
     if (!!id || customerAvailable) {
       return (
-        <Box className="mb-4">
+        <Box className="">
           <FormCustomer
             controlProps={{
               name: "customerId",
@@ -65,7 +65,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
           }}
           label="Mã khách hàng:"
-          className="mb-4"
+          className=""
           disabled={disabled}
         />
       );

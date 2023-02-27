@@ -73,7 +73,6 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             }}
             options={curators}
             label="Người phụ trách:"
-            className="mb-4"
             disabled={disabled}
             labelKey="curatorName"
           />
@@ -87,7 +86,6 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
               rules: { required: "Phải nhập người phụ trách" },
             }}
             label="Người phụ trách:"
-            className="mb-4"
             disabled={disabled}
           />
         );

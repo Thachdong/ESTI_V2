@@ -38,12 +38,10 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
     }
 
     if (type === "View" && defaultValue) {
-      const { paramSearch } = defaultValue || "";
-
       const defaultRecord = {
         name: defaultValue.name,
-        paramSearch: paramSearch?.split(", "),
-        id: defaultValue?.id
+        paramSearch: parseInt(defaultValue?.paramSearch),
+        id: defaultValue?.id,
       };
 
       reset(defaultRecord);
@@ -78,11 +76,11 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleAdd = useCallback(async (data: any) => {
-    const paramSearch = data?.paramSearch || [];
+    const paramSearch = data?.paramSearch || "";
 
     const payload = {
       name: data?.name,
-      paramSearch: paramSearch.join(", "),
+      paramSearch: `${paramSearch}`,
     };
 
     await mutateAdd.mutateAsync(payload);
@@ -112,7 +110,7 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
     const payload = {
       name: data?.name,
       paramSearch: paramSearch.join(", "),
-      id: data?.id
+      id: data?.id,
     };
 
     await mutateUpdate.mutateAsync(payload);
@@ -155,7 +153,7 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
         return (
           <>
             <BaseButton
-                onClick={handleSubmit(handleUpdate)}
+              onClick={handleSubmit(handleUpdate)}
               disabled={!isDirty}
             >
               Cập nhật

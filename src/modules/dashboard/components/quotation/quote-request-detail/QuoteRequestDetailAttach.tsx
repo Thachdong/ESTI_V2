@@ -44,7 +44,7 @@ export const QuoteRequestDetailAttach: React.FC = () => {
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex gap-2 items-center truncate no-underline  text-main w-[500px] "
+                className="flex gap-2 items-center truncate no-underline text-main 2xl:max-w-[500px] max-w-[400px] "
               >
                 <AttachFileIcon className="rotate-90 text-xl" />{" "}
                 <span className="text-ellipsis overflow-hidden whitespace-nowrap">

@@ -6,14 +6,21 @@ import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
 import { toast } from "~modules-core/toast";
 import { useMutation } from "react-query";
-import { TCreateExportWarehouse, TCreateExportWarehouseProduct, warehouse } from "src/api";
+import {
+  TCreateExportWarehouse,
+  TCreateExportWarehouseProduct,
+  warehouse,
+} from "src/api";
 
 type TProps = {
   orderData: any;
   exportStatus?: number;
-}
+};
 
-export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatus}) => {
+export const ExportDetailButtonsBox: React.FC<TProps> = ({
+  orderData,
+  exportStatus,
+}) => {
   // EXTRACT PROPS
   const router = useRouter();
 
@@ -105,18 +112,18 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatu
       payload = {
         exportWarehouseCreate: productList,
         branchId: data.branchId,
-        deliveryId: data.deliveryId
-      }
+        deliveryId: data.deliveryId,
+      };
     } else {
       payload = {
         ...data,
         paymentDocument: paymentDocument.join(","),
         exportWarehouseCreate: productList,
         branchId: orderData.branchId,
-        deliveryId: orderData.deliveryId
+        deliveryId: orderData.deliveryId,
       };
     }
-    
+
     await createMutation.mutateAsync(payload);
   };
 
@@ -137,6 +144,7 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatu
         <BaseButton
           type="button"
           onClick={handleSubmit(handleCreate)}
+          className="bg-main"
         >
           <SaveIcon className="mr-2" />
           Lưu
@@ -145,7 +153,7 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({orderData, exportStatu
         <Box className="flex justify-end">
           <BaseButton
             type="button"
-            className="mr-3"
+            className="mr-3 bg-main"
             onClick={handleSubmit(handleUpdateProducts)}
             disabled={exportStatus !== undefined && exportStatus > 0}
           >
