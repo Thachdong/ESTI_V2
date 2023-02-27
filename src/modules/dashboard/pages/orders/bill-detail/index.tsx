@@ -205,7 +205,7 @@ export const BillDetailPage: React.FC = () => {
         sendMailData={{
           to: BillView?.bill?.billRecipientEmail,
           status: BillView?.bill?.status,
-          cc: [BillView?.mainOrder?.curatorEmail],
+          cc: ["ketoan@esti.vn", BillView?.mainOrder?.curatorEmail],
         }}
       />
     </FormProvider>

@@ -37,7 +37,7 @@ export const QuoteDetailAttach: React.FC<TProps> = ({ disabled }) => {
           {attachFile?.map((file: string) => (
             <ListItem
               key={file}
-              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded "
+              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded truncate"
               disableGutters
             >
               <Typography
@@ -45,10 +45,10 @@ export const QuoteDetailAttach: React.FC<TProps> = ({ disabled }) => {
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex gap-2 items-center truncate no-underline  text-main w-[500px] "
+                className="flex gap-2 items-center truncate no-underline text-main"
               >
                 <AttachFileIcon className="rotate-90 text-xl" />{" "}
-                <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+                <span className="truncate">
                   {file}
                 </span>
               </Typography>

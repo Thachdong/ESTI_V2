@@ -162,7 +162,7 @@ export const QuoteListPage = () => {
             onClick={() => router.push("quote-detail")}
             className="w-1/2 mr-3"
           >
-            Tạo yêu cầu
+            Tạo báo giá
           </AddButton>
 
           <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />

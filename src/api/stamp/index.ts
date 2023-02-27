@@ -19,6 +19,8 @@ export const stamp = {
   getList: (params?: any) =>
     request.getPagination<any>(BASE_URL, { ...params }),
 
+  getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
+
   create: (payload: TCreateStamp) =>
     request.post<TCreateStamp, any>(BASE_URL, payload),
 

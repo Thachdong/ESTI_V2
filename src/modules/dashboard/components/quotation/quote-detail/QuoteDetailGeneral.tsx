@@ -124,6 +124,7 @@ export const QuoteDetailGeneral: React.FC = () => {
               rules: { required: "Phải chọn sale phụ trách" },
             }}
             labelKey="code"
+            getOptionLabel={(opt) => !!opt ? opt?.code + " - " + opt?.fullName : ""}
           />
         </Box>
       </Box>

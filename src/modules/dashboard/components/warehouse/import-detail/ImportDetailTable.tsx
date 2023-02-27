@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import _ from "lodash";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
 import {
@@ -28,7 +28,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const defaultValue = useRef<any>();
+  const [defaultValue, setDefaultValue] = useState<any>();
 
   const { importStatus } = transactionData || {};
 
@@ -57,7 +57,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   }, []);
 
   const handleRemoveProduct = useCallback(() => {
-    const { productName, rowId } = defaultValue.current || {};
+    const { productName, rowId } = defaultValue || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
       const updatedProductList = productList.filter(
@@ -66,14 +66,14 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
 
       setValue("productList", updatedProductList);
     }
-  }, [productList, defaultValue.current]);
+  }, [productList, defaultValue]);
 
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
     const currentRow = productList?.find((item: any) => item?.rowId === id);
 
-    defaultValue.current = currentRow;
+    setDefaultValue(currentRow);
   };
 
   // DATA TABLE
@@ -178,7 +178,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               id={row?.id}
               items={[
                 {
-                  action: () => handleOpen("Update"),
+                  action: () => handleOpen("ViewDocument"),
                   label: "Xem tài liệu SP",
                 },
                 {
@@ -186,15 +186,15 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                   label: "Tạo tài liệu SP",
                 },
                 {
-                  action: () => handleOpen("CreateLabel"),
-                  label: "Tạo nhãn SP",
+                  action: () => handleOpen(defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"),
+                  label: defaultValue?.productLabelId ? "Xem nhãn SP" : "Tạo nhãn SP",
                 },
               ]}
             />
           );
       }
     },
-    [importStatus]
+    [importStatus, defaultValue]
   );
 
   const columns: TGridColDef[] = [
@@ -265,7 +265,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={Boolean(dialog.open && dialog?.type?.includes?.("Product"))}
         type={dialog?.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
       />
 
       {/* ADD PRODUCT DIALOG */}
@@ -280,15 +280,15 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={!!dialog?.open && dialog?.type === "CreateDocument"}
         type="AddFromAnotherRoute"
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
       />
 
       {/* STAMP DIALOG */}
       <StampDialog
         onClose={handleClose}
-        open={dialog?.open && dialog?.type === "CreateLabel"}
-        type="AddFromAnotherRoute"
-        defaultValue={defaultValue.current}
+        open={dialog?.open && (dialog?.type === "CreateLabel" || dialog?.type === "ViewLabel" )}
+        type={!!defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"}
+        defaultValue={{id: defaultValue?.productLabelId} as any}
       />
     </Box>
   );

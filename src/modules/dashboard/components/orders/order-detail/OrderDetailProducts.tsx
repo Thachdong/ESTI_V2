@@ -10,7 +10,7 @@ import {
   DropdownButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
-import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
+import { detailColumns } from "~modules-dashboard/pages/orders/order-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { OrderDetailProductsDialog } from "./OrderDetailProductsDialog";
@@ -31,8 +31,20 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
 
   const products = watch("products");
 
+  let columnsBaseId = [...detailColumns];
+
+  if (!id) {
+    const field = {
+      field: "quantity",
+      headerName: "Số lượng",
+      minWidth: 100,
+    };
+
+    columnsBaseId.splice(7, 3, field);
+  }
+
   const columns: TGridColDef[] = [
-    ...productColumns,
+    ...columnsBaseId,
     {
       field: "action",
       headerName: "",
