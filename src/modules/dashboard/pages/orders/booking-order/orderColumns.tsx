@@ -16,7 +16,8 @@ export const orderColumns: TGridColDef[] = [
     minWidth: 150,
     sortAscValue: 12,
     sortDescValue: 0,
-    filterKey: "created",
+    filterKey: "createdDate",
+    type: "date",
   },
   {
     field: "mainOrderCode",
