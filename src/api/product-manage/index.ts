@@ -17,17 +17,17 @@ export const productManage = {
 };
 
 function resolveAndDownloadBlob(response: any) {
-  const {
-    FileDownloadName: filename,
-    FileContents: data,
-    ContentType,
-  } = response || {};
+  const { FileDownloadName, FileContents, ContentType } = response || {};
 
-  var link = document.createElement("a");
-  link.href = "data:" + ContentType + ";base64," + encodeURIComponent(data);
-  link.setAttribute("download", filename);
+  let link = document.createElement("a");
+
+  link.href =
+    "data:" + ContentType + ";base64," + encodeURIComponent(FileContents);
+
+  link.setAttribute("download", FileDownloadName);
 
   link.style.display = "none";
+
   document.body.appendChild(link);
 
   link.click();
