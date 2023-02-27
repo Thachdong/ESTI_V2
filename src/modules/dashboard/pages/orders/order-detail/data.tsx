@@ -1,3 +1,4 @@
+import { Box, Tooltip } from "@mui/material";
 import moment from "moment";
 import Link from "next/link";
 import { StatusChip } from "~modules-core/components";
@@ -8,9 +9,7 @@ export const detailColumns: TGridColDef[] = [
   {
     field: "no",
     headerName: "STT",
-    minWidth: 120,
-    flex: 1,
-    align: "center",
+    minWidth: 50,
   },
   {
     field: "productCode",
@@ -25,30 +24,55 @@ export const detailColumns: TGridColDef[] = [
   },
   { field: "manufactor", headerName: "Hãng SX", minWidth: 100 },
   {
-    field: "origin",
-    headerName: "Quy cách",
+    field: "productOrigin",
+    headerName: "xuất xứ",
     minWidth: 100,
   },
-  { field: "unitName", headerName: "Đơn vị", minWidth: 100 },
+  { field: "productSpecs", headerName: "Quy cách", minWidth: 100 },
+  { field: "unitName", headerName: "Đơn vị tính", minWidth: 100 },
   {
     field: "quantity",
-    headerName: "Số lượng",
-    minWidth: 150,
+    headerName: "SL yêu cầu",
+    minWidth: 100,
+  },
+  {
+    field: "delivered",
+    headerName: "SL đã giao",
+    minWidth: 100,
+  },
+  {
+    field: "billQuantity",
+    headerName: "SL xuất HĐ",
+    minWidth: 100,
   },
   {
     field: "price",
     headerName: "Giá",
-    minWidth: 150,
+    minWidth: 120,
+    renderCell: ({row}) => _format.getVND(row?.price)
   },
   {
     field: "vat",
     headerName: "Thuế GTGT",
-    minWidth: 150,
+    minWidth: 100,
   },
   {
     field: "totalPrice",
     headerName: "Thành tiền",
     minWidth: 150,
+    renderCell: ({ row }) => {
+      const {quantity, price, vat} = row || {};
+
+      const total = quantity * price;
+
+      const tax = total * (+vat) / 100;
+
+      return (
+        <Tooltip title={ "Sau thuế: " + _format.getVND(total + tax)}>
+          <Box>{_format.getVND(row.totalPrice)}</Box>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "note",
@@ -80,7 +104,11 @@ export const deliveryColumns: TGridColDef[] = [
     renderCell: ({ row }) => (
       <Link href={`/dashboard/warehouse/export-detail/?id=${row?.id}`}>
         <a className="no-underline">
-          <StatusChip status={row?.status} label={row?.warehouseSessionCode} className="cursor-pointer" />
+          <StatusChip
+            status={row?.status}
+            label={row?.warehouseSessionCode}
+            className="cursor-pointer"
+          />
         </a>
       </Link>
     ),
@@ -134,7 +162,11 @@ export const invoiceColumns: TGridColDef[] = [
     renderCell: ({ row }) => (
       <Link href={`/dashboard/orders/bill-detail/?id=${row?.id}`}>
         <a className="no-underline">
-          <StatusChip status={row?.status} label={row?.billCode} className="cursor-pointer" />
+          <StatusChip
+            status={row?.status}
+            label={row?.billCode}
+            className="cursor-pointer"
+          />
         </a>
       </Link>
     ),
