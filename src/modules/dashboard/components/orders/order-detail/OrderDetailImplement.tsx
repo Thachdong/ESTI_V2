@@ -33,7 +33,7 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
         PHÂN CÔNG VIỆC
       </Typography>
 
-      <Box className="bg-white rounded flex-grow p-3">
+      <Box className="bg-white rounded grid gap-3 p-3">
         <FormSelect
           options={selectOptions[0]?.data as []}
           controlProps={{
@@ -43,7 +43,6 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Sale admin:"
           labelKey="fullName"
-          className="mb-4"
           disabled={disabled}
         />
 
@@ -56,7 +55,6 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Sale:"
           labelKey="fullName"
-          className="mb-4"
           disabled={disabled}
         />
 

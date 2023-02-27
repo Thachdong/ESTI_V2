@@ -33,7 +33,7 @@ export const BillDetailPaymentHistory: React.FC<TProps> = ({
         THÔNG TIN THANH TOÁN
       </Typography>
 
-      <Box className="bg-white rounded">
+      <Box className="bg-white rounded pb-3">
         <DataTable
           rows={data?.map((item: any, index: number) => ({
             ...item,

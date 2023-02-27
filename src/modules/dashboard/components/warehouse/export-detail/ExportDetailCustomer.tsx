@@ -15,7 +15,7 @@ export const ExportDetailCustomer: React.FC<TProps> = ({
           THÔNG TIN KHÁCH HÀNG
         </Typography>
 
-        <Box className="grid gap-4 rounded p-3 bg-white">
+        <Box className="grid gap-3 rounded p-3 bg-white">
           <FormInputBase
             value={customerData.companyName}
             disabled={true}
@@ -47,7 +47,7 @@ export const ExportDetailCustomer: React.FC<TProps> = ({
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="grid gap-4 rounded p-3 bg-white">
+        <Box className="grid gap-3 rounded p-3 bg-white">
           <FormInputBase
             value={customerData?.curatorName}
             disabled={true}

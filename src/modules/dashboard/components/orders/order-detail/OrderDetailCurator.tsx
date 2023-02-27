@@ -32,7 +32,7 @@ export const OrderDetailCurator: React.FC<TProps> = ({ disabled }) => {
         THÔNG TIN LIÊN HỆ
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded flex-grow p-3">
+      <Box className="grid gap-3 bg-white rounded flex-grow p-3">
         <FormSelect
           options={customerDetail?.curatorInfo}
           controlProps={{

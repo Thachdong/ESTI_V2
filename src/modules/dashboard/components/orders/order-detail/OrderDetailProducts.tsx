@@ -182,13 +182,23 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ): {getPrice.totalPrice}
+        <List className="border-0 border-t border-solid border-grey-3 px-3">
+          <ListItem className="border-0 border-b border-dashed h-[34px] border-grey-3 text-sm flex gap-3 items-center">
+            <span className="font-semibold">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalPrice}</span>
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          <ListItem className="border-0 border-b border-dashed h-[34px] border-grey-3 text-sm flex gap-3 items-center">
+            <span className="font-semibold">Thuế GTGT(VNĐ): </span>
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm flex gap-3 items-center h-[34px]">
+            <span className="font-semibold">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
           </ListItem>
         </List>
       </Box>

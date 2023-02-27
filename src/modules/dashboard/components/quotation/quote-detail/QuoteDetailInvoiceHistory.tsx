@@ -51,7 +51,7 @@ export const QuoteDetailInvoiceHistory: React.FC<TProps> = ({
         CẬP NHẬT HOÁ ĐƠN
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded flex-grow">
+      <Box className="bg-white grid gap-3 rounded flex-grow">
         <DataTable
           rows={
             billHistory?.items?.map?.((bill: any, index: number) => ({

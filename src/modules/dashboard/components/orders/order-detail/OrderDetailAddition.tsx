@@ -15,7 +15,7 @@ export const OrderDetailAddition: React.FC<TProps> = ({ disabled }) => {
         YÊU CẦU BỔ SUNG
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded flex-grow p-3">
+      <Box className="grid gap-3 bg-white rounded flex-grow p-3">
         <FormInput
           controlProps={{
             name: "requirements",

@@ -96,7 +96,7 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
         Điều khoản của đơn đặt hàng/ Terms and conditions of purchasing order:
       </Typography>
 
-      <Box className="bg-white rounded flex-grow px-3 ">
+      <Box className="bg-white rounded flex-grow p-3 ">
         <List className="p-0">
           <ListItem disableGutters className="pb-0 text-sm">
             - Tổng cộng tiền thanh toán đã bao đồm thuế GTGT và chi phí giao
