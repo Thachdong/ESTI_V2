@@ -13,7 +13,7 @@ export const QuoteRequestDetailGeneral: React.FC<TProps> = ({
 }) => {
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         thông tin chung
       </Typography>
 

@@ -9,7 +9,7 @@ type TProps = {
 export const PurchaseDetailGeneralView: React.FC<TProps> = ({ data }) => {
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 

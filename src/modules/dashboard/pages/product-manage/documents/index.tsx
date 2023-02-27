@@ -1,9 +1,15 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { category, productDocument, TDocument } from "src/api";
+import {
+  category,
+  documentCareer,
+  documentType,
+  productDocument,
+  TDocument,
+} from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -76,7 +82,25 @@ export const DocumentsPage: React.FC = () => {
   const { data: parentCategorys } = useQuery(["parentCategorys"], () =>
     category
       .getList({ pageIndex: 1, pageSize: 50, parentId: parentCategoryId })
-      .then((res) => res.data.items.map(item => ({value: item.id, label: item.name})))
+      .then((res) =>
+        res.data.items.map((item) => ({ value: item.id, label: item.name }))
+      )
+  );
+
+  const { data: documentTypes } = useQuery(["DocumentType"], () =>
+    documentType
+      .getList()
+      .then((res) =>
+        res.data?.map((item: any) => ({ value: item.id, label: item.name }))
+      )
+  );
+
+  const { data: documentCareers } = useQuery(["DocumentCareer"], () =>
+    documentCareer
+      .getList()
+      .then((res) =>
+        res.data.map((item: any) => ({ value: item.id, label: item.name }))
+      )
   );
 
   // DATA TABLE
@@ -92,7 +116,7 @@ export const DocumentsPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {productName, id} = defaultValue.current || {};
+    const { productName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa tài liệu SP: " + productName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -101,7 +125,7 @@ export const DocumentsPage: React.FC = () => {
 
   const columns: TGridColDef<TDocument>[] = [
     {
-      ...documentColumns[0]
+      ...documentColumns[0],
     },
     {
       field: "categoryName",
@@ -114,6 +138,45 @@ export const DocumentsPage: React.FC = () => {
       width: 150,
     },
     ...documentColumns.slice(1),
+    {
+      field: "documentTypeName",
+      headerName: "Loại tài liệu",
+      sortAscValue: 14,
+      sortDescValue: 6,
+      filterKey: "type",
+      width: 150,
+      type: "select",
+      options: documentTypes,
+    },
+    {
+      field: "documentCareerName",
+      headerName: "Tài liệu chuyên ngành",
+      sortAscValue: 15,
+      sortDescValue: 7,
+      filterKey: "careerSlug",
+      width: 200,
+      type: "select",
+      options: documentCareers,
+    },
+    {
+      field: "attachFile",
+      headerName: "File",
+      isFilter: false,
+      isSort: false,
+      width: 125,
+      renderCell: ({ row }) => (
+        <Button variant="text" className="truncate">
+          <a
+            href={row.attachFiles?.[0]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="no-underline text-main text-sm font-semibold"
+          >
+            Xem chi tiết
+          </a>
+        </Button>
+      ),
+    },
     {
       field: "action",
       headerName: "",
@@ -157,7 +220,6 @@ export const DocumentsPage: React.FC = () => {
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm tài liệu
           </AddButton>

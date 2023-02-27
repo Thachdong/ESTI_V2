@@ -49,7 +49,7 @@ export const PurchaseDetailBillHistory: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm mt-4">
         CẬP NHẬT ĐƠN HÓA ĐƠN THANH TOÁN
       </Typography>
 

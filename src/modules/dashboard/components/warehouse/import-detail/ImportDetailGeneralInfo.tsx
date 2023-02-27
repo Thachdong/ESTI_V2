@@ -73,12 +73,12 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
   }, [withoutPurchaseInvoice, orderDetail]);
 
   return (
-    <Paper className="rounded p-3">
-      <Typography className="text-sm font-medium mb-3">
+    <Box className="">
+      <Typography className="text-sm font-semibold mb-3">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-4 rounded p-3 bg-white">
         {renderTagsBaseOnInvoiceFlag()}
 
         <FormSelectAsync
@@ -132,6 +132,6 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
           disabled
         />
       </Box>
-    </Paper>
+    </Box>
   );
 };

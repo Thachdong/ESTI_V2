@@ -26,14 +26,13 @@ export const ProductManageDialog: React.FC<any> = ({
 
   const methods = useForm<any>({ mode: "onBlur", reValidateMode: "onSubmit" });
 
-  const { reset, control } = methods;
+  const { reset, control, watch } = methods;
 
   useQuery(
     ["productDetail"],
     () =>
-      products.getById(defaultValue?.id as string).then((res) => {
+      products.getById(defaultValue?.productId as string).then((res) => {
         const product = res.data;
-
         // PARSE SUPLIERS
         const suppliers = JSON.parse(product?.suppliers || "[]").map(
           (supplier: any) => supplier?.id
@@ -103,7 +102,7 @@ export const ProductManageDialog: React.FC<any> = ({
             <TabPanelContainForm value="2" index={"2"}>
               <ProductManageHistoryTable
                 warehouseId={defaultValue?.warehouseConfigId}
-                productId={defaultValue?.id}
+                productId={defaultValue?.productId}
               />
             </TabPanelContainForm>
           </FormProvider>

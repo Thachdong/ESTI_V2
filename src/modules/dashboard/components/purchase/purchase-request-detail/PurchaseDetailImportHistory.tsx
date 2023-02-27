@@ -45,7 +45,7 @@ export const PurchaseDetailImportHistory: React.FC<TProps> = ({ status }) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         CẬP NHẬT ĐƠN NHẬP HÀNG
       </Typography>
 

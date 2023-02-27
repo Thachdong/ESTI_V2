@@ -3,7 +3,11 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { productManage } from "src/api";
-import { DataTable, generatePaginationProps } from "~modules-core/components";
+import {
+  DataTable,
+  generatePaginationProps,
+  RefreshButton,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { productHistoryColumns } from "~modules-dashboard/pages/product-manage/search/data";
 
@@ -49,10 +53,8 @@ export const ProductManageHistoryTable: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col h-[50vh]">
-      <Box className="flex items-center justify-end">
-        <Button onClick={() => refetch()} variant="text" className="mr-3">
-          <RefreshIcon />
-        </Button>
+      <Box className="flex items-center justify-end my-2">
+        <RefreshButton onClick={() => refetch()} />
       </Box>
 
       <DataTable

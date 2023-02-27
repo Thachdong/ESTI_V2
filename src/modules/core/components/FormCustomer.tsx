@@ -1,4 +1,4 @@
-import { Box, ButtonBase } from "@mui/material";
+import { Box } from "@mui/material";
 import { useCallback, useState } from "react";
 import { customer } from "src/api";
 import { CustomersDialog } from "~modules-dashboard/components";
@@ -6,7 +6,6 @@ import { TDefaultDialogState } from "~types/dialog";
 import { TControllerProps } from "~types/react-hook-form";
 import { AddButton } from "./buttons";
 import { FormSelectAsync } from "./form-hooks";
-import AddIcon from "@mui/icons-material/Add";
 
 type TProps = {
   controlProps: TControllerProps;

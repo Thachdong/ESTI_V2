@@ -27,6 +27,7 @@ export const staffColumns: TGridColDef[] = [
     filterKey: "fullName",
     sortDescValue: 4,
     sortAscValue: 15,
+    flex: 1,
   },
   {
     field: "roleName",
@@ -73,7 +74,7 @@ export const staffColumns: TGridColDef[] = [
     type: "date",
     headerName: "Ngày sinh",
     width: 150,
-    filterKey: "birthDate",
+    filterKey: "fromBirthDate",
     sortDescValue: 9,
     sortAscValue: 20,
     renderCell: ({ row }) =>
@@ -88,9 +89,15 @@ export const staffColumns: TGridColDef[] = [
     sortAscValue: 21,
     type: "select",
     options: accountStatus,
-    renderCell: ({row}) => {
-      const colors = ["success", "default", "error"]
-      return <StatusChip status={row?.status} label={row?.statusName} color={colors[row?.status] as any} />
-    }
+    renderCell: ({ row }) => {
+      const colors = ["success", "default", "error"];
+      return (
+        <StatusChip
+          status={row?.status}
+          label={row?.statusName}
+          color={colors[row?.status] as any}
+        />
+      );
+    },
   },
 ];

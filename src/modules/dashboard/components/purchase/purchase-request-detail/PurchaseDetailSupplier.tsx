@@ -30,7 +30,7 @@ export const PurchaseDetailSupplier: React.FC = () => {
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
+        <Box className="bg-white grid gap-3 rounded flex-grow p-3">
           <FormSelectAsync
             fetcher={suppliers.getList}
             controlProps={{
@@ -69,7 +69,7 @@ export const PurchaseDetailSupplier: React.FC = () => {
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
+        <Box className="bg-white grid gap-3 rounded flex-grow p-3">
           <FormInputBase
             label="Người phụ trách:"
             value={supplier?.curatorName}

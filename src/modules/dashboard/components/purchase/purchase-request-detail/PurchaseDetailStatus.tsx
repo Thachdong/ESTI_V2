@@ -50,7 +50,7 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col col-span-2 mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Trạng thái đơn hàng
       </Typography>
 
@@ -71,7 +71,7 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
         <BaseButton
           disabled={currentStatus > 2}
           onClick={handleUpdateStatus}
-          className="max-w-[200px]"
+          className="max-w-[200px] bg-main text-white"
         >
           Cập nhật trạng thái
         </BaseButton>

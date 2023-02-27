@@ -10,26 +10,27 @@ export const productManage = {
       .then((res) => resolveAndDownloadBlob(res)),
   historyList: (params?: any) =>
     request.getPagination<any>("Product/GetProductHistory", { ...params }),
+  exportStockExcel: (params: any) =>
+    request
+      .get("Product/ExportStockExcel", { ...params })
+      .then((res) => resolveAndDownloadBlob(res?.data)),
 };
 
 function resolveAndDownloadBlob(response: any) {
-  const { FileDownloadName, FileContents } = response?.data || {};
+  const { FileDownloadName, FileContents, ContentType } = response || {};
 
-  const filename = decodeURI(FileDownloadName);
+  let link = document.createElement("a");
 
-  const url = window.URL.createObjectURL(new Blob([FileContents]));
+  link.href =
+    "data:" + ContentType + ";base64," + encodeURIComponent(FileContents);
 
-  const link = document.createElement("a");
+  link.setAttribute("download", FileDownloadName);
 
-  link.href = url;
-
-  link.setAttribute("download", filename);
+  link.style.display = "none";
 
   document.body.appendChild(link);
 
   link.click();
 
-  window.URL.revokeObjectURL(url);
-
-  link.remove();
+  document.body.removeChild(link);
 }

@@ -181,7 +181,7 @@ export const QuotationRequestsPage = () => {
       <Item
         id="view"
         onClick={() =>
-          handleRedirect(`quote-request-detail?id=${defaultValue.current?.id}`)
+          router.push(`quote-request-detail?id=${defaultValue.current?.id}`)
         }
       >
         Nội dung chi tiết

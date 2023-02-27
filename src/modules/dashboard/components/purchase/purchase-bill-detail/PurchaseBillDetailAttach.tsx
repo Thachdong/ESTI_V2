@@ -71,13 +71,15 @@ export const PurchaseBillDetailAttach: React.FC = () => {
       className="flex items-center justify-center text-main font-bold rounded bg-[#2684C51A] border border-solid border-main w-full h-[40px] cursor-pointer uppercase"
     >
       <AttachFileIcon className="rotate-45" />
-      <Typography component="span">Thêm file đính kèm</Typography>
+      <Typography component="span" className="text-sm font-semibold">
+        Thêm file đính kèm
+      </Typography>
     </InputLabel>
   );
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         File đính kèm
       </Typography>
 
