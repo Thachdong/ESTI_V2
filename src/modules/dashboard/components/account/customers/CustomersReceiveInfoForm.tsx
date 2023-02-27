@@ -26,13 +26,10 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({
   type,
   isDisable,
 }) => {
-  const [status, setStatus] = useState<number>();
-
-  const [collapses, setCollapses] = useState<number[]>([0]);
 
   const [curators, setCurators] = useState<any[]>([{}]);
 
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
   const { remove, append } = useFieldArray({
     control,
@@ -40,15 +37,6 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({
   });
 
   // METHODS
-  const handleCollapse = useCallback(
-    (index: number) => {
-      collapses.includes(index)
-        ? setCollapses((prev) => prev.filter((i) => i !== index))
-        : setCollapses([...collapses, index]);
-    },
-    [collapses]
-  );
-
   const handleAdd = useCallback(() => {
     setCurators([...curators, {}]);
 

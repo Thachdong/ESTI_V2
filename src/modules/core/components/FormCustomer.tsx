@@ -13,6 +13,8 @@ type TProps = {
   labelKey?: string;
   disabled?: boolean;
   callback?: (opt: any) => void;
+  defaultValue?: any;
+  onAddCallback?: (opt: any) => void;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
@@ -21,6 +23,8 @@ export const FormCustomer: React.FC<TProps> = ({
   labelKey = "customerCode",
   disabled = false,
   callback,
+  onAddCallback,
+  defaultValue
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -31,6 +35,7 @@ export const FormCustomer: React.FC<TProps> = ({
   const onOpen = useCallback(() => {
     setDialog({ open: true, type: "Add" });
   }, []);
+  
   return (
     <>
       <Box className="flex items-center w-full">
@@ -58,7 +63,9 @@ export const FormCustomer: React.FC<TProps> = ({
       <CustomersDialog
         onClose={onClose}
         open={!!dialog?.open}
-        type={dialog?.type}
+        type="QuickCreate"
+        defaultValue={defaultValue}
+        onAddCallback={onAddCallback}
       />
     </>
   );

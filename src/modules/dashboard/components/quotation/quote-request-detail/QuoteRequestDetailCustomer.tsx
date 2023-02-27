@@ -17,6 +17,36 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
   const { customerId, customerAvailable } = watch();
 
+  let initCustomerInfo = {};
+
+  if (!!id && !customerId) {
+    const {
+      companyAddress,
+      companyName,
+      companyTaxCode,
+      curatorDepartmentId,
+      curatorEmail,
+      curatorName,
+      curatorPhone,
+      receiverAddress,
+    } = watch();
+
+    initCustomerInfo = {
+      companyName: companyName,
+      taxCode: companyTaxCode,
+      address: companyAddress,
+      curatorCreate: [
+        {
+          curatorName: curatorName,
+          curatorDepartment: curatorDepartmentId,
+          curatorPhone: curatorPhone,
+          curatorEmail: curatorEmail,
+          curatorAddress: receiverAddress,
+        },
+      ],
+    };
+  }
+
   const { data } = useQuery(
     ["customerDetail", customerId],
     () => customerApi.getById(customerId).then((res) => res.data),
@@ -52,12 +82,14 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
               rules: { required: "Phải chọn mã khách hàng" },
             }}
             disabled={disabled}
+            defaultValue={initCustomerInfo}
+            onAddCallback={(createdId: any) => setValue("customerId", createdId)}
           />
         </Box>
       );
     }
 
-    if (!id && !customerApi) {
+    if (!id && !customerId) {
       return (
         <FormInput
           controlProps={{

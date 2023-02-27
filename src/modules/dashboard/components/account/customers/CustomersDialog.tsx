@@ -15,12 +15,17 @@ import { CustomersDialogButtons } from "./CustomersDialogButtons";
 import { CustomersInfoForm } from "./CustomersInfoForm";
 import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
 
-export const CustomersDialog: React.FC<TDialog> = ({
+type TProps = TDialog & {
+  onAddCallback?: (opt: any) => void;
+}
+
+export const CustomersDialog: React.FC<TProps> = ({
   onClose,
   open,
   type,
   refetch,
   defaultValue,
+  onAddCallback
 }) => {
   const [tab, setTab] = useState("1");
 
@@ -46,7 +51,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
     ["CustomerDetail_" + defaultValue?.id],
     () => customer.getById(defaultValue?.id).then((res) => res.data),
     {
-      enabled: !!defaultValue,
+      enabled: !!defaultValue?.id,
     }
   );
 
@@ -105,12 +110,18 @@ export const CustomersDialog: React.FC<TDialog> = ({
 
   // SIDE EFFECTS
   useEffect(() => {
-    if (type === "Add") {
-      reset({});
-    }
-
-    if (type === "View" && defaultValue) {
-      reset(convertCustomerDetail(customerDetail));
+    switch (true) {
+      case type === "Add":
+        reset({});
+        break;
+      case type === "QuickCreate" && !!defaultValue:
+        reset({ ...defaultValue });
+        break;
+      case type === "View" && !!defaultValue:
+        reset(convertCustomerDetail(customerDetail));
+        break;
+      default:
+        break;
     }
   }, [type, defaultValue, customerDetail]);
 
@@ -147,6 +158,7 @@ export const CustomersDialog: React.FC<TDialog> = ({
                 setIsUpdate={setIsUpdate}
                 onClose={onClose}
                 refetch={refetch}
+                onAddCallback={onAddCallback}
               />
             </Box>
           </Box>
