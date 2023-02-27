@@ -76,7 +76,9 @@ export const DocumentsPage: React.FC = () => {
   const { data: parentCategorys } = useQuery(["parentCategorys"], () =>
     category
       .getList({ pageIndex: 1, pageSize: 50, parentId: parentCategoryId })
-      .then((res) => res.data.items.map(item => ({value: item.id, label: item.name})))
+      .then((res) =>
+        res.data.items.map((item) => ({ value: item.id, label: item.name }))
+      )
   );
 
   // DATA TABLE
@@ -92,7 +94,7 @@ export const DocumentsPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {productName, id} = defaultValue.current || {};
+    const { productName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa tài liệu SP: " + productName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -101,7 +103,7 @@ export const DocumentsPage: React.FC = () => {
 
   const columns: TGridColDef<TDocument>[] = [
     {
-      ...documentColumns[0]
+      ...documentColumns[0],
     },
     {
       field: "categoryName",
@@ -157,7 +159,6 @@ export const DocumentsPage: React.FC = () => {
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm tài liệu
           </AddButton>

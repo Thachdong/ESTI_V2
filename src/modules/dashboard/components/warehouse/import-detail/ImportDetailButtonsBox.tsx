@@ -16,7 +16,9 @@ type TPayload = {
   importStatus?: 0 | 1 | 2;
 };
 
-export const ImportDetailButtonsBox: React.FC<TPayload> = ({ importStatus }) => {
+export const ImportDetailButtonsBox: React.FC<TPayload> = ({
+  importStatus,
+}) => {
   const router = useRouter();
 
   const { query } = router;
@@ -130,7 +132,11 @@ export const ImportDetailButtonsBox: React.FC<TPayload> = ({ importStatus }) => 
   return (
     <Box className="flex justify-end my-4">
       {!query.id ? (
-        <BaseButton type="button" onClick={handleSubmit(handleCreate)}>
+        <BaseButton
+          type="button"
+          onClick={handleSubmit(handleCreate)}
+          className="bg-main"
+        >
           <SaveIcon className="mr-2" />
           Lưu
         </BaseButton>

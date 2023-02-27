@@ -14,9 +14,9 @@ import { VAT } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
+export const PurchasePlanProduct: React.FC<TProps> = ({ disabled }) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -40,16 +40,15 @@ export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
 
   useEffect(() => {
     if (!quantity || !price) {
-      setValue("totalPrice", 0)
+      setValue("totalPrice", 0);
     } else {
       const total = quantity * price;
 
-      const tax = total * (+vat) / 100;
+      const tax = (total * +vat) / 100;
 
-      setValue("totalPrice", total + tax)
+      setValue("totalPrice", total + tax);
     }
-    
-  }, [quantity, price, vat])
+  }, [quantity, price, vat]);
 
   return (
     <Box className="mb-4">
@@ -57,7 +56,7 @@ export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
         THÔNG TIN SẢN PHẨM CẦN MUA
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-3">
         <FormSelect
           controlProps={{
             control,
@@ -126,14 +125,14 @@ export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
             label="Quy cách:"
             value={selectedProduct?.specs}
             disabled
-            className="mb-4"
+            className="mb-3"
           />
 
           <FormInputBase
             label="Đơn vị:"
             value={selectedProduct?.unitName}
             disabled
-            className="mb-4"
+            className="mb-3"
           />
 
           <FormInputNumber
@@ -152,8 +151,9 @@ export const PurchasePlanProduct: React.FC<TProps> = ({disabled}) => {
           }}
           label="Ghi chú:"
           multiline
-          minRows={6}
+          minRows={5}
           disabled={disabled}
+          className="h-fit"
         />
       </Box>
     </Box>

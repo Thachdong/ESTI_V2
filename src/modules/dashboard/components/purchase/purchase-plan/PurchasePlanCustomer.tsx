@@ -31,12 +31,12 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({ disabled }) => {
   }, []);
 
   return (
-    <Box className="grid grid-cols-2 gap-4">
-      <Box className="mb-4">
+    <Box className="grid grid-cols-2 gap-3">
+      <Box className="mb-3">
         <Typography className="font-semibold mb-2 text-sm">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
-        <Box className="grid gap-4">
+        <Box className="grid gap-3">
           <FormSelectAsync
             fetcher={suppliers.getList}
             controlProps={{
@@ -70,11 +70,11 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({ disabled }) => {
         </Box>
       </Box>
 
-      <Box className="mb-4">
+      <Box className="mb-3">
         <Typography className="font-semibold text-sm mb-2">
           THÔNG TIN LIÊN HỆ
         </Typography>
-        <Box className="grid gap-4">
+        <Box className="grid gap-3">
           <FormInputBase
             value={supplier?.curatorName}
             label="Người phụ trách:"

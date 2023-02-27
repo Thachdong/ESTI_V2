@@ -168,7 +168,7 @@ export const ProductManageTable = () => {
               productManage.downloadAllProduct({ pageSize: 9999, pageIndex: 1 })
             }
             variant="contained"
-            className="mr-3"
+            className=""
           >
             Tải file excel
           </DownloadButton>

@@ -20,7 +20,10 @@ type TProps = {
   productList: any[];
 };
 
-export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList}) => {
+export const PurchaseBillDetailProducts: React.FC<TProps> = ({
+  data,
+  productList,
+}) => {
   const { id } = useRouter().query;
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -44,12 +47,12 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: handleDelete,
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -118,14 +121,16 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
         totalPrice: _format.getVND(resultObj.totalPrice),
         totalTax: _format.getVND(resultObj.totalTax),
         finalPrice: _format.getVND(resultObj.finalPrice),
-      }
+      };
     }
   }, [data, products]);
 
   return (
     <Box className="flex flex-col col-span-2">
       <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
@@ -137,7 +142,11 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item disabled={!!id} id="view-product" onClick={() => onOpen("Update")}>
+              <Item
+                disabled={!!id}
+                id="view-product"
+                onClick={() => onOpen("Update")}
+              >
                 Cập nhật
               </Item>
               <Item disabled={!!id} id="delete-product" onClick={handleDelete}>
@@ -166,8 +175,7 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 
         <List className="border-0 border-t border-solid">
           <ListItem>
-            Thành tiền chưa có thuế(VNĐ):{" "}
-            {getPrice.totalPrice}
+            Thành tiền chưa có thuế(VNĐ): {getPrice.totalPrice}
           </ListItem>
           <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
           <ListItem>

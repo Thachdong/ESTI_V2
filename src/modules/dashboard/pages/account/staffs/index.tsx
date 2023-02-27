@@ -21,7 +21,10 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StaffsDialog, StaffsStatusDialog } from "~modules-dashboard/components/account";
+import {
+  StaffsDialog,
+  StaffsStatusDialog,
+} from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
 import { staffColumns } from "./staffColumns";
 
@@ -54,7 +57,7 @@ export const StaffsPage = () => {
 
   const onOpenStatus = useCallback(() => {
     setDialog({ open: true, type: "UpdateStatus" });
-  }, [])
+  }, []);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -88,7 +91,7 @@ export const StaffsPage = () => {
     },
     onSuccess: (data) => {
       refetch();
-      
+
       toast.success(data.resultMessage);
     },
   });
@@ -150,7 +153,6 @@ export const StaffsPage = () => {
         <div className="w-1/2 flex items-center justify-end">
           <AddButton
             variant="contained"
-            className="mr-3"
             onClick={() => setDialog({ open: true, type: "Add" })}
           >
             Tạo nhân viên

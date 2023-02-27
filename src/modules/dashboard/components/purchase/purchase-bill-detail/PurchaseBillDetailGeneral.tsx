@@ -21,7 +21,7 @@ export const PurchaseBillDetailGeneral: React.FC<TProps> = ({
 
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 

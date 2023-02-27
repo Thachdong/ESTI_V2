@@ -71,7 +71,7 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
         <BaseButton
           disabled={currentStatus > 2}
           onClick={handleUpdateStatus}
-          className="max-w-[200px]"
+          className="max-w-[200px] bg-main"
         >
           Cập nhật trạng thái
         </BaseButton>

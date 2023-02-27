@@ -30,7 +30,7 @@ export const CategoryPage: React.FC = () => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const defaultValue = useRef<any>();
-  
+
   usePathBaseFilter(pagination);
 
   // DIALOG METHODS
@@ -77,7 +77,7 @@ export const CategoryPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {name, id} = defaultValue.current || {};
+    const { name, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa Danh mục: " + name)) {
       await mutateDelete.mutateAsync(id as string);
@@ -128,7 +128,6 @@ export const CategoryPage: React.FC = () => {
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm danh mục SP
           </AddButton>

@@ -37,7 +37,7 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
+        <Box className="bg-white grid gap-3 rounded flex-grow p-3">
           <FormInputBase
             label="Nhà cung cấp:"
             value={supplierDetail?.supplierCode}
@@ -69,7 +69,7 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="bg-white grid gap-4 rounded flex-grow p-3">
+        <Box className="bg-white grid gap-3 rounded flex-grow p-3">
           <FormInputBase
             label="Người phụ trách:"
             value={supplierDetail?.curatorName}

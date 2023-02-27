@@ -208,12 +208,12 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   ];
 
   return (
-    <Paper className="rounded p-3">
+    <Box className="">
       <Box className="flex items-center mb-3">
-        <Typography className="text-sm font-medium flex-grow">
+        <Typography className="text-sm font-semibold flex-grow">
           SẢN PHẨM
         </Typography>
-        <Box className="flex justify-end">
+        <Box className="flex justify-end ">
           <AddButton
             onClick={() => handleOpen("AddProduct")}
             variant="contained"
@@ -231,35 +231,35 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           </AddButton>
         </Box>
       </Box>
+      <Box className="rounded p-3 bg-white">
+        <ContextMenuWrapper
+          menuId="product_table_menu"
+          menuComponent={renderContextMenu()}
+        >
+          <DataTable
+            rows={productList?.map((prod: any, index: number) => ({
+              ...prod,
+              no: index + 1,
+            }))}
+            columns={columns}
+            autoHeight
+            hideSearchbar
+            hideFooter
+            hideFooterPagination
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+            getRowId={(record) => record.rowId}
+          />
+        </ContextMenuWrapper>
 
-      <ContextMenuWrapper
-        menuId="product_table_menu"
-        menuComponent={renderContextMenu()}
-      >
-        <DataTable
-          rows={productList?.map((prod: any, index: number) => ({
-            ...prod,
-            no: index + 1,
-          }))}
-          columns={columns}
-          autoHeight
-          hideSearchbar
-          hideFooter
-          hideFooterPagination
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-            },
-          }}
-          getRowId={(record) => record.rowId}
-        />
-      </ContextMenuWrapper>
-
-      <Typography className="my-3">
-        Tổng cộng tiền thanh toán(VNĐ):
-        <strong> {_format.getVND(totalPrice)}</strong>
-      </Typography>
-
+        <Typography className="my-3">
+          Tổng cộng tiền thanh toán(VNĐ):
+          <strong> {_format.getVND(totalPrice)}</strong>
+        </Typography>
+      </Box>
       {/* IMPLEMENT TRANSACTION DIALOG */}
       <ImportDetailProductDialog
         onClose={handleClose}
@@ -290,6 +290,6 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         type="AddFromAnotherRoute"
         defaultValue={defaultValue.current}
       />
-    </Paper>
+    </Box>
   );
 };

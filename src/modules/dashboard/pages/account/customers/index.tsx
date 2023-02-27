@@ -22,7 +22,7 @@ import { CustomerColumns } from "./customerColumns";
 
 export const CustomersPage = () => {
   const router = useRouter();
-  
+
   const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -80,7 +80,7 @@ export const CustomersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    const {companyName, id} = defaultValue.current || {};
+    const { companyName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa khách hàng: " + companyName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -133,7 +133,6 @@ export const CustomersPage = () => {
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Tạo khách hàng
           </AddButton>

@@ -64,12 +64,12 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
   };
 
   return (
-    <Paper className="rounded p-3">
-      <Typography className="text-sm font-medium mb-3">
+    <Box className="">
+      <Typography className="text-sm font-semibold mb-3">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-4 rounded p-3 bg-white">
         <FormInputBase disabled value={data?.code} label="Mã nhập kho" />
 
         <FormInputBase
@@ -105,7 +105,7 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
           <BaseButton
             size="small"
             variant="contained"
-            className="h-[40px]"
+            className="h-[40px] bg-main"
             // className="!text-[#000] bg-[#edf2f7] hover:bg-[#e2e8f0] h-[40px]"
             disabled={data?.receivedBill}
             onClick={_onUpdate}
@@ -131,11 +131,12 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
             disabled={data?.importStatus > 0}
             onClick={handleSubmit(_onSubmit)}
             variant="contained"
+            className="bg-main"
           >
             Cập nhật trạng thái
           </BaseButton>
         </Box>
       </Box>
-    </Paper>
+    </Box>
   );
 };
