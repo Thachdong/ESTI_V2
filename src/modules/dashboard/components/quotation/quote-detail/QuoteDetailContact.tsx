@@ -18,7 +18,7 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
 
   const { control, watch, setValue } = useFormContext();
 
-  const { customerId, isQuoteRequest } = watch();
+  const { customerId, isQuoteRequest, curatorId } = watch();
 
   // DATA FETCHING
   const { data } = useQuery(
@@ -32,7 +32,7 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
   // SIDE EFFECTS
   useEffect(() => {
     if (!id && !!curator) {
-      const { curatorName, curatorPhone, curatorEmail, curatorDepartment } =
+      const { curatorName, curatorPhone, curatorEmail, curatorDepartment, receiverById } =
         curator || {};
 
       setValue("curatorName", curatorName);
@@ -42,8 +42,30 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
       setValue("curatorEmail", curatorEmail);
 
       setValue("curatorDepartmentId", curatorDepartment);
+
+      const {address} = receiverById || {};
+
+      setValue("receiverAddress", address);
     }
   }, [curator, id]);
+
+  useEffect(() => {
+    const {curatorInfo = []} = data || {};
+
+    const selectedCurator = curatorInfo.find((c: any) => c.id === curatorId);
+
+    if (!selectedCurator && !id) {
+      setValue("curatorName", "");
+
+      setValue("curatorPhone", "");
+
+      setValue("curatorEmail", "");
+
+      setValue("curatorDepartmentId", "");
+
+      setValue("receiverAddress", "");
+    }
+  }, [data, curatorId])
 
   return (
     <Box className="flex flex-col">

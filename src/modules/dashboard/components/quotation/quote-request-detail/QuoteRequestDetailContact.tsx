@@ -75,7 +75,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
             label="Người phụ trách:"
             className="mb-4"
             disabled={disabled}
-            labelKey="curatorName"
+            getOptionLabel={(opt) => !!opt ? opt?.curatorName + " - " + opt?.statusName : ""}
           />
         );
       } else {
@@ -106,7 +106,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
           label="Người phụ trách:"
           className="mb-4"
           disabled={disabled}
-          labelKey="curatorName"
+          getOptionLabel={(opt) => !!opt ? opt?.curatorName + " - " + opt?.statusName : ""}
         />
       );
     }
