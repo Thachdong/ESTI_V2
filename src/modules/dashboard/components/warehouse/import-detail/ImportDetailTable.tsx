@@ -233,6 +233,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       renderCell: ({ row }) => renderActionButtons(row),
     },
   ];
+console.log(defaultValue);
 
   return (
     <Box className="">
@@ -312,9 +313,13 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={
           !!dialog?.open &&
-          (dialog?.type === "CreateDocument" || dialog?.type === "ViewDocument")
+          (dialog?.type === "CreateDocument")
         }
-        type="ViewDocument"
+        type="AddFromAnotherRoute"
+        defaultValue={{
+          productId: defaultValue?.productId,
+          lotNumber: defaultValue?.lotNumber
+        } as any}
       />
 
       {/* STAMP DIALOG */}
