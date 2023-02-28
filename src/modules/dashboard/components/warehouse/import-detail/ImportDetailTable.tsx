@@ -186,8 +186,13 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                   label: "Tạo tài liệu SP",
                 },
                 {
-                  action: () => handleOpen(defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"),
-                  label: defaultValue?.productLabelId ? "Xem nhãn SP" : "Tạo nhãn SP",
+                  action: () =>
+                    handleOpen(
+                      defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"
+                    ),
+                  label: defaultValue?.productLabelId
+                    ? "Xem nhãn SP"
+                    : "Tạo nhãn SP",
                 },
               ]}
             />
@@ -231,7 +236,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           </AddButton>
         </Box>
       </Box>
-      <Box className="rounded p-3 bg-white">
+      <Box className="rounded bg-white">
         <ContextMenuWrapper
           menuId="product_table_menu"
           menuComponent={renderContextMenu()}
@@ -255,10 +260,15 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           />
         </ContextMenuWrapper>
 
-        <Typography className="my-3">
-          Tổng cộng tiền thanh toán(VNĐ):
-          <strong> {_format.getVND(totalPrice)}</strong>
-        </Typography>
+        <Box className="p-3 border-0 border-t border-solid border-grey-3">
+          <Typography>
+            <span className="font-semibold">
+              {" "}
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>
+            <span className="text-base"> {_format.getVND(totalPrice)}</span>
+          </Typography>
+        </Box>
       </Box>
       {/* IMPLEMENT TRANSACTION DIALOG */}
       <ImportDetailProductDialog
@@ -286,9 +296,12 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       {/* STAMP DIALOG */}
       <StampDialog
         onClose={handleClose}
-        open={dialog?.open && (dialog?.type === "CreateLabel" || dialog?.type === "ViewLabel" )}
+        open={
+          dialog?.open &&
+          (dialog?.type === "CreateLabel" || dialog?.type === "ViewLabel")
+        }
         type={!!defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"}
-        defaultValue={{id: defaultValue?.productLabelId} as any}
+        defaultValue={{ id: defaultValue?.productLabelId } as any}
       />
     </Box>
   );

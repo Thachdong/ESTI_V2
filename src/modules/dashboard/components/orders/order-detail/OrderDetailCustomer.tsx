@@ -43,8 +43,7 @@ export const OrderDetailCustomer: React.FC = () => {
 
       const curator = curatorInfo.find((cur: any) => cur?.id === curatorId);
 
-      const { receiverById } =
-        curator || {};
+      const { receiverById } = curator || {};
       const { fullName, phone1, address } = receiverById || {};
 
       setValue("receiverFullName", fullName);
@@ -70,7 +69,7 @@ export const OrderDetailCustomer: React.FC = () => {
         THÔNG TIN DOANH NGHIỆP
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded flex-grow p-3">
+      <Box className="grid gap-3 bg-white rounded flex-grow p-3">
         <FormCustomer
           controlProps={{
             name: "customerId",

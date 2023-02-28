@@ -151,7 +151,7 @@ export const OrderDetailPage: React.FC = () => {
 
         <OrderDetailCurator disabled={disabled} />
 
-        <Box className="col-span-2 grid grid-cols-3 gap-4">
+        <Box className="col-span-2 grid grid-cols-3 gap-3">
           <Box className="col-span-2">
             <OrderDetailReciever disabled={disabled} />
           </Box>
@@ -167,7 +167,7 @@ export const OrderDetailPage: React.FC = () => {
           <OrderDetailProducts disabled={disabled} />
         </Box>
 
-        <Box className="col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Box className="col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-3">
           <OrderDetailNote
             disabled={true}
             controlName={"smgNote"}

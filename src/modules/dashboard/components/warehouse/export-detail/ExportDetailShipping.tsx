@@ -16,7 +16,7 @@ export const ExportDetailShipping: React.FC<TProps> = ({ exportStatus }) => {
         THÔNG TIN VẬN CHUYỂN
       </Typography>
 
-      <Box className="grid gap-4 rounded p-3 bg-white">
+      <Box className="grid gap-3 rounded p-3 bg-white">
         <FormInput
           controlProps={{
             control,

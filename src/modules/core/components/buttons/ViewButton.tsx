@@ -9,7 +9,7 @@ export const ViewButton: React.FC<TBaseButton> = (props) => {
       variant="text"
       tooltipText="Xem chi tiết"
       {...rest}
-      className="flex gap-2 items-center bg-main"
+      className="flex gap-2 items-center bg-main text-white"
     >
       <VisibilityOutlinedIcon />
       {children}

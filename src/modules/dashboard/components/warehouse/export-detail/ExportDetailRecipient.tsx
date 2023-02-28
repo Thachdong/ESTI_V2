@@ -46,7 +46,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
         THÔNG TIN NHẬN HÀNG
       </Typography>
 
-      <Box className="grid gap-4 rounded p-3 bg-white">
+      <Box className="grid gap-3 rounded p-3 bg-white">
         {!transactionId && (
           <FormCheckbox
             controlProps={{

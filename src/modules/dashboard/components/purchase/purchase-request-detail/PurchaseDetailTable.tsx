@@ -236,13 +236,23 @@ export const PurchaseDetailTable: React.FC = () => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ): {getPrice.totalPrice}
+        <List className="border-0 border-t border-solid px-3">
+          <ListItem className="h-[34px] flex items-center gap-3 text-sm border-0 border-b border-dashed border-grey-3">
+            <span className="font-semibold">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):{" "}
+            </span>
+            <span className="text-base">{getPrice.totalPrice}</span>
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          <ListItem className="h-[34px] flex items-center gap-3 text-sm border-0 border-b border-dashed border-grey-3">
+            <span className="font-semibold">Thuế GTGT(VNĐ):</span>{" "}
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="h-[34px] flex items-center gap-3 text-sm">
+            <span className="font-semibold">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
           </ListItem>
         </List>
       </Box>

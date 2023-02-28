@@ -194,7 +194,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
 
   return (
     <Box className="">
-      <Box className="flex justify-between items-center mb-3">
+      <Box className="flex justify-between items-end mb-3">
         <Typography className="text-sm font-medium flex-grow">
           SẢN PHẨM
         </Typography>
@@ -208,33 +208,39 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         </AddButton>
       </Box>
 
-      <ContextMenuWrapper
-        menuId="product_table_menu"
-        menuComponent={renderContextMenu()}
-      >
-        <DataTable
-          rows={productList?.map((prod: any, index: number) => ({
-            ...prod,
-            no: index + 1,
-          }))}
-          columns={columns}
-          autoHeight
-          hideSearchbar
-          hideFooter
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-            },
-          }}
-          paginationMode="client"
-          className="bg-white"
-        />
-      </ContextMenuWrapper>
+      <Box className="bg-white">
+        <ContextMenuWrapper
+          menuId="product_table_menu"
+          menuComponent={renderContextMenu()}
+        >
+          <DataTable
+            rows={productList?.map((prod: any, index: number) => ({
+              ...prod,
+              no: index + 1,
+            }))}
+            columns={columns}
+            autoHeight
+            hideSearchbar
+            hideFooter
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+            paginationMode="client"
+            className=""
+          />
+        </ContextMenuWrapper>
 
-      <Typography className="my-3">
-        Tổng cộng tiền thanh toán(VNĐ):
-        <strong> {_format.getVND(totalPrice)}</strong>
-      </Typography>
+        <Box className="border-0 border-t border-solid border-grey-3">
+          <Typography className="p-3 flex gap-3 items-center">
+            <span className="font-semibold">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>
+            <span className="text-base"> {_format.getVND(totalPrice)}</span>
+          </Typography>
+        </Box>
+      </Box>
 
       <ExportDetailProductDialog
         onClose={onCloseDialog}

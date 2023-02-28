@@ -167,16 +167,29 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ): {_format.getVND(getPrice.totalPrice)}
+        <List className="border-0 border-t border-solid border-grey-3 px-3">
+          <ListItem className="text-sm flex gap-3 h-[34px] border-b border-0 border-dashed border-grey-3 ">
+            <span className="font-semibold">Thành tiền chưa có thuế(VNĐ):</span>{" "}
+            <span className="text-base">
+              {" "}
+              {_format.getVND(getPrice.totalPrice)}
+            </span>
           </ListItem>
-          <ListItem>
-            Thuế GTGT(VNĐ): {_format.getVND(getPrice.totalTax)}
+          <ListItem className="text-sm flex gap-3 h-[34px] border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold">Thuế GTGT(VNĐ):</span>{" "}
+            <span className="text-base">
+              {" "}
+              {_format.getVND(getPrice.totalTax)}
+            </span>
           </ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ):{" "}
-            {_format.getVND(getPrice.finalPrice)}
+          <ListItem className="text-sm flex gap-3 h-[34px]">
+            <span className="font-semibold">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>
+            <span className="text-base">
+              {" "}
+              {_format.getVND(getPrice.finalPrice)}
+            </span>
           </ListItem>
         </List>
       </Box>
