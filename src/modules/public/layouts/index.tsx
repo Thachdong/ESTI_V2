@@ -3,13 +3,13 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { TNextPageWithLayout } from "~types/_app";
-import styles from "../styles/mail-confirm.module.css";
+import styles from "../styles/layout.module.css";
 
 type TProps = {
   Page: TNextPageWithLayout;
 };
 
-export const MailConfirmLayout: React.FC<TProps> = ({ Page }) => {
+export const PublicLayout: React.FC<TProps> = ({ Page }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const MailConfirmLayout: React.FC<TProps> = ({ Page }) => {
   }, []);
 
   return (
-    <Box className={clsx("flex items-center justify-center w-screen h-screen", styles["mail-confirm-layout"])}>
+    <Box className={clsx("flex items-center justify-center w-screen h-screen", styles["public-layout"])}>
       <Page />
     </Box>
   );

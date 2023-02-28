@@ -1,5 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import _ from "lodash";
+import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
@@ -29,6 +30,8 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [defaultValue, setDefaultValue] = useState<any>();
+
+  const router = useRouter();
 
   const { importStatus } = transactionData || {};
 
@@ -114,7 +117,17 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           <Menu className="p-0" id="product_table_menu">
             <Item
               id="view-product-document"
-              // onClick={() => handleOpen("Update")}
+              onClick={() =>
+                router.push({
+                  pathname: "/public/documents/",
+                  query: {
+                    productId: defaultValue?.productId,
+                    productCode: defaultValue?.productCode,
+                    lotNumber: defaultValue?.lotNumber,
+                    importId: router.query.id
+                  },
+                })
+              }
             >
               Xem tài liệu SP
             </Item>
@@ -178,7 +191,16 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               id={row?.id}
               items={[
                 {
-                  action: () => handleOpen("ViewDocument"),
+                  action: () =>
+                    router.push({
+                      pathname: "/public/documents/",
+                      query: {
+                        productId: defaultValue?.productId,
+                        productCode: defaultValue?.productCode,
+                        lotNumber: defaultValue?.lotNumber,
+                        importId: router.query.id
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
                 {
@@ -293,7 +315,6 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           (dialog?.type === "CreateDocument" || dialog?.type === "ViewDocument")
         }
         type="ViewDocument"
-        defaultValue={{ id: "90722720-8344-48ec-e18a-08db19473afc" } as any}
       />
 
       {/* STAMP DIALOG */}
