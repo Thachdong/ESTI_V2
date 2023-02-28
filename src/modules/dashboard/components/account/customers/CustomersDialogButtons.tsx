@@ -11,6 +11,7 @@ type TProps = {
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   onClose: () => void;
   refetch?: Function;
+  onAddCallback?: (opt: any) => void;
 };
 
 export const CustomersDialogButtons: React.FC<TProps> = ({
@@ -19,6 +20,7 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
   setIsUpdate,
   onClose,
   refetch,
+  onAddCallback
 }) => {
   const {
     formState: { isDirty },
@@ -86,6 +88,8 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
       onSuccess: (data) => {
         toast.success(data?.resultMessage);
 
+        onAddCallback?.(data.data);
+
         refetch?.();
 
         onClose();
@@ -152,7 +156,7 @@ export const CustomersDialogButtons: React.FC<TProps> = ({
 
   // DOM RENDERING
   switch (true) {
-    case type === "Add":
+    case type === "Add" || type === "QuickCreate":
       return (
         <>
           <BaseButton

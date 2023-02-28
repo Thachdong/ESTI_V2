@@ -134,6 +134,8 @@ export const FormSelectAsync: React.FC<TAutocompleteAsync> = (props) => {
         error: !!error,
       },
       label: updateLabel,
+      labelKey,
+      valueKey,
       ...restField,
       ...restProps,
     };

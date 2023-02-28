@@ -133,8 +133,6 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
         positionId: selectedPosition?.id,
         positionName: selectedPosition?.positionName,
         totalPrice: data?.price * data?.quantity,
-        productManufactor: selectedProduct?.manufactor,
-        productSpecs: selectedProduct?.specs,
         rowId: new Date().getTime().toString(), // GENERATE UNIQUE ROW ID
       };
 

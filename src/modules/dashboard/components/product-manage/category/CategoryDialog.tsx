@@ -131,7 +131,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
 
   const handleUpdateCategory = async (payload: any) => {
     handleValidation(payload);
-
+    
     await mutationUpdateCategory.mutateAsync(payload);
   };
 

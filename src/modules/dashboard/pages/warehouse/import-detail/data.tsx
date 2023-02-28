@@ -21,12 +21,12 @@ export const productColumns: TGridColDef[] = [
     flex: 1,
   },
   {
-    field: "productManufactor",
+    field: "manufactor",
     headerName: "Hãng SX",
     minWidth: 100,
   },
   {
-    field: "productSpecs",
+    field: "specs",
     headerName: "Quy cách",
     width: 100,
   },

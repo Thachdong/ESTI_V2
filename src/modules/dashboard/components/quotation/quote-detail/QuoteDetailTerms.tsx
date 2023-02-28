@@ -26,70 +26,6 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
     paymentDocument.getList().then((res) => res.data)
   );
 
-  const renderPaymentTypeTags = useCallback(() => {
-    switch (true) {
-      case !!id:
-        return (
-          <FormInput
-            controlProps={{
-              control,
-              name: "paymentType",
-            }}
-            label=""
-            className="max-w-[200px] ml-2"
-            shrinkLabel
-            disabled={disabled}
-          />
-        );
-      case paymentTypesValue !== "Khác":
-        return (
-          <FormSelect
-            options={paymentTypes}
-            label=""
-            placeholder="Chọn"
-            controlProps={{
-              control,
-              name: "paymentType",
-            }}
-            className="min-w-[200px] ml-2"
-            valueKey="name"
-            shrinkLabel
-            disabled={disabled}
-          />
-        );
-      default:
-        return (
-          <>
-            <FormSelect
-              options={paymentTypes}
-              label=""
-              placeholder="Chọn"
-              controlProps={{
-                control,
-                name: "paymentType",
-              }}
-              className="min-w-[200px] ml-2"
-              valueKey="name"
-              shrinkLabel
-              disabled={disabled}
-            />
-
-            <FormInput
-              controlProps={{
-                control,
-                name: "paymentTypeDescript",
-              }}
-              label=""
-              placeholder="Mô tả"
-              className="max-w-[200px] ml-2"
-              shrinkLabel
-              disabled={disabled}
-            />
-          </>
-        );
-    }
-  }, [!!id, paymentTypesValue]);
-
   return (
     <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3 text-sm">
@@ -105,7 +41,19 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
 
           <ListItem disableGutters className="pb-0 text-sm">
             - Hình thức thanh toán/ Payment term:
-            {renderPaymentTypeTags()}
+            <FormSelect
+              controlProps={{
+                name: "paymentType",
+                control,
+              }}
+              label=""
+              options={paymentTypes}
+              disabled={disabled}
+              valueKey="name"
+              freeSolo
+              className="w-[200px] ml-2"
+              shrinkLabel
+            />
           </ListItem>
 
           <ListItem disableGutters className="pb-0 text-sm">
