@@ -62,7 +62,6 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
       products,
       isQuoteRequest,
       paymentType,
-      paymentTypeDescript,
       paymentDocument,
       ...rest
     } = data || {};
@@ -85,7 +84,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
     const payload = {
       ...rest,
       attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      paymentType,
       paymentDocument: paymentDocument.join(","),
       preQuoteDetail: productPayload,
     };
@@ -114,7 +113,6 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
       products,
       isQuoteRequest,
       paymentType,
-      paymentTypeDescript,
       paymentDocument,
       status,
       ...rest
@@ -138,7 +136,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
     const payload = {
       ...rest,
       attachFile: attachFile.join(","),
-      paymentType: paymentType === "Khác" ? paymentTypeDescript : paymentType,
+      paymentType,
       paymentDocument: paymentDocument.join(","),
       preQuoteDetailUpdate: productPayload,
     };

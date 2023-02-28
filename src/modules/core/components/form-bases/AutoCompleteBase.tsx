@@ -28,9 +28,18 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     value: any | any[]
   ) => {
     if (Array.isArray(value)) {
-      onChange(value.map((val) => val[valueKey]));
+      onChange(value.map((val) => val?.[valueKey]));
     } else {
       onChange(value?.[valueKey]);
+    }
+  };
+
+  const handleInputChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: string
+  ) => {
+    if (!Array.isArray(value) && props?.freeSolo) {
+      onChange(value);
     }
   };
 
@@ -39,12 +48,17 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>
-        options.find((o) => o[valueKey] === vl)
+        options.find((o) => o?.[valueKey] === vl)
       );
 
       callback?.(valueList);
 
       return valueList;
+    } else if (
+      props?.freeSolo &&
+      (typeof value === "string" || typeof value === "number")
+    ) {
+      return { [valueKey]: value, [labelKey]: value };
     } else {
       const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
@@ -117,6 +131,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       onChange={handleChange}
       value={renderValue()}
       sx={defaultSx}
+      onInputChange={handleInputChange}
       renderInput={(params) => <TextField {...params} {...defaultInputProps} />}
       {...defaultProps}
     />

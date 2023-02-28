@@ -49,14 +49,22 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
     documentCareer.getList().then((res) => res.data)
   );
 
+  const { data: documentDetail } = useQuery(
+    ["DocumentDetail", defaultValue?.id],
+    () => productDocument.getById(defaultValue?.id).then((res) => res.data),
+    {
+      enabled: !!defaultValue?.id,
+    }
+  );
+
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
       reset({});
-    } else {
-      reset(defaultValue);
+    } else if (!!documentDetail) {
+      reset({ ...documentDetail });
     }
-  }, [type, defaultValue]);
+  }, [type, defaultValue?.id, documentDetail]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
@@ -128,7 +136,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             </BaseButton>
           </>
         );
-      case type === "View" && isUpdate === false:
+      case (type === "View" || type === "ViewDocument") && isUpdate === false:
         return (
           <>
             <BaseButton type="button" onClick={() => setIsUpdate(true)}>
@@ -143,7 +151,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             </BaseButton>
           </>
         );
-      case type === "View" && isUpdate === true:
+      case (type === "View" || type === "ViewDocument") && isUpdate === true:
         return (
           <>
             <BaseButton

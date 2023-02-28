@@ -288,9 +288,12 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       {/* PRODUCT DOCUMENT DIALOG */}
       <DocumentDialog
         onClose={handleClose}
-        open={!!dialog?.open && dialog?.type === "CreateDocument"}
-        type="AddFromAnotherRoute"
-        defaultValue={defaultValue}
+        open={
+          !!dialog?.open &&
+          (dialog?.type === "CreateDocument" || dialog?.type === "ViewDocument")
+        }
+        type="ViewDocument"
+        defaultValue={{ id: "90722720-8344-48ec-e18a-08db19473afc" } as any}
       />
 
       {/* STAMP DIALOG */}

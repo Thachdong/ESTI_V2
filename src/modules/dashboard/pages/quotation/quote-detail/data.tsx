@@ -1,4 +1,4 @@
-import { StatusChip } from "~modules-core/components";
+import { Box, Tooltip } from "@mui/material";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -56,32 +56,20 @@ export const productColumns: TGridColDef[] = [
   },
   {
     field: "totalPrice",
-    headerName: "Thành tiền (chưa thuế)",
-    minWidth: 175,
-    flex: 1,
-    renderCell: ({ row }) => _format.getVND(row.totalPrice),
-  },
-  {
-    field: "totalPriceNoTax",
-    headerName: "Thành tiền (có thuế)",
+    headerName: "Thành tiền",
     minWidth: 175,
     flex: 1,
     renderCell: ({ row }) => {
-      const { totalPrice = 0, vat = 0 } = row || {};
+      const {quantity, price, vat} = row || {};
 
-      const total = totalPrice + (totalPrice * +vat) / 100;
+      const total = quantity * price;
 
-      return _format.getVND(total);
-    },
-  },
-  {
-    field: "status",
-    headerName: "Trạng thái",
-    minWidth: 175,
-    renderCell: ({ row }) => {
-      const {tProductStatus, productStatusName} = row || {};
-
-      return <StatusChip status={tProductStatus} label={productStatusName} />
+      const tax = total * (+vat) / 100;
+      return (
+        <Tooltip title={ "Sau thuế: " + _format.getVND(total + tax)}>
+          <Box>{_format.getVND(row.totalPrice)}</Box>
+        </Tooltip>
+      );
     }
   },
   {

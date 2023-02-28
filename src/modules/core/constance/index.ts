@@ -35,7 +35,6 @@ export const genderData = [
 export const paymentTypes = [
   { id: 1, name: "Tiền mặt" },
   { id: 2, name: "Chuyển khoản" },
-  { id: 3, name: "Khác" },
 ];
 
 export const paymentExpiredIn = [

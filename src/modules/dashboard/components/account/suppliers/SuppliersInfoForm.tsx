@@ -81,7 +81,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Hình thức thanh toán"
           disabled={isDisable}
-          getOptionLabel={(item) => item?.paymentTypeName}
+          labelKey="paymentTypeName"
         />
 
         <FormSelect
@@ -157,9 +157,8 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn nhân viên phụ trách" },
           }}
           label="Nhân viên phụ trách"
-          // labelKey="fullName"
+          labelKey="fullName"
           disabled={isDisable}
-          getOptionLabel={(item) => item?.fullName}
         />
 
         <FormSelect
@@ -170,9 +169,8 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
-          // labelKey="fullName"
+          labelKey="fullName"
           disabled={isDisable}
-          getOptionLabel={(item) => item?.fullName}
         />
       </Box>
     </Box>

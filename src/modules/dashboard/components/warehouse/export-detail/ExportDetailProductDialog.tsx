@@ -37,9 +37,9 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
-  const { control, handleSubmit, reset, setError, watch } = useForm();
+  const { control, handleSubmit, reset, setError, watch, setValue } = useForm();
 
-  const { productId } = watch();
+  const { productId, lotNumber } = watch();
 
   const { watch: globalWatch, setValue: setGlobalValue } = useFormContext();
 
@@ -59,6 +59,12 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
       reset({ productId, lotNumber, positionId, quantity });
     }
   }, [type]);
+
+  useEffect(() => {
+    if (!lotNumber) {
+      setValue("positionId", "")
+    }
+  }, [lotNumber])
 
   // DATA FETCHING
   const { data: lotOptions } = useQuery(
@@ -222,7 +228,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           }
           labelKey="positionName"
           valueKey="positionId"
-          disabled={!selectedLot?.lotNumber}
+          disabled={!lotNumber}
         />
 
         <FormInputNumber
