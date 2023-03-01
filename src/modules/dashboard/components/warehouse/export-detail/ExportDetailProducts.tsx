@@ -32,6 +32,8 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
+  const router = useRouter();
+
   const defaultValue = useRef<any>();
 
   const { watch, setValue } = useFormContext();
@@ -102,13 +104,39 @@ export const ExportDetailProducts: React.FC<TProps> = ({
               Sao chép SP
             </Item>
 
-            <Item id="view-product-document">Xem tài liệu SP</Item>
+            <Item
+              id="view-product-document"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/documents/",
+                  query: {
+                    productName: defaultValue?.current?.productName,
+                    lotNumber: defaultValue?.current?.lotNumber,
+                  },
+                })
+              }
+            >
+              Xem tài liệu SP
+            </Item>
           </Menu>
         );
       case exportStatus > 0:
         return (
           <Menu className="p-0" id="product_table_menu">
-            <Item id="view-product-document">Xem tài liệu SP</Item>
+            <Item
+              id="view-product-document"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/documents/",
+                  query: {
+                    productName: defaultValue?.current?.productName,
+                    lotNumber: defaultValue?.current?.lotNumber,
+                  },
+                })
+              }
+            >
+              Xem tài liệu SP
+            </Item>
           </Menu>
         );
     }
@@ -151,7 +179,14 @@ export const ExportDetailProducts: React.FC<TProps> = ({
                   label: "Sao chép SP",
                 },
                 {
-                  action: () => console.log("Xem tài liệu SP"),
+                  action: () =>
+                    router.push({
+                      pathname: "/dashboard/product-manage/documents/",
+                      query: {
+                        productName: defaultValue?.current?.productName,
+                        lotNumber: defaultValue?.current?.lotNumber,
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
               ]}
@@ -163,7 +198,14 @@ export const ExportDetailProducts: React.FC<TProps> = ({
               id={row?.id}
               items={[
                 {
-                  action: () => console.log("Xem tài liệu SP"),
+                  action: () =>
+                    router.push({
+                      pathname: "/dashboard/product-manage/documents/",
+                      query: {
+                        productName: defaultValue?.current?.productName,
+                        lotNumber: defaultValue?.current?.lotNumber,
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
               ]}
@@ -171,7 +213,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           );
       }
     },
-    [exportStatus]
+    [exportStatus, defaultValue.current]
   );
 
   const columns: TGridColDef[] = [

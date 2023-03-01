@@ -49,22 +49,14 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
     documentCareer.getList().then((res) => res.data)
   );
 
-  const { data: documentDetail } = useQuery(
-    ["DocumentDetail", defaultValue?.id],
-    () => productDocument.getById(defaultValue?.id).then((res) => res.data),
-    {
-      enabled: !!defaultValue?.id,
-    }
-  );
-
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
       reset({});
-    } else if (!!documentDetail) {
-      reset({ ...documentDetail });
+    } else if (!!defaultValue) {
+      reset({ ...defaultValue });
     }
-  }, [type, defaultValue?.id, documentDetail]);
+  }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
