@@ -19,12 +19,12 @@ export const OrderDetailTitle: React.FC = () => {
 
   if (!!id) {
     const { mainOrderCode, status, statusName } = orderDetail?.mainOrder || {};
-    
+
     const colors = ["default", "info", "success", "error"];
-    
+
     return (
       <>
-        ĐƠN HÀNG / CHI TIẾT ĐƠN ĐẶT HÀNG / {mainOrderCode}{" "}
+        ĐƠN ĐẶT HÀNG / CHI TIẾT / {mainOrderCode}{" "}
         {statusName && (
           <StatusChip
             label={statusName}
@@ -36,6 +36,6 @@ export const OrderDetailTitle: React.FC = () => {
       </>
     );
   } else {
-    return <>ĐƠN HÀNG/ TẠO ĐƠN ĐẶT HÀNG</>;
+    return <>ĐƠN ĐẶT HÀNG / TẠO ĐƠN </>;
   }
 };

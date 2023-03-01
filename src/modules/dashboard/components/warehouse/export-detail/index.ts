@@ -5,3 +5,4 @@ export * from "./ExportDetailRecipient";
 export * from "./ExportDetailShipping";
 export * from "./ExportViewGeneralInfo";
 export * from "./ExportDetailButtonsBox";
+export * from "./PrintExportDetail";

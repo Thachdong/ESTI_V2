@@ -11,13 +11,18 @@ import {
 } from "src/api";
 import { toast } from "~modules-core/toast";
 import { useMutation } from "react-query";
+import { PrintImportDetail } from "~modules-dashboard/components";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
 
 type TPayload = {
   importStatus?: 0 | 1 | 2;
+  transactionData: any;
 };
 
 export const ImportDetailButtonsBox: React.FC<TPayload> = ({
   importStatus,
+  transactionData,
 }) => {
   const router = useRouter();
 
@@ -129,6 +134,16 @@ export const ImportDetailButtonsBox: React.FC<TPayload> = ({
     await mutateUpdate.mutateAsync(payload);
   };
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   return (
     <Box className="flex justify-end my-4">
       {!query.id ? (
@@ -152,7 +167,15 @@ export const ImportDetailButtonsBox: React.FC<TPayload> = ({
             Cập nhật SP
           </BaseButton>
 
-          <PrintButton>In chi tiết nhập kho</PrintButton>
+          <PrintButton className="bg-error" onClick={handlePrint}>
+            In{" "}
+          </PrintButton>
+          <Box className="hidden">
+            <PrintImportDetail
+              printAreaRef={printAreaRef}
+              defaultValue={transactionData}
+            />
+          </Box>
         </Box>
       )}
     </Box>

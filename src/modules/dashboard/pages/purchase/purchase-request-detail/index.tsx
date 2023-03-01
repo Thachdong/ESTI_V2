@@ -150,6 +150,7 @@ export const PurchaseRequestDetailPage = () => {
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           refetch={refetch}
+          purchaseRequestDetail={purchaseRequestDetail}
         />
       </FormProvider>
     </Box>
