@@ -272,3 +272,18 @@ export const purchaseOrderBillStatus = [
   {value: 2, label: "Quá hạn"},
   {value: 3, label: "Hủy"},
 ];
+
+export const supplierQuotesProductStatus = [
+  {value: 0, label: "Chưa thực hiện"},
+  {value: 1, label: "Đang thực hiện"},
+  {value: 2, label: "Đã kết chuyển"},
+  {value: 3, label: "Hủy"},
+];
+
+export const supplierQuotesProductTypes = [
+  {value: 1, label: "Cần giá trước"},
+  {value: 2, label: "Tình trạng hàng"},
+  {value: 3, label: "Nhu cầu cao"},
+  {value: 4, label: "Xin giảm giá"},
+  {value: 5, label: "Sales tự lấy giá"},
+]

@@ -26,3 +26,5 @@ export * from "./main-order";
 export * from "./bill";
 export * from "./pre-quote";
 export * from "./payment-type";
+export * from "./ask-price";
+export * from "./ask-price-order";
