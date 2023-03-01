@@ -14,6 +14,7 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
+import { SupplierQuotesStatusDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { suplierQuotesColumns } from "./data";
@@ -91,10 +92,6 @@ export const SupplierQuotesPage: React.FC = () => {
               label: "Nội dung hỏi giá",
             },
             {
-              action: () => handleOpenDialog("Note"),
-              label: "Ghi chú",
-            },
-            {
               action: () => handleOpenDialog("Status"),
               label: "Trạng thái",
             },
@@ -147,9 +144,6 @@ export const SupplierQuotesPage: React.FC = () => {
             >
               Nội dung hỏi giá
             </Item>
-            <Item id="note" onClick={() => handleOpenDialog("Note")}>
-              Ghi chú
-            </Item>
             <Item id="status" onClick={() => handleOpenDialog("Status")}>
               Trạng thái
             </Item>
@@ -171,17 +165,11 @@ export const SupplierQuotesPage: React.FC = () => {
         />
       </ContextMenuWrapper>
 
-      {/* <PurchaseRequestNoteDialog
+      <SupplierQuotesStatusDialog
         onClose={handleCloseDialog}
-        open={Boolean(dialog?.open && dialog.type === "Note")}
+        open={dialog?.open}
         defaultValue={defaultValue?.current}
-      />
-
-      <PurchaseRequestStatusDialog
-        onClose={handleCloseDialog}
-        open={Boolean(dialog?.open && dialog.type === "Status")}
-        defaultValue={defaultValue?.current}
-      /> */}
+      /> 
     </Paper>
   );
 };

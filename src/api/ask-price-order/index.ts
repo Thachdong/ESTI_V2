@@ -46,6 +46,11 @@ export type TUpdateAskPriceOrderProduct = {
   productStatusType: number;
 };
 
+export type TUpdateStatusAskPriceOrder = {
+  id: string;
+  status: number
+}
+
 export const askPriceOrder = {
   create: (payload: TCreateAskPriceOrder) =>
     request.post<TCreateAskPriceOrder, any>(BASE_URL, payload),
@@ -58,9 +63,9 @@ export const askPriceOrder = {
   update: (payload: TUpdateAskPriceOrder) =>
     request.patch<TUpdateAskPriceOrder, any>(BASE_URL, payload),
 
-  updateStatus: (id: string, status: number) =>
+  updateStatus: (payload: TUpdateStatusAskPriceOrder) =>
     request.post<any, any>(
-      `${BASE_URL}/UpdateStatus?id=${id}&status=${status}`,
+      `${BASE_URL}/UpdateStatus?id=${payload.id}&status=${payload.status}`,
       {}
     ),
 
