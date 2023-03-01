@@ -1,4 +1,4 @@
-import React, {  } from "react";
+import React from "react";
 import { _format } from "~modules-core/utility/fomat";
 import {
   WarehouseExportStatistical,
@@ -7,8 +7,8 @@ import {
 
 export const WarehouseExportPage: React.FC = () => (
   <>
-    <WarehouseExportStatistical />
+    {/* <WarehouseExportStatistical /> */}
 
     <WarehouseExportTable />
   </>
-)
+);

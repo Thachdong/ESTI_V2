@@ -157,9 +157,7 @@ export const ProductManageTable = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
-
+      <Box className="flex items-center gap-3 w-3/5">
         <Box className="flex items-center justify-end">
           <DownloadButton
             onClick={() =>
@@ -171,6 +169,7 @@ export const ProductManageTable = () => {
             Tải file excel
           </DownloadButton>
         </Box>
+        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
       </Box>
 
       <ContextMenuWrapper

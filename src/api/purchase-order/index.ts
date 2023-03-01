@@ -59,4 +59,6 @@ export const purchaseOrder = {
 
   sendMail: (payload: TSendMailProps) =>
     request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
+  getProductOrderDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/ProductOrderDetail`, { id }),
 };

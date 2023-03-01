@@ -213,9 +213,7 @@ export const DocumentsPage: React.FC = () => {
   // DOM RENDER
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm" />
-
+      <Box className="flex items-center gap-3 w-3/5 mb-3">
         <Box className="flex items-center justify-end">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
@@ -224,6 +222,7 @@ export const DocumentsPage: React.FC = () => {
             Thêm tài liệu
           </AddButton>
         </Box>
+        <SearchBox label="Tìm kiếm" />
       </Box>
 
       <ContextMenuWrapper

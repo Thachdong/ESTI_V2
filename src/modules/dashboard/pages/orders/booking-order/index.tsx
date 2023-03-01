@@ -9,7 +9,7 @@ import {
 
 export const BookingOrderPage: React.FC = () => (
   <>
-    <BookingOrderStatistic />
+    {/* <BookingOrderStatistic /> */}
 
     <BookingOrderTable />
   </>

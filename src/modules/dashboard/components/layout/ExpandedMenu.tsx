@@ -52,14 +52,7 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
                 "h-[48px] w-[64px] px-3 mx-2 rounded "
               )}
             >
-              {/* <ListItemIcon
-                className={clsx(
-                  pathSlice[2] === item?.id ? "text-white" : "text-[#6494BE]",
-                  "!text-base"
-                )}
-              > */}
               {item.icon}
-              {/* </ListItemIcon> */}
             </ListItemButton>
 
             {
@@ -74,21 +67,21 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
                 </ListItem>
 
                 {item.childrens.map((child: any) => (
-                  <ListItem
-                    key={child?.link}
-                    disablePadding
-                    className={clsx(
-                      styles["menu-items"],
-                      "text-sm font-semibold"
-                    )}
-                    sx={{ ...renderActiveStyle(child.link, "children") }}
-                  >
-                    <ListItemButton>
-                      <Link href={`/dashboard/${child?.link}`}>
+                  <Link href={`/dashboard/${child?.link}`}>
+                    <ListItem
+                      key={child?.link}
+                      disablePadding
+                      className={clsx(
+                        styles["menu-items"],
+                        "text-sm font-semibold"
+                      )}
+                      sx={{ ...renderActiveStyle(child.link, "children") }}
+                    >
+                      <ListItemButton>
                         <span className="py-2">{child?.title}</span>
-                      </Link>
-                    </ListItemButton>
-                  </ListItem>
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 ))}
               </List>
             }

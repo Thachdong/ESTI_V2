@@ -52,7 +52,7 @@ export type TUpdateOrder = {
 export type TUpdateOrderStatus = {
   id: string;
   status: number;
-}
+};
 
 const BASE_URL = "MainOrder";
 
@@ -78,5 +78,6 @@ export const mainOrder = {
       `${BASE_URL}/UpdateStatus?mainOrderId=${payload.id}&status=${payload.status}`,
       {}
     ),
-      
+  getMainOrderDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/MainOrderDetail`, { id }),
 };

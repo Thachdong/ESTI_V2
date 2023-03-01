@@ -17,6 +17,7 @@ import { usePathBaseFilter } from "~modules-core/customHooks";
 import {
   PurchaseRequestNoteDialog,
   PurchaseRequestStatusDialog,
+  ViewListProductDrawer,
 } from "~modules-dashboard/components";
 import { purchaseRequestColumns } from "~modules-dashboard/pages/purchase/purchase-request/data";
 import { TGridColDef } from "~types/data-grid";
@@ -118,13 +119,23 @@ export const PurchaseRequestTable = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await purchaseOrder
+      .getProductOrderDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between mb-3">
-        <Box className="w-1/3">
-          <SearchBox />
-        </Box>
-
+      <Box className="flex mb-3 gap-3 items-center w-3/5">
         <AddButton
           onClick={() =>
             router.push("/dashboard/purchase/purchase-request-detail")
@@ -132,6 +143,7 @@ export const PurchaseRequestTable = () => {
         >
           Tạo đơn mua hàng
         </AddButton>
+        <SearchBox />
       </Box>
 
       <ContextMenuWrapper
@@ -170,8 +182,12 @@ export const PurchaseRequestTable = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -185,6 +201,12 @@ export const PurchaseRequestTable = () => {
         onClose={handleCloseDialog}
         open={Boolean(dialog?.open && dialog.type === "Status")}
         defaultValue={defaultValue?.current}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.productOrderDetail}
       />
     </Paper>
   );

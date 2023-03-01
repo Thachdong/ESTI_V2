@@ -5,7 +5,7 @@ import {
 
 export const PurchaseRequestPage = () => (
   <>
-    <PurchaseRequestStatistic />
+    {/* <PurchaseRequestStatistic /> */}
 
     <PurchaseRequestTable />
   </>

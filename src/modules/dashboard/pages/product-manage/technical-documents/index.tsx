@@ -81,7 +81,7 @@ export const TechnicalDocumentsPage = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {name, id} = defaultValue.current || {};
+    const { name, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa loại tài liệu: " + name)) {
       await mutateDelete.mutateAsync(id as string);
@@ -99,15 +99,14 @@ export const TechnicalDocumentsPage = () => {
   // DOM RENDER
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="flex justify-end mb-3">
-        <RefreshButton onClick={() => refetch()} />
+      <Box className="flex justify-between mb-3">
         <AddButton
           onClick={() => setDialog({ open: true, type: "Add" })}
           variant="contained"
-          className="ml-3"
         >
           Thêm tài liệu theo ngành
         </AddButton>
+        <RefreshButton onClick={() => refetch()} />
       </Box>
 
       <ContextMenuWrapper

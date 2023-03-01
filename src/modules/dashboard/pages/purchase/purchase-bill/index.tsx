@@ -14,7 +14,10 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
-import { PurchaseBillStatusDialog } from "~modules-dashboard/components";
+import {
+  PurchaseBillStatusDialog,
+  ViewListProductDrawer,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { billColumns } from "./data";
@@ -105,6 +108,20 @@ export const PurchaseBill: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await purchaseOrderBill
+      .getProductOrderBillDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
     <Paper className="bgContainer">
       <Box className="flex gap-4 items-center mb-3">
@@ -147,9 +164,13 @@ export const PurchaseBill: React.FC = () => {
             loading: isLoading || isFetching,
             ...paginationProps,
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
         />
@@ -161,6 +182,12 @@ export const PurchaseBill: React.FC = () => {
         type={dialog.type}
         defaultValue={defaultValue.current}
         refetch={refetch}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.productOrderBillDetailList}
       />
     </Paper>
   );

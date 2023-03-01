@@ -135,20 +135,14 @@ export const SuppliersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
-          <AddButton
-            variant="contained"
-            className="mr-3"
-            onClick={() => setDialog({ open: true, type: "Add" })}
-          >
-            Tạo nhà cung cấp
-          </AddButton>
-        </div>
+      <div className="flex items-center gap-3 mb-3 w-3/5">
+        <AddButton
+          variant="contained"
+          onClick={() => setDialog({ open: true, type: "Add" })}
+        >
+          Tạo nhà cung cấp
+        </AddButton>
+        <SearchBox />
       </div>
 
       <ContextMenuWrapper
