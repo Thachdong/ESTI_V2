@@ -163,6 +163,7 @@ export const QuoteDetailPage: React.FC = () => {
               quoteDetail?.preQuoteView?.receiverEmail,
             ],
           }}
+          quoteDetail={quoteDetail}
         />
       </FormProvider>
     </Box>

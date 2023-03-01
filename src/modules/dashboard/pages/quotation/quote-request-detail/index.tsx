@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { quoteRequest } from "src/api";
 import { FormCheckbox } from "~modules-core/components";
+import { useSession } from "~modules-core/customHooks/useSession";
 import {
   QuoteRequestDetailAddition,
   QuoteRequestDetailAttach,
@@ -63,7 +64,7 @@ export const QuoteRequestDetailPage = () => {
       curatorId,
       salesId,
       preOrderStatus,
-      id
+      id,
     } = preOrderView;
 
     const arrayFiles = attachFile ? attachFile?.split?.(",") : [];
@@ -84,7 +85,6 @@ export const QuoteRequestDetailPage = () => {
       curatorId,
       salesId,
       status: preOrderStatus,
-      id
     });
   }, [requestDetail]);
 
@@ -130,6 +130,7 @@ export const QuoteRequestDetailPage = () => {
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           refetch={refetch}
+          requestDetail={requestDetail}
         />
       </FormProvider>
     </Box>

@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
+import { useReactToPrint } from "react-to-print";
 import { bill, TCreateBill } from "src/api";
 import {
   AddButton,
@@ -11,6 +12,7 @@ import {
   SendMailDialog,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { PrintBillDetail } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
@@ -20,11 +22,13 @@ type TProps = {
     status: number;
     cc: string[];
   };
+  billDetail: any;
 };
 
 export const BillDetailButtons: React.FC<TProps> = ({
   refetch,
   sendMailData,
+  billDetail,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -97,6 +101,16 @@ export const BillDetailButtons: React.FC<TProps> = ({
     [id]
   );
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   const renderButtons = useCallback(() => {
     if (!!id) {
       return (
@@ -107,7 +121,15 @@ export const BillDetailButtons: React.FC<TProps> = ({
             </SendButton>
           )}
 
-          <PrintButton className="!bg-error">In</PrintButton>
+          <PrintButton className="!bg-error" onClick={handlePrint}>
+            In
+          </PrintButton>
+          <Box className="hidden">
+            <PrintBillDetail
+              printAreaRef={printAreaRef}
+              defaultValue={billDetail}
+            />
+          </Box>
         </Box>
       );
     } else {

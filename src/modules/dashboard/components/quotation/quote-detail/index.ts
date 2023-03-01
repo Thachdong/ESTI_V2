@@ -12,3 +12,4 @@ export * from "./QuoteDetailButtons";
 export * from "./QuoteDetailGeneralView";
 export * from "./QuoteDetailDeliveryHistory";
 export * from "./QuoteDetailInvoiceHistory";
+export * from "./PrintQuoteDetail";

@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
+import { useReactToPrint } from "react-to-print";
 import { mainOrder, TCreateOrder, TUpdateOrder } from "src/api";
 import {
   AddButton,
@@ -13,6 +14,7 @@ import {
   SendMailDialog,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { PrintOrderDetail } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
@@ -20,6 +22,7 @@ type TProps = {
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch?: () => void;
   sendMailData: any;
+  orderDetail: any;
 };
 
 export const OrderDetailButtons: React.FC<TProps> = ({
@@ -27,6 +30,7 @@ export const OrderDetailButtons: React.FC<TProps> = ({
   setIsUpdate,
   refetch,
   sendMailData,
+  orderDetail,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -162,6 +166,16 @@ export const OrderDetailButtons: React.FC<TProps> = ({
     [id]
   );
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   const renderButtons = useCallback(() => {
     switch (true) {
       case !id:
@@ -200,7 +214,15 @@ export const OrderDetailButtons: React.FC<TProps> = ({
               </>
             )}
 
-            <PrintButton className="!bg-error">In</PrintButton>
+            <PrintButton className="!bg-error" onClick={handlePrint}>
+              In
+            </PrintButton>
+            <Box className="hidden">
+              <PrintOrderDetail
+                printAreaRef={printAreaRef}
+                defaultValue={orderDetail}
+              />
+            </Box>
           </Box>
         );
     }

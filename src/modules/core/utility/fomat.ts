@@ -17,12 +17,12 @@ class Format {
   // format ngày giờ
 
   converseDateTime = (val: number | any) => {
-    const newDate = new Date(val * 1000.0).toLocaleString();
+    const newDate = new Date(val).toLocaleString();
     return val == null ? "" : moment(newDate).format("DD/MM/YYYY HH:mm:ss");
   };
 
   converseDate = (val: number | any) => {
-    const newDate = new Date(val * 1000.0).toLocaleString();
+    const newDate = new Date(val).toLocaleString();
     return moment(newDate).format("DD/MM/YYYY");
   };
 

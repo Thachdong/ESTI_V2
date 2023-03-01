@@ -4,3 +4,4 @@ export * from "./PurchaseBillDetailAttach";
 export * from "./PurchaseBillDetailProductsDialog";
 export * from "./PurchaseBillDetailProducts";
 export * from "./PurchaseBillDetailButtons";
+export * from "./PrintPurchaseBillDetail";

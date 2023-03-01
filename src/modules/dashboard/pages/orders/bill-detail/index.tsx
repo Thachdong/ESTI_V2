@@ -207,6 +207,7 @@ export const BillDetailPage: React.FC = () => {
           status: BillView?.bill?.status,
           cc: ["ketoan@esti.vn", BillView?.mainOrder?.curatorEmail],
         }}
+        billDetail={billDetail}
       />
     </FormProvider>
   );
