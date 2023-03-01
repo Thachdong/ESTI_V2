@@ -165,6 +165,7 @@ export const ImportDetailPage = () => {
 
         <ImportDetailButtonsBox
           importStatus={transactionData?.warehouseSession?.importStatus}
+          transactionData={transactionData}
         />
       </FormProvider>
     </Box>

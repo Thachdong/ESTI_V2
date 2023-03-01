@@ -6,3 +6,4 @@ export * from "./QuoteRequestDetailProduct";
 export * from "./QuoteRequestDetailDialog";
 export * from "./QuoteRequestDetailButtons";
 export * from "./QuoteRequestDetailGeneral";
+export * from "./PrintQuoteRequest";

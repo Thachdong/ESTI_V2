@@ -10,3 +10,4 @@ export * from "./PurchaseDetailStatus";
 export * from "./PurchaseDetailNote";
 export * from "./PurchaseDetailImportHistory";
 export * from "./PurchaseDetailBillHistory";
+export * from "./PrintPurchaseDetail";

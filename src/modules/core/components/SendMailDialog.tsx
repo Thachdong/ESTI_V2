@@ -41,8 +41,8 @@ export const SendMailDialog: React.FC<TProps> = ({
     <Dialog open={open} onClose={onClose} maxWidth="md" title="Gửi mail">
       <Box
         component="form"
-        className="grid gap-4"
-        onSubmit={(e) => e.preventDefault()}
+        className="grid gap-3"
+        onSubmit={(e: any) => e.preventDefault()}
       >
         <Box className="flex items-center gap-3">
           <Typography className="text-right w-[50px]">To: </Typography>

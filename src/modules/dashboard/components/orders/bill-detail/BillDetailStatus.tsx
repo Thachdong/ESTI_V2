@@ -56,7 +56,7 @@ export const BillDetailStatus: React.FC<TProps> = ({
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Trạng thái hóa đơn
       </Typography>
 

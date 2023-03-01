@@ -1,13 +1,10 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  purchaseOrder,
-  TCreatePurchase,
-  TUpdatePurchase,
-} from "src/api";
+import { useReactToPrint } from "react-to-print";
+import { purchaseOrder, TCreatePurchase, TUpdatePurchase } from "src/api";
 import {
   AddButton,
   BaseButton,
@@ -17,18 +14,21 @@ import {
   SendMailDialog,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { PrintPurchaseDetail } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
 
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch: () => void;
+  purchaseRequestDetail: any;
 };
 
 export const PurchaseDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
+  purchaseRequestDetail,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -54,7 +54,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const {products = [], paymentDocument, ...rest} = data || {};
+    const { products = [], paymentDocument, ...rest } = data || {};
 
     const productPayload = products.map((prod: any) => ({
       needToBuyId: prod?.id,
@@ -68,8 +68,8 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
     const payload = {
       ...rest,
       paymentDocument: paymentDocument.join(","),
-      productOrderDetailCreate: productPayload
-    }
+      productOrderDetailCreate: productPayload,
+    };
 
     await mutateCreate.mutateAsync(payload);
   }, []);
@@ -84,17 +84,13 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({open: false})
+        setDialog({ open: false });
       },
     }
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const {
-      products,
-      paymentDocument,
-      ...rest
-    } = data || {};
+    const { products, paymentDocument, ...rest } = data || {};
 
     const payload = {
       ...rest,
@@ -113,7 +109,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({open: false});
+        setDialog({ open: false });
       },
     }
   );
@@ -134,6 +130,16 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
     },
     [id]
   );
+
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
 
   const renderButtons = useCallback(() => {
     switch (true) {
@@ -172,7 +178,15 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
               </>
             )}
 
-            <PrintButton className="!bg-error">In</PrintButton>
+            <PrintButton className="!bg-error" onClick={handlePrint}>
+              In
+            </PrintButton>
+            <Box className="hidden">
+              <PrintPurchaseDetail
+                printAreaRef={printAreaRef}
+                defaultValue={purchaseRequestDetail}
+              />
+            </Box>
           </Box>
         );
     }
@@ -181,7 +195,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
   return (
     <Box className="flex justify-end mt-4">
       {renderButtons()}
-      
+
       <SendMailDialog
         onClose={() => setDialog({ open: false })}
         open={dialog.open}

@@ -40,7 +40,9 @@
     "react-lottie": "^1.2.3",
     "react-number-format": "^4.9.3",
     "react-query": "^3.39.2",
+    "react-to-print": "^2.14.12",
     "react-toastify": "^9.0.8",
+    "sass": "^1.58.3",
     "tinymce": "^6.3.1"
   },
   "devDependencies": {

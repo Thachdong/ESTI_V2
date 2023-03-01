@@ -13,7 +13,7 @@ export const OrderDetailGeneralView: React.FC<TProps> = ({ data }) => {
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
+      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
         <FormInputBase label="Mã BG" value={data?.preQuoteCode} disabled />
 
         <FormInputBase label="Mã ĐH" value={data?.mainOrderCode} disabled />

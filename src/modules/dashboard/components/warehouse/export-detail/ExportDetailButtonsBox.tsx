@@ -11,15 +11,20 @@ import {
   TCreateExportWarehouseProduct,
   warehouse,
 } from "src/api";
+import { useReactToPrint } from "react-to-print";
+import { useRef } from "react";
+import { PrintExportDetail } from "~modules-dashboard/components";
 
 type TProps = {
   orderData: any;
   exportStatus?: number;
+  transactionData: any;
 };
 
 export const ExportDetailButtonsBox: React.FC<TProps> = ({
   orderData,
   exportStatus,
+  transactionData,
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
@@ -138,6 +143,16 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
     await mutateUpdate.mutateAsync(payload);
   };
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   return (
     <Box className="flex justify-end my-4">
       {!query.id ? (
@@ -161,7 +176,15 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
             Cập nhật SP
           </BaseButton>
 
-          <PrintButton>In chi tiết nhập kho</PrintButton>
+          <PrintButton className="bg-error" onClick={handlePrint}>
+            In{" "}
+          </PrintButton>
+          <Box className="hidden">
+            <PrintExportDetail
+              printAreaRef={printAreaRef}
+              defaultValue={transactionData}
+            />
+          </Box>
         </Box>
       )}
     </Box>

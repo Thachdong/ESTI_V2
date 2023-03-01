@@ -1,14 +1,11 @@
 import { Box } from "@mui/material";
 import _ from "lodash";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  preQuote,
-  TCreatePreQuote,
-  TUpdatePreQuote,
-} from "src/api";
+import { useReactToPrint } from "react-to-print";
+import { preQuote, TCreatePreQuote, TUpdatePreQuote } from "src/api";
 import {
   AddButton,
   BaseButton,
@@ -19,19 +16,22 @@ import {
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDefaultDialogState } from "~types/dialog";
+import { PrintQuoteDetail } from "./PrintQuoteDetail";
 
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch: () => void;
   sendMailData: any;
+  quoteDetail: any;
 };
 
 export const QuoteDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
-  sendMailData
+  sendMailData,
+  quoteDetail,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -103,7 +103,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({open: false})
+        setDialog({ open: false });
       },
     }
   );
@@ -154,7 +154,7 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({open: false});
+        setDialog({ open: false });
       },
     }
   );
@@ -175,6 +175,16 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
     },
     [id]
   );
+
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
 
   const renderButtons = useCallback(() => {
     switch (true) {
@@ -213,7 +223,15 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
               </>
             )}
 
-            <PrintButton className="!bg-error">In</PrintButton>
+            <PrintButton className="!bg-error" onClick={handlePrint}>
+              In
+            </PrintButton>
+            <Box className="hidden">
+              <PrintQuoteDetail
+                printAreaRef={printAreaRef}
+                defaultValue={quoteDetail}
+              />
+            </Box>
           </Box>
         );
     }
@@ -226,7 +244,9 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
         onClose={() => setDialog({ open: false })}
         open={dialog.open}
         sendMailHandler={handleSendMail}
-        defaultValue={{ to: sendMailData?.to, cc: [...sendMailData?.cc] } as any}
+        defaultValue={
+          { to: sendMailData?.to, cc: [...sendMailData?.cc] } as any
+        }
       />
     </Box>
   );
