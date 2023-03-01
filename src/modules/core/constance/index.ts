@@ -287,3 +287,10 @@ export const supplierQuotesProductTypes = [
   {value: 4, label: "Xin giảm giá"},
   {value: 5, label: "Sales tự lấy giá"},
 ]
+
+export const supplierQuotesStatus = [
+  {value: 0, label: "Chưa gửi"},
+  {value: 1, label: "Đã gửi"},
+  {value: 2, label: "Hoàn thành"},
+  {value: 3, label: "Hủy"},
+]
