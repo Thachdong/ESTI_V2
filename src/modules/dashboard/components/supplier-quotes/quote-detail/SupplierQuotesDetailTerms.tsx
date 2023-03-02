@@ -12,7 +12,7 @@ type TProps = {
   disabled: boolean;
 };
 
-export const PurchaseDetailTerms: React.FC<TProps> = ({ disabled }) => {
+export const SupplierQuotesDetailTerms: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   const selectOptions = useQueries([
@@ -29,7 +29,7 @@ export const PurchaseDetailTerms: React.FC<TProps> = ({ disabled }) => {
   return (
     <Box className="flex flex-col mb-4">
       <Typography className="font-bold uppercase mb-3 text-sm">
-        Điều khoản của đơn mua hàng/ Terms and conditions of purchasing order:
+        Điều khoản của đơn hỏi giá/ Terms and conditions of purchasing order:
       </Typography>
 
       <List className="bg-white rounded flex-grow p-3">
@@ -55,12 +55,12 @@ export const PurchaseDetailTerms: React.FC<TProps> = ({ disabled }) => {
         </ListItem>
 
         <ListItem className="px-2 pb-0">
-          - Thời gian giao hàng dự kiến / Estimated to delivery: {"  "}
+          - Hiệu lực của đơn hỏi giá
           <FormDatepicker
             label=""
             controlProps={{
               control,
-              name: "deliverDate",
+              name: "expireDate",
             }}
             className="min-w-[200px] ml-2"
             disabled={disabled}
