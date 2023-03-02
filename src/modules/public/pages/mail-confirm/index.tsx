@@ -41,10 +41,10 @@ export const MailConfirmPage: React.FC = () => {
   );
   
   const renderContent = useCallback(() => {
-    const { status, isValid } = data || {};
+    const { status, result } = data || {};
 
     switch (true) {
-      case !isValid:
+      case !result:
         return (
           <>
             <Lottie options={defaultOptions} width={200} height={200} />
@@ -129,7 +129,7 @@ export const MailConfirmPage: React.FC = () => {
 
       <Box>{renderContent()}</Box>
 
-      {!data?.isValid && (
+      {!!data?.result && (
         <FormProvider {...methods}>
           <Box className="grid gap-4 mt-4">
             <FormInput

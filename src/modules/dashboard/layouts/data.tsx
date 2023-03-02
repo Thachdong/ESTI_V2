@@ -38,6 +38,21 @@ export const menu = [
     ],
   },
   {
+    id: "supplier-quotes",
+    title: "Hỏi giá",
+    icon: <ReceiptIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Sản phẩm cần hỏi giá",
+        link: "supplier-quotes/product",
+      },
+      {
+        title: "Đơn hỏi giá",
+        link: "supplier-quotes/quotes",
+      },
+    ]
+  },
+  {
     id: "purchase",
     title: "Đơn mua hàng",
     icon: <ReceiptIcon className="w-[24px] h-[24px]" />,
