@@ -130,22 +130,18 @@ export const PurchasePlanPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between mb-3">
-        <Box className="w-1/3">
-          <SearchBox />
-        </Box>
-
-        <AddButton variant="contained" onClick={() => handleOpenDialog("Add")}>Mua SP nhập kho</AddButton>
+      <Box className="flex gap-3 mb-3 w-3/5">
+        <AddButton variant="contained" onClick={() => handleOpenDialog("Add")}>
+          Mua SP nhập kho
+        </AddButton>
+        <SearchBox />
       </Box>
 
       <ContextMenuWrapper
         menuId="customer_table_menu"
         menuComponent={
           <Menu className="p-0" id="customer_table_menu">
-            <Item
-              id="view"
-              onClick={() => handleOpenDialog("View")}
-            >
+            <Item id="view" onClick={() => handleOpenDialog("View")}>
               Chi tiết SP cần mua
             </Item>
             <Item id="note" onClick={() => handleOpenDialog("Clone")}>

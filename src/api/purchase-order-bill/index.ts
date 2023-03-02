@@ -38,4 +38,6 @@ export const purchaseOrderBill = {
       `${BASE_URL}/UpdateStatus?id=${payload.id}&status=${payload.status}`,
       {}
     ),
+  getProductOrderBillDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/ProductOrderBillDetail`, { id }),
 };

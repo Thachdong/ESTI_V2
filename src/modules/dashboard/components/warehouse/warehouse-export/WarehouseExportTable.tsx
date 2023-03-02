@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
-import { exportWarehouse, TWarehouseExport } from "src/api";
+import { exportWarehouse, TWarehouseExport, warehouse } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -16,6 +16,7 @@ import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
 import {
+  ViewListProductDrawer,
   WarehouseExportNoteDialog,
   WarehouseExportStatusDialog,
 } from "~modules-dashboard/components";
@@ -120,11 +121,25 @@ export const WarehouseExportTable: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await warehouse
+      .getExportWarehouseDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-right mb-3">
+      <Box className="text-left mb-3">
         <AddButton
           variant="contained"
           onClick={() => router.push("/dashboard/warehouse/export-detail")}
@@ -159,8 +174,12 @@ export const WarehouseExportTable: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -175,6 +194,12 @@ export const WarehouseExportTable: React.FC = () => {
         open={Boolean(dialog?.open && dialog.type === "status")}
         defaultValue={defaultValue.current}
         refetch={refetch}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.productOrderDetail}
       />
     </Paper>
   );

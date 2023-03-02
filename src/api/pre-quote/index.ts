@@ -88,4 +88,6 @@ export const preQuote = {
     ),
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+  getPreQuoteDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/PreQuoteDetail`, { id }),
 };

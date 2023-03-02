@@ -54,5 +54,9 @@ export const quoteRequest = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
-  update: (payload: TUpdateQuoteRequest) => request.put<TUpdateQuoteRequest, any>(`${BASE_URL}/UpdateBranch`, payload)
+  update: (payload: TUpdateQuoteRequest) =>
+    request.put<TUpdateQuoteRequest, any>(`${BASE_URL}/UpdateBranch`, payload),
+
+  getPreOrderDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/PreOrderDetail`, { id }),
 };

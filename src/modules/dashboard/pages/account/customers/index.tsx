@@ -124,19 +124,14 @@ export const CustomersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox label="Tìm kiếm" />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-          >
-            Tạo khách hàng
-          </AddButton>
-        </div>
+      <div className="flex gap-3 items-center w-3/5 mb-3">
+        <AddButton
+          onClick={() => setDialog({ open: true, type: "Add" })}
+          variant="contained"
+        >
+          Tạo khách hàng
+        </AddButton>
+        <SearchBox label="Tìm kiếm" />
       </div>
 
       <ContextMenuWrapper

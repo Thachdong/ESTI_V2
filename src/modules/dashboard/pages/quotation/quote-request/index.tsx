@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Drawer, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
@@ -18,7 +18,10 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { QuoteRequestHeader } from "~modules-dashboard/components";
+import {
+  QuoteRequestHeader,
+  ViewListProductDrawer,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { quotationRequestColumns } from "./data";
 
@@ -216,13 +219,24 @@ export const QuotationRequestsPage = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await quoteRequest.getPreOrderDetail(id).then((res) => {
+      return res.data;
+    });
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
     <>
-      <QuoteRequestHeader />
+      {/* <QuoteRequestHeader /> */}
 
       <Paper className="bgContainer">
         <Box className="flex items-center w-full justify-between mb-3">
-          <Box className="flex gap-2 w-full max-w-[60%]">
+          <Box className="flex gap-3 w-3/5">
             <AddButton
               onClick={() => router.push("quote-request-detail")}
               className=""
@@ -249,13 +263,22 @@ export const QuotationRequestsPage = () => {
               loading: isLoading || isFetching,
               ...paginationProps,
             }}
+            getRowClassName={({ id }) =>
+              dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+            }
             componentsProps={{
               row: {
                 onMouseEnter: onMouseEnterRow,
+                onDoubleClick: handleViewProduct,
               },
             }}
           />
         </ContextMenuWrapper>
+        <ViewListProductDrawer
+          Open={Open}
+          onClose={() => setOpen(false)}
+          data={dataViewDetail?.current?.preOrderDetailView as []}
+        />
       </Paper>
     </>
   );

@@ -57,6 +57,8 @@ export const bill = {
 
   sendMail: (payload: TSendMailProps) => {
     instance.defaults.timeout = undefined;
-    return request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload)
+    return request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload);
   },
+  getBillDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/BillDetail`, { id }),
 };

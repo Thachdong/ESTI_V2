@@ -14,6 +14,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
+import { ViewListProductDrawer } from "~modules-dashboard/components";
 import { billColumns } from "~modules-dashboard/pages/orders/bill-list/billColumns";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
@@ -111,6 +112,17 @@ export const BillListTable: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await bill.getBillDetail(id).then((res) => {
+      return res.data;
+    });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
   return (
     <Paper className="flex-grow !h-screen shadow bgContainer p-3">
       <Box className="flex gap-4 items-center mb-3">
@@ -161,8 +173,12 @@ export const BillListTable: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -180,6 +196,12 @@ export const BillListTable: React.FC = () => {
         type={dialog.type}
         defaultValue={defaultValue.current}
         refetch={refetch}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.BillDetailView}
       />
     </Paper>
   );

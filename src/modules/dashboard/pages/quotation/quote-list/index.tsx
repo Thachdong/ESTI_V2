@@ -15,6 +15,7 @@ import {
 import { defaultPagination, quoteStatus } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
+import { ViewListProductDrawer } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { quoteListColumns } from "./data";
 
@@ -77,16 +78,21 @@ export const QuoteListPage = () => {
     }
   }, [defaultValue]);
 
-  const handleRedirect = useCallback((url: string) => {
-    const {status} = defaultValue.current || {};
+  const handleRedirect = useCallback(
+    (url: string) => {
+      const { status } = defaultValue.current || {};
 
-    if (status !== 1) {
-      toast.error("Không thể tạo đơn hàng từ trạng thái " + quoteStatus[status]?.label);
+      if (status !== 1) {
+        toast.error(
+          "Không thể tạo đơn hàng từ trạng thái " + quoteStatus[status]?.label
+        );
 
-      return;
-    }
-    router.push(url);
-  }, [defaultValue.current]);
+        return;
+      }
+      router.push(url);
+    },
+    [defaultValue.current]
+  );
 
   // DATA TABLE
   const columns: TGridColDef[] = [
@@ -102,13 +108,13 @@ export const QuoteListPage = () => {
           items={[
             {
               action: () =>
-              router.push(`quote-detail?id=${defaultValue.current?.id}`),
+                router.push(`quote-detail?id=${defaultValue.current?.id}`),
               label: "Nội dung chi tiết",
             },
             {
               action: () => handleRedirect("/dashboard/orders/order-request"),
               label: "Tạo đơn đặt hàng",
-              disabled: defaultValue.current?.status !== 1
+              disabled: defaultValue.current?.status !== 1,
             },
             {
               action: handleCancel,
@@ -154,14 +160,23 @@ export const QuoteListPage = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await preQuote.getPreQuoteDetail(id).then((res) => {
+      return res.data;
+    });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
     <>
       <Paper className="bgContainer">
-        <Box className="flex items-center w-3/4 mb-3">
-          <AddButton
-            onClick={() => router.push("quote-detail")}
-            className="w-1/2 mr-3"
-          >
+        <Box className="flex items-center w-3/5 mb-3 gap-3">
+          <AddButton onClick={() => router.push("quote-detail")}>
             Tạo báo giá
           </AddButton>
 
@@ -179,13 +194,22 @@ export const QuoteListPage = () => {
               loading: isLoading || isFetching,
               ...paginationProps,
             }}
+            getRowClassName={({ id }) =>
+              dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+            }
             componentsProps={{
               row: {
                 onMouseEnter: onMouseEnterRow,
+                onDoubleClick: handleViewProduct,
               },
             }}
           />
         </ContextMenuWrapper>
+        <ViewListProductDrawer
+          Open={Open}
+          onClose={() => setOpen(false)}
+          data={dataViewDetail?.current?.preQuoteDetailView}
+        />
       </Paper>
     </>
   );
