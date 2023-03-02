@@ -1,21 +1,9 @@
-import { Box, Collapse, List, ListItemButton, Typography } from "@mui/material";
+import { Box, List } from "@mui/material";
 import React from "react";
 import { useCallback, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { useMutation } from "react-query";
-import { customer, TActivateCustomer } from "src/api";
-import {
-  AddButton,
-  AutoCompleteBase,
-  DeleteButton,
-  FormSelect,
-} from "~modules-core/components";
-import { accountStatus } from "~modules-core/constance";
-import { toast } from "~modules-core/toast";
-import { CustomersBill } from "./CustomersBill";
+import { AddButton } from "~modules-core/components";
 import { CustomersContactBox } from "./CustomersContactBox";
-import { CustomersCurator } from "./CustomersCurator";
-import { CustomersReceiver } from "./CustomersReceiver";
 
 type TProps = {
   isDisable: boolean;
@@ -26,7 +14,6 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({
   type,
   isDisable,
 }) => {
-
   const [curators, setCurators] = useState<any[]>([{}]);
 
   const { control } = useFormContext();

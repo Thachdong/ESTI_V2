@@ -17,8 +17,10 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   FormInputBase,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -223,14 +225,13 @@ export const ProductsPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
+      <Box className="grid grid-cols-3 mb-3">
         <SearchBox label="Tìm kiếm sale phụ trách" />
 
-        <Box className="flex items-center justify-end">
+        <Box className="flex items-center justify-end gap-3 col-span-2">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm sản phẩm
           </AddButton>
@@ -249,6 +250,8 @@ export const ProductsPage = () => {
               />
             </InputLabel>
           </AddButton>
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
 

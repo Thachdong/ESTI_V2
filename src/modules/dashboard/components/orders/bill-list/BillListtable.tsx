@@ -9,7 +9,10 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -21,7 +24,15 @@ import { TDefaultDialogState } from "~types/dialog";
 import { BillListBillDialog } from "./BillListBillDialog";
 import { BillListStatusDialog } from "./BillListStatusDialog";
 
-export const BillListTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const BillListTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -125,7 +136,7 @@ export const BillListTable: React.FC = () => {
   };
   return (
     <Paper className="flex-grow !h-screen shadow bgContainer p-3">
-      <Box className="flex gap-4 items-center mb-3">
+      <Box className="flex gap-4 items-center mb-3 justify-between">
         <Box>
           <AddButton
             variant="contained"
@@ -133,6 +144,11 @@ export const BillListTable: React.FC = () => {
           >
             TẠO MỚI HOÁ ĐƠN
           </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
       <ContextMenuWrapper

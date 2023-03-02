@@ -102,16 +102,11 @@ export const WarehouseConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox label="Tìm kiếm" />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" onClick={onAdd}>
-            Tạo kho
-          </AddButton>
-        </div>
+      <div className="flex items-center gap-3 w-3/5 mb-3">
+        <AddButton variant="contained" onClick={onAdd}>
+          Tạo kho
+        </AddButton>
+        <SearchBox label="Tìm kiếm" />
       </div>
 
       <DataTable

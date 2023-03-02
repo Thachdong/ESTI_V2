@@ -93,16 +93,11 @@ export const BranchConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex mb-3">
-        <Box className="w-1/2">
-          <SearchBox label="Tìm kiếm" />
-        </Box>
-
-        <Box className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" onClick={onAdd}>
-            Tạo chi nhánh
-          </AddButton>
-        </Box>
+      <Box className="flex gap-3 items-center w-3/5 mb-3">
+        <AddButton variant="contained" onClick={onAdd}>
+          Tạo chi nhánh
+        </AddButton>
+        <SearchBox label="Tìm kiếm" />
       </Box>
 
       <DataTable

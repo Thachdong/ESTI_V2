@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { curatorPositions, defaultPagination } from "~modules-core/constance";
@@ -135,15 +137,21 @@ export const SuppliersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex items-center gap-3 mb-3 w-3/5">
-        <AddButton
-          variant="contained"
-          onClick={() => setDialog({ open: true, type: "Add" })}
-        >
-          Tạo nhà cung cấp
-        </AddButton>
-        <SearchBox />
-      </div>
+      <Box className="mb-3 flex items-center justify-between">
+        <Box className="flex items-center gap-3 w-3/5">
+          <AddButton
+            variant="contained"
+            onClick={() => setDialog({ open: true, type: "Add" })}
+          >
+            Tạo nhà cung cấp
+          </AddButton>
+          <SearchBox />
+        </Box>
+        <Box className="flex items-center gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="suppliers_table_menu"

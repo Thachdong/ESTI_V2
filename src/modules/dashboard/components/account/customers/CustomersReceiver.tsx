@@ -23,8 +23,15 @@ export const CustomersReceiver: React.FC<TProps> = ({
     name: "curatorCreate",
   });
 
-  const { curatorAddress, curatorEmail, curatorPhone, curatorName } =
-    watch("curatorCreate")[index];
+  const {
+    curatorAddress,
+    curatorEmail,
+    curatorPhone,
+    curatorName,
+    curatorNote,
+  } = watch("curatorCreate")[index];
+
+  console.log(watch("curatorCreate")[index]);
 
   useEffect(() => {
     if (defaultValue && type === "Add") {
@@ -32,6 +39,7 @@ export const CustomersReceiver: React.FC<TProps> = ({
       setValue(`curatorCreate.${index}.receiverPhone1`, curatorPhone);
       setValue(`curatorCreate.${index}.receiverEmail`, curatorEmail);
       setValue(`curatorCreate.${index}.receiverAddress`, curatorAddress);
+      setValue(`curatorCreate.${index}.receiverNote`, curatorNote);
     }
   }, [
     type,
@@ -40,6 +48,7 @@ export const CustomersReceiver: React.FC<TProps> = ({
     curatorEmail,
     curatorPhone,
     curatorName,
+    curatorNote,
   ]);
 
   return (
@@ -114,7 +123,18 @@ export const CustomersReceiver: React.FC<TProps> = ({
         multiline
         minRows={3}
         disabled={isDisable}
-        className="col-span-2"
+        shrinkLabel
+      />
+      <FormInput
+        controlProps={{
+          control,
+          name: `curatorCreate.${index}.receiverNote`,
+          rules: undefined,
+        }}
+        label="Ghi chú"
+        multiline
+        minRows={3}
+        disabled={isDisable}
         shrinkLabel
       />
     </Box>

@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -124,7 +126,7 @@ export const PurchaseBill: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex gap-4 items-center mb-3">
+      <Box className="flex gap-4 items-center mb-3 justify-between">
         <Box>
           <AddButton
             variant="contained"
@@ -134,6 +136,10 @@ export const PurchaseBill: React.FC = () => {
           >
             TẠO MỚI HOÁ ĐƠN
           </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
       <ContextMenuWrapper

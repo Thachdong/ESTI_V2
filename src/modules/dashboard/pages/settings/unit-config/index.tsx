@@ -7,7 +7,9 @@ import {
   AddButton,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -19,9 +21,9 @@ import { productColumns } from "./unitColumns";
 
 export const UnitConfigPage: React.FC = () => {
   const router = useRouter();
-  
+
   const { query } = router;
-  
+
   const [pagination, setPagination] = useState(defaultPagination);
 
   const defaultValue = useRef<TUnit | null>();
@@ -58,7 +60,7 @@ export const UnitConfigPage: React.FC = () => {
       "loading",
       {
         ...pagination,
-        ...query
+        ...query,
       },
     ],
     () =>
@@ -66,7 +68,7 @@ export const UnitConfigPage: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          ...query
+          ...query,
         })
         .then((res) => res.data),
     {
@@ -117,7 +119,7 @@ export const UnitConfigPage: React.FC = () => {
             },
           ]}
         />
-      )
+      ),
     },
   ];
 
@@ -125,15 +127,16 @@ export const UnitConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex mb-3">
-        <Box className="w-1/2">
-          <SearchBox label="Tìm kiếm tên đơn vị" />
-        </Box>
-
-        <Box className="w-1/2 flex items-center justify-end">
+      <Box className="mb-3 flex justify-between items-center">
+        <Box className="flex items-center gap-3 w-3/5 ">
           <AddButton variant="contained" onClick={onAdd}>
             Tạo đơn vị
           </AddButton>
+          <SearchBox label="Tìm kiếm tên đơn vị" />
+        </Box>
+        <Box className="flex gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
 

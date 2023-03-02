@@ -10,7 +10,10 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -23,7 +26,15 @@ import {
 import { warehouseExportColumns } from "~modules-dashboard/pages/warehouse/warehouse-export/data";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const WarehouseExportTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const WarehouseExportTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   // LOCAL STATE AND EXTRACT PROPS
   const router = useRouter();
 
@@ -139,13 +150,21 @@ export const WarehouseExportTable: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-left mb-3">
-        <AddButton
-          variant="contained"
-          onClick={() => router.push("/dashboard/warehouse/export-detail")}
-        >
-          Tạo phiếu xuất kho
-        </AddButton>
+      <Box className="text-left mb-3 flex justify-between items-center">
+        <Box>
+          {" "}
+          <AddButton
+            variant="contained"
+            onClick={() => router.push("/dashboard/warehouse/export-detail")}
+          >
+            Tạo phiếu xuất kho
+          </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper

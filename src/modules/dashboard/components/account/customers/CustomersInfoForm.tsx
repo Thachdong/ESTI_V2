@@ -1,11 +1,12 @@
 import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { customer, staff } from "src/api";
+import { branchs, customer, staff } from "src/api";
 import {
   FormImageGallery,
   FormInput,
   FormSelect,
+  FormSelectAsync,
 } from "~modules-core/components";
 import {
   businessAreas,
@@ -20,7 +21,7 @@ type TProps = {
 export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const context = useFormContext();
 
-  const { control, watch } = context;
+  const { control } = context;
 
   const { data: deliveryStaffs } = useQuery(["deliveryStaffs"], () =>
     staff.getListDeliveryStaff().then((res) => res.data)
@@ -78,6 +79,19 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Giao nhận phụ trách"
           disabled={isDisable}
           labelKey="fullName"
+          shrinkLabel
+        />
+
+        <FormSelectAsync
+          fetcher={branchs.getList}
+          controlProps={{
+            name: "branchId",
+            control,
+            rules: { required: "Phải chọn chi nhánh" },
+          }}
+          label="Chọn chi nhánh:"
+          labelKey="code"
+          disabled={isDisable}
           shrinkLabel
         />
       </Box>

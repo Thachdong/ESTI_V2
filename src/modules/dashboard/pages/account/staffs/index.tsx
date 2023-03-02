@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, {
   useCallback,
@@ -15,7 +15,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -145,15 +147,21 @@ export const StaffsPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex items-center gap-3 w-3/5 mb-3">
-        <AddButton
-          variant="contained"
-          onClick={() => setDialog({ open: true, type: "Add" })}
-        >
-          Tạo nhân viên
-        </AddButton>
-        <SearchBox />
-      </div>
+      <Box className="mb-3 flex justify-between items-center">
+        <Box className="flex items-center gap-3 w-3/5 ">
+          <AddButton
+            variant="contained"
+            onClick={() => setDialog({ open: true, type: "Add" })}
+          >
+            Tạo nhân viên
+          </AddButton>
+          <SearchBox />
+        </Box>
+        <Box className="flex items-center gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="product_table_menu"

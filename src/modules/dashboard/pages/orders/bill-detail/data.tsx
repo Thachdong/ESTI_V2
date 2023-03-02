@@ -11,40 +11,38 @@ export const productColumns: TGridColDef[] = [
   {
     field: "productCode",
     headerName: "Mã SP",
-    minWidth: 75,
+    minWidth: 100,
   },
   {
     field: "productName",
     headerName: "Tên SP",
-    minWidth: 200,
+    minWidth: 250,
     flex: 1,
   },
   {
     field: "productManufactor",
     headerName: "Hãng SX",
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     field: "productSpecs",
     headerName: "Quy cách",
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     field: "unitName",
-    headerName: "    vị",
-    minWidth: 75,
-    flex: 1,
+    headerName: " Đơn vị",
+    minWidth: 50,
   },
   {
     field: "quantity",
     headerName: "Số lượng",
-    minWidth: 75,
-    flex: 1,
+    minWidth: 50,
   },
   {
     field: "price",
     headerName: "Giá",
-    minWidth: 75,
+    minWidth: 80,
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row.price),
   },
@@ -57,7 +55,7 @@ export const productColumns: TGridColDef[] = [
   {
     field: "totalPrice",
     headerName: "Thành tiền",
-    minWidth: 100,
+    minWidth: 220,
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row.totalPrice),
   },
@@ -74,7 +72,8 @@ export const paymentHistoryColumns: TGridColDef[] = [
     headerName: "Ngày tạo",
     minWidth: 100,
     flex: 1,
-    renderCell: ({row}) => row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__"
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__",
   },
   {
     field: "createdByName",
@@ -87,13 +86,14 @@ export const paymentHistoryColumns: TGridColDef[] = [
     headerName: "Ngày thanh toán",
     minWidth: 100,
     flex: 1,
-    renderCell: ({row}) => row?.paymentDate ? moment(row?.paymentDate).format("DD/MM/YYYY") : "__"
+    renderCell: ({ row }) =>
+      row?.paymentDate ? moment(row?.paymentDate).format("DD/MM/YYYY") : "__",
   },
   {
     field: "paid",
     headerName: "Số tiền thanh toán",
     minWidth: 100,
     flex: 1,
-    renderCell: ({row}) => _format.getVND(row?.paid)
+    renderCell: ({ row }) => _format.getVND(row?.paid),
   },
 ];

@@ -167,23 +167,27 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid border-grey-3 px-3">
-          <ListItem className="text-sm flex gap-3 h-[34px] border-b border-0 border-dashed border-grey-3 ">
-            <span className="font-semibold">Thành tiền chưa có thuế(VNĐ):</span>{" "}
+        <List className="border-0 border-t border-solid border-grey-3 p-0">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thành tiền chưa có thuế(VNĐ):
+            </span>{" "}
             <span className="text-base">
               {" "}
               {_format.getVND(getPrice.totalPrice)}
             </span>
           </ListItem>
-          <ListItem className="text-sm flex gap-3 h-[34px] border-b border-0 border-dashed border-grey-3">
-            <span className="font-semibold">Thuế GTGT(VNĐ):</span>{" "}
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):
+            </span>{" "}
             <span className="text-base">
               {" "}
               {_format.getVND(getPrice.totalTax)}
             </span>
           </ListItem>
-          <ListItem className="text-sm flex gap-3 h-[34px]">
-            <span className="font-semibold">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
               Tổng cộng tiền thanh toán(VNĐ):
             </span>
             <span className="text-base">

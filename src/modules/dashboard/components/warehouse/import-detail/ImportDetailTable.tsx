@@ -124,7 +124,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                     productId: defaultValue?.productId,
                     productCode: defaultValue?.productCode,
                     lotNumber: defaultValue?.lotNumber,
-                    importId: router.query.id
+                    importId: router.query.id,
                   },
                 })
               }
@@ -198,7 +198,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                         productId: defaultValue?.productId,
                         productCode: defaultValue?.productCode,
                         lotNumber: defaultValue?.lotNumber,
-                        importId: router.query.id
+                        importId: router.query.id,
                       },
                     }),
                   label: "Xem tài liệu SP",
@@ -233,7 +233,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       renderCell: ({ row }) => renderActionButtons(row),
     },
   ];
-console.log(defaultValue);
+  console.log(defaultValue);
 
   return (
     <Box className="">
@@ -283,9 +283,9 @@ console.log(defaultValue);
           />
         </ContextMenuWrapper>
 
-        <Box className="p-3 border-0 border-t border-solid border-grey-3">
-          <Typography>
-            <span className="font-semibold">
+        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
+          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
               {" "}
               Tổng cộng tiền thanh toán(VNĐ):
             </span>
@@ -311,15 +311,14 @@ console.log(defaultValue);
       {/* PRODUCT DOCUMENT DIALOG */}
       <DocumentDialog
         onClose={handleClose}
-        open={
-          !!dialog?.open &&
-          (dialog?.type === "CreateDocument")
-        }
+        open={!!dialog?.open && dialog?.type === "CreateDocument"}
         type="AddFromAnotherRoute"
-        defaultValue={{
-          productId: defaultValue?.productId,
-          lotNumber: defaultValue?.lotNumber
-        } as any}
+        defaultValue={
+          {
+            productId: defaultValue?.productId,
+            lotNumber: defaultValue?.lotNumber,
+          } as any
+        }
       />
 
       {/* STAMP DIALOG */}
