@@ -1,3 +1,4 @@
+import { Box, Tooltip } from "@mui/material";
 import moment from "moment";
 import { StatusChip } from "~modules-core/components";
 import { purchasePlanStatus } from "~modules-core/constance";
@@ -110,7 +111,18 @@ export const dialogColumns: TGridColDef[] = [
     field: "totalPrice",
     headerName: "THÀNH TIỀN",
     minWidth: 120,
-    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
+    renderCell: ({ row }) => {
+      const {quantity, price, vat} = row || {};
+
+      const total = quantity * price;
+
+      const tax = total * (+vat) / 100;
+      return (
+        <Tooltip title={ "Sau thuế: " + _format.getVND(total + tax)}>
+          <Box>{_format.getVND(row.totalPrice)}</Box>
+        </Tooltip>
+      );
+    }
   },
   { field: "note", headerName: "GHI CHÚ", minWidth: 120 },
 ];

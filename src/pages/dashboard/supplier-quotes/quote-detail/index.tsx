@@ -1,6 +1,7 @@
+import { SupplierQuoteDetailPage } from "~modules-dashboard/pages";
 import { TNextPageWithLayout } from "~types/_app";
 
-const Index: TNextPageWithLayout = () => <div>chi tiết hỏi giá</div>
+const Index: TNextPageWithLayout = () => <SupplierQuoteDetailPage />
 
 Index.displayName = "Chi tiết hỏi giá";
 

@@ -56,7 +56,7 @@ export const SupplierQuotesPage: React.FC = () => {
       },
     ],
     () =>
-    askPriceOrder
+      askPriceOrder
         .getList({
           pageSize: pagination.pageSize,
           pageIndex: pagination.pageIndex,
@@ -114,17 +114,17 @@ export const SupplierQuotesPage: React.FC = () => {
   return (
     <Paper className="bgContainer">
       <Box className="flex justify-between mb-3">
-        <Box className="w-1/3">
+        <Box className="flex w-1/2">
+          <AddButton
+            onClick={() =>
+              router.push("/dashboard/supplier-quotes/quote-detail/")
+            }
+            className="!min-w-[200px] mr-4"
+          >
+            Tạo đơn hỏi giá
+          </AddButton>
           <SearchBox />
         </Box>
-
-        <AddButton
-          onClick={() =>
-            router.push("/dashboard/supplier-quotes/quote-detail/")
-          }
-        >
-          Tạo đơn hỏi giá
-        </AddButton>
       </Box>
 
       <ContextMenuWrapper
@@ -169,7 +169,7 @@ export const SupplierQuotesPage: React.FC = () => {
         onClose={handleCloseDialog}
         open={dialog?.open}
         defaultValue={defaultValue?.current}
-      /> 
+      />
     </Paper>
   );
 };

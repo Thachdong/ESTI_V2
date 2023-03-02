@@ -11,7 +11,7 @@ import {
   FormSelectAsync,
 } from "~modules-core/components";
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
-import { VAT } from "~modules-core/constance";
+import { supplierQuotesDetailStatus, VAT } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -26,7 +26,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
 
   const { control, reset, watch, handleSubmit, setValue } = useForm<any>();
 
-  const { quantity, price } = watch();
+  const { quantity, price, productId } = watch();
 
   const { setValue: setProductsValue, getValues } = useFormContext();
 
@@ -37,9 +37,31 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     if (type === "Add") {
       reset({});
     } else {
-      const { productId, quantity, price, vat, note, id } = defaultValue || {};
+      const {
+        productId,
+        quantity,
+        price,
+        vat,
+        note,
+        id,
+        totalPrice,
+        productStatus,
+        productStatusType,
+        availabilityQuantity
+      } = defaultValue || {};
 
-      reset({ productId, quantity, price, vat: String(vat), note, id });
+      reset({
+        productId,
+        quantity,
+        price,
+        vat: String(vat),
+        note,
+        id,
+        totalPrice,
+        productStatus,
+        productStatusType,
+        availabilityQuantity
+      });
     }
   }, [defaultValue, type]);
 
@@ -119,11 +141,11 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     <Dialog
       onClose={onClose}
       open={open}
-      maxWidth="sm"
+      maxWidth="md"
       title={title}
       headerClassName="text-center"
     >
-      <Box className="grid gap-4">
+      <Box className="grid grid-cols-2 gap-4">
         <FormSelectAsync
           controlProps={{
             control,
@@ -134,6 +156,13 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           labelKey="productCode"
           fetcher={productApi.getList}
           callback={(prod) => setSelectedProduct(prod)}
+          disabled={type !== "Add"}
+        />
+
+        <FormInputBase
+          label="Hãng sản xuất"
+          value={!!productId ? selectedProduct?.manufactor : ""}
+          disabled
         />
 
         <FormSelectAsync
@@ -145,33 +174,48 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           labelKey="productName"
           fetcher={productApi.getList}
           callback={(prod) => setSelectedProduct(prod)}
-        />
-
-        <FormInputBase
-          label="Hãng sản xuất"
-          value={selectedProduct?.manufactor}
-          disabled
+          disabled={type !== "Add"}
         />
 
         <FormInputBase
           label="Quy cách"
-          value={selectedProduct?.specs}
+          value={!!productId ? selectedProduct?.specs : ""}
           disabled
+        />
+
+        <FormSelect
+          options={supplierQuotesDetailStatus}
+          controlProps={{
+            control,
+            name: "productStatusType",
+            rules: { required: "Phải chọn trạng thái" },
+          }}
+          label="Trạng thái"
+          labelKey="label"
+          valueKey="value"
         />
 
         <FormInputBase
           label="Đơn vị"
-          value={selectedProduct?.unitName}
+          value={!!productId ? selectedProduct?.unitName : ""}
           disabled
         />
 
         <FormInputNumber
+          label="Số lượng có thể cung cấp"
           controlProps={{
             control,
-            name: "quantity",
-            rules: { required: "Phải nhập số lượng" },
+            name: "availabilityQuantity",
           }}
-          label="Số lượng"
+        />
+
+        <FormInputNumber
+          label="Thành tiền"
+          disabled
+          controlProps={{
+            control,
+            name: "totalPrice",
+          }}
         />
 
         <FormInputNumber
@@ -183,6 +227,15 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
           label="Đơn giá"
         />
 
+        <FormInputNumber
+          controlProps={{
+            control,
+            name: "quantity",
+            rules: { required: "Phải nhập số lượng" },
+          }}
+          label="Số lượng"
+        />
+
         <FormSelect
           options={VAT}
           controlProps={{
@@ -191,15 +244,6 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
             rules: { required: "Phải chọn VAT" },
           }}
           label="VAT"
-        />
-
-        <FormInputNumber
-          label="Thành tiền"
-          disabled
-          controlProps={{
-            control,
-            name: "totalPrice",
-          }}
         />
 
         <FormInput
