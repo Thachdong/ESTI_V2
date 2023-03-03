@@ -9,8 +9,11 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -23,7 +26,15 @@ import { purchaseRequestColumns } from "~modules-dashboard/pages/purchase/purcha
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const PurchaseRequestTable = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const PurchaseRequestTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const router = useRouter();
 
   const { query } = router;
@@ -50,6 +61,7 @@ export const PurchaseRequestTable = () => {
     data: purchaseList,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery(
     [
       "PurchaseList",
@@ -135,15 +147,22 @@ export const PurchaseRequestTable = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex mb-3 gap-3 items-center w-3/5">
-        <AddButton
-          onClick={() =>
-            router.push("/dashboard/purchase/purchase-request-detail")
-          }
-        >
-          Tạo đơn mua hàng
-        </AddButton>
-        <SearchBox />
+      <Box className="flex justify-between mb-3">
+        <Box className="flex gap-3 items-center w-3/5">
+          <AddButton
+            onClick={() =>
+              router.push("/dashboard/purchase/purchase-request-detail")
+            }
+          >
+            Tạo đơn mua hàng
+          </AddButton>
+          <SearchBox />
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper

@@ -33,20 +33,30 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
   };
 
   // DEFAULT PROPS
-  const defaultRenderInput = !!renderInput ? renderInput : (params: any) => (
-    <TextField
-      size="small"
-      inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
-      helperText={helperText}
-      {...params}
-      {...renderInputProps}
-    />
-  )
+  const defaultRenderInput = !!renderInput
+    ? renderInput
+    : (params: any) => (
+        <TextField
+          size="small"
+          inputProps={{ placeholder: "Chọn ngày", ...params.inputProps }}
+          helperText={helperText}
+          {...params}
+          {...renderInputProps}
+          sx={{
+            label: {
+              textTransform: "uppercase",
+              fontWeight: "bold",
+              fontSize: "12px",
+              marginTop: "4px",
+            },
+          }}
+        />
+      );
 
   const defaultInputProps = {
     ...InputProps,
-    className: clsx("bg-input-bg", InputProps?.className),
-  }
+    className: clsx("bg-input-bg ", InputProps?.className),
+  };
 
   return (
     <DateTimePicker

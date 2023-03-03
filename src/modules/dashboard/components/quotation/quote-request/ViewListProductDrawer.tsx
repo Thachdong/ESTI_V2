@@ -28,7 +28,7 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
     {
       field: "productCode",
       headerName: "Mã SP",
-      minWidth: 100,
+      minWidth: 150,
     },
     {
       field: "productName",
@@ -39,22 +39,22 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
     {
       field: "manufactor",
       headerName: "Hãng SX",
-      minWidth: 100,
+      minWidth: 150,
     },
     {
       field: "specs",
       headerName: "Quy cách",
-      minWidth: 100,
+      minWidth: 150,
     },
     {
       field: "unitName",
       headerName: "Đơn vị",
-      minWidth: 100,
+      minWidth: 150,
     },
     {
       field: "quantity",
       headerName: "Số lượng",
-      minWidth: 100,
+      minWidth: 150,
     },
     {
       field: "note",

@@ -9,8 +9,11 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination, quoteStatus } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -175,12 +178,18 @@ export const QuoteListPage = () => {
   return (
     <>
       <Paper className="bgContainer">
-        <Box className="flex items-center w-3/5 mb-3 gap-3">
-          <AddButton onClick={() => router.push("quote-detail")}>
-            Tạo báo giá
-          </AddButton>
+        <Box className="flex justify-between">
+          <Box className="flex items-center w-3/5 mb-3 gap-3">
+            <AddButton onClick={() => router.push("quote-detail")}>
+              Tạo báo giá
+            </AddButton>
 
-          <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+            <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+          </Box>
+          <Box className="flex gap-2">
+            <FilterButton listFilterKey={[]} />
+            <RefreshButton onClick={() => refetch()} />
+          </Box>
         </Box>
 
         <ContextMenuWrapper

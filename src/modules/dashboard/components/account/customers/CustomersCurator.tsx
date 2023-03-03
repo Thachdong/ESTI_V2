@@ -3,7 +3,11 @@ import { useCallback } from "react";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customerType } from "src/api/customer-type";
-import { FormInput, FormSelect } from "~modules-core/components";
+import {
+  FormDatepicker,
+  FormInput,
+  FormSelect,
+} from "~modules-core/components";
 import {
   accountTypeOptions,
   curatorDepartments,
@@ -143,6 +147,17 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
           shrinkLabel
         />
 
+        <FormDatepicker
+          controlProps={{
+            control,
+            name: `curatorCreate.${index}.birthDay`,
+            rules: { required: "Phải chọn ngày sinh" },
+          }}
+          label="Ngày sinh"
+          disabled={isDisable}
+          shrinkLabel
+        />
+
         <FormSelect
           options={genderData}
           controlProps={{
@@ -172,6 +187,17 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
             name: `curatorCreate.${index}.curatorEmail`,
           }}
           label="Email"
+          required={false}
+          disabled={isDisable}
+          shrinkLabel
+        />
+
+        <FormInput
+          controlProps={{
+            control,
+            name: `curatorCreate.${index}.zaloNumber`,
+          }}
+          label="Tài khoản Zalo"
           required={false}
           disabled={isDisable}
           shrinkLabel

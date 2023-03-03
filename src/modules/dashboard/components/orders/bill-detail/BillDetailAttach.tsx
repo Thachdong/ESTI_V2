@@ -83,7 +83,7 @@ export const BillDetailAttach: React.FC = () => {
         File đính kèm
       </Typography>
 
-      <Box className="bg-white rounded flex-grow p-3">
+      <Box className="bg-white rounded flex-grow p-3 py-2">
         {renderAttachFile()}
 
         {!id && (

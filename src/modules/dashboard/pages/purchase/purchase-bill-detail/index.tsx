@@ -94,16 +94,17 @@ export const PurchaseBillDetailPage: React.FC = () => {
             productList={purchaseDetail?.productOrderDetail || []}
           />
         </Box>
+        <Box className="col-span-2">
+          <PurchaseBillDetailButtons
+            refetch={refetch}
+            sendMailData={{
+              to: billDetail?.productOrderBillById?.curatorEmail,
+              status: billDetail?.productOrderBillById?.status,
+              cc: [billDetail?.productOrderBillById?.salesAdminEmail],
+            }}
+          />
+        </Box>
       </Box>
-
-      <PurchaseBillDetailButtons
-        refetch={refetch}
-        sendMailData={{
-          to: billDetail?.productOrderBillById?.curatorEmail,
-          status: billDetail?.productOrderBillById?.status,
-          cc: [billDetail?.productOrderBillById?.salesAdminEmail],
-        }}
-      />
     </FormProvider>
   );
 };

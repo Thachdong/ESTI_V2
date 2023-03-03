@@ -75,7 +75,7 @@ export const PurchaseBillDetailButtons: React.FC<TProps> = ({
   });
 
   return (
-    <Box className="flex justify-end mt-4">
+    <Box className="flex justify-end">
       {!id ? (
         <AddButton onClick={handleSubmit(handleCreate)}>Tạo hóa đơn</AddButton>
       ) : (

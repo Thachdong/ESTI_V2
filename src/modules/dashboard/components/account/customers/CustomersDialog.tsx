@@ -17,7 +17,7 @@ import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
 
 type TProps = TDialog & {
   onAddCallback?: (opt: any) => void;
-}
+};
 
 export const CustomersDialog: React.FC<TProps> = ({
   onClose,
@@ -25,7 +25,7 @@ export const CustomersDialog: React.FC<TProps> = ({
   type,
   refetch,
   defaultValue,
-  onAddCallback
+  onAddCallback,
 }) => {
   const [tab, setTab] = useState("1");
 
@@ -61,6 +61,7 @@ export const CustomersDialog: React.FC<TProps> = ({
     return {
       companyInfoId: companyInfo.id,
       customerId: customer.id,
+      branchId: customer.branchId,
       salesId: customer.salesId,
       salesAdminId: customer.salesAdminId,
       deliveryId: customer.deliveryId,
@@ -91,6 +92,8 @@ export const CustomersDialog: React.FC<TProps> = ({
         curatorAddress: curator?.curatorAddress,
         curatorPhone: curator?.curatorPhone,
         curatorEmail: curator?.curatorEmail,
+        birthDay: curator?.birthDay,
+        zaloNumber: curator?.zaloNumber,
 
         receiverId: curator?.receiverById?.id,
         receiverAddress: curator?.receiverById?.address,
@@ -98,6 +101,7 @@ export const CustomersDialog: React.FC<TProps> = ({
         receiverName: curator?.receiverById?.fullName,
         receiverPhone1: curator?.receiverById?.phone1,
         receiverPhone2: curator?.receiverById?.phone2,
+        receiverNote: curator?.receiverById?.note,
 
         billId: curator?.recipientById?.id,
         billAddress: curator?.recipientById?.address,

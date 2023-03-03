@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -130,11 +132,20 @@ export const PurchasePlanPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex gap-3 mb-3 w-3/5">
-        <AddButton variant="contained" onClick={() => handleOpenDialog("Add")}>
-          Mua SP nhập kho
-        </AddButton>
-        <SearchBox />
+      <Box className="flex justify-between items-center mb-3">
+        <Box className="flex gap-3  w-3/5">
+          <AddButton
+            variant="contained"
+            onClick={() => handleOpenDialog("Add")}
+          >
+            Mua SP nhập kho
+          </AddButton>
+          <SearchBox />
+        </Box>
+        <Box className="flex gap-2">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper
