@@ -2,26 +2,23 @@ import { Box, Collapse, ListItemButton, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import { customer, TActivateCustomer } from "src/api";
-import {
-  AutoCompleteBase,
-  DeleteButton,
-} from "~modules-core/components";
+import { AutoCompleteBase, DeleteButton } from "~modules-core/components";
 import { accountStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
-import { CustomersBill } from "./CustomersBill";
-import { CustomersCurator } from "./CustomersCurator";
-import { CustomersReceiver } from "./CustomersReceiver";
+import { CustomerDetailCurator } from "./CustomerDetailCurator";
+import { CustomerDetailCuratorBill } from "./CustomerDetailCuratorBill";
+import { CustomerDetailReceiver } from "./CustomerDetailReceiver";
 
 type TProps = {
   isDisable: boolean;
-  type: string;
   index: number;
   handleRemove: (index: number) => void;
 };
 
-export const CustomersContactBox: React.FC<TProps> = ({
-  type,
+export const CustomerDetailContact: React.FC<TProps> = ({
   isDisable,
   index,
   handleRemove,
@@ -34,9 +31,9 @@ export const CustomersContactBox: React.FC<TProps> = ({
 
   const { watch } = useFormContext();
 
-  const initStatus = watch(`curatorCreate.${index}.status`);
+  const initStatus = watch(`contacts.${index}.status`);
 
-  const id = watch(`curatorCreate.${index}.id`);
+  const id = watch(`contacts.${index}.id`);
 
   // METHODS
   const handleCollapse = useCallback(
@@ -74,32 +71,35 @@ export const CustomersContactBox: React.FC<TProps> = ({
 
   return (
     <Box className="!border-grey-2 !rounded-[4px] mb-2">
-      <Box className="border-0 border-b-2 flex border-solid border-[#e9e9e9] mb-3 pt-3">
+      <Box className="border-0 border-b-2 flex items-center border-solid border-[#e9e9e9] mb-3 pt-3">
         <ListItemButton
           component="fieldset"
           onClick={() => handleCollapse(index)}
         >
-          <Typography className="font-semibold w-full">{`Thông tin liên hệ ${
-            index + 1
-          }`}</Typography>
+          <Typography className="font-semibold w-full">
+            {`Thông tin liên hệ ${index + 1}`}{" "}
+            {collapses.includes(index) ? (
+              <ExpandLess className="mb-[-5px]" />
+            ) : (
+              <ExpandMore className="mb-[-5px]" />
+            )}
+          </Typography>
 
           {index > 0 && (
             <DeleteButton color="error" onClick={() => handleRemove(index)} />
           )}
         </ListItemButton>
 
-        {type === "View" && (
-          <AutoCompleteBase
-            onChange={val => handleUpdateStatus(id, val)}
-            value={status}
-            options={accountStatus}
-            label="Trạng thái tài khoản"
-            className="min-w-[200px]"
-            labelKey="label"
-            valueKey="value"
-            shrinkLabel
-          />
-        )}
+        <AutoCompleteBase
+          onChange={(val) => handleUpdateStatus(id, val)}
+          value={status}
+          options={accountStatus}
+          label="Trạng thái tài khoản"
+          className="min-w-[200px]"
+          labelKey="label"
+          valueKey="value"
+          shrinkLabel
+        />
       </Box>
 
       <Collapse
@@ -108,11 +108,17 @@ export const CustomersContactBox: React.FC<TProps> = ({
         unmountOnExit
         className="w-full"
       >
-        <CustomersCurator isDisable={isDisable} index={index} />
+        <CustomerDetailCurator isDisable={isDisable} index={index} />
 
-        <CustomersReceiver type={type} isDisable={isDisable} index={index} />
+        <CustomerDetailReceiver
+          isDisable={isDisable}
+          index={index}
+        />
 
-        <CustomersBill type={type} isDisable={isDisable} index={index} />
+        <CustomerDetailCuratorBill
+          isDisable={isDisable}
+          index={index}
+        />
       </Collapse>
     </Box>
   );

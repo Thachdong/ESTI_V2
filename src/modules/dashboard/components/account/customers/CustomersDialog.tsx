@@ -152,7 +152,7 @@ export const CustomersDialog: React.FC<TProps> = ({
               <FormAvatar
                 loader={customer.uploadImage}
                 controlProps={{ control, name: "avatar" }}
-                label="Ảnh đại diện của nhà cung cấp"
+                label="Ảnh đại diện"
               />
             </Box>
             <Box className="flex flex-col items-center justify-center">

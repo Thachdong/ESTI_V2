@@ -101,8 +101,12 @@ export const CustomersPage = () => {
           id={row?.id}
           items={[
             {
-              action: onUpdate,
-              label: "Thông tin chi tiết",
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/account/customer-detail",
+                  query: { id: row?.id },
+                }),
+              label: "Chi tiết / cập nhật",
             },
             {
               action: onDelete,
@@ -148,9 +152,12 @@ export const CustomersPage = () => {
           <Menu className="p-0" id="customer_table_menu">
             <Item
               id="view-product"
-              onClick={() => setDialog({ open: true, type: "View" })}
+              onClick={() => router.push({
+                pathname: "/dashboard/account/customer-detail",
+                query: { id: defaultValue?.current?.id },
+              })}
             >
-              Xem chi tiết
+              Chi tiết / cập nhật
             </Item>
             <Item id="delete-product" onClick={onDelete}>
               Xóa
