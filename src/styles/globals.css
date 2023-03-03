@@ -160,3 +160,11 @@ input[type="checkbox"] {
   border-radius: 4px !important;
   font-weight: 600;
 }
+
+.data-table-container .MuiDataGrid-footerContainer button {
+  @apply text-main mx-2 hover:bg-main-2 !cursor-pointer;
+}
+
+.data-table-container .MuiDataGrid-footerContainer p {
+  @apply text-main font-semibold !cursor-pointer;
+}
