@@ -10,7 +10,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -146,10 +148,16 @@ export const WarehouseImportPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-left mb-3">
-        <Link href="/dashboard/warehouse/import-detail">
-          <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
-        </Link>
+      <Box className="flex justify-between items-center mb-3">
+        <Box className="text-left ">
+          <Link href="/dashboard/warehouse/import-detail">
+            <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
+          </Link>
+        </Box>
+        <Box className="flex gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper

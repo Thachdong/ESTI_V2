@@ -14,6 +14,7 @@ import {
   generatePaginationProps,
   RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -230,9 +231,11 @@ export const QuotationRequestsPage = () => {
     setOpen(true);
   };
 
+  const [ViewReport, setViewReport] = useState(false);
+
   return (
     <>
-      {/* <QuoteRequestHeader /> */}
+      {ViewReport ? <QuoteRequestHeader /> : null}
 
       <Paper className="bgContainer">
         <Box className="flex items-center w-full justify-between mb-3">
@@ -247,8 +250,12 @@ export const QuotationRequestsPage = () => {
             <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
           </Box>
           <Box className="flex gap-2">
-            <RefreshButton />
-            <FilterButton />
+            <StatisticButton
+              onClick={() => setViewReport(!ViewReport)}
+              View={ViewReport}
+            />
+            <FilterButton listFilterKey={[]} />
+            <RefreshButton onClick={() => refetch()} />
           </Box>
         </Box>
 

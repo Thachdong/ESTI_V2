@@ -9,7 +9,10 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -22,7 +25,15 @@ import { orderColumns } from "~modules-dashboard/pages/orders/booking-order/orde
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const BookingOrderTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const BookingOrderTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -143,7 +154,7 @@ export const BookingOrderTable: React.FC = () => {
 
   return (
     <Paper className="bgContainer p-3 shadow">
-      <Box className="flex gap-4 items-center mb-3">
+      <Box className="flex gap-4 items-center mb-3 justify-between">
         <Box>
           <AddButton
             variant="contained"
@@ -151,6 +162,11 @@ export const BookingOrderTable: React.FC = () => {
           >
             TẠO MỚI ĐƠN ĐẶT HÀNG
           </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
       <ContextMenuWrapper

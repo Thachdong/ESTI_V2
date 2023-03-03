@@ -274,9 +274,9 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           />
         </ContextMenuWrapper>
 
-        <Box className="border-0 border-t border-solid border-grey-3">
-          <Typography className="p-3 flex gap-3 items-center">
-            <span className="font-semibold">
+        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
+          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
               Tổng cộng tiền thanh toán(VNĐ):
             </span>
             <span className="text-base"> {_format.getVND(totalPrice)}</span>

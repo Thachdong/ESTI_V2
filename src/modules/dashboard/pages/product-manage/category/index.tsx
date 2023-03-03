@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -121,16 +123,22 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="flex gap-3 items-center w-3/5 mb-3">
-        <Box className="flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-          >
-            Thêm danh mục SP
-          </AddButton>
+      <Box className="mb-3 flex items-center justify-between">
+        <Box className="flex gap-3 items-center w-3/5">
+          <Box className="flex items-center justify-end">
+            <AddButton
+              onClick={() => setDialog({ open: true, type: "Add" })}
+              variant="contained"
+            >
+              Thêm danh mục SP
+            </AddButton>
+          </Box>
+          <SearchBox label="Tìm kiếm" />
         </Box>
-        <SearchBox label="Tìm kiếm" />
+        <Box className="flex gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper
