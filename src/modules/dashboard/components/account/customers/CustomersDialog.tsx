@@ -146,7 +146,7 @@ export const CustomersDialog: React.FC<TProps> = ({
       PaperProps={{ sx: { height: "100%" } }}
     >
       <FormProvider {...methods}>
-        <Box component="form" className="grid grid-cols-5 gap-4">
+        <Box component="form" className="grid grid-cols-5 gap-3">
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar

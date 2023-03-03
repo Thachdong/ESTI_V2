@@ -65,7 +65,7 @@ export const CustomersCurator: React.FC<TProps> = ({ isDisable, index }) => {
     <>
       <Box
         component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
+        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-4"
       >
         <legend>Thông tin tài khoản:</legend>
 
