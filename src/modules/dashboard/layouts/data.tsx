@@ -5,6 +5,8 @@ import WarehouseIcon from "@mui/icons-material/WarehouseOutlined";
 import AccountIcon from "@mui/icons-material/SwitchAccountOutlined";
 import ProductionIcon from "@mui/icons-material/ProductionQuantityLimitsOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 export const menu = [
   {
@@ -40,7 +42,7 @@ export const menu = [
   {
     id: "supplier-quotes",
     title: "Hỏi giá",
-    icon: <ReceiptIcon className="w-[24px] h-[24px]" />,
+    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
         title: "Sản phẩm cần hỏi giá",
@@ -126,17 +128,32 @@ export const menu = [
     ],
   },
   {
+    id: "customer",
+    title: "Khách hàng",
+    icon: <AccountIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Danh sách khách hàng",
+        link: "customer/list",
+      },
+      {
+        title: "Danh sách đối thủ",
+        link: "customer/competitors",
+      },
+      {
+        title: "Danh sách nhu cầu",
+        link: "customer/demand",
+      },
+    ],
+  },
+  {
     id: "account",
     title: "Tài khoản",
-    icon: <AccountIcon className="w-[24px] h-[24px]" />,
+    icon: <PeopleAltOutlinedIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
         title: "Danh sách nhà cung cấp",
         link: "account/suppliers",
-      },
-      {
-        title: "Danh sách khách hàng",
-        link: "account/customers",
       },
       {
         title: "Danh sách nhân viên",
