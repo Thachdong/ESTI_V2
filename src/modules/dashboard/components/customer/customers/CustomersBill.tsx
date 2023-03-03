@@ -44,7 +44,7 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index, type }) => {
   return (
     <Box
       component="fieldset"
-      className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-3"
+      className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-3"
     >
       <legend>Thông tin hóa đơn:</legend>
 
