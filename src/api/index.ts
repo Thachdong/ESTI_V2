@@ -28,3 +28,7 @@ export * from "./pre-quote";
 export * from "./payment-type";
 export * from "./ask-price";
 export * from "./ask-price-order";
+export * from "./customer-competitor";
+export * from "./customer-demand";
+export * from "./customer-opinion";
+export * from "./customer-characteristics";

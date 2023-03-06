@@ -1,4 +1,4 @@
-import { CustomerDetailBasic, CustomerDetailDemand } from "~modules-dashboard/components";
+import { CustomerDetailBasic, CustomerDetailCharacteristics, CustomerDetailCompetitor, CustomerDetailDemand, CustomerDetailOpinion } from "~modules-dashboard/components";
 
 export const CustomerDetailPage: React.FC = () => {
   return (
@@ -8,6 +8,18 @@ export const CustomerDetailPage: React.FC = () => {
       <hr />
 
       <CustomerDetailDemand />
+
+      <hr />
+
+      <CustomerDetailCompetitor />
+
+      <hr />
+
+      <CustomerDetailOpinion />
+
+      <hr />
+
+      <CustomerDetailCharacteristics />
     </>
   );
 };

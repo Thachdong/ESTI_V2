@@ -3,7 +3,16 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { customerDemand, TCreateCustomerDemand, TUpdateCustomerDemand } from "src/api/customer-demand";
+import {
+  customerOpinion,
+  TCreateCustomerOpinion,
+  TUpdateCustomerOpinion,
+} from "src/api";
+import {
+  customerDemand,
+  TCreateCustomerDemand,
+  TUpdateCustomerDemand,
+} from "src/api/customer-demand";
 import {
   BaseButton,
   Dialog,
@@ -13,7 +22,7 @@ import {
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const DemanDialog: React.FC<TDialog> = ({
+export const OpinionDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,
@@ -24,23 +33,28 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   const { id } = useRouter().query;
 
-  const { control, handleSubmit, reset, formState: {isDirty} } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm();
 
   const disabled = type === "View" && !isUpdate;
 
   const title =
     type === "Add"
-      ? "Tạo nhu cầu"
+      ? "Tạo quan điểm cạnh tranh"
       : type === "View" && isUpdate
-      ? "Cập nhật nhu cầu"
+      ? "Cập nhật quan điểm cạnh tranh"
       : "Chi tiết";
 
   // SIDE EFFECTS
   useEffect(() => {
     if (!!defaultValue && type !== "Add") {
-      const { id, demand, turnover } = defaultValue || {};
+      const { id, level, opinionGroup } = defaultValue || {};
 
-      reset({ id, demand, turnover });
+      reset({ id, level, opinionGroup });
     } else {
       reset({});
     }
@@ -48,7 +62,7 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   // METHODS
   const mutateAdd = useMutation(
-    (payload: TCreateCustomerDemand) => customerDemand.create(payload),
+    (payload: TCreateCustomerOpinion) => customerOpinion.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -72,15 +86,18 @@ export const DemanDialog: React.FC<TDialog> = ({
     [id]
   );
 
-  const mutateUpdate = useMutation((payload: TUpdateCustomerDemand) => customerDemand.update(payload), {
-    onSuccess: (data) => {
-      toast.success(data.resultMessage);
+  const mutateUpdate = useMutation(
+    (payload: TUpdateCustomerOpinion) => customerOpinion.update(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
 
-      refetch?.();
+        refetch?.();
 
-      setIsUpdate(false);
-    },
-  });
+        setIsUpdate(false);
+      },
+    }
+  );
 
   const handleUpdate = useCallback(
     async (data: any) => {
@@ -151,22 +168,22 @@ export const DemanDialog: React.FC<TDialog> = ({
       <Box className="grid gap-4">
         <FormInput
           controlProps={{
-            name: "demand",
+            name: "opinionGroup",
             control,
-            rules: { required: "Phải nhập nhu cầu" },
+            rules: { required: "Phải nhập nhóm quan điểm" },
           }}
-          label="Nhu cầu"
+          label="Nhóm quan điểm"
           shrinkLabel
           disabled={disabled}
         />
 
-        <FormInputNumber
+        <FormInput
           controlProps={{
-            name: "turnover",
+            name: "level",
             control,
-            rules: { required: "Phải nhập doanh thu / năm" },
+            rules: { required: "Phải nhập mức độ" },
           }}
-          label="Doanh thu / năm"
+          label="Mức độ (tính trên thang điểm 10)"
           shrinkLabel
           disabled={disabled}
         />

@@ -231,7 +231,7 @@ export const CustomerDetailBasic: React.FC = () => {
   };
 
   return (
-    <Box className="container-center">
+    <Box className="container-center mb-4">
       <FormProvider {...methods}>
         <CustomerDetailAccount isUpdate={isUpdate} />
 

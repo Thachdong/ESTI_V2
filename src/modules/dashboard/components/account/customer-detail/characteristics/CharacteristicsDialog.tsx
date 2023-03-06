@@ -3,17 +3,25 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { customerDemand, TCreateCustomerDemand, TUpdateCustomerDemand } from "src/api/customer-demand";
+import {
+  customerCharacteristics,
+  TCreateCustomerCharacteristics,
+  TUpdateCustomerCharacteristics,
+} from "src/api";
+import {
+  customerDemand,
+  TCreateCustomerDemand,
+  TUpdateCustomerDemand,
+} from "src/api/customer-demand";
 import {
   BaseButton,
   Dialog,
   FormInput,
-  FormInputNumber,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const DemanDialog: React.FC<TDialog> = ({
+export const CharacteristicsDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,
@@ -24,23 +32,28 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   const { id } = useRouter().query;
 
-  const { control, handleSubmit, reset, formState: {isDirty} } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm();
 
   const disabled = type === "View" && !isUpdate;
 
   const title =
     type === "Add"
-      ? "Tạo nhu cầu"
+      ? "Thêm đặc điểm"
       : type === "View" && isUpdate
-      ? "Cập nhật nhu cầu"
+      ? "Cập nhật đặc điểm"
       : "Chi tiết";
 
   // SIDE EFFECTS
   useEffect(() => {
     if (!!defaultValue && type !== "Add") {
-      const { id, demand, turnover } = defaultValue || {};
+      const { id, characteristicsName, description } = defaultValue || {};
 
-      reset({ id, demand, turnover });
+      reset({ id, characteristicsName, description });
     } else {
       reset({});
     }
@@ -48,7 +61,8 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   // METHODS
   const mutateAdd = useMutation(
-    (payload: TCreateCustomerDemand) => customerDemand.create(payload),
+    (payload: TCreateCustomerCharacteristics) =>
+      customerCharacteristics.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -72,15 +86,19 @@ export const DemanDialog: React.FC<TDialog> = ({
     [id]
   );
 
-  const mutateUpdate = useMutation((payload: TUpdateCustomerDemand) => customerDemand.update(payload), {
-    onSuccess: (data) => {
-      toast.success(data.resultMessage);
+  const mutateUpdate = useMutation(
+    (payload: TUpdateCustomerCharacteristics) =>
+      customerCharacteristics.update(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
 
-      refetch?.();
+        refetch?.();
 
-      setIsUpdate(false);
-    },
-  });
+        setIsUpdate(false);
+      },
+    }
+  );
 
   const handleUpdate = useCallback(
     async (data: any) => {
@@ -151,24 +169,26 @@ export const DemanDialog: React.FC<TDialog> = ({
       <Box className="grid gap-4">
         <FormInput
           controlProps={{
-            name: "demand",
+            name: "characteristicsName",
             control,
-            rules: { required: "Phải nhập nhu cầu" },
+            rules: { required: "Phải nhập đặc điểm" },
           }}
-          label="Nhu cầu"
+          label="Đặc điểm"
           shrinkLabel
           disabled={disabled}
         />
 
-        <FormInputNumber
+        <FormInput
           controlProps={{
-            name: "turnover",
+            name: "description",
             control,
-            rules: { required: "Phải nhập doanh thu / năm" },
+            rules: { required: "Phải nhập mô tả" },
           }}
-          label="Doanh thu / năm"
+          label="Mô tả"
           shrinkLabel
           disabled={disabled}
+          multiline
+          minRows={3}
         />
 
         <Box className="flex items-center justify-end">{renderButtons()}</Box>

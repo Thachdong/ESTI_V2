@@ -3,17 +3,20 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { customerDemand, TCreateCustomerDemand, TUpdateCustomerDemand } from "src/api/customer-demand";
+import {
+  customerCompetitor,
+  TCreateCustomerCompetitor,
+  TUpdateCustomerCompetitor,
+} from "src/api";
 import {
   BaseButton,
   Dialog,
   FormInput,
-  FormInputNumber,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const DemanDialog: React.FC<TDialog> = ({
+export const CompetitorDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,
@@ -24,23 +27,28 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   const { id } = useRouter().query;
 
-  const { control, handleSubmit, reset, formState: {isDirty} } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm();
 
   const disabled = type === "View" && !isUpdate;
 
   const title =
     type === "Add"
-      ? "Tạo nhu cầu"
+      ? "Thêm đối thủ"
       : type === "View" && isUpdate
-      ? "Cập nhật nhu cầu"
+      ? "Cập nhật đối thủ"
       : "Chi tiết";
 
   // SIDE EFFECTS
   useEffect(() => {
     if (!!defaultValue && type !== "Add") {
-      const { id, demand, turnover } = defaultValue || {};
+      const { id, competitorName, description } = defaultValue || {};
 
-      reset({ id, demand, turnover });
+      reset({ id, competitorName, description });
     } else {
       reset({});
     }
@@ -48,7 +56,7 @@ export const DemanDialog: React.FC<TDialog> = ({
 
   // METHODS
   const mutateAdd = useMutation(
-    (payload: TCreateCustomerDemand) => customerDemand.create(payload),
+    (payload: TCreateCustomerCompetitor) => customerCompetitor.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -72,15 +80,18 @@ export const DemanDialog: React.FC<TDialog> = ({
     [id]
   );
 
-  const mutateUpdate = useMutation((payload: TUpdateCustomerDemand) => customerDemand.update(payload), {
-    onSuccess: (data) => {
-      toast.success(data.resultMessage);
+  const mutateUpdate = useMutation(
+    (payload: TUpdateCustomerCompetitor) => customerCompetitor.update(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
 
-      refetch?.();
+        refetch?.();
 
-      setIsUpdate(false);
-    },
-  });
+        setIsUpdate(false);
+      },
+    }
+  );
 
   const handleUpdate = useCallback(
     async (data: any) => {
@@ -125,11 +136,7 @@ export const DemanDialog: React.FC<TDialog> = ({
       case type === "View" && isUpdate === true:
         return (
           <>
-            <BaseButton
-              disabled={!isDirty}
-              onClick={handleSubmit(handleUpdate)}
-              className="mr-2"
-            >
+            <BaseButton disabled={!isDirty} onClick={handleSubmit(handleUpdate)} className="mr-2">
               Cập nhật
             </BaseButton>
             <BaseButton
@@ -151,22 +158,22 @@ export const DemanDialog: React.FC<TDialog> = ({
       <Box className="grid gap-4">
         <FormInput
           controlProps={{
-            name: "demand",
+            name: "competitorName",
             control,
-            rules: { required: "Phải nhập nhu cầu" },
+            rules: { required: "Phải nhập tên đối thủ" },
           }}
-          label="Nhu cầu"
+          label="Tên"
           shrinkLabel
           disabled={disabled}
         />
 
-        <FormInputNumber
+        <FormInput
           controlProps={{
-            name: "turnover",
+            name: "description",
             control,
-            rules: { required: "Phải nhập doanh thu / năm" },
+            rules: { required: "Phải nhập mô tả" },
           }}
-          label="Doanh thu / năm"
+          label="Mô tả"
           shrinkLabel
           disabled={disabled}
         />
