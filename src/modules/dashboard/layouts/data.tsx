@@ -155,6 +155,10 @@ export const menu = [
         link: "settings/customer-type-config",
       },
       {
+        title: "Nhóm CSKH",
+        link: "settings/customer-care-group",
+      },
+      {
         title: "Đơn vị",
         link: "settings/unit-config",
       },

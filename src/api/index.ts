@@ -32,3 +32,5 @@ export * from "./customer-competitor";
 export * from "./customer-demand";
 export * from "./customer-opinion";
 export * from "./customer-characteristics";
+export * from "./customer-care-group";
+export * from "./customer-care";
