@@ -12,7 +12,7 @@ type TProps = {
 export const CustomerDetailContactList: React.FC<TProps> = ({ isUpdate }) => {
   const { control, watch } = useFormContext();
 
-  const {contacts} = watch();
+  const { contacts } = watch();
 
   const { remove, append } = useFieldArray({
     control,
@@ -20,14 +20,11 @@ export const CustomerDetailContactList: React.FC<TProps> = ({ isUpdate }) => {
   });
 
   // METHODS
-  const handleRemove = useCallback(
-    (index: number) => {
-      if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
-        remove(index);
-      }
-    },
-    []
-  );
+  const handleRemove = useCallback((index: number) => {
+    if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
+      remove(index);
+    }
+  }, []);
 
   return (
     <Box className="flex flex-col mb-4">
@@ -37,13 +34,12 @@ export const CustomerDetailContactList: React.FC<TProps> = ({ isUpdate }) => {
 
       <List className="bg-white rounded flex-grow p-3">
         {contacts.map((_: any, index: number) => (
-          <React.Fragment key={index}>
-            <CustomerDetailContact
-              isDisable={!isUpdate}
-              index={index}
-              handleRemove={handleRemove}
-            />
-          </React.Fragment>
+          <CustomerDetailContact
+            key={index}
+            isDisable={!isUpdate}
+            index={index}
+            handleRemove={handleRemove}
+          />
         ))}
 
         <AddButton className="!font-medium" onClick={() => append({})}>

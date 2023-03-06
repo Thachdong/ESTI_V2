@@ -1,6 +1,6 @@
 import { request } from "../method";
 
-const BASE_URL = "Demand";
+const BASE_URL = "Competitor";
 
 export type TCreateCustomerDemand = {
   uid: string;

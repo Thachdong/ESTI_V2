@@ -31,9 +31,9 @@ export const CustomerDetailContact: React.FC<TProps> = ({
 
   const { watch } = useFormContext();
 
-  const initStatus = watch(`contacts.${index}.status`);
+  const contactData = watch(`contacts.${index}`);
 
-  const id = watch(`contacts.${index}.id`);
+  const { userName, id, status: initStatus } = contactData || {};
 
   // METHODS
   const handleCollapse = useCallback(
@@ -55,9 +55,13 @@ export const CustomerDetailContact: React.FC<TProps> = ({
   );
 
   const handleUpdateStatus = async (id: string, status: number) => {
-    setStatus(status);
+    const statusName = accountStatus?.find((s) => s.value === status)?.label;
 
-    await updateStatusMutation.mutateAsync({ id, status });
+    if (confirm(`Cập nhật trạng thái ${userName} thành ${statusName}`)) {
+      setStatus(status);
+
+      await updateStatusMutation.mutateAsync({ id, status });
+    }
   };
 
   // SIDE EFFECTS
@@ -110,15 +114,9 @@ export const CustomerDetailContact: React.FC<TProps> = ({
       >
         <CustomerDetailCurator isDisable={isDisable} index={index} />
 
-        <CustomerDetailReceiver
-          isDisable={isDisable}
-          index={index}
-        />
+        <CustomerDetailReceiver isDisable={isDisable} index={index} />
 
-        <CustomerDetailCuratorBill
-          isDisable={isDisable}
-          index={index}
-        />
+        <CustomerDetailCuratorBill isDisable={isDisable} index={index} />
       </Collapse>
     </Box>
   );

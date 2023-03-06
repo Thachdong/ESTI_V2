@@ -226,7 +226,6 @@ export const CustomerDetailBasic: React.FC = () => {
       companyInfo,
       curatorUpdate: contactsPayload,
     };
-console.log(payload);
 
     await mutateUpdate.mutateAsync(payload);
   };
