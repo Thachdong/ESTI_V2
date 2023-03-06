@@ -1,20 +1,11 @@
 import { Box, Collapse, ListItemButton, Typography } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { useMutation } from "react-query";
-import { customer, TActivateCustomer } from "src/api";
-import {
-  AutoCompleteBase,
-  DeleteButton,
-} from "~modules-core/components";
-import { accountStatus } from "~modules-core/constance";
-import { toast } from "~modules-core/toast";
+import { DeleteButton } from "~modules-core/components";
 import { CustomersBill } from "./CustomersBill";
 import { CustomersCurator } from "./CustomersCurator";
 import { CustomersReceiver } from "./CustomersReceiver";
 
 type TProps = {
-  isDisable: boolean;
   type: string;
   index: number;
   handleRemove: (index: number) => void;
@@ -22,21 +13,12 @@ type TProps = {
 
 export const CustomersContactBox: React.FC<TProps> = ({
   type,
-  isDisable,
   index,
   handleRemove,
 }) => {
-  const [status, setStatus] = useState<number>();
-
   const [collapses, setCollapses] = useState<number[]>([0]);
 
   const firstRenderRef = useRef<boolean>(true);
-
-  const { watch } = useFormContext();
-
-  const initStatus = watch(`curatorCreate.${index}.status`);
-
-  const id = watch(`curatorCreate.${index}.id`);
 
   // METHODS
   const handleCollapse = useCallback(
@@ -48,29 +30,10 @@ export const CustomersContactBox: React.FC<TProps> = ({
     [collapses]
   );
 
-  const updateStatusMutation = useMutation(
-    (payload: TActivateCustomer) => customer.updateStatus(payload),
-    {
-      onSuccess: (data: any) => {
-        toast.success(data?.resultMessage);
-      },
-    }
-  );
-
-  const handleUpdateStatus = async (id: string, status: number) => {
-    setStatus(status);
-
-    await updateStatusMutation.mutateAsync({ id, status });
-  };
-
   // SIDE EFFECTS
   useEffect(() => {
     firstRenderRef.current = false;
   }, []);
-
-  useEffect(() => {
-    setStatus(initStatus);
-  }, [initStatus]);
 
   return (
     <Box className="!border-grey-2 !rounded-[4px] mb-2">
@@ -87,19 +50,6 @@ export const CustomersContactBox: React.FC<TProps> = ({
             <DeleteButton color="error" onClick={() => handleRemove(index)} />
           )}
         </ListItemButton>
-
-        {type === "View" && (
-          <AutoCompleteBase
-            onChange={val => handleUpdateStatus(id, val)}
-            value={status}
-            options={accountStatus}
-            label="Trạng thái tài khoản"
-            className="min-w-[200px]"
-            labelKey="label"
-            valueKey="value"
-            shrinkLabel
-          />
-        )}
       </Box>
 
       <Collapse
@@ -108,11 +58,11 @@ export const CustomersContactBox: React.FC<TProps> = ({
         unmountOnExit
         className="w-full"
       >
-        <CustomersCurator isDisable={isDisable} index={index} />
+        <CustomersCurator index={index} />
 
-        <CustomersReceiver type={type} isDisable={isDisable} index={index} />
+        <CustomersReceiver type={type} index={index} />
 
-        <CustomersBill type={type} isDisable={isDisable} index={index} />
+        <CustomersBill type={type} index={index} />
       </Collapse>
     </Box>
   );

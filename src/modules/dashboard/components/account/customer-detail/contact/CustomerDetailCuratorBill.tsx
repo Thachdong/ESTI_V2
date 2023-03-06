@@ -55,7 +55,7 @@ export const CustomerDetailCuratorBill: React.FC<TProps> = ({
         disabled={isDisable}
       />
 
-      <FormInput
+      {/* <FormInput
         controlProps={{
           control,
           name: `contacts.${index}.address`,
@@ -65,7 +65,7 @@ export const CustomerDetailCuratorBill: React.FC<TProps> = ({
         multiline
         minRows={1}
         disabled={isDisable}
-      />
+      /> */}
 
       <FormInput
         controlProps={{

@@ -4,33 +4,30 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
 type TProps = {
-  isDisable: boolean;
   index: number;
   type: string;
 };
 
-export const CustomersBill: React.FC<TProps> = ({ isDisable, index, type }) => {
+export const CustomersBill: React.FC<TProps> = ({ index, type }) => {
   const [defaultValue, setDefaultValue] = useState(true);
 
   const { control, watch, setValue } = useFormContext();
 
   useFieldArray({
     control,
-    name: "curatorCreate",
+    name: "contacts",
   });
 
   const { curatorAddress, curatorEmail, curatorPhone, curatorName } =
-    watch("curatorCreate")[index];
+    watch("contacts")[index];
 
   useEffect(() => {
     if (defaultValue && type === "Add") {
-      setValue(`curatorCreate.${index}.billFullName`, curatorName);
+      setValue(`contacts.${index}.billFullName`, curatorName);
 
-      setValue(`curatorCreate.${index}.billPhone`, curatorPhone);
+      setValue(`contacts.${index}.billPhone`, curatorPhone);
 
-      setValue(`curatorCreate.${index}.billEmail`, curatorEmail);
-
-      setValue(`curatorCreate.${index}.billAddress`, curatorAddress);
+      setValue(`contacts.${index}.billEmail`, curatorEmail);
     }
   }, [
     type,
@@ -52,7 +49,6 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index, type }) => {
         <FormControlLabel
           control={<Checkbox size="small" />}
           label="Cùng thông tin người liên hệ"
-          disabled={isDisable}
           className="col-span-2"
           value={defaultValue}
           onChange={(e: any) => setDefaultValue(e.target.checked)}
@@ -63,46 +59,42 @@ export const CustomersBill: React.FC<TProps> = ({ isDisable, index, type }) => {
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.billFullName`,
+          name: `contacts.${index}.billFullName`,
           rules: { required: "Phải nhập họ tên người nhận hóa đơn" },
         }}
         label="Họ tên người nhận hóa đơn"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.billEmail`,
+          name: `contacts.${index}.billEmail`,
         }}
         label="Email"
         required={false}
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.billPhone`,
+          name: `contacts.${index}.billPhone`,
           rules: { required: "Phải nhập số điện thoại" },
         }}
         label="Số điện thoại 1"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.billAddress`,
+          name: `contacts.${index}.billNote`,
           rules: { required: "Phải nhập địa chỉ" },
         }}
-        label="Địa chỉ"
+        label="Ghi chú"
         multiline
         minRows={3}
-        disabled={isDisable}
         shrinkLabel
       />
     </Box>

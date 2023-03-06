@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import { customer, TUpdateCustomer } from "src/api";
@@ -52,6 +52,7 @@ export const CustomerDetailBasic: React.FC = () => {
       identityCard,
       identityCardImage,
       address,
+      id: companyId,
     } = customerDetail?.companyInfo || {};
 
     const contacts =
@@ -85,7 +86,7 @@ export const CustomerDetailBasic: React.FC = () => {
 
         const {
           fullName,
-          address,
+          // address,
           email,
           phone,
           note,
@@ -106,7 +107,7 @@ export const CustomerDetailBasic: React.FC = () => {
           zaloNumber,
           curatorAddress,
           fullName,
-          address,
+          // address,
           email,
           phone,
           note,
@@ -120,11 +121,13 @@ export const CustomerDetailBasic: React.FC = () => {
           id,
           recipientId,
           receiverId,
+          companyId,
         };
       }) || [];
 
     reset({
       id,
+      companyId,
       salesId,
       salesAdminId,
       deliveryId,
@@ -152,12 +155,28 @@ export const CustomerDetailBasic: React.FC = () => {
         toast.success(data?.resultMessage);
 
         refetch?.();
+
+        setIsUpdate(false);
       },
     }
   );
 
   const handleUpdateCustomer = async (data: any) => {
-    const { contacts = [], ...rest } = data || {};
+    const {
+      contacts = [],
+      companyId,
+      salesId,
+      salesAdminId,
+      deliveryId,
+      avatar,
+      id,
+      ...rest
+    } = data || {};
+
+    const companyInfo = {
+      ...rest,
+      id: companyId,
+    };
 
     const contactsPayload = contacts.map((contact: any) => {
       const {
@@ -198,7 +217,18 @@ export const CustomerDetailBasic: React.FC = () => {
       };
     });
 
-    await mutateUpdate.mutateAsync({ ...rest, curatorUpdate: contactsPayload });
+    const payload = {
+      salesId,
+      salesAdminId,
+      deliveryId,
+      avatar,
+      id,
+      companyInfo,
+      curatorUpdate: contactsPayload,
+    };
+console.log(payload);
+
+    await mutateUpdate.mutateAsync(payload);
   };
 
   return (

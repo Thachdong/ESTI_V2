@@ -40,10 +40,6 @@ export const CustomersPage = () => {
     setDialog({ open: false });
   }, []);
 
-  const onUpdate = useCallback(() => {
-    setDialog({ open: true, type: "View" });
-  }, []);
-
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [

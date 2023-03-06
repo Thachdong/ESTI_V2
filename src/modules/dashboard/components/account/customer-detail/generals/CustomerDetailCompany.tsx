@@ -30,7 +30,7 @@ export const CustomerDetailCompany: React.FC<TProps> = ({isUpdate}) => {
         <FormInput
           controlProps={{
             control,
-            name: "companyName",
+            name: "name",
             rules: { required: "Phải nhập tên doanh nghiệp / khách hàng" },
           }}
           label="Tên doanh nghiệp / khách hàng"
