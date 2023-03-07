@@ -4,8 +4,9 @@ import ReceiptIcon from "@mui/icons-material/ReceiptLongOutlined";
 import WarehouseIcon from "@mui/icons-material/WarehouseOutlined";
 import ProductionIcon from "@mui/icons-material/ProductionQuantityLimitsOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
-import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import ForumIcon from "@mui/icons-material/Forum";
 
 export const menu = [
   {
@@ -51,7 +52,7 @@ export const menu = [
         title: "Đơn hỏi giá",
         link: "supplier-quotes/quotes",
       },
-    ]
+    ],
   },
   {
     id: "purchase",
@@ -177,6 +178,37 @@ export const menu = [
       {
         title: "Hình thức thanh toán",
         link: "settings/payment-type",
+      },
+    ],
+  },
+  {
+    id: "forum",
+    title: "Forum",
+    icon: <ForumIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Nhóm task",
+        link: "forum/task/task-group",
+      },
+      {
+        title: "Danh sách task",
+        link: "forum/task/task-list",
+      },
+      {
+        title: "Nhóm đề tài",
+        link: "forum/discuss/topic",
+      },
+      {
+        title: "Thảo luận",
+        link: "forum/discuss/discussion-topic",
+      },
+      {
+        title: "Họp triển khai",
+        link: "forum/meeting-deploy",
+      },
+      {
+        title: "Nghỉ phép",
+        link: "forum/leave-application",
       },
     ],
   },

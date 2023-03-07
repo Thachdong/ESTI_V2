@@ -85,11 +85,10 @@ export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
               rel="noopener noreferrer"
               className="2xl:max-w-[500px] max-w-[400px] text-ellipsis whitespace-nowrap overflow-hidden no-underline text-main font-semibold"
             >
-              {val}
+              file {"(" + (index + 1) + ")"}
             </a>
             <ButtonBase
               onClick={() => handleRemoveFile(val)}
-              // variant="text"
               className="no-underline text-error bg-[#f4e4e4] rounded-full"
             >
               <CloseIcon className="text-2xl p-1" />
@@ -101,15 +100,15 @@ export const FormUploadfiles: React.FC<TFormImageGallery> = (props) => {
 
     return (
       <Box>
-        <List className="grid gap-2">{renderFiles()}</List>
+        <List className={clsx(className, "grid gap-2")}>{renderFiles()}</List>
 
-        <Button className={clsx(className, "bg-main-2")}>
+        <Button className={clsx("bg-main-2")}>
           <InputLabel
-            className="flex items-center justify-center text-[#fff] cursor-pointer"
+            className="flex items-center justify-center text-[#fff] cursor-pointer mr-1"
             htmlFor={controlProps.name}
           >
             <UploadFileIcon className="mr-2" />
-            <span>{title || "Tải ảnh"}</span>
+            <span className="font-semibold text-sm">{title || "Tải ảnh"}</span>
           </InputLabel>
         </Button>
 

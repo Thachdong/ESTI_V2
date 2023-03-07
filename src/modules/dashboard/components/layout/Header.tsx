@@ -61,7 +61,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
       <Typography
         component="h1"
         variant="h5"
-        className="flex-grow pl-[64px] text-[16px] font-medium uppercase"
+        className="flex-grow pl-[64px] text-[16px] font-medium uppercase sm:block hidden"
       >
         {renderTitle()}
       </Typography>

@@ -302,6 +302,13 @@ export const supplierQuotesDetailStatus = [
   { value: 4, label: "Ngừng sản xuất" },
 ];
 
+export const statusTask = [
+  { id: 1, name: "Chưa thực hiện" },
+  { id: 2, name: "Đang thực hiện" },
+  { id: 3, name: "Hoàn thành" },
+  { id: 4, name: "Chưa hoàn thành" },
+  { id: 5, name: "Huỷ" },
+];
 export const customerCareStatus = [
   { value: 1, label: "Chưa thực hiện" },
   { value: 2, label: "Đang thực hiện" },
