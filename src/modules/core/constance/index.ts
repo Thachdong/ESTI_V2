@@ -315,3 +315,26 @@ export const customerCareStatus = [
   { value: 3, label: "Đã hoàn thành" },
   { value: 4, label: "Đã hủy" },
 ];
+
+export const chartjsOptions = {
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+    },
+  },
+  scales: {
+    xAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'probability'
+      }
+    }],
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'probability',
+      }
+    }],
+  },
+};

@@ -47,9 +47,16 @@ export const customerCareColumns: TGridColDef[] = [
     sortAscValue: 10,
   },
   {
+    field: "curatorName",
+    headerName: "Tên Người liên hệ",
+    minWidth: 180,
+    isSort: false,
+    isFilter: false,
+  },
+  {
     field: "status",
     headerName: "Trạng thái",
-    minWidth: 125,
+    minWidth: 150,
     renderCell: ({ row }) => (
       <StatusChip status={row?.status} label={row?.statusName} />
     ),

@@ -28,7 +28,6 @@ export const CustomerCareDialog: React.FC<TDialog> = ({
   const methods = useForm();
 
   const {
-    control,
     handleSubmit,
     reset,
     formState: { isDirty },
