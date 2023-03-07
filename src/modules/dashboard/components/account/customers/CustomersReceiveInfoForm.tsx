@@ -1,62 +1,51 @@
 import { Box, List } from "@mui/material";
-import React from "react";
-import { useCallback, useState } from "react";
+import React, { useEffect } from "react";
+import { useCallback } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { AddButton } from "~modules-core/components";
 import { CustomersContactBox } from "./CustomersContactBox";
 
 type TProps = {
-  isDisable: boolean;
   type: string;
 };
 
-export const CustomersReceiveInfoForm: React.FC<TProps> = ({
-  type,
-  isDisable,
-}) => {
-  const [curators, setCurators] = useState<any[]>([{}]);
+export const CustomersReceiveInfoForm: React.FC<TProps> = ({ type }) => {
+  const { control, watch, setValue } = useFormContext();
 
-  const { control } = useFormContext();
+  const { contacts = [] } = watch();
 
   const { remove, append } = useFieldArray({
     control,
-    name: "curatorCreate",
+    name: "contacts",
   });
 
+  useEffect(() => {
+    if (contacts?.length === 0) {
+      setValue("contacts", [{}]);
+    }
+  }, [contacts?.length]);
+
   // METHODS
-  const handleAdd = useCallback(() => {
-    setCurators([...curators, {}]);
-
-    append({});
-  }, [curators]);
-
-  const handleRemove = useCallback(
-    (index: number) => {
-      if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
-        setCurators((prev) => prev.filter((c: any, i: number) => i !== index));
-
-        remove(index);
-      }
-    },
-    [curators]
-  );
+  const handleRemove = useCallback((index: number) => {
+    if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
+      remove(index);
+    }
+  }, []);
 
   return (
     <Box>
       <List className="pt-0">
-        {curators.map((curator: any, index: number) => (
-          <React.Fragment key={index}>
-            <CustomersContactBox
-              isDisable={isDisable}
-              type={type}
-              index={index}
-              handleRemove={handleRemove}
-            />
-          </React.Fragment>
+        {contacts.map((_: any, index: number) => (
+          <CustomersContactBox
+            key={index}
+            type={type}
+            index={index}
+            handleRemove={handleRemove}
+          />
         ))}
       </List>
 
-      <AddButton onClick={handleAdd}>Thêm thông tin liên hệ</AddButton>
+      <AddButton onClick={() => append({})}>Thêm thông tin liên hệ</AddButton>
     </Box>
   );
 };

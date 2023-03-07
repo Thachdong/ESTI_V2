@@ -3,3 +3,4 @@ export * from "./unit-config";
 export * from "./warehouse-config";
 export * from "./customer-type-config";
 export * from "./payment-type";
+export * from "./customer-care-group";

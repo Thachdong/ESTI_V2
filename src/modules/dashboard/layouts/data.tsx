@@ -136,8 +136,12 @@ export const menu = [
         link: "account/suppliers",
       },
       {
-        title: "Danh sách nhà khách hàng",
+        title: "Danh sách khách hàng",
         link: "account/customers",
+      },
+      {
+        title: "Danh sách CSKH",
+        link: "account/customer-care",
       },
       {
         title: "Danh sách nhân viên",
@@ -153,6 +157,10 @@ export const menu = [
       {
         title: "Loại khách hàng",
         link: "settings/customer-type-config",
+      },
+      {
+        title: "Nhóm CSKH",
+        link: "settings/customer-care-group",
       },
       {
         title: "Đơn vị",

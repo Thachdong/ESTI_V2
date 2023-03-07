@@ -15,14 +15,14 @@ export const CustomerColumns: TGridColDef[] = [
     sortDescValue: 0,
     sortAscValue: 9,
   },
-  {
-    field: "branchCode",
-    headerName: "Chi nhánh",
-    width: 150,
-    filterKey: "salesCode",
-    sortDescValue: 2,
-    sortAscValue: 11,
-  },
+  // {
+  //   field: "branchCode",
+  //   headerName: "Chi nhánh",
+  //   width: 150,
+  //   filterKey: "salesCode",
+  //   sortDescValue: 2,
+  //   sortAscValue: 11,
+  // },
   {
     field: "salesCode",
     headerName: "Sale phụ trách",

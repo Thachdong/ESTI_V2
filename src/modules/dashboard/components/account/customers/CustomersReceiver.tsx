@@ -4,13 +4,11 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormInput } from "~modules-core/components";
 
 type TProps = {
-  isDisable: boolean;
   index: number;
   type: string;
 };
 
 export const CustomersReceiver: React.FC<TProps> = ({
-  isDisable,
   index,
   type,
 }) => {
@@ -20,7 +18,7 @@ export const CustomersReceiver: React.FC<TProps> = ({
 
   useFieldArray({
     control,
-    name: "curatorCreate",
+    name: "contacts",
   });
 
   const {
@@ -29,17 +27,15 @@ export const CustomersReceiver: React.FC<TProps> = ({
     curatorPhone,
     curatorName,
     curatorNote,
-  } = watch("curatorCreate")[index];
-
-  console.log(watch("curatorCreate")[index]);
+  } = watch("contacts")[index];
 
   useEffect(() => {
     if (defaultValue && type === "Add") {
-      setValue(`curatorCreate.${index}.receiverName`, curatorName);
-      setValue(`curatorCreate.${index}.receiverPhone1`, curatorPhone);
-      setValue(`curatorCreate.${index}.receiverEmail`, curatorEmail);
-      setValue(`curatorCreate.${index}.receiverAddress`, curatorAddress);
-      setValue(`curatorCreate.${index}.receiverNote`, curatorNote);
+      setValue(`contacts.${index}.receiverName`, curatorName);
+      setValue(`contacts.${index}.receiverPhone1`, curatorPhone);
+      setValue(`contacts.${index}.receiverEmail`, curatorEmail);
+      setValue(`contacts.${index}.receiverAddress`, curatorAddress);
+      setValue(`contacts.${index}.receiverNote`, curatorNote);
     }
   }, [
     type,
@@ -62,7 +58,6 @@ export const CustomersReceiver: React.FC<TProps> = ({
         <FormControlLabel
           control={<Checkbox size="small" />}
           label="Cùng thông tin người liên hệ"
-          disabled={isDisable}
           className="col-span-2"
           value={defaultValue}
           onChange={(e: any) => setDefaultValue(e.target.checked)}
@@ -73,68 +68,62 @@ export const CustomersReceiver: React.FC<TProps> = ({
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverName`,
+          name: `contacts.${index}.receiverName`,
           rules: { required: "Phải nhập họ tên người nhận hàng" },
         }}
         label="Họ tên người nhận hàng"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverEmail`,
+          name: `contacts.${index}.receiverEmail`,
         }}
         label="Email"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverPhone1`,
+          name: `contacts.${index}.receiverPhone1`,
           rules: { required: "Phải nhập số điện thoại 1" },
         }}
         label="Số điện thoại 1"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverPhone2`,
+          name: `contacts.${index}.receiverPhone2`,
           rules: { required: "Phải nhập số điện thoại 2" },
         }}
         label="Số điện thoại 2"
-        disabled={isDisable}
         shrinkLabel
       />
 
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverAddress`,
+          name: `contacts.${index}.receiverAddress`,
           rules: { required: "Phải nhập địa chỉ" },
         }}
         label="Địa chỉ"
         multiline
         minRows={3}
-        disabled={isDisable}
         shrinkLabel
       />
       <FormInput
         controlProps={{
           control,
-          name: `curatorCreate.${index}.receiverNote`,
+          name: `contacts.${index}.receiverNote`,
           rules: undefined,
         }}
         label="Ghi chú"
         multiline
         minRows={3}
-        disabled={isDisable}
         shrinkLabel
       />
     </Box>

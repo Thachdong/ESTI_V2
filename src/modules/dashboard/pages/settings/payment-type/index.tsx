@@ -103,9 +103,9 @@ export const PaymentTypePage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex items-center gap-3 w-3/5 mb-3">
-        <AddButton variant="contained" onClick={onAdd}>
-          Tạo H/Thức thanh toán
+      <Box className="flex items-center gap-3 w-full md:w-4/5 lg:w-3/5 mb-3">
+        <AddButton className="min-w-[300px]" variant="contained" onClick={onAdd}>
+          Tạo hình thức thanh toán
         </AddButton>
         <SearchBox label="Tìm kiếm tên đơn vị" />
       </Box>

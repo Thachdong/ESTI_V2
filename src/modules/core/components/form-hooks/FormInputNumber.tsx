@@ -6,7 +6,7 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputNumberBase } from "../form-bases";
 
 export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
-  const { controlProps, ...baseProps } = props;
+  const { controlProps, label, ...baseProps } = props;
 
   const renderController = ({
     field: { ref, ...restField },
@@ -25,8 +25,15 @@ export const FormInputNumber: React.FC<TFormInputNumberProps> = (props) => {
           ),
         };
 
+      const rules = controlProps.rules || {};
+
+      const updateLabel = Object.keys(rules).includes("required")
+      ? `${label} *`
+      : label;   
+
     const defaultProps = {
       error: !!error,
+      label: updateLabel,
       ...helperTextOpbject,
       ...restField,
       ...baseProps,
