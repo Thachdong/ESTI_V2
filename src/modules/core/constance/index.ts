@@ -309,3 +309,9 @@ export const statusTask = [
   { id: 4, name: "Chưa hoàn thành" },
   { id: 5, name: "Huỷ" },
 ];
+export const customerCareStatus = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Đã hoàn thành" },
+  { value: 4, label: "Đã hủy" },
+];

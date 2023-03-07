@@ -2,7 +2,6 @@ import QuoteIcon from "@mui/icons-material/RequestQuoteOutlined";
 import OrderIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
 import ReceiptIcon from "@mui/icons-material/ReceiptLongOutlined";
 import WarehouseIcon from "@mui/icons-material/WarehouseOutlined";
-import AccountIcon from "@mui/icons-material/SwitchAccountOutlined";
 import ProductionIcon from "@mui/icons-material/ProductionQuantityLimitsOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
@@ -129,25 +128,6 @@ export const menu = [
     ],
   },
   {
-    id: "customer",
-    title: "Khách hàng",
-    icon: <AccountIcon className="w-[24px] h-[24px]" />,
-    childrens: [
-      {
-        title: "Danh sách khách hàng",
-        link: "customer/list",
-      },
-      {
-        title: "Danh sách đối thủ",
-        link: "customer/competitors",
-      },
-      {
-        title: "Danh sách nhu cầu",
-        link: "customer/demand",
-      },
-    ],
-  },
-  {
     id: "account",
     title: "Tài khoản",
     icon: <PeopleAltOutlinedIcon className="w-[24px] h-[24px]" />,
@@ -155,6 +135,14 @@ export const menu = [
       {
         title: "Danh sách nhà cung cấp",
         link: "account/suppliers",
+      },
+      {
+        title: "Danh sách khách hàng",
+        link: "account/customers",
+      },
+      {
+        title: "Danh sách CSKH",
+        link: "account/customer-care",
       },
       {
         title: "Danh sách nhân viên",
@@ -170,6 +158,10 @@ export const menu = [
       {
         title: "Loại khách hàng",
         link: "settings/customer-type-config",
+      },
+      {
+        title: "Nhóm CSKH",
+        link: "settings/customer-care-group",
       },
       {
         title: "Đơn vị",
