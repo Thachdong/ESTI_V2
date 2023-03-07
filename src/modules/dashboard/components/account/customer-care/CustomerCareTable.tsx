@@ -9,8 +9,11 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -20,7 +23,12 @@ import { TDefaultDialogState } from "~types/dialog";
 import { CustomerCareDialog } from "./CustomerCareDialog";
 import { customerCareColumns } from "./data";
 
-export const CustomerCareTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  viewReport: boolean;
+};
+
+export const CustomerCareTable: React.FC<TProps> = ({onViewReport, viewReport}) => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -126,10 +134,14 @@ export const CustomerCareTable: React.FC = () => {
 
   return (
     <Paper className="flex-grow !h-screen shadow bgContainer p-3">
-      <Box className="flex gap-3 items-center w-3/5 mb-4">
+      <Box className="flex gap-3 items-center justify-between mb-4">
         <AddButton onClick={() => onOpen("Add")}>Tạo phiên CSKH</AddButton>
 
-        <SearchBox />
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={viewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper

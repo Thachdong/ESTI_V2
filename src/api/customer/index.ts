@@ -59,7 +59,7 @@ type BillRecipientCreate = {
 export type TActivateCustomer = {
   id: string;
   status: number;
-}
+};
 
 export type TUpdateCustomer = any;
 
@@ -70,6 +70,11 @@ export const customer = {
     request.getPagination<any>(BASE_URL, { ...params }),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
+
+  getStatisticById: (customerId: string) =>
+    request.get<any>(
+      `${BASE_URL}/GetValueMainOrderInYear?customerId=${customerId}`
+    ),
 
   uploadImage: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
@@ -82,5 +87,6 @@ export const customer = {
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
 
-  updateStatus: (payload: TActivateCustomer) => request.post<TActivateCustomer, any>(`${BASE_URL}/IsActive`, payload)
+  updateStatus: (payload: TActivateCustomer) =>
+    request.post<TActivateCustomer, any>(`${BASE_URL}/IsActive`, payload),
 };

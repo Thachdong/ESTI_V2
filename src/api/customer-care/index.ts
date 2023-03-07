@@ -29,6 +29,9 @@ export const customerCare = {
   getStatisticByYear: (params?: any) =>
     request.get<any>(`${BASE_URL}/GetTicketSupportInYear`, { ...params }),
 
+  getStatistic: (params?: any) =>
+    request.get<any>(`${BASE_URL}/GetTicketSupport`, { ...params }),
+
   create: (payload: TCreateCustomerCare) =>
     request.post<TCreateCustomerCare, any>(BASE_URL, payload),
 

@@ -15,6 +15,8 @@ import {
   Legend,
 } from "chart.js";
 import { MonthlyChart } from "./MonthlyChart";
+import { YearChart } from "./YearChart";
+import { StatisticCards } from "./StatisticCards";
 
 ChartJS.register(
   CategoryScale,
@@ -52,7 +54,7 @@ export const CustomerCareStatistics: React.FC = () => {
     <Box className="mb-4">
       <Typography className="font-medium mb-3">Thống kê CSKH</Typography>
 
-      <Box className="flex items-center justify-end">
+      <Box className="flex items-center justify-end mb-4">
         <ButtonGroup variant="contained" className="mr-3">
           <Button
             className={clsx(
@@ -94,10 +96,12 @@ export const CustomerCareStatistics: React.FC = () => {
         />
       </Box>
 
+      <StatisticCards fromdate={fromDate} todate={toDate} />
+
       {dataType === "Month" ? (
         <MonthlyChart fromdate={fromDate} todate={toDate} />
       ) : (
-        <></>
+        <YearChart fromdate={fromDate} todate={toDate} />
       )}
     </Box>
   );
