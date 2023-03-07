@@ -13,11 +13,11 @@ export const QuoteRequestDetailGeneral: React.FC<TProps> = ({
 }) => {
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         thông tin chung
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         <FormInputBase label="Mã Y/C báo giá:" value={code} disabled />
 
         <FormInputBase

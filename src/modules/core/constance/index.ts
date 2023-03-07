@@ -35,7 +35,6 @@ export const genderData = [
 export const paymentTypes = [
   { id: 1, name: "Tiền mặt" },
   { id: 2, name: "Chuyển khoản" },
-  { id: 3, name: "Khác" },
 ];
 
 export const paymentExpiredIn = [
@@ -255,21 +254,87 @@ export const billStatus = [
 ];
 
 export const purchasePlanStatus = [
-  {value: 0, label: "Chưa thực hiện"},
-  {value: 1, label: "Đã kết chuyển"},
-  {value: 2, label: "Hủy"},
+  { value: 0, label: "Chưa thực hiện" },
+  { value: 1, label: "Đã kết chuyển" },
+  { value: 2, label: "Hủy" },
 ];
 
 export const purchaseOrderStatus = [
-  {value: 1, label: "Chưa thực hiện"},
-  {value: 2, label: "Đang thực hiện"},
-  {value: 3, label: "Hoàn thành"},
-  {value: 4, label: "Hủy"},
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Hoàn thành" },
+  { value: 4, label: "Hủy" },
 ];
 
 export const purchaseOrderBillStatus = [
-  {value: 0, label: "Chưa thanh toán"},
-  {value: 1, label: "Hoàn thành"},
-  {value: 2, label: "Quá hạn"},
-  {value: 3, label: "Hủy"},
+  { value: 0, label: "Chưa thanh toán" },
+  { value: 1, label: "Hoàn thành" },
+  { value: 2, label: "Quá hạn" },
+  { value: 3, label: "Hủy" },
 ];
+
+export const supplierQuotesProductStatus = [
+  { value: 0, label: "Chưa thực hiện" },
+  { value: 1, label: "Đang thực hiện" },
+  { value: 2, label: "Đã kết chuyển" },
+  { value: 3, label: "Hủy" },
+];
+
+export const supplierQuotesProductTypes = [
+  { value: 1, label: "Cần giá trước" },
+  { value: 2, label: "Tình trạng hàng" },
+  { value: 3, label: "Nhu cầu cao" },
+  { value: 4, label: "Xin giảm giá" },
+  { value: 5, label: "Sales tự lấy giá" },
+];
+
+export const supplierQuotesStatus = [
+  { value: 0, label: "Chưa gửi" },
+  { value: 1, label: "Đã gửi" },
+  { value: 2, label: "Hoàn thành" },
+  { value: 3, label: "Hủy" },
+];
+
+export const supplierQuotesDetailStatus = [
+  { value: 1, label: "Sản phẩm mới" },
+  { value: 2, label: "Nhu cầu cao" },
+  { value: 3, label: "Cạnh tranh cao" },
+  { value: 4, label: "Ngừng sản xuất" },
+];
+
+export const statusTask = [
+  { id: 1, name: "Chưa thực hiện" },
+  { id: 2, name: "Đang thực hiện" },
+  { id: 3, name: "Hoàn thành" },
+  { id: 4, name: "Chưa hoàn thành" },
+  { id: 5, name: "Huỷ" },
+];
+export const customerCareStatus = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Đã hoàn thành" },
+  { value: 4, label: "Đã hủy" },
+];
+
+export const chartjsOptions = {
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+    },
+  },
+  scales: {
+    xAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'probability'
+      }
+    }],
+    yAxes: [{
+      scaleLabel: {
+        display: true,
+        labelString: 'probability',
+      }
+    }],
+  },
+};

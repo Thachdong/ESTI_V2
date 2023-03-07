@@ -15,7 +15,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedSupplier, setSelectedSupplier] = useState<any>();
 
-  const {query} = useRouter();
+  const { query } = useRouter();
 
   const { control, watch } = useFormContext();
 
@@ -26,12 +26,12 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
   // DOM RENDERING
   return (
     <Box className="grid grid-cols-2 gap-4 my-4">
-      <Paper className="rounded-sm p-3">
-        <Typography className="text-sm font-medium mb-3">
+      <Box className="">
+        <Typography className="text-sm font-semibold mb-3 ">
           THÔNG TIN NHÀ CUNG CẤP
         </Typography>
 
-        <Box className="grid gap-4">
+        <Box className="grid gap-3 rounded p-3 bg-white">
           {withoutPurchaseInvoice && !query.id ? (
             <FormSelectAsync
               fetcher={suppliers.getList}
@@ -44,7 +44,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
               labelKey="supplierCode"
             />
           ) : (
-            <Box className="grid grid-cols-3 gap-4">
+            <Box className="grid grid-cols-3 gap-3">
               <FormInputBase
                 value={supplier?.supplierCode || supplier?.code}
                 label="Mã nhà cung cấp"
@@ -73,14 +73,14 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
             disabled
           />
         </Box>
-      </Paper>
+      </Box>
 
-      <Paper className="rounded-sm p-3">
-        <Typography className="text-sm font-medium mb-3">
+      <Box className="">
+        <Typography className="text-sm font-semibold mb-3">
           THÔNG TIN LIÊN HỆ
         </Typography>
 
-        <Box className="grid gap-4">
+        <Box className="grid gap-3 rounded p-3 bg-white">
           <FormInputBase
             name="name"
             label="Người phụ trách"
@@ -102,7 +102,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
             disabled
           />
         </Box>
-      </Paper>
+      </Box>
     </Box>
   );
 };

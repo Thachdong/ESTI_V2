@@ -56,7 +56,7 @@ export const PurchaseRequestDetailPage = () => {
       deliverDate,
       receiverAddress,
       paymentDocument,
-      curatorEmail
+      curatorEmail,
     } = purchaseRequestDetail?.productOrder?.productOrder || {};
 
     const productOrderDetail = purchaseRequestDetail?.productOrderDetail || [];
@@ -110,10 +110,10 @@ export const PurchaseRequestDetailPage = () => {
           <>
             <Box className="grid grid-cols-2 gap-4 mb-4">
               <Box className="flex flex-col">
-                <Typography className="font-bold uppercase mb-3">
+                <Typography className="font-bold uppercase mb-3 text-sm">
                   Ghi chú
                 </Typography>
-                <Box className="bg-white grid gap-4 rounded-sm flex-grow p-3">
+                <Box className="bg-white grid gap-4 rounded flex-grow p-3">
                   <FormInput
                     controlProps={{
                       name: "note",
@@ -135,9 +135,7 @@ export const PurchaseRequestDetailPage = () => {
               <PurchaseDetailNote title={"Ghi chú của cập nhật"} value={""} />
             </Box>
 
-            <PurchaseDetailImportHistory
-              status={status}
-            />
+            <PurchaseDetailImportHistory status={status} />
 
             <PurchaseDetailBillHistory
               purchaseCode={
@@ -152,6 +150,7 @@ export const PurchaseRequestDetailPage = () => {
           isUpdate={isUpdate}
           setIsUpdate={setIsUpdate}
           refetch={refetch}
+          purchaseRequestDetail={purchaseRequestDetail}
         />
       </FormProvider>
     </Box>

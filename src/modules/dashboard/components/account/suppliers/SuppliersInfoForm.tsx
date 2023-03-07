@@ -1,27 +1,35 @@
 import { Box } from "@mui/material";
 import { useFormContext } from "react-hook-form";
-import {  useQuery } from "react-query";
-import { staff } from "src/api";
+import { useQuery } from "react-query";
+import { paymentType, staff } from "src/api";
 import { FormInput, FormSelect } from "~modules-core/components";
 import {
   paymentExpiredIn,
-  paymentTypes,
+  // paymentTypes,
   productTypes,
 } from "~modules-core/constance";
 
 type TProps = {
   isDisable: boolean;
-}
+};
 
-export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {  
+export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const context = useFormContext();
 
-  const {control} = context;
+  const { control, watch } = context;
 
-  const {data: deliveryStaffs} = useQuery(["deliveryStaffs"], () => staff.getListDeliveryStaff().then(res => res.data));
+  const { data: deliveryStaffs } = useQuery(["deliveryStaffs"], () =>
+    staff.getListDeliveryStaff().then((res) => res.data)
+  );
 
-  const {data: saleAdminStaffs} = useQuery(["saleAdminStaffs"], () => staff.getListSaleAdmin().then(res => res.data));
-  
+  const { data: saleAdminStaffs } = useQuery(["saleAdminStaffs"], () =>
+    staff.getListSaleAdmin().then((res) => res.data)
+  );
+
+  const { data: paymentTypes } = useQuery(["paymentType"], () =>
+    paymentType.getList().then((res) => res.data)
+  );
+
   return (
     <Box>
       <Box
@@ -73,6 +81,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {
           }}
           label="Hình thức thanh toán"
           disabled={isDisable}
+          labelKey="paymentTypeName"
         />
 
         <FormSelect
@@ -144,7 +153,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {
           options={saleAdminStaffs || []}
           controlProps={{
             control,
-            name: "salesAdminID",
+            name: "salesAdminId",
             rules: { required: "Phải chọn nhân viên phụ trách" },
           }}
           label="Nhân viên phụ trách"
@@ -156,7 +165,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({isDisable}) => {
           options={deliveryStaffs || []}
           controlProps={{
             control,
-            name: "deliveryID",
+            name: "deliveryId",
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"

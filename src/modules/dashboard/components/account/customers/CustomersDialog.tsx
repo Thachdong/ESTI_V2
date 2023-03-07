@@ -1,9 +1,8 @@
 import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import _ from "lodash";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
 import { customer } from "src/api";
 import {
   Dialog,
@@ -15,16 +14,19 @@ import { CustomersDialogButtons } from "./CustomersDialogButtons";
 import { CustomersInfoForm } from "./CustomersInfoForm";
 import { CustomersReceiveInfoForm } from "./CustomersReceiveInfoForm";
 
-export const CustomersDialog: React.FC<TDialog> = ({
+type TProps = TDialog & {
+  onAddCallback?: (opt: any) => void;
+};
+
+export const CustomersDialog: React.FC<TProps> = ({
   onClose,
   open,
   type,
   refetch,
   defaultValue,
+  onAddCallback,
 }) => {
   const [tab, setTab] = useState("1");
-
-  const [isUpdate, setIsUpdate] = useState(false);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
@@ -32,8 +34,10 @@ export const CustomersDialog: React.FC<TDialog> = ({
 
   const methods = useForm({
     mode: "onBlur",
-    shouldUnregister: false,
-    reValidateMode: "onSubmit",
+    defaultValues: {
+      contacts: [{}],
+      isNotCompany: false,
+    }
   });
 
   const {
@@ -42,85 +46,17 @@ export const CustomersDialog: React.FC<TDialog> = ({
     reset,
   } = methods;
 
-  const { data: customerDetail } = useQuery(
-    ["CustomerDetail_" + defaultValue?.id],
-    () => customer.getById(defaultValue?.id).then((res) => res.data),
-    {
-      enabled: !!defaultValue,
-    }
-  );
-
-  const convertCustomerDetail = useCallback((data: any) => {
-    const { companyInfo = {}, customer = {}, curatorInfo = [] } = data || {};
-
-    return {
-      companyInfoId: companyInfo.id,
-      customerId: customer.id,
-      salesId: customer.salesId,
-      salesAdminId: customer.salesAdminId,
-      deliveryId: customer.deliveryId,
-      avatar: customer.avatar,
-      companyName: companyInfo.name,
-      professionId: companyInfo.professionId,
-      taxCode: companyInfo.taxCode,
-      address: companyInfo.address,
-      hotline: companyInfo.hotline,
-      email: companyInfo.email,
-      website: companyInfo.website,
-      paymentLimit: companyInfo.paymentLimit,
-      paymentType: companyInfo.paymentType,
-      identityCard: companyInfo.identityCard,
-      identityCardImage: !!companyInfo.identityCardImage
-        ? companyInfo.identityCardImage?.split?.(",")
-        : [],
-      curatorCreate: curatorInfo.map((curator: any) => ({
-        id: curator?.id,
-        userName: curator?.userName,
-        typeAccount: curator?.typeAccount,
-        typeDiscount: curator?.typeDiscount,
-        status: curator?.status,
-
-        curatorName: curator?.curatorName,
-        curatorDepartment: curator?.curatorDepartment,
-        curatorGender: curator?.curatorGender,
-        curatorAddress: curator?.curatorAddress,
-        curatorPhone: curator?.curatorPhone,
-        curatorEmail: curator?.curatorEmail,
-
-        receiverId: curator?.receiverById?.id,
-        receiverAddress: curator?.receiverById?.address,
-        receiverEmail: curator?.receiverById?.email,
-        receiverName: curator?.receiverById?.fullName,
-        receiverPhone1: curator?.receiverById?.phone1,
-        receiverPhone2: curator?.receiverById?.phone2,
-
-        billId: curator?.recipientById?.id,
-        billAddress: curator?.recipientById?.address,
-        billEmail: curator?.recipientById?.email,
-        billFullName: curator?.recipientById?.fullName,
-        billPhone: curator?.recipientById?.phone,
-      })),
-    };
-  }, []);
-
   // SIDE EFFECTS
   useEffect(() => {
-    if (type === "Add") {
+    if (type === "QuickCreate" && !!defaultValue) {
+      reset({ ...defaultValue });
+    } else {
       reset({});
     }
-
-    if (type === "View" && defaultValue) {
-      reset(convertCustomerDetail(customerDetail));
-    }
-  }, [type, defaultValue, customerDetail]);
+  }, [type, defaultValue]);
 
   // CREATE TITLE BASE ON DIALOG TYPE
-  const title =
-    type === "Add"
-      ? "Tạo khách hàng"
-      : type === "View" && isUpdate
-      ? "Cập nhật khách hàng"
-      : "Thông tin khách hàng";
+  const title = "Tạo khách hàng";
 
   return (
     <Dialog
@@ -131,22 +67,20 @@ export const CustomersDialog: React.FC<TDialog> = ({
       PaperProps={{ sx: { height: "100%" } }}
     >
       <FormProvider {...methods}>
-        <Box component="form" className="grid grid-cols-5 gap-4">
+        <Box component="form" className="grid grid-cols-5 gap-3">
           <Box className="">
             <Box className="flex justify-center mb-5">
               <FormAvatar
                 loader={customer.uploadImage}
                 controlProps={{ control, name: "avatar" }}
-                label="Ảnh đại diện của nhà cung cấp"
+                label="Ảnh đại diện"
               />
             </Box>
             <Box className="flex flex-col items-center justify-center">
               <CustomersDialogButtons
-                type={type}
-                isUpdate={isUpdate}
-                setIsUpdate={setIsUpdate}
                 onClose={onClose}
                 refetch={refetch}
+                onAddCallback={onAddCallback}
               />
             </Box>
           </Box>
@@ -179,14 +113,11 @@ export const CustomersDialog: React.FC<TDialog> = ({
 
               <Box className="tabpanel-container relative pb-4 pt-2">
                 <TabPanelContainForm value="1" index={"1"}>
-                  <CustomersInfoForm isDisable={type === "View" && !isUpdate} />
+                  <CustomersInfoForm />
                 </TabPanelContainForm>
 
                 <TabPanelContainForm value="2" index={"2"}>
-                  <CustomersReceiveInfoForm
-                    isDisable={type === "View" && !isUpdate}
-                    type={type || ""}
-                  />
+                  <CustomersReceiveInfoForm type={type || ""} />
                 </TabPanelContainForm>
               </Box>
             </Box>

@@ -11,11 +11,11 @@ export const BillDetailReciever: React.FC = () => {
   const { defaultReceiver } = watch();
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN NHẬN HÓA ĐƠN
       </Typography>
 
-      <Box className="bg-white rounded-sm p-3">
+      <Box className="bg-white rounded p-3">
         {!id && (
           <FormCheckbox
             controlProps={{
@@ -68,7 +68,6 @@ export const BillDetailReciever: React.FC = () => {
           }}
           label="Địa chỉ:"
           disabled={defaultReceiver || !!id}
-          
         />
       </Box>
     </Box>

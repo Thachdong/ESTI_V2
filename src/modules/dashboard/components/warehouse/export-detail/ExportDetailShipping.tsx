@@ -5,18 +5,18 @@ import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNu
 
 type TProps = {
   exportStatus: number;
-}
+};
 
-export const ExportDetailShipping: React.FC<TProps> = ({exportStatus}) => {
+export const ExportDetailShipping: React.FC<TProps> = ({ exportStatus }) => {
   const { control } = useFormContext();
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Box>
       <Typography className="text-sm font-medium mb-3">
         THÔNG TIN VẬN CHUYỂN
       </Typography>
 
-      <Box className="grid gap-4">
+      <Box className="grid gap-3 rounded p-3 bg-white">
         <FormInput
           controlProps={{
             control,
@@ -59,6 +59,6 @@ export const ExportDetailShipping: React.FC<TProps> = ({exportStatus}) => {
           disabled={exportStatus > 0}
         />
       </Box>
-    </Paper>
+    </Box>
   );
 };

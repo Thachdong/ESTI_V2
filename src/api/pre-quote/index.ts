@@ -15,7 +15,7 @@ export type TCreatePreQuote = {
   paymentType: string;
   deliverDate: number;
   expireDate: number;
-  receiverAdress: string;
+  receiverAddress: string;
   paymentDocument: string;
   smgNote: string;
   salesNote: string;
@@ -41,6 +41,13 @@ export type TUpdatePreQuoteProduct = Omit<
   "totalPrice"
 > & {
   id: string;
+};
+
+export type TPreQuoteMailConfirm = {
+  code: string;
+  title?: string;
+  note?: string;
+  attachFile?: string;
 };
 
 const BASE_URL = "PreQuote";
@@ -70,4 +77,17 @@ export const preQuote = {
 
   sendMail: (payload: TSendMailProps) =>
     request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
+
+  checkMailCode: (code: string) =>
+    request.get<any>(`${BASE_URL}/CheckCodeResponse?code=${code}`),
+
+  mailConfirm: (payload: TPreQuoteMailConfirm) =>
+    request.post<any, any>(
+      `${BASE_URL}/MailResponse?code=${payload.code}&title=${payload?.title}&note=${payload?.note}&attachFile=${payload?.attachFile}`,
+      {}
+    ),
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+  getPreQuoteDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/PreQuoteDetail`, { id }),
 };

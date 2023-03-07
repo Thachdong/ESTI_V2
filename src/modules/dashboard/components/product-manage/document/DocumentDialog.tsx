@@ -53,8 +53,8 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   useEffect(() => {
     if (type === "Add") {
       reset({});
-    } else {
-      reset(defaultValue);
+    } else if (!!defaultValue) {
+      reset({ ...defaultValue });
     }
   }, [type, defaultValue]);
 
@@ -84,13 +84,27 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleAddDocument = async (data: any) => {
-    const payload = {
-      ...data,
-      attachFiles: data?.attachFiles?.join(", "),
-      thumbnail: data?.thumbnail?.join(", ")
+    await mutationAdd.mutateAsync(data);
+  };
+
+  const mutationUpdate = useMutation(
+    (payload: TDocument) => productDocument.update(payload),
+    {
+      onError: (error: any) => {
+        toast.error(error?.resultMessage);
+      },
+      onSuccess: (data) => {
+        toast.success(data?.resultMessage);
+
+        refetch?.();
+        onClose();
+        setIsUpdate(false);
+      },
     }
-    
-    await mutationAdd.mutateAsync(payload);
+  );
+
+  const handleUpdateCategory = async (data: any) => {
+    await mutationUpdate.mutateAsync(data);
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE
@@ -114,7 +128,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             </BaseButton>
           </>
         );
-      case type === "View" && isUpdate === false:
+      case (type === "View" || type === "ViewDocument") && isUpdate === false:
         return (
           <>
             <BaseButton type="button" onClick={() => setIsUpdate(true)}>
@@ -129,11 +143,11 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             </BaseButton>
           </>
         );
-      case type === "View" && isUpdate === true:
+      case (type === "View" || type === "ViewDocument") && isUpdate === true:
         return (
           <>
             <BaseButton
-              //   onClick={handleSubmit(handleUpdateCategory)}
+              onClick={handleSubmit(handleUpdateCategory)}
               disabled={!isDirty}
             >
               Cập nhật
@@ -187,7 +201,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
 
           <FormSelectAsync
             fetcher={category.getList}
-            fetcherParams={{parentId: parentCategoryId}}
+            fetcherParams={{ parentId: parentCategoryId }}
             controlProps={{
               control,
               name: "categoryId",

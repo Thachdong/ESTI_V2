@@ -26,23 +26,30 @@ export const QuoteRequestDetailAttach: React.FC = () => {
   const renderAttachFile = useCallback(() => {
     if (!attachFile || attachFile?.length === 0) {
       return (
-        <Typography className="font-semibold text-center text-grey mb-3">
+        <Typography className="text-center text-grey my-3">
           Không có file đính kèm
         </Typography>
       );
     } else {
       return (
-        <List>
+        <List className="grid gap-2">
           {attachFile?.map((file: string) => (
-            <ListItem key={file} className="flex py-0" disableGutters>
+            <ListItem
+              key={file}
+              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded "
+              disableGutters
+            >
               <Typography
                 component="a"
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate"
+                className="flex gap-2 items-center truncate no-underline text-main 2xl:max-w-[500px] max-w-[400px] "
               >
-                {file}
+                <AttachFileIcon className="rotate-90 text-xl" />{" "}
+                <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+                  {file}
+                </span>
               </Typography>
 
               <DeleteButton
@@ -61,20 +68,22 @@ export const QuoteRequestDetailAttach: React.FC = () => {
     <InputLabel
       disabled={loading}
       htmlFor="attachFile"
-      className="flex items-cetner justify-center text-main font-bold rounded-sm bg-[#2684C51A] border border-dashed border-main py-3 w-full h-[40px] cursor-pointer uppercase h-auto"
+      className="flex items-center justify-center text-main font-bold rounded bg-[#2684C51A] border border-solid border-main w-full h-[40px] cursor-pointer uppercase"
     >
       <AttachFileIcon className="rotate-45" />
-      <Typography component="span">Thêm file đính kèm</Typography>
+      <Typography component="span" className="font-semibold">
+        Thêm file đính kèm
+      </Typography>
     </InputLabel>
   );
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         File đính kèm
       </Typography>
 
-      <Box className="bg-white rounded-sm flex-grow p-3">
+      <Box className="bg-white rounded flex-grow p-3">
         {renderAttachFile()}
         <FormUploadBase
           controlProps={{

@@ -17,8 +17,10 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   FormInputBase,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -148,7 +150,7 @@ export const ProductsPage = () => {
   };
 
   const handleDelete = useCallback(async () => {
-    const {productName, id} = defaultValue.current || {};
+    const { productName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -223,20 +225,22 @@ export const ProductsPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
+      <Box className="grid grid-cols-3 mb-3">
         <SearchBox label="Tìm kiếm sale phụ trách" />
 
-        <Box className="flex items-center justify-end">
+        <Box className="flex items-center justify-end gap-3 col-span-2">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm sản phẩm
           </AddButton>
 
-          <AddButton variant="contained" className="mr-3">
-            <InputLabel htmlFor="product-file" className="cursor-pointer font-semibold text-white">
+          <AddButton variant="contained" className="">
+            <InputLabel
+              htmlFor="product-file"
+              className="cursor-pointer font-semibold text-white"
+            >
               Thêm file excel
               <FormInputBase
                 id="product-file"
@@ -246,6 +250,8 @@ export const ProductsPage = () => {
               />
             </InputLabel>
           </AddButton>
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
 

@@ -18,7 +18,7 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
 
   const { control, watch, setValue } = useFormContext();
 
-  const { customerId, isQuoteRequest } = watch();
+  const { customerId, isQuoteRequest, curatorId } = watch();
 
   // DATA FETCHING
   const { data } = useQuery(
@@ -32,7 +32,7 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
   // SIDE EFFECTS
   useEffect(() => {
     if (!id && !!curator) {
-      const { curatorName, curatorPhone, curatorEmail, curatorDepartment } =
+      const { curatorName, curatorPhone, curatorEmail, curatorDepartment, receiverById } =
         curator || {};
 
       setValue("curatorName", curatorName);
@@ -42,16 +42,38 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
       setValue("curatorEmail", curatorEmail);
 
       setValue("curatorDepartmentId", curatorDepartment);
+
+      const {address} = receiverById || {};
+
+      setValue("receiverAddress", address);
     }
   }, [curator, id]);
 
+  useEffect(() => {
+    const {curatorInfo = []} = data || {};
+
+    const selectedCurator = curatorInfo.find((c: any) => c.id === curatorId);
+
+    if (!selectedCurator && !id) {
+      setValue("curatorName", "");
+
+      setValue("curatorPhone", "");
+
+      setValue("curatorEmail", "");
+
+      setValue("curatorDepartmentId", "");
+
+      setValue("receiverAddress", "");
+    }
+  }, [data, curatorId])
+
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         thông tin liên hệ
       </Typography>
 
-      <Box className="bg-white rounded-sm flex-grow p-3">
+      <Box className="bg-white rounded grid gap-3 p-3">
         <FormSelect
           controlProps={{
             name: "curatorId",
@@ -60,7 +82,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={data?.curatorInfo || []}
           label="Người phụ trách"
-          className="mb-4"
           labelKey="curatorName"
           callback={(opt: any) => setCurator(opt)}
           disabled={isQuoteRequest || disabled}
@@ -74,7 +95,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={curatorDepartments}
           label="Phòng ban"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
 
@@ -85,7 +105,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập điện thoại" },
           }}
           label="Điện thoại"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
 
@@ -96,7 +115,6 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập Email" },
           }}
           label="Email"
-          className="mb-4"
           disabled={isQuoteRequest || disabled}
         />
       </Box>

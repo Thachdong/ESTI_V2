@@ -64,14 +64,15 @@ export const QuoteDetailPage: React.FC = () => {
       curatorPhone,
       curatorEmail,
       curatorDepartmentId,
+      performBranchId,
     } = preQuoteView;
 
-    let documents = []
+    let documents = [];
     try {
       documents = JSON.parse(paymentDocument || "[]").map(
         (doc: any) => doc?.id
       );
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
 
@@ -91,6 +92,7 @@ export const QuoteDetailPage: React.FC = () => {
       curatorPhone,
       curatorEmail,
       curatorDepartmentId,
+      branchId: performBranchId,
       products: [...preQuoteDetailView],
       attachFile: !attachFile ? [] : attachFile.split(","),
       paymentDocument: documents,
@@ -140,9 +142,13 @@ export const QuoteDetailPage: React.FC = () => {
             <QuoteDetailTerms disabled={disabled} />
           </Box>
 
-          <QuoteDetailShopManagerNote disabled={disabled} />
+          {!!id && (
+            <>
+              <QuoteDetailShopManagerNote disabled={true} />
 
-          <QuoteDetailSaleNote disabled={disabled} />
+              <QuoteDetailSaleNote disabled={true} />
+            </>
+          )}
         </Box>
 
         <QuoteDetailButtons
@@ -157,6 +163,7 @@ export const QuoteDetailPage: React.FC = () => {
               quoteDetail?.preQuoteView?.receiverEmail,
             ],
           }}
+          quoteDetail={quoteDetail}
         />
       </FormProvider>
     </Box>

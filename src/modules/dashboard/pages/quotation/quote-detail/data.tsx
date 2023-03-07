@@ -1,3 +1,4 @@
+import { Box, Tooltip } from "@mui/material";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -15,7 +16,7 @@ export const productColumns: TGridColDef[] = [
   {
     field: "productName",
     headerName: "Tên SP",
-    minWidth: 200,
+    minWidth: 250,
     flex: 1,
   },
   {
@@ -26,11 +27,11 @@ export const productColumns: TGridColDef[] = [
   {
     field: "specs",
     headerName: "Quy cách",
-    minWidth: 100,
+    minWidth: 75,
   },
   {
     field: "unitName",
-    headerName: "    vị",
+    headerName: "Đơn vị",
     minWidth: 75,
     flex: 1,
   },
@@ -43,7 +44,7 @@ export const productColumns: TGridColDef[] = [
   {
     field: "price",
     headerName: "Giá",
-    minWidth: 75,
+    minWidth: 100,
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row.price),
   },
@@ -56,14 +57,25 @@ export const productColumns: TGridColDef[] = [
   {
     field: "totalPrice",
     headerName: "Thành tiền",
-    minWidth: 100,
+    minWidth: 120,
     flex: 1,
-    renderCell: ({ row }) => _format.getVND(row.totalPrice),
+    renderCell: ({ row }) => {
+      const { quantity, price, vat } = row || {};
+
+      const total = quantity * price;
+
+      const tax = (total * +vat) / 100;
+      return (
+        <Tooltip title={"Sau thuế: " + _format.getVND(total + tax)}>
+          <Box>{_format.getVND(row.totalPrice)}</Box>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "note",
     headerName: "Ghi chú",
-    minWidth: 100,
+    minWidth: 80,
     flex: 1,
   },
 ];

@@ -17,7 +17,7 @@ export const BillDetailStatus: React.FC<TProps> = ({
   currentStatus,
   refetch,
 }) => {
-  const {id} = useRouter().query;
+  const { id } = useRouter().query;
 
   const { control, watch, reset } = useForm();
 
@@ -44,25 +44,25 @@ export const BillDetailStatus: React.FC<TProps> = ({
 
     const payload = {
       id: id as string,
-      status
+      status,
     };
 
     await mutateUpdate.mutateAsync(payload);
   }, [status, id]);
 
   useEffect(() => {
-    reset({status: currentStatus})
+    reset({ status: currentStatus });
   }, [currentStatus]);
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Trạng thái hóa đơn
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         <FormSelect
-          options={billStatus.filter(s => s.value >= currentStatus)}
+          options={billStatus.filter((s) => s.value >= currentStatus)}
           controlProps={{
             control,
             name: "status",

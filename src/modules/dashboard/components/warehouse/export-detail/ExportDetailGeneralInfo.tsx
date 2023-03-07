@@ -16,7 +16,11 @@ type TProps = {
   setSelectedBranch: Dispatch<any>;
 };
 
-export const ExportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail, selectedBranch, setSelectedBranch }) => {
+export const ExportDetailGeneralInfo: React.FC<TProps> = ({
+  orderDetail,
+  selectedBranch,
+  setSelectedBranch,
+}) => {
   // EXTRACT PROPS
   const { control, watch } = useFormContext();
 
@@ -93,12 +97,12 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail, selecte
   }, [isForDelete, orderDetail]);
 
   return (
-    <Paper className="rounded-sm p-3 mb-4">
+    <Box className="">
       <Typography className="text-sm font-medium mb-3">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-3 rounded p-3 mb-4 bg-white">
         {renderInputTag()}
 
         <FormInputBase
@@ -110,6 +114,6 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail, selecte
           label="Mã kho"
         />
       </Box>
-    </Paper>
+    </Box>
   );
 };

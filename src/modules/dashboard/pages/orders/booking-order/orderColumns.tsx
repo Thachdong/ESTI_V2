@@ -13,10 +13,11 @@ export const orderColumns: TGridColDef[] = [
       params.row.created
         ? moment(params.row.created).format("DD/MM/YYYY")
         : "__",
-    minWidth: 120,
+    minWidth: 150,
     sortAscValue: 12,
     sortDescValue: 0,
-    filterKey: "created",
+    filterKey: "createdDate",
+    type: "date",
   },
   {
     field: "mainOrderCode",
@@ -95,9 +96,15 @@ export const orderColumns: TGridColDef[] = [
     filterKey: "status",
     type: "select",
     options: orderStatus,
-    renderCell: ({row}) => {
-      const colors = ["default", "info", "success", "error"]
-      return <StatusChip label={row?.statusName} status={row?.status} color={colors[row?.status - 1] as any} />
-    }
+    renderCell: ({ row }) => {
+      const colors = ["default", "info", "success", "error"];
+      return (
+        <StatusChip
+          label={row?.statusName}
+          status={row?.status}
+          color={colors[row?.status - 1] as any}
+        />
+      );
+    },
   },
 ];

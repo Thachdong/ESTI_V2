@@ -65,14 +65,13 @@ export const StoragePage: React.FC = () => {
   // DOM RENDER
   return (
     <Box>
-      <Box className="grid grid-cols-2 mb-3">
+      <Box className="flex items-center justify-between mb-3">
         <StoragePositionStatus />
 
-        <Box className="flex items-center justify-end">
+        <Box className="">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Thêm vị trí
           </AddButton>
@@ -102,7 +101,7 @@ export const StoragePage: React.FC = () => {
         onClose={onDialogClose}
         open={dialog.open && dialog.type === "View"}
         refetch={refetch}
-        defaultValue={defaultValue .current}
+        defaultValue={defaultValue.current}
         title="THÔNG TIN VỊ TRÍ LƯU"
       />
     </Box>

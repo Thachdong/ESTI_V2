@@ -7,7 +7,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "code",
     headerName: "Mã",
-    width: 150,
+    minWidth: 150,
     filterKey: "code",
     sortDescValue: 0,
     sortAscValue: 13,
@@ -15,7 +15,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "username",
     headerName: "Tên tài khoản",
-    width: 150,
+    minWidth: 150,
     filterKey: "userName",
     sortDescValue: 2,
     sortAscValue: 14,
@@ -23,15 +23,16 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "fullName",
     headerName: "Tên nhân viên",
-    width: 150,
+    minWidth: 150,
     filterKey: "fullName",
     sortDescValue: 4,
     sortAscValue: 15,
+    flex: 1,
   },
   {
     field: "roleName",
     headerName: "Chức vụ",
-    width: 150,
+    minWidth: 150,
     filterKey: "roleName",
     sortDescValue: 5,
     sortAscValue: 16,
@@ -39,7 +40,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "branchCode",
     headerName: "Chi nhánh",
-    width: 150,
+    minWidth: 150,
     filterKey: "branchCode",
     sortDescValue: 1,
     sortAscValue: 12,
@@ -47,7 +48,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "phone",
     headerName: "Số điện thoại",
-    width: 150,
+    minWidth: 150,
     filterKey: "phone",
     sortDescValue: 6,
     sortAscValue: 17,
@@ -55,7 +56,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "address",
     headerName: "Địa chỉ",
-    width: 150,
+    minWidth: 150,
     filterKey: "address",
     sortDescValue: 7,
     sortAscValue: 18,
@@ -63,7 +64,7 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "email",
     headerName: "Email",
-    width: 150,
+    minWidth: 150,
     filterKey: "email",
     sortDescValue: 8,
     sortAscValue: 19,
@@ -72,8 +73,8 @@ export const staffColumns: TGridColDef[] = [
     field: "birthday",
     type: "date",
     headerName: "Ngày sinh",
-    width: 150,
-    filterKey: "birthDate",
+    minWidth: 150,
+    filterKey: "fromBirthDate",
     sortDescValue: 9,
     sortAscValue: 20,
     renderCell: ({ row }) =>
@@ -82,15 +83,21 @@ export const staffColumns: TGridColDef[] = [
   {
     field: "statusName",
     headerName: "Trạng thái",
-    width: 150,
+    minWidth: 150,
     filterKey: "status",
     sortDescValue: 10,
     sortAscValue: 21,
     type: "select",
     options: accountStatus,
-    renderCell: ({row}) => {
-      const colors = ["success", "default", "error"]
-      return <StatusChip status={row?.status} label={row?.statusName} color={colors[row?.status] as any} />
-    }
+    renderCell: ({ row }) => {
+      const colors = ["success", "default", "error"];
+      return (
+        <StatusChip
+          status={row?.status}
+          label={row?.statusName}
+          color={colors[row?.status] as any}
+        />
+      );
+    },
   },
 ];

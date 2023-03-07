@@ -20,7 +20,10 @@ type TProps = {
   productList: any[];
 };
 
-export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList}) => {
+export const PurchaseBillDetailProducts: React.FC<TProps> = ({
+  data,
+  productList,
+}) => {
   const { id } = useRouter().query;
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -44,12 +47,12 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: handleDelete,
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -118,26 +121,32 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
         totalPrice: _format.getVND(resultObj.totalPrice),
         totalTax: _format.getVND(resultObj.totalTax),
         finalPrice: _format.getVND(resultObj.finalPrice),
-      }
+      };
     }
   }, [data, products]);
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+      <Box className="flex items-center mb-3 justify-between">
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
         </AddButton>
       </Box>
 
-      <Box className="bg-white">
+      <Box className="bg-white rounded">
         <ContextMenuWrapper
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item disabled={!!id} id="view-product" onClick={() => onOpen("Update")}>
+              <Item
+                disabled={!!id}
+                id="view-product"
+                onClick={() => onOpen("Update")}
+              >
                 Cập nhật
               </Item>
               <Item disabled={!!id} id="delete-product" onClick={handleDelete}>
@@ -164,14 +173,26 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ):{" "}
-            {getPrice.totalPrice}
+        <List className="border-0 border-t border-solid p-0 pb-1">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):
+            </span>
+            <span className="text-base"> {getPrice.totalPrice}</span>
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
           </ListItem>
         </List>
       </Box>

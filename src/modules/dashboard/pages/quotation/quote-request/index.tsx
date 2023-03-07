@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Drawer, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
@@ -10,13 +10,19 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { QuoteRequestHeader } from "~modules-dashboard/components";
+import {
+  QuoteRequestHeader,
+  ViewListProductDrawer,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { quotationRequestColumns } from "./data";
 
@@ -179,7 +185,7 @@ export const QuotationRequestsPage = () => {
       <Item
         id="view"
         onClick={() =>
-          handleRedirect(`quote-request-detail?id=${defaultValue.current?.id}`)
+          router.push(`quote-request-detail?id=${defaultValue.current?.id}`)
         }
       >
         Nội dung chi tiết
@@ -214,20 +220,43 @@ export const QuotationRequestsPage = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await quoteRequest.getPreOrderDetail(id).then((res) => {
+      return res.data;
+    });
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
+  const [ViewReport, setViewReport] = useState(false);
+
   return (
     <>
-      <QuoteRequestHeader />
+      {ViewReport ? <QuoteRequestHeader /> : null}
 
       <Paper className="bgContainer">
-        <Box className="flex items-center w-3/4 mb-3">
-          <AddButton
-            onClick={() => router.push("quote-request-detail")}
-            className="w-1/2 mr-3"
-          >
-            Tạo yêu cầu
-          </AddButton>
+        <Box className="flex items-center w-full justify-between mb-3">
+          <Box className="flex gap-3 w-3/5">
+            <AddButton
+              onClick={() => router.push("quote-request-detail")}
+              className=""
+            >
+              Tạo yêu cầu
+            </AddButton>
 
-          <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+            <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+          </Box>
+          <Box className="flex gap-2">
+            <StatisticButton
+              onClick={() => setViewReport(!ViewReport)}
+              View={ViewReport}
+            />
+            <FilterButton listFilterKey={[]} />
+            <RefreshButton onClick={() => refetch()} />
+          </Box>
         </Box>
 
         <ContextMenuWrapper
@@ -241,13 +270,22 @@ export const QuotationRequestsPage = () => {
               loading: isLoading || isFetching,
               ...paginationProps,
             }}
+            getRowClassName={({ id }) =>
+              dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+            }
             componentsProps={{
               row: {
                 onMouseEnter: onMouseEnterRow,
+                onDoubleClick: handleViewProduct,
               },
             }}
           />
         </ContextMenuWrapper>
+        <ViewListProductDrawer
+          Open={Open}
+          onClose={() => setOpen(false)}
+          data={dataViewDetail?.current?.preOrderDetailView as []}
+        />
       </Paper>
     </>
   );

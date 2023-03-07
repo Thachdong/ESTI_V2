@@ -9,16 +9,31 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import { BookingOrderNoteDialog, BookingOrderStatusDialog } from "~modules-dashboard/components";
+import {
+  BookingOrderNoteDialog,
+  BookingOrderStatusDialog,
+  ViewListProductDrawer,
+} from "~modules-dashboard/components";
 import { orderColumns } from "~modules-dashboard/pages/orders/booking-order/orderColumns";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const BookingOrderTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const BookingOrderTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -124,9 +139,22 @@ export const BookingOrderTable: React.FC = () => {
   const onOpen = useCallback((type: string) => {
     setDialog({ open: true, type });
   }, []);
+
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await mainOrder.getMainOrderDetail(id).then((res) => {
+      return res.data;
+    });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
-    <Paper className="bgContainer p-2 shadow">
-      <Box className="flex gap-4 items-center mb-2">
+    <Paper className="bgContainer p-3 shadow">
+      <Box className="flex gap-4 items-center mb-3 justify-between">
         <Box>
           <AddButton
             variant="contained"
@@ -134,6 +162,11 @@ export const BookingOrderTable: React.FC = () => {
           >
             TẠO MỚI ĐƠN ĐẶT HÀNG
           </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
       <ContextMenuWrapper
@@ -197,8 +230,12 @@ export const BookingOrderTable: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -214,6 +251,11 @@ export const BookingOrderTable: React.FC = () => {
         open={Boolean(dialog.open && dialog.type === "AddNote")}
         type={dialog.type}
         defaultValue={defaultValue.current}
+      />
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.mainOrderDetail}
       />
     </Paper>
   );

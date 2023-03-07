@@ -1,18 +1,17 @@
 import { Box } from "@mui/material";
-import { useState, useEffect, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { products, stamp, TCreateStamp, TProduct, TUpdateStamp } from "src/api";
+import { useState, useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useQuery } from "react-query";
+import { products, stamp, TProduct } from "src/api";
 import {
-  BaseButton,
   Dialog,
   FormInput,
   FormSelect,
   FormSelectAsync,
 } from "~modules-core/components";
 import { productTypesStamp } from "~modules-core/constance";
-import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
+import { StampButtons } from "./StampButtons";
 
 export const StampDialog: React.FC<TDialog> = ({
   onClose,
@@ -25,20 +24,23 @@ export const StampDialog: React.FC<TDialog> = ({
 
   const [selectedProduct, setSelectedProduct] = useState<TProduct>();
 
-  const {
-    handleSubmit,
-    formState: { isDirty },
-    reset,
-    control,
-    watch,
-    setValue,
-  } = useForm<any>({
+  const methods = useForm<any>({
     mode: "onBlur",
   });
 
-  const disabled = type === "View";
+  const { reset, control, watch, setValue } = methods;
+
+  const disabled = type === "View" || type === "ViewLabel";
 
   const labelType = watch("labelType");
+
+  const { data: stampDetail, refetch: refetchDetail } = useQuery(
+    ["StampDetail", defaultValue?.id],
+    () => stamp.getById(defaultValue?.id).then((res) => res.data),
+    {
+      enabled: !!defaultValue?.id,
+    }
+  );
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -56,7 +58,7 @@ export const StampDialog: React.FC<TDialog> = ({
         specs,
         chemicalName,
         casCode,
-      } = defaultValue || {};
+      } = stampDetail || {};
 
       reset({
         id,
@@ -71,13 +73,15 @@ export const StampDialog: React.FC<TDialog> = ({
         casCode,
       });
     }
-  }, [type, defaultValue]);
+  }, [type, stampDetail]);
 
   useEffect(() => {
-    setValue("productId", "");
+    if (type === "Add") {
+      setValue("productId", "");
 
-    setSelectedProduct(undefined);
-  }, [labelType]);
+      setSelectedProduct(undefined);
+    }
+  }, [labelType, type]);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -95,128 +99,11 @@ export const StampDialog: React.FC<TDialog> = ({
 
   // CREATE TITLE BASE ON DIALOG TYPE
   const title =
-    type === "Add" || type === "AddFromAnotherRoute"
+    type === "Add" || type === "CreateLabel"
       ? "Thêm nhãn sản phẩm"
       : type === "View" && isUpdate
       ? "Cập nhật nhãn sản phẩm"
       : "Thông tin nhãn sản phẩm";
-
-  // MUTATION DECLARATIONS
-  const mutationAddStamp = useMutation(
-    (payload: TCreateStamp) => stamp.create(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
-
-        refetch?.();
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleAddStamp = async (data: any) => {
-    const payload: TCreateStamp = {
-      labelType: data?.labelType,
-      productId: data?.productId,
-      chemicalName: data?.chemicalName,
-      casCode: data?.casCode,
-    };
-
-    await mutationAddStamp.mutateAsync(payload);
-  };
-
-  const mutationUpdateStamp = useMutation(
-    (payload: TUpdateStamp) => stamp.update(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
-
-        refetch?.();
-
-        setIsUpdate(false);
-
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
-
-  const handleUpdateStamp = async (data: any) => {
-    const payload = {
-      id: data?.id,
-      chemicalName: data?.chemicalName,
-      casCode: data?.casCode,
-    };
-
-    await mutationUpdateStamp.mutateAsync(payload);
-  };
-
-  const handleSelectProductCallback = useCallback((option: any) => {
-    setSelectedProduct(option);
-  }, []);
-
-  // RENDER BUTTONS BASE ON DIALOG TYPE
-  const renderButtons = () => {
-    switch (true) {
-      case type === "Add" || type === "AddFromAnotherRoute":
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleAddStamp)}
-              disabled={!isDirty}
-            >
-              Tạo
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="!bg-main-1 ml-3"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === false:
-        return (
-          <>
-            <BaseButton type="button" onClick={() => setIsUpdate(true)}>
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="!bg-main-1 ml-3"
-              onClick={onClose}
-            >
-              Đóng
-            </BaseButton>
-          </>
-        );
-      case type === "View" && isUpdate === true:
-        return (
-          <>
-            <BaseButton
-              onClick={handleSubmit(handleUpdateStamp)}
-              disabled={!isDirty}
-            >
-              Cập nhật
-            </BaseButton>
-            <BaseButton
-              type="button"
-              className="!bg-main-1 ml-3"
-              onClick={() => setIsUpdate(false)}
-            >
-              Quay lại
-            </BaseButton>
-          </>
-        );
-    }
-  };
 
   return (
     <Dialog
@@ -226,100 +113,109 @@ export const StampDialog: React.FC<TDialog> = ({
       title={title}
       headerClassName="text-center"
     >
-      <Box component="form">
-        <Box className="grid gap-4">
-          <FormSelect
-            options={productTypesStamp}
-            controlProps={{
-              control,
-              name: "labelType",
-              rules: { required: "Phải chọn nhóm sản phẩm" },
-            }}
-            label="Nhóm sản phẩm"
-            disabled={disabled}
-          />
-          <FormSelectAsync
-            fetcher={products.getList}
-            fetcherParams={{ labelType }}
-            controlProps={{
-              control,
-              name: "productId",
-              rules: { required: "Phải chọn mã sản phẩm" },
-            }}
-            label="Mã sản phẩm"
-            callback={handleSelectProductCallback}
-            disabled={disabled || !labelType}
-            labelKey="productCode"
-          />
+      <FormProvider {...methods}>
+        <Box component="form">
+          <Box className="grid gap-4">
+            <FormSelect
+              options={productTypesStamp}
+              controlProps={{
+                control,
+                name: "labelType",
+                rules: { required: "Phải chọn nhóm sản phẩm" },
+              }}
+              label="Nhóm sản phẩm"
+              disabled={disabled}
+            />
+            <FormSelectAsync
+              fetcher={products.getList}
+              fetcherParams={{ labelType }}
+              controlProps={{
+                control,
+                name: "productId",
+                rules: { required: "Phải chọn mã sản phẩm" },
+              }}
+              label="Mã sản phẩm"
+              callback={(opt) => setSelectedProduct(opt)}
+              disabled={disabled || !labelType}
+              labelKey="productCode"
+            />
 
-          <FormSelectAsync
-            fetcher={products.getList}
-            fetcherParams={{ labelType }}
-            controlProps={{
-              control,
-              name: "productId",
-              rules: { required: "Phải chọn tên sản phẩm" },
-            }}
-            label="Tên sản phẩm"
-            callback={handleSelectProductCallback}
-            disabled={disabled || !labelType}
-            labelKey="productName"
-          />
+            <FormSelectAsync
+              fetcher={products.getList}
+              fetcherParams={{ labelType }}
+              controlProps={{
+                control,
+                name: "productId",
+                rules: { required: "Phải chọn tên sản phẩm" },
+              }}
+              label="Tên sản phẩm"
+              callback={(opt) => setSelectedProduct(opt)}
+              disabled={disabled || !labelType}
+              labelKey="productName"
+            />
 
-          <FormInput
-            controlProps={{
-              control,
-              name: "manufactor",
-            }}
-            label="Hãng sản xuất"
-            disabled={true}
-          />
-
-          <FormInput
-            controlProps={{
-              control,
-              name: "origin",
-            }}
-            label="Xuất xứ"
-            disabled={true}
-          />
-
-          {labelType !== 3 && (
             <FormInput
               controlProps={{
                 control,
-                name: "specs",
+                name: "manufactor",
               }}
-              label="Quy cách"
+              label="Hãng sản xuất"
               disabled={true}
             />
-          )}
 
-          {labelType === 1 && (
             <FormInput
               controlProps={{
-                name: "chemicalName",
+                control,
+                name: "origin",
+              }}
+              label="Xuất xứ"
+              disabled={true}
+            />
+
+            {labelType !== 3 && (
+              <FormInput
+                controlProps={{
+                  control,
+                  name: "specs",
+                }}
+                label="Quy cách"
+                disabled={true}
+              />
+            )}
+
+            {labelType === 1 && (
+              <FormInput
+                controlProps={{
+                  name: "chemicalName",
+                  control,
+                }}
+                label="Công thức hóa học"
+                disabled={disabled && !isUpdate}
+              />
+            )}
+
+            <FormInput
+              controlProps={{
+                name: "casCode",
                 control,
               }}
-              label="Công thức hóa học"
+              label="Mã CAS"
               disabled={disabled && !isUpdate}
             />
-          )}
+          </Box>
 
-          <FormInput
-            controlProps={{
-              name: "casCode",
-              control,
-            }}
-            label="Mã CAS"
-            disabled={disabled && !isUpdate}
-          />
+          <Box className="flex justify-center items-center mt-4">
+            <StampButtons
+              type={type}
+              isUpdate={isUpdate}
+              onClose={onClose}
+              refetch={refetch}
+              refetchDetail={refetchDetail}
+              setIsUpdate={setIsUpdate}
+            />
+          </Box>
         </Box>
-
-        <Box className="flex justify-center items-center mt-4">
-          {renderButtons()}
-        </Box>
-      </Box>
+      </FormProvider>
     </Dialog>
   );
 };

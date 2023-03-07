@@ -82,7 +82,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
 
       return (
         <ImageList
-          className="w-full py-4 pr-4"
+          className="w-full py-4 pr-4 m-0"
           cols={3}
           gap={8}
           {...imageListProps}
@@ -119,7 +119,8 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
           disabled={disabled}
           className={clsx(
             className,
-            disabled ? "disable-form-input" : "bg-main-2"
+            disabled ? "disable-form-input" : "bg-main-2",
+            "mt-3"
           )}
         >
           <InputLabel

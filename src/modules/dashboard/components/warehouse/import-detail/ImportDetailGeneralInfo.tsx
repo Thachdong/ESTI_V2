@@ -14,9 +14,7 @@ type TProps = {
   orderDetail: any;
 };
 
-export const ImportDetailGeneralInfo: React.FC<TProps> = ({
-  orderDetail,
-}) => {
+export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
@@ -75,12 +73,12 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
   }, [withoutPurchaseInvoice, orderDetail]);
 
   return (
-    <Paper className="rounded-sm p-3">
-      <Typography className="text-sm font-medium mb-3">
+    <Box className="">
+      <Typography className="text-sm font-semibold mb-3">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid grid-cols-2 gap-4 rounded p-3 bg-white">
         {renderTagsBaseOnInvoiceFlag()}
 
         <FormSelectAsync
@@ -134,6 +132,6 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
           disabled
         />
       </Box>
-    </Paper>
+    </Box>
   );
 };

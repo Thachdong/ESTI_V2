@@ -10,7 +10,7 @@ import {
   DropdownButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
-import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
+import { detailColumns } from "~modules-dashboard/pages/orders/order-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { OrderDetailProductsDialog } from "./OrderDetailProductsDialog";
@@ -31,8 +31,20 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
 
   const products = watch("products");
 
+  let columnsBaseId = [...detailColumns];
+
+  if (!id) {
+    const field = {
+      field: "quantity",
+      headerName: "Số lượng",
+      minWidth: 100,
+    };
+
+    columnsBaseId.splice(7, 3, field);
+  }
+
   const columns: TGridColDef[] = [
-    ...productColumns,
+    ...columnsBaseId,
     {
       field: "action",
       headerName: "",
@@ -44,12 +56,12 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
             {
               action: () => onOpen("Update"),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: handleDelete,
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -118,14 +130,16 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
         totalPrice: _format.getVND(resultObj.totalPrice),
         totalTax: _format.getVND(resultObj.totalTax),
         finalPrice: _format.getVND(resultObj.finalPrice),
-      }
+      };
     }
   }, [data, products]);
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Box className="flex items-center mb-3">
-        <Typography className="font-bold uppercase mr-3">Sản phẩm</Typography>
+      <Box className="flex items-center mb-3 justify-between">
+        <Typography className="font-bold uppercase mr-3 text-sm">
+          Sản phẩm
+        </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>
           Thêm SP
@@ -137,7 +151,11 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
           menuId="product_table_menu"
           menuComponent={
             <Menu className="p-0" id="product_table_menu">
-              <Item disabled={!!id} id="view-product" onClick={() => onOpen("Update")}>
+              <Item
+                disabled={!!id}
+                id="view-product"
+                onClick={() => onOpen("Update")}
+              >
                 Cập nhật
               </Item>
               <Item disabled={!!id} id="delete-product" onClick={handleDelete}>
@@ -164,14 +182,25 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ):{" "}
-            {getPrice.totalPrice}
+        <List className="border-0 border-t border-solid border-grey-3 p-0 pb-1">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalPrice}</span>
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):{" "}
+            </span>
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
           </ListItem>
         </List>
       </Box>

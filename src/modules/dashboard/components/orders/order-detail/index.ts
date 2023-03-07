@@ -10,3 +10,4 @@ export * from "./OrderDetailNote";
 export * from "./OrderDetailButtons";
 export * from "./OrderDetailGeneralView";
 export * from "./OrderDetailStatus";
+export * from "./PrintOrderDetail";

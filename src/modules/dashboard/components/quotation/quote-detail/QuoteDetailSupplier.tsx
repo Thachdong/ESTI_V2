@@ -1,1 +1,0 @@
-export const QuoteDetailSupplier:React.FC = () => <div>QuoteDetailSupplier</div>

@@ -3,16 +3,13 @@ import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { customer as customerApi } from "src/api";
-import {
-  FormCustomer,
-  FormInputBase,
-} from "~modules-core/components";
+import { FormCustomer, FormInputBase } from "~modules-core/components";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
+export const QuoteDetailCustomer: React.FC<TProps> = ({ disabled }) => {
   const [customer, setCustomer] = useState<any>();
 
   const { control, watch } = useFormContext();
@@ -35,11 +32,11 @@ export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Thông tin doanh nghiệp
       </Typography>
 
-      <Box className="flex-grow bg-white rounded-sm p-3">
+      <Box className="grid gap-3 bg-white rounded p-3">
         <FormCustomer
           controlProps={{
             name: "customerId",
@@ -49,23 +46,10 @@ export const QuoteDetailCustomer: React.FC<TProps> = ({disabled}) => {
           disabled={isQuoteRequest || disabled}
         />
 
-        <FormInputBase
-          label="Tên khách hàng"
-          className="my-4"
-          disabled
-          value={customer?.name}
-        />
-
-        <FormInputBase
-          label="Mã số thuế"
-          className="mb-4"
-          disabled
-          value={customer?.taxCode}
-        />
+        <FormInputBase label="Mã số thuế" disabled value={customer?.taxCode} />
 
         <FormInputBase
           label="Địa chỉ khách hàng"
-          className="mb-4"
           multiline
           minRows={2}
           disabled

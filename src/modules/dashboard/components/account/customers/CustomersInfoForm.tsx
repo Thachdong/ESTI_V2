@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
+import clsx from "clsx";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { customer, staff } from "src/api";
+import { branchs, customer, staff } from "src/api";
 import {
+  FormCheckbox,
   FormImageGallery,
   FormInput,
   FormSelect,
+  FormSelectAsync,
 } from "~modules-core/components";
 import {
   businessAreas,
@@ -13,14 +16,10 @@ import {
   paymentTypes,
 } from "~modules-core/constance";
 
-type TProps = {
-  isDisable: boolean;
-};
+export const CustomersInfoForm: React.FC = () => {
+  const { control, watch } = useFormContext();
 
-export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
-  const context = useFormContext();
-
-  const { control, watch } = context;
+  const isNotCompany = watch("isNotCompany");
 
   const { data: deliveryStaffs } = useQuery(["deliveryStaffs"], () =>
     staff.getListDeliveryStaff().then((res) => res.data)
@@ -38,7 +37,7 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
     <Box>
       <Box
         component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
+        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-4"
       >
         <legend>Thông tin tài khoản:</legend>
 
@@ -50,7 +49,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn sale phụ trách" },
           }}
           label="Sale Phụ trách"
-          disabled={isDisable}
           labelKey="fullName"
           shrinkLabel
         />
@@ -63,7 +61,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn sale admin phụ trách" },
           }}
           label="Sales Admin phụ trách"
-          disabled={isDisable}
           labelKey="fullName"
           shrinkLabel
         />
@@ -76,7 +73,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn giao nhận phụ trách" },
           }}
           label="Giao nhận phụ trách"
-          disabled={isDisable}
           labelKey="fullName"
           shrinkLabel
         />
@@ -84,18 +80,26 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
 
       <Box
         component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
+        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-4"
       >
         <legend>Thông tin doanh nghiệp:</legend>
+
+        <FormCheckbox
+          controlProps={{
+            control,
+            name: "isNotCompany",
+          }}
+          label={"Khách hàng là cá nhân"}
+          className="col-span-2"
+        />
 
         <FormInput
           controlProps={{
             control,
-            name: "companyName",
+            name: "name",
             rules: { required: "Phải nhập tên doanh nghiệp / khách hàng" },
           }}
           label="Tên doanh nghiệp / khách hàng"
-          disabled={isDisable}
           shrinkLabel
         />
 
@@ -107,20 +111,20 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải nhập ngành nghề" },
           }}
           label="Ngành nghề"
-          disabled={isDisable}
           shrinkLabel
         />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "taxCode",
-            rules: { required: "Phải nhập mã số thuế" },
-          }}
-          label="Mã số thuế"
-          disabled={isDisable}
-          shrinkLabel
-        />
+        {!isNotCompany && (
+          <FormInput
+            controlProps={{
+              control,
+              name: "taxCode",
+              rules: { required: "Phải nhập mã số thuế" },
+            }}
+            label="Mã số thuế"
+            shrinkLabel
+          />
+        )}
 
         <FormInput
           controlProps={{
@@ -129,7 +133,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải nhập hotline / số điện thoại" },
           }}
           label="Hotline / số điện thoại"
-          disabled={isDisable}
           shrinkLabel
         />
 
@@ -140,7 +143,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải nhập email" },
           }}
           label="Email"
-          disabled={isDisable}
           shrinkLabel
         />
 
@@ -152,7 +154,6 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn hình thức thanh toán" },
           }}
           label="Hình thức thanh toán"
-          disabled={isDisable}
           shrinkLabel
         />
 
@@ -164,23 +165,22 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             rules: { required: "Phải chọn thời hạn thanh toán" },
           }}
           label="Thời hạn thanh toán"
-          disabled={isDisable}
           shrinkLabel
         />
 
         <FormInput
           controlProps={{ control, name: "website" }}
           label="Website"
-          disabled={isDisable}
           shrinkLabel
         />
 
-        <FormInput
-          controlProps={{ control, name: "identityCard" }}
-          label="Số CMND (khách hàng là cá nhân)"
-          disabled={isDisable}
-          shrinkLabel
-        />
+        {isNotCompany && (
+          <FormInput
+            controlProps={{ control, name: "identityCard" }}
+            label="Số CMND (khách hàng là cá nhân)"
+            shrinkLabel
+          />
+        )}
 
         <FormInput
           multiline
@@ -190,16 +190,18 @@ export const CustomersInfoForm: React.FC<TProps> = ({ isDisable }) => {
             name: "address",
           }}
           label="Địa chỉ"
-          disabled={isDisable}
           shrinkLabel
+          className={clsx("col-span-2")}
         />
 
-        <FormImageGallery
-          loader={customer.uploadImage}
-          controlProps={{ control, name: "identityCardImage" }}
-          title="Tải ảnh CMND"
-          className="mb-3"
-        />
+        {isNotCompany && (
+          <FormImageGallery
+            loader={customer.uploadImage}
+            controlProps={{ control, name: "identityCardImage" }}
+            title="Tải ảnh CMND"
+            className="mb-3"
+          />
+        )}
       </Box>
     </Box>
   );

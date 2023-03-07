@@ -13,7 +13,10 @@ type TProps = {
   onDialogOpen: (type: string, data: TPosition) => void;
 };
 
-export const StoragePositionList: React.FC<TProps> = ({ warehouse, onDialogOpen }) => {
+export const StoragePositionList: React.FC<TProps> = ({
+  warehouse,
+  onDialogOpen,
+}) => {
   const getClassByStatus = useCallback(
     (status: number) => {
       switch (status) {
@@ -31,8 +34,8 @@ export const StoragePositionList: React.FC<TProps> = ({ warehouse, onDialogOpen 
   );
 
   return (
-    <Box className="border border-solid border-current">
-      <Typography className="uppercase bg-[#295174] text-white py-1 px-3">
+    <Box className="rounded bg-white">
+      <Typography className="uppercase text-main font-semibold text-sm py-3 px-3 rounded bg-[#F3F6F9] m-2">
         {warehouse?.warehouseConfigCode}
       </Typography>
 
@@ -42,7 +45,7 @@ export const StoragePositionList: React.FC<TProps> = ({ warehouse, onDialogOpen 
             variant="text"
             className={clsx(
               getClassByStatus(position?.positionStatus),
-              "border border-solid border-grey-2 text-center"
+              "border border-solid border-[#f5f3f3] text-center"
             )}
             onClick={() => onDialogOpen("View", position)}
             key={position?.id}

@@ -10,9 +10,9 @@ import {
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const PurchaseDetailTerms: React.FC<TProps> = ({disabled}) => {
+export const PurchaseDetailTerms: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   const selectOptions = useQueries([
@@ -25,14 +25,14 @@ export const PurchaseDetailTerms: React.FC<TProps> = ({disabled}) => {
       queryFn: () => paymentDocument.getList().then((res) => res.data),
     },
   ]);
-  
+
   return (
     <Box className="flex flex-col mb-4">
-      <Typography className="font-bold uppercase mb-3">
-        Điều khoản của đơn đặt hàng/ Terms and conditions of purchasing order:
+      <Typography className="font-bold uppercase mb-3 text-sm">
+        Điều khoản của đơn mua hàng/ Terms and conditions of purchasing order:
       </Typography>
 
-      <List className="bg-white rounded-sm flex-grow p-3">
+      <List className="bg-white rounded flex-grow p-3">
         <ListItem className="px-2 pb-0">
           - Tổng cộng tiền thanh toán đã bao đồm thuế GTGT và chi phí giao hàng/
           Total amount are included VAT and delivery fee

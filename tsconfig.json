@@ -19,6 +19,7 @@
       "~modules-core/*": ["./src/modules/core/*"],
       "~modules-auth/*": ["./src/modules/auth/*"],
       "~modules-dashboard/*": ["./src/modules/dashboard/*"],
+      "~modules-public/*": ["./src/modules/public/*"],
       "~styles/*": ["./src/styles/*"],
       "~types/*": ["./src/types/*"],
       "~assets/*": ["./src/assets/*"],

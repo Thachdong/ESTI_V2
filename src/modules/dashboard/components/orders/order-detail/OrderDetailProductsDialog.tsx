@@ -29,7 +29,7 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
 
   const products = contextWatch("products");
 
-  const { productId, quantity = 0, price = 0, vat = 0 } = watch();
+  const { productId, quantity = 0, price = 0 } = watch();
 
   const title =
     type === "Add" ? "Thêm sản phẩm báo giá" : "Cập nhật sản phẩm báo giá";
@@ -45,14 +45,12 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
   }, [type]);
 
   useEffect(() => {
-    const total = quantity * price;
-
-    setValue("totalPrice", total + (total * vat) / 100);
-  }, [quantity, price, vat]);
+    setValue("totalPrice", quantity * price);
+  }, [quantity, price]);
 
   useEffect(() => {
     type === "Add" && isSelectedProduct();
-  }, [products, productId])
+  }, [products, productId]);
 
   // METHODS
   const callback = useCallback((data: any) => {
@@ -79,7 +77,9 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
   const updateProduct = useCallback(
     (data: any) => {
       const updatedProducts = products.map((prod: any) =>
-        prod?.productId === data?.productId ? { ...product, ...data } : { ...prod }
+        prod?.productId === data?.productId
+          ? { ...product, ...data }
+          : { ...prod }
       );
 
       setContextValue("products", updatedProducts);
@@ -99,7 +99,7 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
     }
 
     return false;
-  }, [products, productId])
+  }, [products, productId]);
 
   return (
     <Dialog
@@ -120,18 +120,10 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
           callback={callback}
           labelKey="productCode"
           label="Mã SP"
-        />
-
-        <FormSelectAsync
-          fetcher={productApi.getList}
-          controlProps={{
-            control,
-            name: "productId",
-            rules: { required: "Phải chọn SP" },
-          }}
-          callback={callback}
-          labelKey="productName"
-          label="Tên SP"
+          getOptionLabel={(opt) =>
+            opt ? opt?.productCode + " / " + opt?.productName : ""
+          }
+          disabled={type !== "Add"}
         />
 
         <FormInputBase
@@ -140,7 +132,14 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
           disabled
         />
 
-        <FormInputBase value={product?.specs} label="Quy cách" disabled />
+        <FormInputNumber
+          controlProps={{
+            control,
+            name: "price",
+            rules: { required: "Phải nhập giá" },
+          }}
+          label="Giá"
+        />
 
         <FormInputBase value={product?.unitName} label="Đơn vị" disabled />
 
@@ -153,14 +152,7 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
           label="Số lượng"
         />
 
-        <FormInputNumber
-          controlProps={{
-            control,
-            name: "price",
-            rules: { required: "Phải nhập giá" },
-          }}
-          label="Giá"
-        />
+        <FormInputBase value={product?.specs} label="Quy cách" disabled />
 
         <FormSelect
           controlProps={{
@@ -176,9 +168,8 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
           controlProps={{
             control,
             name: "totalPrice",
-            rules: { required: "Phải nhập thành tiền" },
           }}
-          label="Thành tiền"
+          label="Thành tiền (chưa VAT)"
           disabled
         />
 
@@ -190,6 +181,7 @@ export const OrderDetailProductsDialog: React.FC<TDialog> = ({
           label="Ghi chú"
           multiline
           minRows={2}
+          className="col-span-2"
         />
       </Box>
 

@@ -10,13 +10,18 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
-import { WarehouseImportNoteDialog } from "~modules-dashboard/components";
+import {
+  ViewListProductDrawer,
+  WarehouseImportNoteDialog,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { importWarehouseColumns } from "./data";
@@ -119,25 +124,40 @@ export const WarehouseImportPage: React.FC = () => {
   );
 
   const handleDeleteTransaction = useCallback(async () => {
-    const {warehouseSessionCode, id} = defaultValue.current || {};
+    const { warehouseSessionCode, id } = defaultValue.current || {};
 
-    if (
-      confirm(
-        "Xác nhận xóa phiên nhập kho " + warehouseSessionCode
-      )
-    ) {
+    if (confirm("Xác nhận xóa phiên nhập kho " + warehouseSessionCode)) {
       await deleteMutation.mutateAsync(id);
     }
   }, [deleteMutation, defaultValue]);
+
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await warehouse
+      .getImportWarehouseDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-right mb-2">
-        <Link href="/dashboard/warehouse/import-detail">
-          <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
-        </Link>
+      <Box className="flex justify-between items-center mb-3">
+        <Box className="text-left ">
+          <Link href="/dashboard/warehouse/import-detail">
+            <AddButton variant="contained">Tạo phiếu nhập kho</AddButton>
+          </Link>
+        </Box>
+        <Box className="flex gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper
@@ -166,9 +186,13 @@ export const WarehouseImportPage: React.FC = () => {
             loading: isLoading || isFetching,
             ...paginationProps,
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
         />
@@ -178,6 +202,12 @@ export const WarehouseImportPage: React.FC = () => {
         onClose={() => setDialog({ open: false, type: undefined })}
         open={!!dialog?.open}
         defaultValue={defaultValue.current}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.warehouse as []}
       />
     </Paper>
   );

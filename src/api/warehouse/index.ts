@@ -94,4 +94,8 @@ export const warehouse = {
 
   updateTransaction: (payload: any) =>
     request.patch<any, any>(`${BASE_URL}/UpdateWarehouse`, payload),
+  getExportWarehouseDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/ExportWarehouseDetail`, { id }),
+  getImportWarehouseDetail: (id: string) =>
+    request.get<any>(`${BASE_URL}/ImportWarehouseDetail`, { id }),
 };

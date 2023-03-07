@@ -26,12 +26,9 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
 
   const { control, reset, watch, handleSubmit, setValue } = useForm<any>();
 
-  const { quantity, price, vat } = watch();
+  const { quantity, price } = watch();
 
-  const {
-    setValue: setProductsValue,
-    getValues,
-  } = useFormContext();
+  const { setValue: setProductsValue, getValues } = useFormContext();
 
   const title = type === "Add" ? "Thêm SP" : "Cập nhật SP";
 
@@ -50,13 +47,9 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     if (!quantity || !price) {
       setValue("totalPrice", 0);
     } else {
-      const total = quantity * price;
-
-      const tax = (total * vat) / 100;
-
-      setValue("totalPrice", total + tax);
+      setValue("totalPrice", quantity * price);
     }
-  }, [quantity, price, vat]);
+  }, [quantity, price]);
 
   // METHODS
   const handleAddProduct = useCallback(
@@ -106,7 +99,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
               specs,
               productCode,
               productName,
-              unitName
+              unitName,
             }
           : { ...prod };
       });

@@ -31,7 +31,9 @@ export const ContextMenuWrapper: React.FC<TContextMenuWrapper> = ({
 
   return (
     <>
-      <Box className="flex-grow" onContextMenu={handleContextMenu}>{children}</Box>
+      <Box className="flex-grow" onContextMenu={handleContextMenu}>
+        {children}
+      </Box>
 
       {menuComponent}
     </>

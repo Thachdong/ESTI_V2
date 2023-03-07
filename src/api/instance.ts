@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-
 const TIMEOUT_IN_MILISECOND = 25000;
 
 export const instance = axios.create({
@@ -34,6 +33,7 @@ const useRequestCongif = async (config: AxiosRequestConfig) => {
 
     if (!!accessToken) {
       config.headers = {
+        ...headers,
         Authorization: `Bearer ${accessToken}`,
       };
     }

@@ -13,6 +13,8 @@ type TProps = {
   labelKey?: string;
   disabled?: boolean;
   callback?: (opt: any) => void;
+  defaultValue?: any;
+  onAddCallback?: (opt: any) => void;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
@@ -20,36 +22,51 @@ export const FormCustomer: React.FC<TProps> = ({
   label = "Mã khách hàng",
   labelKey = "customerCode",
   disabled = false,
-  callback
+  callback,
+  onAddCallback,
+  defaultValue
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
   const onClose = useCallback(() => {
-    setDialog({open: false})
+    setDialog({ open: false });
   }, []);
 
   const onOpen = useCallback(() => {
-    setDialog({open: true, type: "Add"})
+    setDialog({ open: true, type: "Add" });
   }, []);
+  
   return (
-    <Box className="flex items-center w-full">
-      <FormSelectAsync
-        controlProps={controlProps}
-        label={label}
-        fetcher={customer.getList}
-        labelKey={labelKey}
-        className="flex-grow"
-        disabled={disabled}
-        callback={callback}
-      />
+    <>
+      <Box className="flex items-center w-full">
+        <FormSelectAsync
+          controlProps={controlProps}
+          label={label}
+          fetcher={customer.getList}
+          labelKey={labelKey}
+          getOptionLabel={(customer: any) =>
+            !!customer
+              ? customer?.customerCode + " - " + customer?.companyName
+              : ""
+          }
+          className="w-full"
+          disabled={disabled}
+          callback={callback}
+        />
 
-      <AddButton disabled={disabled} onClick={onOpen} className="min-w-[32px] mb-1 ml-2" />
-
+        <AddButton
+          disabled={disabled}
+          onClick={onOpen}
+          className="!w-[32px] ml-2 !min-w-[40px]"
+        />
+      </Box>
       <CustomersDialog
         onClose={onClose}
         open={!!dialog?.open}
-        type={dialog?.type}
+        type="QuickCreate"
+        defaultValue={defaultValue}
+        onAddCallback={onAddCallback}
       />
-    </Box>
+    </>
   );
 };

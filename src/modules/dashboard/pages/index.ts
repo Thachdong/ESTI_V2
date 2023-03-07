@@ -6,3 +6,5 @@ export * from "./product-manage";
 export * from "./purchase";
 export * from "./orders";
 export * from "./warehouse";
+export * from "./supplier-quotes";
+export * from "./forum";

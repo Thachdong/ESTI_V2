@@ -80,11 +80,10 @@ export const quoteListColumns: TGridColDef[] = [
         (status) => status.value === row?.status
       )?.label;
 
-      const color =
-        row.status === 3 ? "success" : row.status > 3 ? "error" : undefined;
+      const colors = ["default", "success", "primary", "secondary", "info", "warning", "error"]
 
       return (
-        <StatusChip label={label as string} status={row.status} color={color} />
+        <StatusChip label={label as string} status={row.status} color={colors[row?.status] as any} />
       );
     },
   },

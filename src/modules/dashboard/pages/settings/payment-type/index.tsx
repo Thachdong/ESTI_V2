@@ -59,7 +59,7 @@ export const PaymentTypePage: React.FC = () => {
   });
 
   const onDelete = useCallback(async (paymentType: any) => {
-    const {paymentTypeName, id} = paymentType || {};
+    const { paymentTypeName, id } = paymentType || {};
     if (confirm("Xác nhận xóa đơn vị: " + paymentTypeName)) {
       await mutateDelete.mutateAsync(id);
     }
@@ -103,16 +103,11 @@ export const PaymentTypePage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex mb-3">
-        <Box className="w-1/2">
-          <SearchBox label="Tìm kiếm tên đơn vị" />
-        </Box>
-
-        <Box className="w-1/2 flex items-center justify-end">
-          <AddButton variant="contained" onClick={onAdd}>
-            Tạo hình thức thanh toán
-          </AddButton>
-        </Box>
+      <Box className="flex items-center gap-3 w-full md:w-4/5 lg:w-3/5 mb-3">
+        <AddButton className="min-w-[300px]" variant="contained" onClick={onAdd}>
+          Tạo hình thức thanh toán
+        </AddButton>
+        <SearchBox label="Tìm kiếm tên đơn vị" />
       </Box>
 
       <DataTable

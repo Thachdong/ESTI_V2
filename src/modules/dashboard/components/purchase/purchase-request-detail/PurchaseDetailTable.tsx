@@ -102,12 +102,12 @@ export const PurchaseDetailTable: React.FC = () => {
             {
               action: () => setDialog({ open: true, type: "View" }),
               label: "Thông tin chi tiết",
-              disabled: !!id
+              disabled: !!id,
             },
             {
               action: () => handleRemoveProduct(row?.id || row?.productId),
               label: "Xóa",
-              disabled: !!id
+              disabled: !!id,
             },
           ]}
         />
@@ -157,7 +157,7 @@ export const PurchaseDetailTable: React.FC = () => {
   return (
     <Box className="flex flex-col mb-4">
       <Box className="flex items-center mb-2">
-        <Typography className="font-bold uppercase mr-4">
+        <Typography className="font-bold uppercase mr-4 text-sm">
           THÔNG TIN SẢN PHẨM
         </Typography>
 
@@ -166,9 +166,9 @@ export const PurchaseDetailTable: React.FC = () => {
         )}
       </Box>
 
-      <Box className="bg-white">
+      <Box className="bg-white rounded">
         {!id && (
-          <Box className="grid grid-cols-5 gap-4 rounded-sm mb-4 p-3">
+          <Box className="grid grid-cols-5 gap-4 rounded mb-4 p-3">
             <FormDatepickerBase
               label="Từ ngày"
               onChange={(e: any) =>
@@ -186,7 +186,7 @@ export const PurchaseDetailTable: React.FC = () => {
               className="col-span-2"
             />
 
-            <BaseButton className="truncate" onClick={getPurchasePlan}>
+            <BaseButton className="truncate bg-main" onClick={getPurchasePlan}>
               Lọc SP cần mua
             </BaseButton>
           </Box>
@@ -236,13 +236,25 @@ export const PurchaseDetailTable: React.FC = () => {
           />
         </ContextMenuWrapper>
 
-        <List className="border-0 border-t border-solid">
-          <ListItem>
-            Thành tiền chưa có thuế(VNĐ): {getPrice.totalPrice}
+        <List className="border-0 border-t border-solid p-0 pb-1">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):{" "}
+            </span>
+            <span className="text-base">{getPrice.totalPrice}</span>
           </ListItem>
-          <ListItem>Thuế GTGT(VNĐ): {getPrice.totalTax}</ListItem>
-          <ListItem>
-            Tổng cộng tiền thanh toán(VNĐ): {getPrice.finalPrice}
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
           </ListItem>
         </List>
       </Box>

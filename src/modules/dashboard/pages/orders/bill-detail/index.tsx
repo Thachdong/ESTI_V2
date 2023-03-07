@@ -113,7 +113,7 @@ export const BillDetailPage: React.FC = () => {
   return (
     <FormProvider {...method}>
       {!!id ? (
-        <Box className="grid grid-cols-1 gap-y-4 mb-4">
+        <Box className="grid grid-cols-1 gap-y-3 mb-4">
           <BillDetailStatus
             currentStatus={BillView.bill?.status}
             refetch={refetch}
@@ -205,8 +205,9 @@ export const BillDetailPage: React.FC = () => {
         sendMailData={{
           to: BillView?.bill?.billRecipientEmail,
           status: BillView?.bill?.status,
-          cc: [BillView?.mainOrder?.curatorEmail]
+          cc: ["ketoan@esti.vn", BillView?.mainOrder?.curatorEmail],
         }}
+        billDetail={billDetail}
       />
     </FormProvider>
   );

@@ -1,6 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import _ from "lodash";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useMemo, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
 import {
@@ -28,7 +29,9 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const defaultValue = useRef<any>();
+  const [defaultValue, setDefaultValue] = useState<any>();
+
+  const router = useRouter();
 
   const { importStatus } = transactionData || {};
 
@@ -57,21 +60,23 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
   }, []);
 
   const handleRemoveProduct = useCallback(() => {
-    const { productName, rowId } = defaultValue.current || {};
+    const { productName, rowId } = defaultValue || {};
 
     if (confirm("Xác nhận xóa SP: " + productName)) {
-      const updatedProductList = productList.filter((p: any) => p?.rowId !== rowId);
+      const updatedProductList = productList.filter(
+        (p: any) => p?.rowId !== rowId
+      );
 
       setValue("productList", updatedProductList);
     }
-  }, [productList, defaultValue.current]);
+  }, [productList, defaultValue]);
 
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
     const currentRow = productList?.find((item: any) => item?.rowId === id);
 
-    defaultValue.current = currentRow;
+    setDefaultValue(currentRow);
   };
 
   // DATA TABLE
@@ -112,7 +117,17 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           <Menu className="p-0" id="product_table_menu">
             <Item
               id="view-product-document"
-              // onClick={() => handleOpen("Update")}
+              onClick={() =>
+                router.push({
+                  pathname: "/public/documents/",
+                  query: {
+                    productId: defaultValue?.productId,
+                    productCode: defaultValue?.productCode,
+                    lotNumber: defaultValue?.lotNumber,
+                    importId: router.query.id,
+                  },
+                })
+              }
             >
               Xem tài liệu SP
             </Item>
@@ -176,7 +191,16 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               id={row?.id}
               items={[
                 {
-                  action: () => handleOpen("Update"),
+                  action: () =>
+                    router.push({
+                      pathname: "/public/documents/",
+                      query: {
+                        productId: defaultValue?.productId,
+                        productCode: defaultValue?.productCode,
+                        lotNumber: defaultValue?.lotNumber,
+                        importId: router.query.id,
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
                 {
@@ -184,15 +208,20 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
                   label: "Tạo tài liệu SP",
                 },
                 {
-                  action: () => handleOpen("CreateLabel"),
-                  label: "Tạo nhãn SP",
+                  action: () =>
+                    handleOpen(
+                      defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"
+                    ),
+                  label: defaultValue?.productLabelId
+                    ? "Xem nhãn SP"
+                    : "Tạo nhãn SP",
                 },
               ]}
             />
           );
       }
     },
-    [importStatus]
+    [importStatus, defaultValue]
   );
 
   const columns: TGridColDef[] = [
@@ -204,14 +233,15 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       renderCell: ({ row }) => renderActionButtons(row),
     },
   ];
+  console.log(defaultValue);
 
   return (
-    <Paper className="rounded-sm p-3">
+    <Box className="">
       <Box className="flex items-center mb-3">
-        <Typography className="text-sm font-medium flex-grow">
+        <Typography className="text-sm font-semibold flex-grow">
           SẢN PHẨM
         </Typography>
-        <Box className="flex justify-end">
+        <Box className="flex justify-end ">
           <AddButton
             onClick={() => handleOpen("AddProduct")}
             variant="contained"
@@ -229,41 +259,46 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           </AddButton>
         </Box>
       </Box>
+      <Box className="rounded bg-white">
+        <ContextMenuWrapper
+          menuId="product_table_menu"
+          menuComponent={renderContextMenu()}
+        >
+          <DataTable
+            rows={productList?.map((prod: any, index: number) => ({
+              ...prod,
+              no: index + 1,
+            }))}
+            columns={columns}
+            autoHeight
+            hideSearchbar
+            hideFooter
+            hideFooterPagination
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+            getRowId={(record) => record.rowId}
+          />
+        </ContextMenuWrapper>
 
-      <ContextMenuWrapper
-        menuId="product_table_menu"
-        menuComponent={renderContextMenu()}
-      >
-        <DataTable
-          rows={productList?.map((prod: any, index: number) => ({
-            ...prod,
-            no: index + 1,
-          }))}
-          columns={columns}
-          autoHeight
-          hideSearchbar
-          hideFooter
-          hideFooterPagination
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-            },
-          }}
-          getRowId={(record) => record.rowId}
-        />
-      </ContextMenuWrapper>
-
-      <Typography className="my-3">
-        Tổng cộng tiền thanh toán(VNĐ):
-        <strong> {_format.getVND(totalPrice)}</strong>
-      </Typography>
-
+        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
+          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>
+            <span className="text-base"> {_format.getVND(totalPrice)}</span>
+          </Typography>
+        </Box>
+      </Box>
       {/* IMPLEMENT TRANSACTION DIALOG */}
       <ImportDetailProductDialog
         onClose={handleClose}
         open={Boolean(dialog.open && dialog?.type?.includes?.("Product"))}
         type={dialog?.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
       />
 
       {/* ADD PRODUCT DIALOG */}
@@ -278,16 +313,24 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         onClose={handleClose}
         open={!!dialog?.open && dialog?.type === "CreateDocument"}
         type="AddFromAnotherRoute"
-        defaultValue={defaultValue.current}
+        defaultValue={
+          {
+            productId: defaultValue?.productId,
+            lotNumber: defaultValue?.lotNumber,
+          } as any
+        }
       />
 
       {/* STAMP DIALOG */}
       <StampDialog
         onClose={handleClose}
-        open={dialog?.open && dialog?.type === "CreateLabel"}
-        type="AddFromAnotherRoute"
-        defaultValue={defaultValue.current}
+        open={
+          dialog?.open &&
+          (dialog?.type === "CreateLabel" || dialog?.type === "ViewLabel")
+        }
+        type={!!defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"}
+        defaultValue={{ id: defaultValue?.productLabelId } as any}
       />
-    </Paper>
+    </Box>
   );
 };

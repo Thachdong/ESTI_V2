@@ -7,11 +7,11 @@ import { customer } from "src/api";
 import { FormCustomer, FormInputBase } from "~modules-core/components";
 
 export const OrderDetailCustomer: React.FC = () => {
-  const {id} = useRouter().query;
+  const { id } = useRouter().query;
 
   const { control, watch, setValue } = useFormContext();
 
-  const { customerId, notFromQuote, curatorId } = watch();
+  const { customerId, notFromQuote, curatorId, defaultReceiver } = watch();
 
   const { data: customerDetail } = useQuery(
     ["customerDetail", customerId],
@@ -23,15 +23,9 @@ export const OrderDetailCustomer: React.FC = () => {
 
   // SIDE EFFECTS
   useEffect(() => {
-    const { curatorInfo = [], companyInfo = {} } = customerDetail || {};
+    const { curatorInfo = [] } = customerDetail || {};
 
     const curator = curatorInfo.find((cur: any) => cur?.id === curatorId);
-
-    const { paymentLimit, paymentType } = companyInfo;
-
-    setValue("paymentLimit", paymentLimit);
-
-    setValue("paymentType", paymentType);
 
     const { curatorDepartment, curatorPhone, curatorEmail, receiverById } =
       curator || {};
@@ -41,25 +35,41 @@ export const OrderDetailCustomer: React.FC = () => {
     setValue("curatorPhone", curatorPhone);
 
     setValue("curatorEmail", curatorEmail);
+  }, [customerDetail, curatorId, defaultReceiver]);
 
-    const { fullName, phone1, address } = receiverById || {};
+  useEffect(() => {
+    if (!!defaultReceiver) {
+      const { curatorInfo = [], companyInfo = {} } = customerDetail || {};
 
-    setValue("receiverFullName", fullName);
+      const curator = curatorInfo.find((cur: any) => cur?.id === curatorId);
 
-    setValue("receiverPhone", phone1);
+      const { receiverById } = curator || {};
+      const { fullName, phone1, address } = receiverById || {};
 
-    setValue("receiverAddress", address);
-  }, [customerDetail, curatorId]);
+      setValue("receiverFullName", fullName);
 
-  const {address, taxCode, professionName} = customerDetail?.companyInfo || {};
+      setValue("receiverPhone", phone1);
+
+      setValue("receiverAddress", address);
+
+      const { paymentLimit, paymentType } = companyInfo;
+
+      setValue("paymentLimit", paymentLimit);
+
+      setValue("paymentType", paymentType);
+    }
+  }, [defaultReceiver, customerDetail]);
+
+  const { address, taxCode, professionName } =
+    customerDetail?.companyInfo || {};
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN DOANH NGHIỆP
       </Typography>
 
-      <Box className="grid gap-4 bg-white rounded-sm flex-grow p-3">
+      <Box className="grid gap-3 bg-white rounded flex-grow p-3">
         <FormCustomer
           controlProps={{
             name: "customerId",
@@ -78,7 +88,7 @@ export const OrderDetailCustomer: React.FC = () => {
         <FormInputBase
           label="Mã số thuế:"
           disabled
-          value={customerId ? taxCode: ""}
+          value={customerId ? taxCode : ""}
         />
 
         <FormInputBase

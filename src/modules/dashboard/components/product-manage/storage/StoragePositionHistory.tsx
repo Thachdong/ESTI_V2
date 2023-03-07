@@ -50,7 +50,7 @@ export const StoragePositionHistory: React.FC<TProps> = ({
       "ProductTransactions_" + positionId,
       {
         ...pagination,
-        searchParams
+        searchParams,
       },
     ],
     () =>
@@ -59,7 +59,7 @@ export const StoragePositionHistory: React.FC<TProps> = ({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           positionId,
-          ...searchParams
+          ...searchParams,
         })
         .then((res) => res.data),
     {
@@ -72,8 +72,8 @@ export const StoragePositionHistory: React.FC<TProps> = ({
 
   return (
     <Box className="mb-4">
-      <Box className="flex">
-        <Typography className="flex-grow">
+      <Box className="flex items-center mb-3">
+        <Typography className="flex-grow text-sm font-semibold">
           LỊCH SỬ NHẬP XUẤT SẢN PHẨM
         </Typography>
         <RefreshButton onClick={() => refetch()} />

@@ -9,18 +9,30 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
+import { ViewListProductDrawer } from "~modules-dashboard/components";
 import { billColumns } from "~modules-dashboard/pages/orders/bill-list/billColumns";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { BillListBillDialog } from "./BillListBillDialog";
 import { BillListStatusDialog } from "./BillListStatusDialog";
 
-export const BillListTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const BillListTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -111,18 +123,32 @@ export const BillListTable: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await bill.getBillDetail(id).then((res) => {
+      return res.data;
+    });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
   return (
-    <Paper className="flex-grow !h-screen shadow bgContainer p-2">
-      <Box className="flex gap-4 items-center mb-2">
+    <Paper className="flex-grow !h-screen shadow bgContainer p-3">
+      <Box className="flex gap-4 items-center mb-3 justify-between">
         <Box>
           <AddButton
             variant="contained"
-            onClick={() =>
-              router.push("/dashboard/orders/bill-detail/")
-            }
+            onClick={() => router.push("/dashboard/orders/bill-detail/")}
           >
             TẠO MỚI HOÁ ĐƠN
           </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
       <ContextMenuWrapper
@@ -163,8 +189,12 @@ export const BillListTable: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -182,6 +212,12 @@ export const BillListTable: React.FC = () => {
         type={dialog.type}
         defaultValue={defaultValue.current}
         refetch={refetch}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.BillDetailView}
       />
     </Paper>
   );

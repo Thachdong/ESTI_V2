@@ -1,24 +1,26 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { suppliers, TSupplier } from "src/api";
+import { role, suppliers, TSupplier } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
-import { defaultPagination } from "~modules-core/constance";
+import { curatorPositions, defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { SuppliersDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { supplierColumns } from "./supplierColumns";
+import { supplider2Columns, supplierColumns } from "./supplierColumns";
 
 export const SuppliersPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
@@ -78,7 +80,7 @@ export const SuppliersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    const {supplierName, id} = defaultValue.current || {};
+    const { supplierName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa nhà cung cấp: " + supplierName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -87,6 +89,19 @@ export const SuppliersPage = () => {
 
   const columns: TGridColDef<TSupplier>[] = [
     ...supplierColumns,
+    {
+      field: "curatorPositionName",
+      headerName: "Chức vụ",
+      minWidth: 150,
+      sortAscValue: 12,
+      sortDescValue: 4,
+      filterKey: "curatorPosition",
+      type: "select",
+      options: curatorPositions.map(
+        (item) => ({ value: item?.id, label: item?.name } as any)
+      ),
+    },
+    ...supplider2Columns,
     {
       field: "action",
       headerName: "",
@@ -122,21 +137,21 @@ export const SuppliersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
+      <Box className="mb-3 flex items-center justify-between">
+        <Box className="flex items-center gap-3 w-3/5">
           <AddButton
             variant="contained"
-            className="mr-3"
             onClick={() => setDialog({ open: true, type: "Add" })}
           >
             Tạo nhà cung cấp
           </AddButton>
-        </div>
-      </div>
+          <SearchBox />
+        </Box>
+        <Box className="flex items-center gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="suppliers_table_menu"

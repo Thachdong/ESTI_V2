@@ -1,32 +1,33 @@
 import { Box, Typography } from "@mui/material";
 import { useFormContext } from "react-hook-form";
-import {
-  FormCheckbox,
-  FormInput,
-  FormSelect,
-} from "~modules-core/components";
+import { FormCheckbox, FormInput, FormSelect } from "~modules-core/components";
 import { paymentExpiredIn, paymentTypes } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const OrderDetailReciever: React.FC<TProps> = ({disabled}) => {
-  const { control } = useFormContext();
+export const OrderDetailReciever: React.FC<TProps> = ({ disabled }) => {
+  const { control, watch } = useFormContext();
+
+  const { paymentType } = watch();
+
+  console.log(paymentType);
+  
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN NHẬN HÀNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
         <FormCheckbox
           controlProps={{
             name: "defaultReceiver",
             control,
           }}
           label="Thông tin nhận hàng giống thông tin tài khoản khách hàng đăng kí"
-          className="col-span-2"
+          className="col-span-2 ml-[2px] w-full"
           disabled={disabled}
         />
 
@@ -56,6 +57,8 @@ export const OrderDetailReciever: React.FC<TProps> = ({disabled}) => {
           label="Hình thức TT:"
           options={paymentTypes}
           disabled={disabled}
+          valueKey="name"
+          freeSolo
         />
 
         <FormSelect

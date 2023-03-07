@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
+import { useReactToPrint } from "react-to-print";
 import {
   quoteRequest,
   TCreateQuoteRequest,
@@ -16,17 +17,20 @@ import {
   ViewButton,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { PrintQuoteRequest } from "./PrintQuoteRequest";
 
 type TProps = {
   isUpdate: boolean;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetch: () => void;
+  requestDetail: any;
 };
 
 export const QuoteRequestDetailButtons: React.FC<TProps> = ({
   isUpdate,
   setIsUpdate,
   refetch,
+  requestDetail,
 }) => {
   // EXTRACT PROPS
   const router = useRouter();
@@ -89,6 +93,16 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
     await mutateUpdate.mutateAsync({ id, salesId, curatorId, customerId });
   }, []);
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   const renderButtons = useCallback(() => {
     switch (true) {
       case !id:
@@ -130,9 +144,20 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
                 </AddButton>
               </>
             ) : (
-              <ViewButton variant="contained"> Xem báo giá</ViewButton>
+              <ViewButton variant="contained" className="bg-main">
+                {" "}
+                Xem báo giá
+              </ViewButton>
             )}
-            <PrintButton className="!bg-error">In</PrintButton>
+            <PrintButton className="!bg-error" onClick={handlePrint}>
+              In
+            </PrintButton>
+            <Box className="hidden">
+              <PrintQuoteRequest
+                printAreaRef={printAreaRef}
+                defaultValue={requestDetail}
+              />
+            </Box>
           </Box>
         );
     }

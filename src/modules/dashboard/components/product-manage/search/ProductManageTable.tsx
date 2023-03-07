@@ -1,18 +1,16 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { productManage, products, warehouseConfig } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
-  DeleteButton,
   DownloadButton,
   DropdownButton,
   generatePaginationProps,
   SearchBox,
-  ViewButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
@@ -159,20 +157,19 @@ export const ProductManageTable = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
-
+      <Box className="flex items-center gap-3 w-3/5">
         <Box className="flex items-center justify-end">
           <DownloadButton
             onClick={() =>
-              productManage.downloadAllProduct({ pageSize: 9999, pageIndex: 1 })
+              productManage.exportStockExcel({ pageSize: 9999, pageIndex: 1 })
             }
             variant="contained"
-            className="mr-3"
+            className=""
           >
             Tải file excel
           </DownloadButton>
         </Box>
+        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
       </Box>
 
       <ContextMenuWrapper

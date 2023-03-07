@@ -28,9 +28,18 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     value: any | any[]
   ) => {
     if (Array.isArray(value)) {
-      onChange(value.map((val) => val[valueKey]));
+      onChange(value.map((val) => val?.[valueKey]));
     } else {
       onChange(value?.[valueKey]);
+    }
+  };
+
+  const handleInputChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: string
+  ) => {
+    if (!Array.isArray(value) && props?.freeSolo) {
+      onChange(value);
     }
   };
 
@@ -39,12 +48,17 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
 
     if (Array.isArray(value)) {
       const valueList = value.map((vl) =>
-        options.find((o) => o[valueKey] === vl)
+        options.find((o) => o?.[valueKey] === vl)
       );
 
       callback?.(valueList);
 
       return valueList;
+    } else if (
+      props?.freeSolo &&
+      (typeof value === "string" || typeof value === "number")
+    ) {
+      return { [valueKey]: value, [labelKey]: value };
     } else {
       const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
@@ -53,7 +67,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       return valueObj;
     }
   }, [value, options, callback]);
-  
+
   // DEFFAULT PROPS
   const defaultProps: Partial<TAutocompleteProps> = {
     size: "small",
@@ -61,16 +75,16 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
     disableCloseOnSelect: restProps.multiple,
     getOptionLabel: (option: any) => {
       if (!option) return "";
-      
-      return option?.[labelKey] || "Incorrect label key"
+
+      return option?.[labelKey] || "Incorrect label key";
     },
     ...restProps,
   };
 
   const shrink = shrinkLabel ? {} : { shrink: false };
 
-  const {helperText, error, ...restInputPRops} = inputProps || {};
-  
+  const { helperText, error, ...restInputPRops } = inputProps || {};
+
   const defaultInputProps: TextFieldProps = {
     InputLabelProps: { ...shrink },
     label,
@@ -87,6 +101,10 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       },
       label: {
         color: "#747474",
+        fontSize: "12px",
+        fontWeight: 700,
+        textTransform: "uppercase",
+        marginTop: "2px",
       },
     },
     error: !!error,
@@ -103,6 +121,7 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
         input: {
           textAlign: "right",
           paddingLeft: "30% !important",
+          fontSize: "14px",
         },
       };
 
@@ -112,9 +131,8 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       onChange={handleChange}
       value={renderValue()}
       sx={defaultSx}
-      renderInput={(params) => (
-        <TextField {...params} {...defaultInputProps} />
-      )}
+      onInputChange={handleInputChange}
+      renderInput={(params) => <TextField {...params} {...defaultInputProps} />}
       {...defaultProps}
     />
   );

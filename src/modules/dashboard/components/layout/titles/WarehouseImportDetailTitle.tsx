@@ -21,7 +21,7 @@ export const WarehouseImportDetailTitle: React.FC = () => {
   if (!!id) {
     const code = warehouseImportDetail?.warehouseSession?.code;
 
-    return <>XUẤT KHO / CHI TIẾT NHẬP KHO / {code}</>
+    return <>NHẬP KHO / CHI TIẾT NHẬP KHO / {code}</>
   } else {
     return <>NHẬP KHO / TẠO NHẬP KHO</>
   }

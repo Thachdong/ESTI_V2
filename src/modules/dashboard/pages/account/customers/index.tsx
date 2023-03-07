@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -22,7 +24,7 @@ import { CustomerColumns } from "./customerColumns";
 
 export const CustomersPage = () => {
   const router = useRouter();
-  
+
   const { query } = router;
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -36,10 +38,6 @@ export const CustomersPage = () => {
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
     setDialog({ open: false });
-  }, []);
-
-  const onUpdate = useCallback(() => {
-    setDialog({ open: true, type: "View" });
   }, []);
 
   // DATA FETCHING
@@ -80,7 +78,7 @@ export const CustomersPage = () => {
   });
 
   const onDelete = useCallback(async () => {
-    const {companyName, id} = defaultValue.current || {};
+    const { companyName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa khách hàng: " + companyName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -99,8 +97,12 @@ export const CustomersPage = () => {
           id={row?.id}
           items={[
             {
-              action: onUpdate,
-              label: "Thông tin chi tiết",
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/account/customer-detail",
+                  query: { id: row?.id },
+                }),
+              label: "Chi tiết / cập nhật",
             },
             {
               action: onDelete,
@@ -124,21 +126,21 @@ export const CustomersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox label="Tìm kiếm" />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
+      <Box className="mb-3 flex justify-between">
+        <Box className="flex gap-3 items-center w-3/5 ">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
           >
             Tạo khách hàng
           </AddButton>
-        </div>
-      </div>
+          <SearchBox label="Tìm kiếm" />
+        </Box>
+        <Box className="flex items-center gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="customer_table_menu"
@@ -146,9 +148,12 @@ export const CustomersPage = () => {
           <Menu className="p-0" id="customer_table_menu">
             <Item
               id="view-product"
-              onClick={() => setDialog({ open: true, type: "View" })}
+              onClick={() => router.push({
+                pathname: "/dashboard/account/customer-detail",
+                query: { id: defaultValue?.current?.id },
+              })}
             >
-              Xem chi tiết
+              Chi tiết / cập nhật
             </Item>
             <Item id="delete-product" onClick={onDelete}>
               Xóa

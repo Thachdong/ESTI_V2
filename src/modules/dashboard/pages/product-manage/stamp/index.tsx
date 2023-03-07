@@ -88,7 +88,7 @@ export const StampPage = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {productName, id} = defaultValue.current || {};
+    const { productName, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa nhãn: " + productName)) {
       await mutateDelete.mutateAsync(id as string);
@@ -136,21 +136,22 @@ export const StampPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <FormSelect
-          controlProps={{ control, name: "labelType" }}
-          label="Nhóm sản phẩm"
-          options={productTypesStamp}
-        />
-
+      <Box className="flex gap-3 w-3/5 items-center mb-3">
         <Box className="flex items-center justify-end">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className="mr-3"
+            className=""
           >
             Thêm nhãn sản phẩm
           </AddButton>
+        </Box>
+        <Box className="w-full">
+          <FormSelect
+            controlProps={{ control, name: "labelType" }}
+            label="Nhóm sản phẩm"
+            options={productTypesStamp}
+          />
         </Box>
       </Box>
 
@@ -164,10 +165,7 @@ export const StampPage = () => {
             >
               Xem chi tiết
             </Item>
-            <Item
-              id="view-product"
-              onClick={() => setHistoryDialog(true)}
-            >
+            <Item id="view-product" onClick={() => setHistoryDialog(true)}>
               Lịch sử nhãn
             </Item>
             <Item id="delete-product" onClick={handleDelete}>

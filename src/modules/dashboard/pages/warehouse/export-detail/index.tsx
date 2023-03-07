@@ -60,35 +60,32 @@ export const ExportDetailPage = () => {
 
   const { data: transactionData, refetch: refetchTransactionDetail } = useQuery(
     ["warehouseExportDetail_" + id],
-    () =>
-      warehouse
-        .getExportSessionById(id as string)
-        .then((res) => res.data),
+    () => warehouse.getExportSessionById(id as string).then((res) => res.data),
     {
       enabled: !!id,
     }
   );
 
   const getWarehouseConfig = useCallback(() => {
-    switch(true) {
+    switch (true) {
       case !!id:
         return {
           warehouseConfigId: transactionData?.productOrder?.warehouseConfigId,
-          warehouseConfigCode: transactionData?.productOrder?.warehouseConfigCode,
-        }
+          warehouseConfigCode:
+            transactionData?.productOrder?.warehouseConfigCode,
+        };
       case !!isForDelete:
         return {
           warehouseConfigId: selectedBranch?.warehouseConfigId,
           warehouseConfigCode: selectedBranch?.warehouseConfigCode,
-        }
+        };
       default:
         return {
           warehouseConfigId: orderDetailData?.mainOrder?.warehouseConfigId,
           warehouseConfigCode: orderDetailData?.mainOrder?.warehouseConfigCode,
-        }
-
+        };
     }
-  }, [transactionData, selectedBranch, orderDetailData])
+  }, [transactionData, selectedBranch, orderDetailData]);
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -124,7 +121,7 @@ export const ExportDetailPage = () => {
 
   useEffect(() => {
     setValue("mainOrderId", fromOrderId);
-  }, [fromOrderId])
+  }, [fromOrderId]);
 
   // DOM RENDERING
   return (
@@ -158,17 +155,13 @@ export const ExportDetailPage = () => {
           <Box className="grid grid-cols-2 gap-4 mb-4">
             <ExportDetailCustomer
               customerData={
-                id
-                  ? transactionData?.productOrder
-                  : orderDetailData?.mainOrder
+                id ? transactionData?.productOrder : orderDetailData?.mainOrder
               }
             />
 
             <ExportDetailRecipient
               orderData={
-                id
-                  ? transactionData?.productOrder
-                  : orderDetailData?.mainOrder
+                id ? transactionData?.productOrder : orderDetailData?.mainOrder
               }
             />
 
@@ -191,6 +184,7 @@ export const ExportDetailPage = () => {
         <ExportDetailButtonsBox
           exportStatus={transactionData?.productOrder?.exportStatus}
           orderData={orderDetailData?.mainOrder}
+          transactionData={transactionData}
         />
       </FormProvider>
     </Box>

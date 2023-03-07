@@ -4,25 +4,37 @@ import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
-import { exportWarehouse, TWarehouseExport } from "src/api";
+import { exportWarehouse, TWarehouseExport, warehouse } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
 import {
+  ViewListProductDrawer,
   WarehouseExportNoteDialog,
   WarehouseExportStatusDialog,
 } from "~modules-dashboard/components";
 import { warehouseExportColumns } from "~modules-dashboard/pages/warehouse/warehouse-export/data";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const WarehouseExportTable: React.FC = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const WarehouseExportTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   // LOCAL STATE AND EXTRACT PROPS
   const router = useRouter();
 
@@ -120,17 +132,39 @@ export const WarehouseExportTable: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await warehouse
+      .getExportWarehouseDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-right mb-2">
-        <AddButton
-          variant="contained"
-          onClick={() => router.push("/dashboard/warehouse/export-detail")}
-        >
-          Tạo phiếu xuất kho
-        </AddButton>
+      <Box className="text-left mb-3 flex justify-between items-center">
+        <Box>
+          {" "}
+          <AddButton
+            variant="contained"
+            onClick={() => router.push("/dashboard/warehouse/export-detail")}
+          >
+            Tạo phiếu xuất kho
+          </AddButton>
+        </Box>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper
@@ -159,8 +193,12 @@ export const WarehouseExportTable: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -175,6 +213,12 @@ export const WarehouseExportTable: React.FC = () => {
         open={Boolean(dialog?.open && dialog.type === "status")}
         defaultValue={defaultValue.current}
         refetch={refetch}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.productOrderDetail}
       />
     </Paper>
   );

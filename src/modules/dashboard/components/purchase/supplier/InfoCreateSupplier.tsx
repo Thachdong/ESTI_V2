@@ -47,7 +47,7 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
 
       <div className="grid grid-cols-3 gap-4">
         <Paper className="col-span-2 shadow grid gap-4 mt-4 p-4">
-          <div className="font-medium text-base">
+          <div className="font-medium text-sm">
             <span>THÔNG TIN NHÀ CUNG CẤP</span>
           </div>
           <div className="flex items-center">
@@ -127,7 +127,7 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
         </Paper>
 
         <Paper className=" mt-4 p-4 grid gap-4 shadow">
-          <div className="font-medium text-base">
+          <div className="font-medium text-sm">
             <span>THÔNG TIN LIÊN HỆ</span>
           </div>
           <div className="flex items-center">
@@ -202,7 +202,7 @@ export const InfoCreateSupplier: React.FC<TProps> = ({ control }) => {
       </div>
 
       <Paper className="col-span-2 shadow grid grid-cols-2 gap-4 mt-4 p-4">
-        <div className="font-medium text-base col-span-2">
+        <div className="font-medium text-sm col-span-2">
           <span>PHÂN CÔNG VIỆC</span>
         </div>
         <div className="flex items-center">

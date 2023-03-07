@@ -16,11 +16,11 @@ type TProps = {
 export const BillDetailGeneralView: React.FC<TProps> = ({ data }) => {
   return (
     <Box>
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         <FormInputBase value={data.orderCode} label="Mã đơn hàng: " disabled />
 
         <FormInputBase value={data.billCode} label="Mã giao hàng:" disabled />

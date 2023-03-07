@@ -8,15 +8,15 @@ export const AddButton: React.FC<ButtonProps> = ({ ref, ...props }) => {
       variant="contained"
       {...props}
       className={clsx(
-        "bg-main-2 hover:bg-[#3182ce] px-3 shadow-none !font-bold",
-        props.disabled && "disable-btn",
+        "!bg-main hover:bg-[#3182ce] px-3 shadow-none !font-bold h-[40px] min-w-[260px]",
+        props.disabled && "disable-btn !bg-[#a6a3a3]",
         props?.className
       )}
     >
       <AddIcon />
-      {
-        props?.children && <span className="truncate ml-2">{props?.children}</span>
-      }
+      {props?.children && (
+        <span className="truncate ml-2">{props?.children}</span>
+      )}
     </Button>
   );
 };

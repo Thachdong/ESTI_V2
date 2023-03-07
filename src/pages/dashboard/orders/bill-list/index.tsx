@@ -8,7 +8,7 @@ Index.displayName = "Hoá đơn";
 Index.layoutName = "Dashboard";
 
 Index.data = {
-  title: "ĐƠN HÀNG/ HOÁ ĐƠN",
+  title: "ĐƠN HÀNG / HOÁ ĐƠN",
 };
 
 export default Index;

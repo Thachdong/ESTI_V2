@@ -2,9 +2,11 @@ import QuoteIcon from "@mui/icons-material/RequestQuoteOutlined";
 import OrderIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
 import ReceiptIcon from "@mui/icons-material/ReceiptLongOutlined";
 import WarehouseIcon from "@mui/icons-material/WarehouseOutlined";
-import AccountIcon from "@mui/icons-material/SwitchAccountOutlined";
 import ProductionIcon from "@mui/icons-material/ProductionQuantityLimitsOutlined";
 import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
+import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import ForumIcon from "@mui/icons-material/Forum";
 
 export const menu = [
   {
@@ -34,6 +36,21 @@ export const menu = [
       {
         title: "Hóa đơn",
         link: "orders/bill-list",
+      },
+    ],
+  },
+  {
+    id: "supplier-quotes",
+    title: "Hỏi giá",
+    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Sản phẩm cần hỏi giá",
+        link: "supplier-quotes/product",
+      },
+      {
+        title: "Đơn hỏi giá",
+        link: "supplier-quotes/quotes",
       },
     ],
   },
@@ -113,7 +130,7 @@ export const menu = [
   {
     id: "account",
     title: "Tài khoản",
-    icon: <AccountIcon className="w-[24px] h-[24px]" />,
+    icon: <PeopleAltOutlinedIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
         title: "Danh sách nhà cung cấp",
@@ -122,6 +139,10 @@ export const menu = [
       {
         title: "Danh sách khách hàng",
         link: "account/customers",
+      },
+      {
+        title: "Danh sách CSKH",
+        link: "account/customer-care",
       },
       {
         title: "Danh sách nhân viên",
@@ -139,6 +160,10 @@ export const menu = [
         link: "settings/customer-type-config",
       },
       {
+        title: "Nhóm CSKH",
+        link: "settings/customer-care-group",
+      },
+      {
         title: "Đơn vị",
         link: "settings/unit-config",
       },
@@ -153,6 +178,37 @@ export const menu = [
       {
         title: "Hình thức thanh toán",
         link: "settings/payment-type",
+      },
+    ],
+  },
+  {
+    id: "forum",
+    title: "Forum",
+    icon: <ForumIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Nhóm task",
+        link: "forum/task/task-group",
+      },
+      {
+        title: "Danh sách task",
+        link: "forum/task/task-list",
+      },
+      {
+        title: "Nhóm đề tài",
+        link: "forum/discuss/topic",
+      },
+      {
+        title: "Thảo luận",
+        link: "forum/discuss/discussion-topic",
+      },
+      {
+        title: "Họp triển khai",
+        link: "forum/meeting-deploy",
+      },
+      {
+        title: "Nghỉ phép",
+        link: "forum/leave-application",
       },
     ],
   },

@@ -45,7 +45,7 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
       "ProductListIn_" + positionId,
       {
         ...pagination,
-        searchParams
+        searchParams,
       },
     ],
     () =>
@@ -54,7 +54,7 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           positionId,
-          ...searchParams
+          ...searchParams,
         })
         .then((res) => res.data),
     {
@@ -67,8 +67,10 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
 
   return (
     <Box className="mb-4">
-      <Box className="flex">
-        <Typography className="flex-grow">THÔNG TIN SẢN PHẨM</Typography>
+      <Box className="flex items-center mb-3">
+        <Typography className="flex-grow text-sm font-semibold">
+          THÔNG TIN SẢN PHẨM
+        </Typography>
         <RefreshButton onClick={() => refetch()} />
       </Box>
 

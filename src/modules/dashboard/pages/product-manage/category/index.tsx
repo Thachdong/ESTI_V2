@@ -9,7 +9,9 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -30,7 +32,7 @@ export const CategoryPage: React.FC = () => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const defaultValue = useRef<any>();
-  
+
   usePathBaseFilter(pagination);
 
   // DIALOG METHODS
@@ -77,7 +79,7 @@ export const CategoryPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const {name, id} = defaultValue.current || {};
+    const { name, id } = defaultValue.current || {};
 
     if (confirm("Xác nhận xóa Danh mục: " + name)) {
       await mutateDelete.mutateAsync(id as string);
@@ -121,17 +123,21 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-2 mb-3">
-        <SearchBox label="Tìm kiếm" />
-
-        <Box className="flex items-center justify-end">
-          <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
-            variant="contained"
-            className="mr-3"
-          >
-            Thêm danh mục SP
-          </AddButton>
+      <Box className="mb-3 flex items-center justify-between">
+        <Box className="flex gap-3 items-center w-3/5">
+          <Box className="flex items-center justify-end">
+            <AddButton
+              onClick={() => setDialog({ open: true, type: "Add" })}
+              variant="contained"
+            >
+              Thêm danh mục SP
+            </AddButton>
+          </Box>
+          <SearchBox label="Tìm kiếm" />
+        </Box>
+        <Box className="flex gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
 

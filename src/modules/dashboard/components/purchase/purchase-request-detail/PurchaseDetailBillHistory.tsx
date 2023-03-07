@@ -16,7 +16,10 @@ type TProps = {
   purchaseCode: string;
 };
 
-export const PurchaseDetailBillHistory: React.FC<TProps> = ({ status, purchaseCode }) => {
+export const PurchaseDetailBillHistory: React.FC<TProps> = ({
+  status,
+  purchaseCode,
+}) => {
   const router = useRouter();
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -46,11 +49,11 @@ export const PurchaseDetailBillHistory: React.FC<TProps> = ({ status, purchaseCo
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm mt-4">
         CẬP NHẬT ĐƠN HÓA ĐƠN THANH TOÁN
       </Typography>
 
-      <Box className="bg-white grid gap-4 rounded-sm">
+      <Box className="bg-white grid gap-4 rounded">
         <DataTable
           rows={
             billHistory?.items?.map?.((item: any, index: number) => ({

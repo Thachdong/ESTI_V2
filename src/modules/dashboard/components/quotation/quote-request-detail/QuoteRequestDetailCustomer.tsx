@@ -17,6 +17,36 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
   const { customerId, customerAvailable } = watch();
 
+  let initCustomerInfo = {};
+
+  if (!!id && !customerId) {
+    const {
+      companyAddress,
+      companyName,
+      companyTaxCode,
+      curatorDepartmentId,
+      curatorEmail,
+      curatorName,
+      curatorPhone,
+      receiverAddress,
+    } = watch();
+
+    initCustomerInfo = {
+      companyName: companyName,
+      taxCode: companyTaxCode,
+      address: companyAddress,
+      curatorCreate: [
+        {
+          curatorName: curatorName,
+          curatorDepartment: curatorDepartmentId,
+          curatorPhone: curatorPhone,
+          curatorEmail: curatorEmail,
+          curatorAddress: receiverAddress,
+        },
+      ],
+    };
+  }
+
   const { data } = useQuery(
     ["customerDetail", customerId],
     () => customerApi.getById(customerId).then((res) => res.data),
@@ -44,7 +74,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
   const renderCustomerTag = useCallback(() => {
     if (!!id || customerAvailable) {
       return (
-        <Box className="mb-4">
+        <Box className="">
           <FormCustomer
             controlProps={{
               name: "customerId",
@@ -52,12 +82,14 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
               rules: { required: "Phải chọn mã khách hàng" },
             }}
             disabled={disabled}
+            defaultValue={initCustomerInfo}
+            onAddCallback={(createdId: any) => setValue("customerId", createdId)}
           />
         </Box>
       );
     }
 
-    if (!id && !customerApi) {
+    if (!id && !customerId) {
       return (
         <FormInput
           controlProps={{
@@ -65,7 +97,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             control: control,
           }}
           label="Mã khách hàng:"
-          className="mb-4"
+          className=""
           disabled={disabled}
         />
       );
@@ -74,11 +106,11 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
   return (
     <Box className="flex flex-col">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Thông tin doanh nghiệp
       </Typography>
 
-      <Box className="flex-grow bg-white rounded-sm p-3">
+      <Box className="grid gap-3 bg-white rounded p-3">
         {renderCustomerTag()}
 
         <FormInput
@@ -88,7 +120,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập tên khách hàng" },
           }}
           label="Tên khách hàng:"
-          className="mb-4"
           disabled={!!id}
         />
 
@@ -99,7 +130,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập mã số thuế" },
           }}
           label="Mã số thuế:"
-          className="mb-4"
           disabled={!!id}
         />
 
@@ -110,7 +140,6 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải nhập địa chỉ khách hàng" },
           }}
           label="Địa chỉ khách hàng:"
-          className="mb-4"
           multiline
           minRows={2}
           disabled={!!id}
@@ -118,7 +147,7 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
 
         <FormInput
           controlProps={{
-            name: "receiverAdress",
+            name: "receiverAddress",
             control: control,
             rules: { required: "Phải nhập địa chỉ nhận hàng" },
           }}

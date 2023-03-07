@@ -14,6 +14,7 @@ export const billColumns: TGridColDef[] = [
     sortAscValue: 14,
     sortDescValue: 3,
     filterKey: "createdDate",
+    type: "date",
   },
   {
     field: "billNumber",
@@ -64,7 +65,7 @@ export const billColumns: TGridColDef[] = [
     minWidth: 150,
     renderCell: ({ row }) => _format.getVND(row?.unPaid),
     isSort: false,
-    isFilter: false
+    isFilter: false,
   },
   {
     field: "branchCode",
@@ -82,6 +83,8 @@ export const billColumns: TGridColDef[] = [
     filterKey: "status",
     type: "select",
     options: purchaseOrderBillStatus,
-    renderCell: ({row}) => <StatusChip status={row?.status} label={row?.statusName} />
+    renderCell: ({ row }) => (
+      <StatusChip status={row?.status} label={row?.statusName} />
+    ),
   },
 ];

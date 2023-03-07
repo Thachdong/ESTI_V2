@@ -1,10 +1,4 @@
-import {
-  Box,
-  Collapse,
-  List,
-  ListItem,
-  ListItemButton,
-} from "@mui/material";
+import { Box, Collapse, List, ListItem, ListItemButton } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
 import React, { useCallback, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -16,6 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
 import { BaseButton } from "~modules-core/components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { useMediaQuery } from "react-responsive";
 
 type TProps = {
   expand: boolean;
@@ -24,6 +19,7 @@ type TProps = {
 
 export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
   // LOCAL STATE AND EXTRACT PROPS
+  let isTabletOrMobile = useMediaQuery({ query: "(max-width: 1024px)" });
   const [collapses, setCollapses] = useState<string[]>([]);
 
   const { pathname } = useRouter();
@@ -120,9 +116,10 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
   }, [expand, menu, styles, collapses, pathname]);
 
   // DOM RENDERING
+
   return (
     <Box
-      className={styles["sidebar"]}
+      className={clsx(styles["sidebar"])}
       sx={{ width: expand ? "250px" : "64px" }}
     >
       <Box className={styles["logo-box"]}>

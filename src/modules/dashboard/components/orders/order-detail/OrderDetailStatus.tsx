@@ -12,35 +12,42 @@ type TProps = {
   refetch: () => void;
 };
 
-export const OrderDetailStatus: React.FC<TProps> = ({ currentStatus, refetch }) => {
+export const OrderDetailStatus: React.FC<TProps> = ({
+  currentStatus,
+  refetch,
+}) => {
   const { control, watch } = useFormContext();
 
   const { status, id } = watch();
 
-  const mutateUpdate = useMutation((payload: {id: string, status: number}) => mainOrder.updateStatus(payload), {
-    onSuccess: (data: any) => {
-      toast.success(data?.resultMessage);
+  const mutateUpdate = useMutation(
+    (payload: { id: string; status: number }) =>
+      mainOrder.updateStatus(payload),
+    {
+      onSuccess: (data: any) => {
+        toast.success(data?.resultMessage);
 
-      refetch?.();
+        refetch?.();
+      },
     }
-  });
+  );
 
-  const handleUpdateStatus = useCallback(async() => {
+  const handleUpdateStatus = useCallback(async () => {
     if (status <= currentStatus) {
       toast.error("Trạng thái cần cập nhật không hợp lệ !");
 
       return;
     }
-    await mutateUpdate.mutateAsync({id, status})
-  }, [status, id])
+    await mutateUpdate.mutateAsync({ id, status });
+  }, [status, id]);
 
   return (
     <Box className="flex flex-col col-span-2">
-      <Typography className="font-bold uppercase mb-3">
+      <Typography className="font-bold uppercase mb-3 text-sm">
         Trạng thái đơn hàng
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded-sm p-3">
+      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
         <FormSelect
           options={orderStatus}
           controlProps={{
@@ -54,7 +61,11 @@ export const OrderDetailStatus: React.FC<TProps> = ({ currentStatus, refetch }) 
           disabled={currentStatus > 2}
         />
 
-        <BaseButton disabled={currentStatus > 2} onClick={handleUpdateStatus} className="max-w-[200px]">
+        <BaseButton
+          disabled={currentStatus > 2}
+          onClick={handleUpdateStatus}
+          className="max-w-[200px] bg-main"
+        >
           Cập nhật trạng thái
         </BaseButton>
       </Box>

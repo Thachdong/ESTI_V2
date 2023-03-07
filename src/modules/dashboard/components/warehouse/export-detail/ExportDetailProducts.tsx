@@ -32,6 +32,8 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
+  const router = useRouter();
+
   const defaultValue = useRef<any>();
 
   const { watch, setValue } = useFormContext();
@@ -102,13 +104,39 @@ export const ExportDetailProducts: React.FC<TProps> = ({
               Sao chép SP
             </Item>
 
-            <Item id="view-product-document">Xem tài liệu SP</Item>
+            <Item
+              id="view-product-document"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/documents/",
+                  query: {
+                    productName: defaultValue?.current?.productName,
+                    lotNumber: defaultValue?.current?.lotNumber,
+                  },
+                })
+              }
+            >
+              Xem tài liệu SP
+            </Item>
           </Menu>
         );
       case exportStatus > 0:
         return (
           <Menu className="p-0" id="product_table_menu">
-            <Item id="view-product-document">Xem tài liệu SP</Item>
+            <Item
+              id="view-product-document"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/documents/",
+                  query: {
+                    productName: defaultValue?.current?.productName,
+                    lotNumber: defaultValue?.current?.lotNumber,
+                  },
+                })
+              }
+            >
+              Xem tài liệu SP
+            </Item>
           </Menu>
         );
     }
@@ -151,7 +179,14 @@ export const ExportDetailProducts: React.FC<TProps> = ({
                   label: "Sao chép SP",
                 },
                 {
-                  action: () => console.log("Xem tài liệu SP"),
+                  action: () =>
+                    router.push({
+                      pathname: "/dashboard/product-manage/documents/",
+                      query: {
+                        productName: defaultValue?.current?.productName,
+                        lotNumber: defaultValue?.current?.lotNumber,
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
               ]}
@@ -163,7 +198,14 @@ export const ExportDetailProducts: React.FC<TProps> = ({
               id={row?.id}
               items={[
                 {
-                  action: () => console.log("Xem tài liệu SP"),
+                  action: () =>
+                    router.push({
+                      pathname: "/dashboard/product-manage/documents/",
+                      query: {
+                        productName: defaultValue?.current?.productName,
+                        lotNumber: defaultValue?.current?.lotNumber,
+                      },
+                    }),
                   label: "Xem tài liệu SP",
                 },
               ]}
@@ -171,7 +213,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           );
       }
     },
-    [exportStatus]
+    [exportStatus, defaultValue.current]
   );
 
   const columns: TGridColDef[] = [
@@ -193,8 +235,8 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   };
 
   return (
-    <Paper className="rounded-sm p-3">
-      <Box className="flex justify-between items-center mb-3">
+    <Box className="">
+      <Box className="flex justify-between items-end mb-3">
         <Typography className="text-sm font-medium flex-grow">
           SẢN PHẨM
         </Typography>
@@ -208,32 +250,39 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         </AddButton>
       </Box>
 
-      <ContextMenuWrapper
-        menuId="product_table_menu"
-        menuComponent={renderContextMenu()}
-      >
-        <DataTable
-          rows={productList?.map((prod: any, index: number) => ({
-            ...prod,
-            no: index + 1,
-          }))}
-          columns={columns}
-          autoHeight
-          hideSearchbar
-          hideFooter
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-            },
-          }}
-          paginationMode="client"
-        />
-      </ContextMenuWrapper>
+      <Box className="bg-white">
+        <ContextMenuWrapper
+          menuId="product_table_menu"
+          menuComponent={renderContextMenu()}
+        >
+          <DataTable
+            rows={productList?.map((prod: any, index: number) => ({
+              ...prod,
+              no: index + 1,
+            }))}
+            columns={columns}
+            autoHeight
+            hideSearchbar
+            hideFooter
+            componentsProps={{
+              row: {
+                onMouseEnter: onMouseEnterRow,
+              },
+            }}
+            paginationMode="client"
+            className=""
+          />
+        </ContextMenuWrapper>
 
-      <Typography className="my-3">
-        Tổng cộng tiền thanh toán(VNĐ):
-        <strong> {_format.getVND(totalPrice)}</strong>
-      </Typography>
+        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
+          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>
+            <span className="text-base"> {_format.getVND(totalPrice)}</span>
+          </Typography>
+        </Box>
+      </Box>
 
       <ExportDetailProductDialog
         onClose={onCloseDialog}
@@ -243,6 +292,6 @@ export const ExportDetailProducts: React.FC<TProps> = ({
         getWarehouseConfig={getWarehouseConfig}
         productOptions={productOptions}
       />
-    </Paper>
+    </Box>
   );
 };

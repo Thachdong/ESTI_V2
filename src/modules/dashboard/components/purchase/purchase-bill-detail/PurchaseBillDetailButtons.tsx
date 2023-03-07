@@ -1,14 +1,16 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
+import { useReactToPrint } from "react-to-print";
 import {
   purchaseOrderBill,
   TCreatePurchaseOrderBill,
 } from "src/api/purchase-order-bill";
-import { AddButton } from "~modules-core/components";
+import { AddButton, PrintButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
+import { PrintPurchaseBillDetail } from "~modules-dashboard/components";
 
 type TProps = {
   refetch?: () => void;
@@ -62,11 +64,31 @@ export const PurchaseBillDetailButtons: React.FC<TProps> = ({
     await mutateCreate.mutateAsync(payload);
   }, []);
 
+  const printAreaRef = useRef<HTMLTableElement>(null);
+  const handlePrint = useReactToPrint({
+    content: () => printAreaRef.current,
+    pageStyle: `
+      @page {
+        size: 210mm 297mm;
+      }
+    `,
+  });
+
   return (
-    <Box className="flex justify-end mt-4">
-      {!id && (
+    <Box className="flex justify-end">
+      {!id ? (
         <AddButton onClick={handleSubmit(handleCreate)}>Tạo hóa đơn</AddButton>
+      ) : (
+        <PrintButton onClick={handlePrint} className="bg-error ">
+          In
+        </PrintButton>
       )}
+      <Box className="hidden">
+        <PrintPurchaseBillDetail
+          printAreaRef={printAreaRef}
+          defaultValue={[]}
+        />
+      </Box>
     </Box>
   );
 };

@@ -81,7 +81,7 @@ export const StaffsDialog: React.FC<TDialog> = ({
               }}
               label="Tên tài khoản"
               className="mb-4"
-              disabled={type === "View" && !isUpdate}
+              disabled={type === "View"}
               shrinkLabel
             />
 

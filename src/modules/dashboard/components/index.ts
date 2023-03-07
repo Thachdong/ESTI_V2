@@ -5,3 +5,5 @@ export * from "./warehouse";
 export * from "./purchase";
 export * from "./orders";
 export * from "./quotation";
+export * from "./supplier-quotes";
+export * from "./forum";

@@ -5,10 +5,11 @@ import { TGridColDef } from "~types/data-grid";
 export const supplierColumns: TGridColDef<TSupplier>[] = [
   {
     isSort: false,
-    isFilter: false,
     field: "created",
     headerName: "Ngày tạo",
     width: 125,
+    type: "date",
+    filterKey: "createdDate",
     renderCell: (params) =>
       params.row.created
         ? moment(params.row.created).format("DD/MM/YYYY")
@@ -29,7 +30,7 @@ export const supplierColumns: TGridColDef<TSupplier>[] = [
     sortAscValue: 10,
     sortDescValue: 2,
     filterKey: "name",
-    flex: 1
+    flex: 1,
   },
   {
     field: "curatorName",
@@ -39,14 +40,9 @@ export const supplierColumns: TGridColDef<TSupplier>[] = [
     sortDescValue: 3,
     filterKey: "curatorName",
   },
-  {
-    field: "curatorPositionName",
-    headerName: "Chức vụ",
-    minWidth: 150,
-    sortAscValue: 12,
-    sortDescValue: 4,
-    filterKey: "curatorPosition",
-  },
+];
+
+export const supplider2Columns: TGridColDef<TSupplier>[] = [
   {
     field: "curatorPhone",
     headerName: "Số điện thoại",
@@ -69,6 +65,6 @@ export const supplierColumns: TGridColDef<TSupplier>[] = [
     minWidth: 150,
     sortAscValue: 15,
     sortDescValue: 7,
-    isFilter: false
+    isFilter: false,
   },
 ];

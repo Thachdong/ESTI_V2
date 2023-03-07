@@ -9,20 +9,32 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
+  StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import {
   PurchaseRequestNoteDialog,
   PurchaseRequestStatusDialog,
+  ViewListProductDrawer,
 } from "~modules-dashboard/components";
 import { purchaseRequestColumns } from "~modules-dashboard/pages/purchase/purchase-request/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 
-export const PurchaseRequestTable = () => {
+type TProps = {
+  onViewReport: () => void;
+  ViewReport: boolean;
+};
+
+export const PurchaseRequestTable: React.FC<TProps> = ({
+  onViewReport,
+  ViewReport,
+}) => {
   const router = useRouter();
 
   const { query } = router;
@@ -49,6 +61,7 @@ export const PurchaseRequestTable = () => {
     data: purchaseList,
     isLoading,
     isFetching,
+    refetch,
   } = useQuery(
     [
       "PurchaseList",
@@ -118,20 +131,38 @@ export const PurchaseRequestTable = () => {
     defaultValue.current = currentRow;
   };
 
+  const [Open, setOpen] = useState<boolean>(false);
+  const dataViewDetail = useRef<any>();
+  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+    const currentRow = await purchaseOrder
+      .getProductOrderDetail(id)
+      .then((res) => {
+        return res.data;
+      });
+
+    dataViewDetail.current = { ...currentRow, id: id };
+    setOpen(true);
+  };
+
   return (
     <Paper className="bgContainer">
       <Box className="flex justify-between mb-3">
-        <Box className="w-1/3">
+        <Box className="flex gap-3 items-center w-3/5">
+          <AddButton
+            onClick={() =>
+              router.push("/dashboard/purchase/purchase-request-detail")
+            }
+          >
+            Tạo đơn mua hàng
+          </AddButton>
           <SearchBox />
         </Box>
-
-        <AddButton
-          onClick={() =>
-            router.push("/dashboard/purchase/purchase-request-detail")
-          }
-        >
-          Tạo đơn mua hàng
-        </AddButton>
+        <Box className="flex gap-2">
+          <StatisticButton onClick={onViewReport} View={ViewReport} />
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
 
       <ContextMenuWrapper
@@ -170,8 +201,12 @@ export const PurchaseRequestTable = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: handleViewProduct,
             },
           }}
+          getRowClassName={({ id }) =>
+            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -185,6 +220,12 @@ export const PurchaseRequestTable = () => {
         onClose={handleCloseDialog}
         open={Boolean(dialog?.open && dialog.type === "Status")}
         defaultValue={defaultValue?.current}
+      />
+
+      <ViewListProductDrawer
+        Open={Open}
+        onClose={() => setOpen(false)}
+        data={dataViewDetail?.current?.productOrderDetail}
       />
     </Paper>
   );

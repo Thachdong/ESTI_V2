@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, {
   useCallback,
@@ -15,13 +15,18 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { StaffsDialog, StaffsStatusDialog } from "~modules-dashboard/components/account";
+import {
+  StaffsDialog,
+  StaffsStatusDialog,
+} from "~modules-dashboard/components/account";
 import { TGridColDef } from "~types/data-grid";
 import { staffColumns } from "./staffColumns";
 
@@ -54,7 +59,7 @@ export const StaffsPage = () => {
 
   const onOpenStatus = useCallback(() => {
     setDialog({ open: true, type: "UpdateStatus" });
-  }, [])
+  }, []);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -88,7 +93,7 @@ export const StaffsPage = () => {
     },
     onSuccess: (data) => {
       refetch();
-      
+
       toast.success(data.resultMessage);
     },
   });
@@ -142,21 +147,21 @@ export const StaffsPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <div className="flex mb-3">
-        <div className="w-1/2">
-          <SearchBox />
-        </div>
-
-        <div className="w-1/2 flex items-center justify-end">
+      <Box className="mb-3 flex justify-between items-center">
+        <Box className="flex items-center gap-3 w-3/5 ">
           <AddButton
             variant="contained"
-            className="mr-3"
             onClick={() => setDialog({ open: true, type: "Add" })}
           >
             Tạo nhân viên
           </AddButton>
-        </div>
-      </div>
+          <SearchBox />
+        </Box>
+        <Box className="flex items-center gap-3">
+          <FilterButton listFilterKey={[]} />
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
+      </Box>
 
       <ContextMenuWrapper
         menuId="product_table_menu"
