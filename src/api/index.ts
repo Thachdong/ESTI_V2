@@ -28,3 +28,7 @@ export * from "./pre-quote";
 export * from "./payment-type";
 export * from "./ask-price";
 export * from "./ask-price-order";
+export * from "./task-group";
+export * from "./task-list";
+export * from "./topic";
+export * from "./discussion";

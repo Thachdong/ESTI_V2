@@ -60,7 +60,7 @@ export const DropdownButton: React.FC<TDropdownButton> = ({ items, id }) => {
         {items?.map((item, index) => (
           <MenuItem
             key={index}
-            className="font-semibold text-sm text-[#061E33]"
+            className="font-semibold text-sm text-[#061E33] hover:bg-main hover:text-[#FFF]"
             onClick={() => handleClickItem(item?.action)}
             disabled={item.disabled}
           >
