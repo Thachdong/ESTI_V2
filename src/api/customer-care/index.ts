@@ -18,11 +18,16 @@ export type TUpdateCustomerCare = TCreateCustomerCare & {
 };
 
 export const customerCare = {
-  getList: (params?: any) => request.getPagination<any>(BASE_URL, {...params}),
+  getList: (params?: any) =>
+    request.getPagination<any>(BASE_URL, { ...params }),
 
-  getStatisticByMonth: () => request.get<any>(`${BASE_URL}/GetTicketSupportInMonthAndWeek`),
+  getStatisticByMonth: (params?: any) =>
+    request.get<any>(`${BASE_URL}/GetTicketSupportInMonthAndWeek`, {
+      ...params,
+    }),
 
-  getStatisticByYear: () => request.get<any>(`${BASE_URL}/GetTicketSupportInYear`),
+  getStatisticByYear: (params?: any) =>
+    request.get<any>(`${BASE_URL}/GetTicketSupportInYear`, { ...params }),
 
   create: (payload: TCreateCustomerCare) =>
     request.post<TCreateCustomerCare, any>(BASE_URL, payload),
