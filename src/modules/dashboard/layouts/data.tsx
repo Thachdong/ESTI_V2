@@ -136,8 +136,12 @@ export const menu = [
         link: "account/suppliers",
       },
       {
-        title: "Danh sách nhà khách hàng",
+        title: "Danh sách khách hàng",
         link: "account/customers",
+      },
+      {
+        title: "Danh sách CSKH",
+        link: "account/customer-care",
       },
       {
         title: "Danh sách nhân viên",

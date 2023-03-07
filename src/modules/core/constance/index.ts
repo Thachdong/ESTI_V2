@@ -301,3 +301,10 @@ export const supplierQuotesDetailStatus = [
   { value: 3, label: "Cạnh tranh cao" },
   { value: 4, label: "Ngừng sản xuất" },
 ];
+
+export const customerCareStatus = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Đã hoàn thành" },
+  { value: 4, label: "Đã hủy" },
+]

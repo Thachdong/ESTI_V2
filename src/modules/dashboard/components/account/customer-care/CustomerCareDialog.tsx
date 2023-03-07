@@ -1,22 +1,20 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { FormProvider, useForm } from "react-hook-form";
+import { useMutation, useQuery } from "react-query";
 import {
-  customerCharacteristics,
-  TCreateCustomerCharacteristics,
-  TUpdateCustomerCharacteristics,
+  customerCare,
+  TCreateCustomerCare,
+  TUpdateCustomerCare,
 } from "src/api";
-import {
-  BaseButton,
-  Dialog,
-  FormInput,
-} from "~modules-core/components";
+import { BaseButton, Dialog } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
+import { CustomerCareContent } from "./CustomerCareContent";
+import { CustomerCareInfo } from "./CustomerCareInfo";
 
-export const CharacteristicsDialog: React.FC<TDialog> = ({
+export const CustomerCareDialog: React.FC<TDialog> = ({
   onClose,
   open,
   type,
@@ -27,37 +25,68 @@ export const CharacteristicsDialog: React.FC<TDialog> = ({
 
   const { id } = useRouter().query;
 
+  const methods = useForm();
+
   const {
     control,
     handleSubmit,
     reset,
     formState: { isDirty },
-  } = useForm();
+  } = methods;
 
   const disabled = type === "View" && !isUpdate;
 
   const title =
     type === "Add"
-      ? "Thêm đặc điểm"
+      ? "Thêm phiên CSKH"
       : type === "View" && isUpdate
-      ? "Cập nhật đặc điểm"
-      : "Chi tiết";
+      ? "Cập nhật phiên CSKH"
+      : "Chi tiết phiên CSKH";
 
+  // DATA FETCHING
+  const { data: customerCareDetail } = useQuery(
+    ["CustomerCareDetail", defaultValue?.id],
+    () =>
+      customerCare.getById(defaultValue?.id as string).then((res) => res.data),
+    {
+      enabled: !!defaultValue?.id && type === "View",
+    }
+  );
+  
   // SIDE EFFECTS
   useEffect(() => {
-    if (!!defaultValue && type !== "Add") {
-      const { id, characteristicsName, description } = defaultValue || {};
+    if (!!customerCareDetail && type !== "Add") {
+      const {
+        id,
+        salesId,
+        customerId,
+        curatorId,
+        action,
+        performDate,
+        plan,
+        result,
+        status,
+      } = customerCareDetail || {};
 
-      reset({ id, characteristicsName, description });
+      reset({
+        id,
+        salesId,
+        customerId,
+        curatorId,
+        action,
+        performDate,
+        plan,
+        result,
+        status,
+      });
     } else {
       reset({});
     }
-  }, [type, defaultValue]);
+  }, [type, customerCareDetail]);
 
   // METHODS
   const mutateAdd = useMutation(
-    (payload: TCreateCustomerCharacteristics) =>
-      customerCharacteristics.create(payload),
+    (payload: TCreateCustomerCare) => customerCare.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -71,19 +100,13 @@ export const CharacteristicsDialog: React.FC<TDialog> = ({
 
   const handleCreate = useCallback(
     async (data: any) => {
-      const payload = {
-        ...data,
-        uid: id,
-      };
-
-      await mutateAdd.mutateAsync(payload);
+      await mutateAdd.mutateAsync({ ...data });
     },
     [id]
   );
 
   const mutateUpdate = useMutation(
-    (payload: TUpdateCustomerCharacteristics) =>
-      customerCharacteristics.update(payload),
+    (payload: TUpdateCustomerCare) => customerCare.update(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -160,34 +183,15 @@ export const CharacteristicsDialog: React.FC<TDialog> = ({
   }, [type, isUpdate, isDirty]);
 
   return (
-    <Dialog onClose={onClose} open={open} maxWidth="sm" title={title}>
-      <Box className="grid gap-4">
-        <FormInput
-          controlProps={{
-            name: "characteristicsName",
-            control,
-            rules: { required: "Phải nhập đặc điểm" },
-          }}
-          label="Đặc điểm"
-          shrinkLabel
-          disabled={disabled}
-        />
+    <Dialog onClose={onClose} open={open} maxWidth="lg" title={title}>
+      <FormProvider {...methods}>
+        <Box className="grid grid-cols-1 gap-4">
+          <CustomerCareInfo disabled={disabled} />
 
-        <FormInput
-          controlProps={{
-            name: "description",
-            control,
-            rules: { required: "Phải nhập mô tả" },
-          }}
-          label="Mô tả"
-          shrinkLabel
-          disabled={disabled}
-          multiline
-          minRows={3}
-        />
-
+          <CustomerCareContent disabled={disabled} />
+        </Box>
         <Box className="flex items-center justify-end">{renderButtons()}</Box>
-      </Box>
+      </FormProvider>
     </Dialog>
   );
 };
