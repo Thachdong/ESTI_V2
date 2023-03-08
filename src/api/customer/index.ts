@@ -92,4 +92,7 @@ export const customer = {
 
   resetPassword: (id: string) =>
     request.post<any, any>(`${BASE_URL}/ResetPassword?id=${id}`, {}),
+
+  export: (params?: any) =>
+    request.get<any>(`${BASE_URL}/export-excel`, { ...params }),
 };
