@@ -3,7 +3,13 @@ import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { meetingDeploy, taskGroup, taskList, TJobGroup } from "src/api";
+import {
+  meetingDeploy,
+  registerMission,
+  taskGroup,
+  taskList,
+  TJobGroup,
+} from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
@@ -15,6 +21,8 @@ import { _format } from "~modules-core/utility/fomat";
 import {
   MeetingDeployDialog,
   MeetingDeployMailReponse,
+  RegisterMissionDialog,
+  RegisterMissionMailReponse,
 } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
@@ -26,7 +34,7 @@ type TProps = {
   refetch: () => void;
 };
 
-export const MeetingDeloyTable: React.FC<TProps> = ({
+export const RegisterMissionTable: React.FC<TProps> = ({
   data,
   paginationProps,
   isLoading,
@@ -37,59 +45,73 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
 
   const [repply, setReply] = useState(false);
 
-  const { userInfo } = useSession();
-
   const columns: TGridColDef[] = [
     {
       field: "created",
       headerName: "Ngày tạo",
       align: "left",
-      minWidth: 100,
+      minWidth: 120,
       flex: 1,
       type: "date",
       filterKey: "createdDate",
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
-      field: "departmentName",
-      headerName: "Phòng ban",
+      field: "applicantCode",
+      headerName: "Mã nhân viên",
       align: "left",
       minWidth: 150,
       flex: 1,
-      filterKey: "jobGroupName",
+      filterKey: "applicantCode",
+    },
+    {
+      field: "applicantName",
+      headerName: "Người nộp đơn",
+      align: "left",
+      minWidth: 150,
+      flex: 1,
+      filterKey: "applicantName",
     },
     {
       field: "startTime",
-      headerName: "Ngày tiến hành",
+      headerName: "Thời gian công tác",
       align: "left",
-      minWidth: 150,
+      minWidth: 190,
       flex: 1,
-      filterKey: "performDate",
+      filterKey: "startTime",
       renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
       field: "endTime",
       headerName: "Thời gian kết thúc",
       align: "left",
-      minWidth: 150,
+      minWidth: 190,
       flex: 1,
       filterKey: "endTime",
       renderCell: ({ row }) => _format.converseDate(row?.endTime),
     },
     {
-      field: "descriptionJob",
-      headerName: "Mô tả công việc",
+      field: "numberOfDay",
+      headerName: "Số ngày",
       align: "left",
-      minWidth: 250,
+      minWidth: 100,
       flex: 1,
-      filterKey: "petitionerName",
+      filterKey: "numberOfDay",
+    },
+    {
+      field: "seasonMission",
+      headerName: "Lý do công tác",
+      align: "left",
+      minWidth: 300,
+      filterKey: "seasonMission",
+      flex: 1,
       renderCell: ({ row }) => {
         return (
           <>
             <Tooltip title="Xem phản hồi">
               <ButtonBase onClick={() => setReply(true)}>
                 <Typography className="text-main text-sm text-left">
-                  {row?.descriptionJob}
+                  {row?.seasonMission}
                 </Typography>
               </ButtonBase>
             </Tooltip>
@@ -98,49 +120,18 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
       },
     },
     {
-      field: "proposerName",
-      headerName: "Người đề xuất",
-      align: "left",
-      minWidth: 150,
-      filterKey: "proposerName",
-      flex: 1,
-    },
-    {
-      field: "secretaryName",
-      headerName: "Thư ký",
+      field: "headOfDepartmentName",
+      headerName: "Trưởng bộ phân",
       align: "left",
       minWidth: 150,
       flex: 1,
-      filterKey: "secretaryName",
-    },
-    {
-      field: "participant",
-      headerName: "Nguời tham gia",
-      align: "left",
-      minWidth: 200,
-      flex: 1,
-      filterKey: "co_ParticipantName",
-      renderCell: ({ row }) => {
-        const listParticipant = JSON.parse(row?.participant || "[]");
-        return (
-          <>
-            <Box className="grid ">
-              {listParticipant.map((item: any) => (
-                <Typography className="text-sm">
-                  {" "}
-                  {item?.paticipantName}
-                </Typography>
-              ))}
-            </Box>
-          </>
-        );
-      },
+      filterKey: "headOfDepartmentName",
     },
     {
       field: "status",
       headerName: "Trạng thái",
       align: "left",
-      minWidth: 100,
+      minWidth: 150,
       flex: 1,
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
@@ -150,31 +141,6 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
             label={row?.statusName}
             color={colors[row?.status] as any}
           />
-        );
-      },
-    },
-    {
-      field: "accept",
-      headerName: "Tham gia",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
-      renderCell: ({ row }) => {
-        const listParticipant = JSON.parse(row?.participant || "[]");
-        const isAccept = listParticipant.find(
-          (item: any) => item?.id == userInfo?.userInfo?.userId
-        );
-        return (
-          <>
-            {isAccept ? (
-              <ButtonBase
-                onClick={() => handleAcceptMeeting(row?.id)}
-                className="bg-success text-white px-2 py-1 rounded font-semibold"
-              >
-                Tham gia
-              </ButtonBase>
-            ) : null}
-          </>
         );
       },
     },
@@ -209,7 +175,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     defaultValue.current = currentRow;
   };
 
-  // HANDLE UPDATE GROUP TASK IN DIALOG
+  // HANDLE UPDATE REGISTER MISSION IN DIALOG
   const [Open, setOpen] = useState(false);
 
   const handleOpenUpdate = () => {
@@ -220,9 +186,9 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     setOpen(false);
   };
 
-  // HANDLE DELETE GROUP TASK IN DIALOG
+  // HANDLE DELETE REGISTER MISSION IN DIALOG
   const mutateDelete = useMutation(
-    (payload: { id: string }) => meetingDeploy.delete(payload?.id),
+    (payload: { id: string }) => registerMission.delete(payload?.id),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -233,26 +199,9 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    if (confirm("Xác nhận xoá đăng ký công tác!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
-  };
-
-  //   HANDLE ACCEPT MEETING
-  const mutateAccept = useMutation(
-    (payload: { meetingDeployId: string }) =>
-      meetingDeploy.acceptMetting(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
-
-        refetch?.();
-      },
-    }
-  );
-
-  const handleAcceptMeeting = (id: string) => {
-    mutateAccept.mutateAsync({ meetingDeployId: id });
   };
 
   return (
@@ -284,15 +233,16 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
           }}
         />
       </ContextMenuWrapper>
-      <MeetingDeployDialog
+      <RegisterMissionDialog
         onClose={handleCloseUpdate}
         open={Open}
         refetch={refetch}
         type="Update"
         defaultValue={defaultValue.current}
       />
+
       <Drawer anchor={"right"} open={repply} onClose={() => setReply(false)}>
-        <MeetingDeployMailReponse data={defaultValue.current} />
+        <RegisterMissionMailReponse data={defaultValue.current} />
       </Drawer>
     </>
   );

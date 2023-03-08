@@ -38,3 +38,6 @@ export * from "./customer-opinion";
 export * from "./customer-characteristics";
 export * from "./customer-care-group";
 export * from "./customer-care";
+export * from "./meeting-deploy";
+export * from "./leave-application";
+export * from "./register-mission";

@@ -25,8 +25,6 @@ type TProps = {
 export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
   const { control, handleSubmit } = useForm();
 
-  console.log;
-
   const {
     data: dataRepList,
     isLoading,
