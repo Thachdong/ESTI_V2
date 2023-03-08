@@ -237,7 +237,7 @@ export const CustomerDetailBasic: React.FC = () => {
 
         <CustomerDetailCompany isUpdate={isUpdate} />
 
-        <CustomerDetailContactList isUpdate={isUpdate} />
+        <CustomerDetailContactList isUpdate={isUpdate} refetch={refetch} />
 
         <Box className="flex justify-end">
           {!isUpdate ? (
@@ -247,7 +247,7 @@ export const CustomerDetailBasic: React.FC = () => {
           ) : (
             <>
               <BaseButton
-                onClick={methods.handleSubmit(handleUpdateCustomer)}
+                onClick={handleSubmit(handleUpdateCustomer)}
                 disabled={!isDirty}
               >
                 Cập nhật

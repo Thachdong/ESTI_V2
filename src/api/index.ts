@@ -38,3 +38,4 @@ export * from "./customer-opinion";
 export * from "./customer-characteristics";
 export * from "./customer-care-group";
 export * from "./customer-care";
+export * from "./curator";

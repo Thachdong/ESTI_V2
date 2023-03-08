@@ -17,9 +17,10 @@ type TProps = {
   isUpdate: boolean;
 };
 
-export const CustomerDetailCompany: React.FC<TProps> = ({isUpdate}) => {
-  const { control } = useFormContext();
+export const CustomerDetailCompany: React.FC<TProps> = ({ isUpdate }) => {
+  const { control, watch } = useFormContext();
 
+  const taxCode = watch("taxCode");
   return (
     <Box className="flex flex-col mb-4">
       <Typography className="font-bold uppercase mb-3 text-sm">
@@ -106,11 +107,13 @@ export const CustomerDetailCompany: React.FC<TProps> = ({isUpdate}) => {
           disabled={!isUpdate}
         />
 
-        <FormInput
-          controlProps={{ control, name: "identityCard" }}
-          label="Số CMND (khách hàng là cá nhân)"
-          disabled={!isUpdate}
-        />
+        {!taxCode && (
+          <FormInput
+            controlProps={{ control, name: "identityCard" }}
+            label="Số CMND"
+            disabled={!isUpdate}
+          />
+        )}
 
         <FormInput
           multiline
@@ -122,14 +125,15 @@ export const CustomerDetailCompany: React.FC<TProps> = ({isUpdate}) => {
           label="Địa chỉ"
           disabled={!isUpdate}
         />
-
-        <FormImageGallery
-          loader={customer.uploadImage}
-          controlProps={{ control, name: "identityCardImage" }}
-          title="Tải ảnh CMND"
-          className={clsx("mb-3", !isUpdate && "!bg-input-label")}
-          disabled={!isUpdate}
-        />
+        {!taxCode && (
+          <FormImageGallery
+            loader={customer.uploadImage}
+            controlProps={{ control, name: "identityCardImage" }}
+            title="Tải ảnh CMND"
+            className={clsx("mb-3", !isUpdate && "!bg-input-label")}
+            disabled={!isUpdate}
+          />
+        )}
       </Box>
     </Box>
   );

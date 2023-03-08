@@ -1,102 +1,46 @@
 import { Box } from "@mui/material";
 import { useCallback } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import { curator, customer } from "src/api";
+import { useForm, useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
 import { customerType } from "src/api/customer-type";
-import {
-  BaseButton,
-  FormDatepicker,
-  FormInput,
-  FormSelect,
-} from "~modules-core/components";
-import {
-  accountTypeOptions,
-  curatorDepartments,
-  discountTypeOptions,
-  genderData,
-} from "~modules-core/constance";
-import { toast } from "~modules-core/toast";
+import { FormDatepicker, FormInput, FormSelect } from "~modules-core/components";
+import { accountTypeOptions, curatorDepartments, discountTypeOptions, genderData } from "~modules-core/constance";
 
-type TProps = {
-  isDisable: boolean;
-  index: number;
-  refetch: () => void;
-};
+export const ContactAccount: React.FC = () => {
+  const { control: accountGroupControl, watch: accountGroupWatch } = useForm();
 
-export const CustomerDetailCurator: React.FC<TProps> = ({
-  isDisable,
-  index,
-  refetch,
-}) => {
-  const { control, watch } = useFormContext();
+  const accountGroup = accountGroupWatch("accountGroup");
 
-  const contactDetails = watch(`contacts[${index}]`);
+  const { control } = useFormContext();
 
-  const { accountType, id, userName } = contactDetails || {};
-
-  useFieldArray({
-    control,
-    name: "contacts",
-  });
-
-  // DATA FETCHING
   const { data: customerTypeOptions = [] } = useQuery(
     ["CustomerTypesList"],
     () => customerType.getAll().then((res) => res.data)
   );
 
-  // METHODS
   const renderDiscountTypeOptions = useCallback(
     (discountTypeOptions: any[]) => {
-      if (accountType === 1) {
+      if (accountGroup === 1) {
         return discountTypeOptions.slice(1, 3);
       }
 
-      if (accountType === 2) {
+      if (accountGroup === 2) {
         return [{ ...discountTypeOptions[0] }];
       }
 
       return [];
     },
-    [accountType]
+    [accountGroup]
   );
 
   const renderCustomerTypeOptions = useCallback(
     (customerTypeOptions: any[]) => {
       return customerTypeOptions.filter(
-        (type) => type?.accountType === accountType
+        (type) => type?.accountType === accountGroup
       );
     },
-    [accountType]
+    [accountGroup]
   );
-
-  const mutationDelete = useMutation((id: string) => curator.delete(id), {
-    onSuccess: (data: any) => {
-      toast.success(data?.resultMessage);
-
-      refetch();
-    },
-  });
-
-  const handleDelete = useCallback(async () => {
-    if (confirm("Xác nhận xóa: " + userName)) {
-      await mutationDelete.mutateAsync(id);
-    }
-  }, [userName, id]);
-
-  const mutateUpdate = useMutation((id: string) => customer.resetPassword(id), {
-    onSuccess: (data: any) => {
-      toast.success(data?.resultMessage);
-    },
-  });
-
-  const handleRessetPassword = useCallback(async () => {
-    if (confirm("Xác nhận cấp lại mật khẩu tài khoản: " + userName)) {
-      await mutateUpdate.mutateAsync(id);
-    }
-  }, [id, userName]);
-
   return (
     <>
       <Box
@@ -108,55 +52,48 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.userName`,
+            name: "userName",
             rules: { required: "Phải nhập tên tài khoản" },
           }}
           label="Tên tài khoản"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
           controlProps={{
-            control,
-            name: `contacts.${index}.accountType`,
+            control: accountGroupControl,
+            name: "accountGroup",
             rules: { required: "Phải chọn nhóm tài khoản" },
           }}
           options={accountTypeOptions}
           label="Nhóm tài khoản"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
           controlProps={{
             control,
-            name: `contacts.${index}.typeAccount`,
+            name: "typeAccount",
             rules: { required: "Phải chọn loại tài khoản" },
           }}
           options={renderCustomerTypeOptions(customerTypeOptions)}
           label="Loại tài khoản"
-          disabled={isDisable || !accountType}
+          disabled={!accountGroup}
+          shrinkLabel
           labelKey="levelName"
         />
 
         <FormSelect
           controlProps={{
             control,
-            name: `contacts.${index}.typeDiscount`,
+            name: "typeDiscount",
             rules: { required: "Phải chọn loại chiết khấu" },
           }}
           options={renderDiscountTypeOptions(discountTypeOptions)}
           label="Loại chiết khấu"
-          disabled={isDisable || !accountType}
+          disabled={!accountGroup}
+          shrinkLabel
         />
-
-        <Box className="col-span-2 flex items-center justify-end">
-          <BaseButton onClick={handleRessetPassword} className="mr-3">
-            Cấp lại mật khẩu
-          </BaseButton>
-          <BaseButton onClick={handleDelete} className="!bg-main-1">
-            Xóa khách hàng
-          </BaseButton>
-        </Box>
       </Box>
 
       <Box
@@ -168,86 +105,85 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.curatorName`,
+            name: "curatorName",
             rules: { required: "Phải nhập tên người liên hệ" },
           }}
           label="Tên người liên hệ"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
           options={curatorDepartments}
           controlProps={{
             control,
-            name: `contacts.${index}.curatorDepartment`,
+            name: "curatorDepartment",
             rules: { required: "Phải chọn phòng ban" },
           }}
           label="Phòng ban"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormDatepicker
           controlProps={{
             control,
-            name: `contacts.${index}.birthDay`,
+            name: "birthDay",
             rules: { required: "Phải chọn ngày sinh" },
           }}
           label="Ngày sinh"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
           options={genderData}
           controlProps={{
             control,
-            name: `contacts.${index}.curatorGender`,
+            name: "curatorGender",
             rules: { required: "Phải chọn giới tính" },
           }}
           label="Giới tính"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.curatorPhone`,
+            name: "curatorPhone",
             rules: { required: "Phải nhập số điện thoại" },
           }}
           label="Số điện thoại"
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.curatorEmail`,
+            name: "curatorEmail",
           }}
           label="Email"
           required={false}
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.zaloNumber`,
+            name: "zaloNumber",
           }}
           label="Tài khoản Zalo"
           required={false}
-          disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{
             control,
-            name: `contacts.${index}.curatorAddress`,
+            name: "curatorAddress",
             rules: { required: "Phải nhập địa chỉ" },
           }}
           label="Địa chỉ"
           multiline
           minRows={3}
-          disabled={isDisable}
-          className="col-span-2"
+          shrinkLabel
         />
       </Box>
     </>

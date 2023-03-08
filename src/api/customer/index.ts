@@ -89,4 +89,7 @@ export const customer = {
 
   updateStatus: (payload: TActivateCustomer) =>
     request.post<TActivateCustomer, any>(`${BASE_URL}/IsActive`, payload),
+
+  resetPassword: (id: string) =>
+    request.post<any, any>(`${BASE_URL}/ResetPassword?id=${id}`, {}),
 };
