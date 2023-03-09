@@ -11,7 +11,7 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputBase } from "./FormInputBase";
 
 export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
-  const { controlProps, loader, renderTitle, multiple = false, disabled = false } = props;
+  const { controlProps, loader, renderTitle, successToast, multiple = false, disabled = false } = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -40,12 +40,14 @@ export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
       setLoading(true);
 
       const urls = await Promise.all(promises);
-
+      
       const currentVal = Array.isArray(value) ? value : [];
 
       onChange([...currentVal, ...urls]);
 
       setLoading(false);
+
+      successToast?.();
     };
 
     return (

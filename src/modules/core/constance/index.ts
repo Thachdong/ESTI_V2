@@ -338,3 +338,10 @@ export const chartjsOptions = {
     }],
   },
 };
+
+export const referencePriceProductStatus = [
+  { value: 1, label: "Sản phẩm mới" },
+  { value: 2, label: "Nhu cầu cao" },
+  { value: 3, label: "Cạnh tranh cao" },
+  { value: 4, label: "Ngừng sản xuất" },
+]

@@ -1,9 +1,10 @@
 import DownloadIcon from "@mui/icons-material/SimCardDownloadOutlined";
-import { ButtonBase, ButtonProps } from "@mui/material";
 import clsx from "clsx";
 import { useCallback } from "react";
+import { TBaseButton } from "~types/buttons";
+import { BaseButton } from "./BaseButton";
 
-type TProps = ButtonProps & {
+type TProps = TBaseButton & {
   api: (params?: any) => Promise<TBaseResponse<any>>;
   filterParams?: any;
 };
@@ -34,16 +35,17 @@ export const ExportButton: React.FC<TProps> = (props) => {
   }, [api, filterParams]);
 
   return (
-    <ButtonBase
+    <BaseButton
+      tooltipText="Tải file excel"
       {...restProps}
       className={clsx(
-        "px-3 text-main bg-[#F3F6F9] h-[40px] w-[40px] rounded border border-solid border-[#edf0f2] active:bg-main active:text-white",
+        "px-3 text-main bg-[#F3F6F9] h-[40px] min-w-[40px] w-[40px] border-[#edf0f2] active:bg-main active:text-white",
         className
       )}
       onClick={handleExport}
     >
       <DownloadIcon />
       {children}
-    </ButtonBase>
+    </BaseButton>
   );
 };
