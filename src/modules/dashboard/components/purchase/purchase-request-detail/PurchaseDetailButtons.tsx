@@ -99,7 +99,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
     };
 
     await mutateUpdate.mutateAsync(payload);
-  }, []);
+  }, [id]);
 
   const mutateSendMail = useMutation(
     (payload: TSendMailProps) => purchaseOrder.sendMail(payload),
