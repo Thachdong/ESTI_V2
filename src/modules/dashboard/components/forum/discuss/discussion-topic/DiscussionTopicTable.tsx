@@ -1,12 +1,9 @@
 import {
   Avatar,
-  Box,
   ButtonBase,
-  Chip,
   Drawer,
   List,
   ListItem,
-  Paper,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -21,11 +18,9 @@ import {
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { statusTaskTable } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
-import {
-  DiscussionMailReponse,
-  TaskGroupDialog,
-} from "~modules-dashboard/components";
+import { DiscussionMailReponse } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -52,6 +47,8 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 50,
       flex: 1,
+      type: "date",
+      filterKey: "createdDate",
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
@@ -60,6 +57,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 150,
       flex: 1,
+      filterKey: "topicName",
     },
     {
       field: "levelName",
@@ -67,13 +65,15 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 50,
       flex: 1,
+      filterKey: "level",
     },
     {
       field: "descriptionJob",
       headerName: "Mô tả thảo luận",
       align: "left",
-      minWidth: 150,
+      minWidth: 250,
       flex: 1,
+      filterKey: "descriptionJob",
       renderCell: ({ row }) => {
         return (
           <>
@@ -94,6 +94,8 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 160,
       flex: 1,
+      type: "date",
+      filterKey: "fromdate",
       renderCell: ({ row }) => _format.converseDateTime(row?.startTime),
     },
 
@@ -103,6 +105,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 100,
       flex: 1,
+      filterKey: "proposerName",
     },
     {
       field: "participants",
@@ -110,6 +113,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 150,
       flex: 1,
+      filterKey: "participantsName",
       renderCell: ({ row }) => {
         const newParticipants = JSON.parse(row?.participants || "[]");
         return (
@@ -133,6 +137,9 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 100,
       flex: 1,
+      type: "select",
+      options: statusTaskTable as any,
+      filterKey: "status",
       renderCell: ({ row }) => {
         return (
           <>

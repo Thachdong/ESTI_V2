@@ -1,16 +1,20 @@
-import { Box, Paper } from "@mui/material";
+import { ButtonBase, Tooltip, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { taskGroup, TJobGroup } from "src/api";
+import { accountManagement, leaveApplication } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  StatusChip,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
-import { TaskGroupDialog } from "~modules-dashboard/components";
+import {
+  AccountDialog,
+  LeaveApplycationDialog,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -21,7 +25,7 @@ type TProps = {
   refetch: () => void;
 };
 
-export const TaskGroupTable: React.FC<TProps> = ({
+export const AccountListTable: React.FC<TProps> = ({
   data,
   paginationProps,
   isLoading,
@@ -41,29 +45,47 @@ export const TaskGroupTable: React.FC<TProps> = ({
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
-      field: "jobGroupName",
-      headerName: "Nhóm task",
+      field: "account",
+      headerName: "Tài khoản",
+      align: "left",
+      minWidth: 150,
+      flex: 1,
+      isFilter: false,
+    },
+    {
+      field: "branchCode",
+      headerName: "Chi nhánh",
       align: "left",
       minWidth: 50,
       flex: 1,
       isFilter: false,
     },
     {
-      field: "totalItem",
-      headerName: "Tổng số task",
+      field: "goal",
+      headerName: "Mục tiêu",
       align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       isFilter: false,
+      renderCell: ({ row }) => _format.getVND(row?.goal),
     },
     {
-      field: "updated",
-      headerName: "Ngày cập nhật",
+      field: "percent",
+      headerName: "Phần trăm",
       align: "left",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       isFilter: false,
-      renderCell: ({ row }) => _format.converseDate(row?.updated),
+      renderCell: ({ row }) => row?.percent + " %",
+    },
+    {
+      field: "balance",
+      headerName: "Tiền còn lại",
+      align: "left",
+      minWidth: 100,
+      flex: 1,
+      isFilter: false,
+      renderCell: ({ row }) => _format.getVND(row?.balance),
     },
     {
       field: "action",
@@ -77,8 +99,9 @@ export const TaskGroupTable: React.FC<TProps> = ({
               action: () => handleOpenUpdate(),
               label: "Cập nhật",
             },
+
             {
-              action: () => handleDeleteTaskGroup(),
+              action: () => handleDelete(),
               label: "Xoá",
             },
           ]}
@@ -96,7 +119,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
     defaultValue.current = currentRow;
   };
 
-  // HANDLE UPDATE GROUP TASK IN DIALOG
+  //   // HANDLE UPDATE GROUP ACCOUNT IN DIALOG
   const [Open, setOpen] = useState(false);
 
   const handleOpenUpdate = () => {
@@ -107,9 +130,9 @@ export const TaskGroupTable: React.FC<TProps> = ({
     setOpen(false);
   };
 
-  // HANDLE DELETE GROUP TASK IN DIALOG
+  //   // HANDLE DELETE GROUP TASK IN DIALOG
   const mutateDelete = useMutation(
-    (payload: { id: string }) => taskGroup.delete(payload?.id),
+    (payload: { id: string }) => accountManagement.delete(payload?.id),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -119,8 +142,8 @@ export const TaskGroupTable: React.FC<TProps> = ({
     }
   );
 
-  const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá nhóm task!")) {
+  const handleDelete = () => {
+    if (confirm("Xác nhận xoá task!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };
@@ -134,7 +157,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
             <Item id="update-product" onClick={handleOpenUpdate}>
               Cập nhật
             </Item>
-            <Item id="delete-product" onClick={handleDeleteTaskGroup}>
+            <Item id="delete-product" onClick={handleDelete}>
               Xóa
             </Item>
           </Menu>
@@ -155,12 +178,12 @@ export const TaskGroupTable: React.FC<TProps> = ({
         />
       </ContextMenuWrapper>
 
-      <TaskGroupDialog
+      <AccountDialog
         onClose={handleCloseUpdate}
         open={Open}
-        refetch={refetch}
         type="Update"
-        defaultValue={defaultValue.current}
+        refetch={refetch}
+        defaultValue={defaultValue?.current}
       />
     </>
   );

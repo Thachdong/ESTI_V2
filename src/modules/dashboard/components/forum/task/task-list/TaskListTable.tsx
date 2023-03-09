@@ -51,7 +51,7 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "created",
       headerName: "Ngày tạo",
       align: "left",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "date",
       filterKey: "createdDate",
@@ -61,7 +61,7 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "jobGroupName",
       headerName: "Nhóm task",
       align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "jobGroupName",
     },
@@ -69,16 +69,17 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "performDate",
       headerName: "Thời gian thực hiện",
       align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "performDate",
+      type: "date",
       renderCell: ({ row }) => _format.converseDate(row?.performDate),
     },
     {
       field: "descriptionsJob",
       headerName: "Mô tả task",
       align: "left",
-      minWidth: 150,
+      minWidth: 250,
       flex: 1,
       filterKey: "descriptionsJob",
       renderCell: ({ row }) => {
@@ -99,7 +100,7 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "petitionerName",
       headerName: "Người yêu cầu",
       align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       filterKey: "petitionerName",
     },
@@ -107,7 +108,7 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "inChargeOfPersonName",
       headerName: "Người phụ trách",
       align: "left",
-      minWidth: 50,
+      minWidth: 200,
       filterKey: "inChargeOfPersonName",
       flex: 1,
     },
@@ -115,7 +116,7 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "co_Participant",
       headerName: "Người cùng tham gia",
       align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "co_ParticipantName",
       renderCell: ({ row }) => {
@@ -127,8 +128,9 @@ export const TaskListTable: React.FC<TProps> = ({
       field: "status",
       headerName: "Trạng thái",
       align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
+      isFilter: false,
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
         return (
@@ -148,7 +150,7 @@ export const TaskListTable: React.FC<TProps> = ({
       flex: 1,
       filterKey: "level",
       renderCell: ({ row }) => (
-        <Rating className="text-xl" value={row?.level} readOnly />
+        <Rating className="text-sm" value={row?.level} readOnly />
       ),
     },
     {

@@ -2,7 +2,6 @@ import { Box, Rating, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import { meetingDeploy, staff, taskList, TMeetingDeployUpdate } from "src/api";
 import {
   BaseButton,
@@ -14,6 +13,7 @@ import {
   FormUploadfiles,
 } from "~modules-core/components";
 import { department, statusTask } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 
@@ -47,11 +47,13 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
 
   const handleAdd = async (data: any) => {
     const newParticipant = data?.participant?.toString().replaceAll("[");
+    const newAttachFile = data?.attachFile.toString().replaceAll("[");
     const dataPost = {
       ...data,
       participant: newParticipant,
+      attachFile: newAttachFile,
     };
-    mutateAdd.mutateAsync(dataPost);
+    await mutateAdd.mutateAsync(dataPost);
   };
 
   //   UPDATE STATUS
