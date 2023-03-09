@@ -56,6 +56,7 @@ export const SearchBox: React.FC<TSearchBox> = ({
       label={label}
       value={content}
       shrinkLabel
+      className="min-w-[300px]"
     />
   );
 };

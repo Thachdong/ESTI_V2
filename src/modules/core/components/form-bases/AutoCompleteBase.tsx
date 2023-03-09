@@ -52,7 +52,6 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       );
 
       callback?.(valueList);
-
       return valueList;
     } else if (
       props?.freeSolo &&
@@ -63,7 +62,6 @@ export const AutoCompleteBase: React.FC<TProps> = (props) => {
       const valueObj = options.find((opt) => opt?.[valueKey] === value) || null;
 
       callback?.(valueObj);
-
       return valueObj;
     }
   }, [value, options, callback]);

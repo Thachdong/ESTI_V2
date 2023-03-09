@@ -25,6 +25,25 @@ export const menu = [
     ],
   },
   {
+    id: "supplier-quotes",
+    title: "Hỏi giá",
+    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Giá tham khảo",
+        link: "supplier-quotes/reference-price",
+      },
+      {
+        title: "Sản phẩm cần hỏi giá",
+        link: "supplier-quotes/product",
+      },
+      {
+        title: "Đơn hỏi giá",
+        link: "supplier-quotes/quotes",
+      },
+    ],
+  },
+  {
     id: "orders",
     title: "Đơn hàng",
     icon: <OrderIcon className="w-[24px] h-[24px]" />,
@@ -36,21 +55,6 @@ export const menu = [
       {
         title: "Hóa đơn",
         link: "orders/bill-list",
-      },
-    ],
-  },
-  {
-    id: "supplier-quotes",
-    title: "Hỏi giá",
-    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
-    childrens: [
-      {
-        title: "Sản phẩm cần hỏi giá",
-        link: "supplier-quotes/product",
-      },
-      {
-        title: "Đơn hỏi giá",
-        link: "supplier-quotes/quotes",
       },
     ],
   },

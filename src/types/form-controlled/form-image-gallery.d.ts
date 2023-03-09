@@ -15,4 +15,5 @@ type TFormUploadBase = {
   renderTitle: (loading: boolean) => ReactNode;
   multiple?: boolean;
   disabled?: boolean;
+  successToast?: Function
 };
