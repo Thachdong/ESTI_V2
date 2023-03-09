@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { purchaseOrder } from "src/api";
 import { FormInput } from "~modules-core/components";
 import {
+  PurchaseDetailAdvancePayment,
   PurchaseDetailBillHistory,
   PurchaseDetailButtons,
   PurchaseDetailGeneral,
@@ -41,7 +42,8 @@ export const PurchaseRequestDetailPage = () => {
     }
   );
 
-  const { status, salesAdminNote, deliveryNote, smgNote } = purchaseRequestDetail?.productOrder?.productOrder || {};
+  const { status, salesAdminNote, deliveryNote, smgNote } =
+    purchaseRequestDetail?.productOrder?.productOrder || {};
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -125,11 +127,20 @@ export const PurchaseRequestDetailPage = () => {
                 </Box>
               </Box>
 
-              <PurchaseDetailNote title={"Ghi chú của sale admin"} value={salesAdminNote} />
+              <PurchaseDetailNote
+                title={"Ghi chú của sale admin"}
+                value={salesAdminNote}
+              />
 
-              <PurchaseDetailNote title={"Ghi chú của giao nhận"} value={deliveryNote} />
+              <PurchaseDetailNote
+                title={"Ghi chú của giao nhận"}
+                value={deliveryNote}
+              />
 
-              <PurchaseDetailNote title={"Ghi chú của cập nhật"} value={smgNote} />
+              <PurchaseDetailNote
+                title={"Ghi chú của cập nhật"}
+                value={smgNote}
+              />
             </Box>
 
             <PurchaseDetailImportHistory status={status} />
@@ -140,6 +151,8 @@ export const PurchaseRequestDetailPage = () => {
               }
               status={status}
             />
+
+            <PurchaseDetailAdvancePayment status={status} />
           </>
         )}
 
