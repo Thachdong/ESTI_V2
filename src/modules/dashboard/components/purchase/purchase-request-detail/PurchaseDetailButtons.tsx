@@ -89,17 +89,20 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
     }
   );
 
-  const handleUpdate = useCallback(async (data: any) => {
-    const { products, paymentDocument, ...rest } = data || {};
+  const handleUpdate = useCallback(
+    async (data: any) => {
+      const { products, paymentDocument, ...rest } = data || {};
 
-    const payload = {
-      ...rest,
-      id,
-      paymentDocument: paymentDocument.join(","),
-    };
+      const payload = {
+        ...rest,
+        id,
+        paymentDocument: paymentDocument.join(","),
+      };
 
-    await mutateUpdate.mutateAsync(payload);
-  }, []);
+      await mutateUpdate.mutateAsync(payload);
+    },
+    [id]
+  );
 
   const mutateSendMail = useMutation(
     (payload: TSendMailProps) => purchaseOrder.sendMail(payload),
@@ -172,6 +175,11 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
                   tooltipText="Cập nhật"
                   onClick={() => setIsUpdate(true)}
                 />
+                <SendButton
+                  onClick={() => setDialog({ open: true })}
+                >
+                  Gửi kế toán
+                </SendButton>
                 <SendButton onClick={() => setDialog({ open: true })}>
                   Gửi khách hàng
                 </SendButton>

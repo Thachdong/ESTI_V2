@@ -59,6 +59,16 @@ export const purchaseOrder = {
 
   sendMail: (payload: TSendMailProps) =>
     request.post<TSendMailProps, any>(`${BASE_URL}/SendMail`, payload),
+
+  sendAdvancePaymentMail: (payload: TSendMailProps) =>
+    request.post<TSendMailProps, any>(
+      `${BASE_URL}/SendMailToAccountant`,
+      payload
+    ),
+
   getProductOrderDetail: (id: string) =>
     request.get<any>(`${BASE_URL}/ProductOrderDetail`, { id }),
+
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
 };

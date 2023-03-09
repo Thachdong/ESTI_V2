@@ -143,7 +143,9 @@ export const AccountListTable: React.FC<TProps> = ({
   );
 
   const handleDelete = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    const {account} = defaultValue.current || {};
+
+    if (confirm("Xác nhận xoá: " + account)) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };

@@ -12,7 +12,7 @@ import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { AccountDialog, AccountListTable } from "~modules-dashboard/components";
 
-export const AccountPage = () => {
+export const AccountPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { query } = useRouter();
