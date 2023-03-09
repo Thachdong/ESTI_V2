@@ -4,3 +4,4 @@ export * from "./discuss/topic";
 export * from "./discuss/discussion-topic";
 export * from "./meeting-deploy";
 export * from "./leave-applycation";
+export * from "./register-mission";

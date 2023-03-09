@@ -214,6 +214,10 @@ export const menu = [
         title: "Nghỉ phép",
         link: "forum/leave-application",
       },
+      {
+        title: "Đăng ký công tác",
+        link: "forum/register-mission",
+      },
     ],
   },
 ];

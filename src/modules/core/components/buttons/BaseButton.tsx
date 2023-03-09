@@ -35,9 +35,13 @@ export const BaseButton: React.FC<TBaseButton> = (props) => {
         {...rest}
       >
         {children}
-
+        {"   "}
         {(loading || isSubmitting) && (
-          <CircularProgress size="1rem" color="inherit" />
+          <CircularProgress
+            size="1rem"
+            color="inherit"
+            className="text-[10px]"
+          />
         )}
       </Button>
     </Tooltip>

@@ -324,18 +324,22 @@ export const chartjsOptions = {
     },
   },
   scales: {
-    xAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: 'probability'
-      }
-    }],
-    yAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: 'probability',
-      }
-    }],
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "probability",
+        },
+      },
+    ],
+    yAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "probability",
+        },
+      },
+    ],
   },
 };
 
@@ -345,3 +349,17 @@ export const referencePriceProductStatus = [
   { value: 3, label: "Cạnh tranh cao" },
   { value: 4, label: "Ngừng sản xuất" },
 ]
+export const department = [
+  { id: 1, name: "Phòng kinh doanh" },
+  { id: 2, name: "Phòng kế toán" },
+  { id: 3, name: "Phòng chăm sóc khách hàng" },
+  { id: 4, name: "Phòng ban khách" },
+  { id: 5, name: "Toàn công ty" },
+];
+
+export const ConfirmRegisterMission = [
+  { id: 1, name: "Chưa phản hồi" },
+  { id: 2, name: "Không đồng ý" },
+  { id: 3, name: "Đồng ý" },
+  { id: 4, name: "Huỷ" },
+];
