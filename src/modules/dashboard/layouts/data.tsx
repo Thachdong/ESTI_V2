@@ -7,6 +7,7 @@ import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ForumIcon from "@mui/icons-material/Forum";
+import ContactsIcon from "@mui/icons-material/Contacts";
 
 export const menu = [
   {
@@ -217,6 +218,25 @@ export const menu = [
       {
         title: "Đăng ký công tác",
         link: "forum/register-mission",
+      },
+    ],
+  },
+  {
+    id: "accountant",
+    title: "Kế toán",
+    icon: <ContactsIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Quản lý tài khoản",
+        link: "accountant/account",
+      },
+      {
+        title: "Danh mục giao dịch",
+        link: "accountant/trading-directory",
+      },
+      {
+        title: "Quản lý giao dịch",
+        link: "accountant/transaction",
       },
     ],
   },

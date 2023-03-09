@@ -2,71 +2,82 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { topic } from "src/api";
-import { BaseButton, Dialog, FormInput } from "~modules-core/components";
+import { categoryTransaction, TCategoryTransactionUpdate } from "src/api";
+import {
+  BaseButton,
+  Dialog,
+  FormInput,
+  FormSelect,
+} from "~modules-core/components";
+import { TypeTransaction } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 
-export const TopicDialog: React.FC<TDialog> = ({
+export const TradingDirectoryDialog: React.FC<TDialog> = ({
   onClose,
   open,
   refetch,
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset } = useForm<any>({});
+  const { control, handleSubmit, reset, setValue } = useForm<any>({});
 
   useEffect(() => {
     if (type == "Update") {
-      reset({ topicName: defaultValue?.topicName, id: defaultValue?.id });
+      reset({
+        categoryName: defaultValue?.categoryName,
+        type: defaultValue?.type,
+      });
     }
   }, [defaultValue]);
 
-  //   METHODS
+  //   ADD
   const mutateAdd = useMutation(
-    (payload: { topicName: string }) => topic.create(payload),
+    (payload: TCategoryTransactionUpdate) =>
+      categoryTransaction.create(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
-
         refetch?.();
-
+        reset();
         onClose();
       },
     }
   );
 
-  const handleAdd = async (data: any) => {
-    await mutateAdd.mutateAsync({
-      topicName: data?.topicName,
-    });
+  const handleAdd = async (data: TCategoryTransactionUpdate) => {
+    await mutateAdd.mutateAsync(data);
   };
 
+  //   UPDATE
   const mutateUpdate = useMutation(
-    (payload: { topicName: string; id: string }) => topic.update(payload),
+    (payload: { categoryName: string; type: number; id: string }) =>
+      categoryTransaction.update(payload),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
-
         refetch?.();
-
         onClose();
       },
     }
   );
 
   const handleUpdate = async (data: any) => {
-    await mutateUpdate?.mutateAsync(data);
+    await mutateUpdate.mutateAsync({
+      id: defaultValue?.id,
+      categoryName: data?.categoryName,
+      type: data?.type,
+    });
   };
 
   const renderTitle = () => {
     switch (type) {
       case "Add":
-        return "Thêm mới nhóm đề tài";
+        return "Thêm mới danh mục giao dịch";
         break;
       case "Update":
-        return "Cập nhật nhóm đề tài";
+        return "Cập nhật danh mục giao dịch";
         break;
       default:
         break;
@@ -113,15 +124,24 @@ export const TopicDialog: React.FC<TDialog> = ({
   };
 
   return (
-    <Dialog onClose={onClose} open={open} maxWidth="sm" title={renderTitle()}>
-      <Box className="grid gap-4">
+    <Dialog onClose={onClose} open={open} maxWidth={"xs"} title={renderTitle()}>
+      <Box className="grid gap-3">
         <FormInput
           controlProps={{
             control: control,
-            name: "topicName",
-            rules: { required: "Phải nhập tên nhóm đề tài" },
+            name: "categoryName",
+            rules: { required: "Phải nhập tên danh mục" },
           }}
-          label="Tên nhóm đề tài"
+          label="Tên danh mục"
+        />
+        <FormSelect
+          options={TypeTransaction}
+          label={"Loại"}
+          controlProps={{
+            name: "type",
+            control: control,
+            rules: undefined,
+          }}
         />
       </Box>
 
