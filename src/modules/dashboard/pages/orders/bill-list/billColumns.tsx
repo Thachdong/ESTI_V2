@@ -18,11 +18,19 @@ export const billColumns: TGridColDef[] = [
   },
   {
     field: "billCode",
-    headerName: "MÃ HOÁ ĐƠN",
+    headerName: "số HOÁ ĐƠN",
     minWidth: 150,
     sortAscValue: 13,
     sortDescValue: 2,
     filterKey: "billCode",
+  },
+  {
+    field: "mainOrderCode",
+    headerName: "mã đơn hàng",
+    minWidth: 150,
+    sortAscValue: 13,
+    sortDescValue: 2,
+    filterKey: "mainOrderCode",
   },
   {
     field: "customerCode",
@@ -42,6 +50,14 @@ export const billColumns: TGridColDef[] = [
     filterKey: "companyName",
   },
   {
+    field: "accountCode",
+    headerName: "Người liên hệ",
+    minWidth: 250,
+    flex: 1,
+    isSort: false,
+    filterKey: "curatorCode",
+  },
+  {
     field: "totalPrice",
     headerName: "GIÁ TRỊ HOÁ ĐƠN",
     minWidth: 150,
@@ -58,6 +74,14 @@ export const billColumns: TGridColDef[] = [
     sortAscValue: 18,
     sortDescValue: 7,
     filterKey: "paid",
+  },
+  {
+    field: "paymentTime",
+    headerName: "Ngày thanh toán",
+    minWidth: 150,
+    renderCell: ({ row }) => row?.paymentTime ? moment(row?.paymentTime).format("DD/MM/YYYY") : "",
+    isSort: false,
+    isFilter: false,
   },
   {
     field: "unPaid",

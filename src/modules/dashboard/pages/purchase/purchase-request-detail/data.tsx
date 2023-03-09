@@ -114,7 +114,6 @@ export const addvancePaymentColumns: TGridColDef[] = [
     field: "attachFile",
     headerName: "File chuyển tiền",
     minWidth: 120,
-    flex: 1,
     renderCell: ({ row }) => {
       const {attachFile} = row || {};
 
@@ -128,7 +127,7 @@ export const addvancePaymentColumns: TGridColDef[] = [
         <Stack>
           {files.map?.((file: string, index: number) => (
             <Box key={index} className="truncate">
-              <a href={file}>{file}</a>
+              <a className="truncate" href={file}>{`File ${index + 1}`}</a>
             </Box>
           ))}
         </Stack>

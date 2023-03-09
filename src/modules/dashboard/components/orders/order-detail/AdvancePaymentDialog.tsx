@@ -51,7 +51,7 @@ export const AdvancePaymentDialog: React.FC<TDialog> = ({
 
       reset({
         id,
-        attachFile: files,
+        AdvancePaymentAttachFile: files,
         advancePaymentDate,
         contentBilling,
         payments,
@@ -76,12 +76,14 @@ export const AdvancePaymentDialog: React.FC<TDialog> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const { attachFile, ...rest } = data || {};
+    const { AdvancePaymentAttachFile, ...rest } = data || {};
+
+    const files = !AdvancePaymentAttachFile ? null : AdvancePaymentAttachFile.join(",");
 
     await mutateAdd.mutateAsync({
       ...rest,
-      attachFile: !attachFile ? null : attachFile.join(","),
-      productOrderId: id,
+      attachFile: files,
+      mainOrderId: id,
     });
   }, []);
 
@@ -101,12 +103,14 @@ export const AdvancePaymentDialog: React.FC<TDialog> = ({
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const { attachFile, ...rest } = data || {};
+    const { AdvancePaymentAttachFile, ...rest } = data || {};
+
+    const files = !AdvancePaymentAttachFile ? null : AdvancePaymentAttachFile.join(",");
 
     await mutateUpdate.mutateAsync({
       ...rest,
-      attachFile: !attachFile ? null : attachFile.join(","),
-      productOrderId: id,
+      attachFile: files,
+      mainOrderId: id,
     });
   }, []);
 

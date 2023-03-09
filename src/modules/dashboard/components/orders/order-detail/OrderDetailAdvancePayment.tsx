@@ -18,7 +18,7 @@ type TProps = {
   status: number;
 };
 
-export const PurchaseDetailAdvancePayment: React.FC<TProps> = ({
+export const OrderDetailAdvancePayment: React.FC<TProps> = ({
   status,
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -33,7 +33,7 @@ export const PurchaseDetailAdvancePayment: React.FC<TProps> = ({
   const { data: advancePaymentList, refetch } = useQuery(
     ["AdvancePaymentList", id],
     () =>
-      advancePayment.getByPurchaseOrder(id as string).then((res) => res.data),
+      advancePayment.getByOrder(id as string).then((res) => res.data),
     {
       enabled: !!id,
     }
@@ -116,7 +116,7 @@ export const PurchaseDetailAdvancePayment: React.FC<TProps> = ({
         </ContextMenuWrapper>
       </Box>
 
-      {status < 2 && (
+      {status === 2 && (
         <AddButton
           onClick={() => onOpen("Add")}
           className="max-w-[250px] ml-auto my-3 "

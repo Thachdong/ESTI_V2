@@ -33,6 +33,8 @@ export const BillListTable: React.FC<TProps> = ({
   onViewReport,
   ViewReport,
 }) => {
+  const [defaultValue, setDefaultValue] = useState<any>();
+
   const [pagination, setPagination] = useState(defaultPagination);
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -40,8 +42,6 @@ export const BillListTable: React.FC<TProps> = ({
   const router = useRouter();
 
   const { query } = router;
-
-  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -101,7 +101,7 @@ export const BillListTable: React.FC<TProps> = ({
             {
               action: () => onOpen("AddBill"),
               label: "Thêm phiếu thanh toán",
-              disabled: !defaultValue.current?.unPaid,
+              disabled: !defaultValue?.unPaid,
             },
             {
               action: () => onOpen("UpdateStatus"),
@@ -120,7 +120,7 @@ export const BillListTable: React.FC<TProps> = ({
 
     const currentRow = data?.items.find((item: any) => item.id === id);
 
-    defaultValue.current = currentRow;
+    setDefaultValue(currentRow)
   };
 
   const [Open, setOpen] = useState<boolean>(false);
@@ -160,14 +160,14 @@ export const BillListTable: React.FC<TProps> = ({
               onClick={() =>
                 router.push({
                   pathname: "/dashboard/orders/bill-detail",
-                  query: { id: defaultValue.current?.id },
+                  query: { id: defaultValue?.id },
                 })
               }
             >
               Nội dung chi tiết
             </Item>
             <Item
-              disabled={!defaultValue.current?.unPaid}
+              disabled={!defaultValue?.unPaid}
               id="add-bill"
               onClick={() => onOpen("AddBill")}
             >
@@ -202,7 +202,7 @@ export const BillListTable: React.FC<TProps> = ({
         onClose={onClose}
         open={Boolean(dialog.open && dialog.type === "AddBill")}
         type={dialog.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
         refetch={refetch}
       />
 
@@ -210,7 +210,7 @@ export const BillListTable: React.FC<TProps> = ({
         onClose={onClose}
         open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
         type={dialog.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
         refetch={refetch}
       />
 
