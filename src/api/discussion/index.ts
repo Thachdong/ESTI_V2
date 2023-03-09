@@ -47,6 +47,8 @@ export const discussion = {
     request.post(BASE_URL + "/" + "CancelDiscussion", undefined, {
       ...params,
     }),
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
   getListMailReponse: (params?: { discussionId: string }) =>
     request.get<any>(
       `${BASE_URL}/DiscussionResponseList/${params?.discussionId}`,

@@ -309,6 +309,14 @@ export const statusTask = [
   { id: 4, name: "Chưa hoàn thành" },
   { id: 5, name: "Huỷ" },
 ];
+
+export const statusTaskTable = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Đã kết thúc" },
+  { value: 4, label: "Huỷ" },
+];
+
 export const customerCareStatus = [
   { value: 1, label: "Chưa thực hiện" },
   { value: 2, label: "Đang thực hiện" },
@@ -342,6 +350,7 @@ export const chartjsOptions = {
     ],
   },
 };
+
 export const department = [
   { id: 1, name: "Phòng kinh doanh" },
   { id: 2, name: "Phòng kế toán" },
@@ -355,4 +364,9 @@ export const ConfirmRegisterMission = [
   { id: 2, name: "Không đồng ý" },
   { id: 3, name: "Đồng ý" },
   { id: 4, name: "Huỷ" },
+];
+
+export const TypeTransaction = [
+  { id: 1, name: "Income" },
+  { id: 2, name: "Expense" },
 ];

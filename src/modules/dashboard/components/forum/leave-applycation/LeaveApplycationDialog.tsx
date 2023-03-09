@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import {
   leaveApplication,
   meetingDeploy,
@@ -19,6 +18,7 @@ import {
   FormUploadfiles,
 } from "~modules-core/components";
 import { department, statusTask } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 

@@ -2,7 +2,7 @@ import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { leaveApplication } from "src/api";
+import { accountManagement } from "src/api";
 import {
   AddButton,
   generatePaginationProps,
@@ -10,12 +10,9 @@ import {
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import {
-  LeaveApplycationDialog,
-  LeaveApplycationTable,
-} from "~modules-dashboard/components";
+import { AccountDialog, AccountListTable } from "~modules-dashboard/components";
 
-export const LeaveApplycationPage = () => {
+export const AccountPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { query } = useRouter();
@@ -25,7 +22,7 @@ export const LeaveApplycationPage = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "leaveApplicationData",
+      "registerMisson",
       "loading",
       {
         ...pagination,
@@ -33,7 +30,7 @@ export const LeaveApplycationPage = () => {
       },
     ],
     () =>
-      leaveApplication
+      accountManagement
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -51,32 +48,34 @@ export const LeaveApplycationPage = () => {
 
   //   HANDLE ADD MEETING
   const [Open, setOpen] = useState(false);
-  const onCreateMeeting = () => {
+  const onCreateAccount = () => {
     setOpen(true);
   };
 
-  const handelClose = () => {
+  const handelCloseAccount = () => {
     setOpen(false);
   };
 
   return (
     <Paper className="bgContainer">
       <Box className="mb-3 flex gap-3 w-3/5">
-        <AddButton children="Tạo nghỉ phép" onClick={onCreateMeeting} />
+        <AddButton children="Tạo tài khoản" onClick={onCreateAccount} />
         <SearchBox />
       </Box>
-      <LeaveApplycationTable
+
+      <AccountListTable
         data={data?.items}
+        refetch={refetch}
         isFetching={isFetching}
         isLoading={isLoading}
-        refetch={refetch}
         paginationProps={paginationProps}
       />
-      <LeaveApplycationDialog
-        onClose={handelClose}
+
+      <AccountDialog
+        onClose={handelCloseAccount}
         open={Open}
-        refetch={refetch}
         type="Add"
+        refetch={refetch}
       />
     </Paper>
   );

@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { discussion } from "src/api";
-import { AddButton, generatePaginationProps } from "~modules-core/components";
+import {
+  AddButton,
+  generatePaginationProps,
+  SearchBox,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import {
@@ -58,8 +62,9 @@ export const DiscussionTopicPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3">
+      <Box className="mb-3 flex gap-3 w-3/5">
         <AddButton children="Tạo thảo luận" onClick={onAddDiscussionTopic} />
+        <SearchBox />
       </Box>
       <DiscussionTopicTable
         refetch={refetch}

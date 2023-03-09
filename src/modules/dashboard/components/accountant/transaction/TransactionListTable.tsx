@@ -1,16 +1,11 @@
-import { Box, Paper } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
-import { useMutation } from "react-query";
-import { toast } from "react-toastify";
-import { taskGroup, TJobGroup } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
-import { TaskGroupDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -21,7 +16,7 @@ type TProps = {
   refetch: () => void;
 };
 
-export const TaskGroupTable: React.FC<TProps> = ({
+export const TransactionListTable: React.FC<TProps> = ({
   data,
   paginationProps,
   isLoading,
@@ -37,33 +32,70 @@ export const TaskGroupTable: React.FC<TProps> = ({
       align: "left",
       minWidth: 50,
       flex: 1,
-      isFilter: false,
+      type: "date",
+      filterKey: "createdDate",
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
-      field: "jobGroupName",
-      headerName: "Nhóm task",
+      field: "account",
+      headerName: "Mã đối tác",
       align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
-      isFilter: false,
+      filterKey: "applicantCode",
     },
     {
-      field: "totalItem",
-      headerName: "Tổng số task",
+      field: "branchCode",
+      headerName: "Tên đối tác",
       align: "left",
       minWidth: 50,
       flex: 1,
-      isFilter: false,
+      filterKey: "branchCode",
     },
     {
-      field: "updated",
-      headerName: "Ngày cập nhật",
+      field: "goal",
+      headerName: "Diễn giải",
       align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
-      isFilter: false,
-      renderCell: ({ row }) => _format.converseDate(row?.updated),
+      filterKey: "goal",
+      renderCell: ({ row }) => _format.getVND(row?.goal),
+    },
+    {
+      field: "percent",
+      headerName: "Danh mục",
+      align: "left",
+      minWidth: 100,
+      flex: 1,
+      filterKey: "percent",
+      renderCell: ({ row }) => row?.percent + " %",
+    },
+    {
+      field: "balance",
+      headerName: "Số hoá đơn",
+      align: "left",
+      minWidth: 100,
+      flex: 1,
+      filterKey: "balance",
+      renderCell: ({ row }) => _format.getVND(row?.balance),
+    },
+    {
+      field: "inDebt",
+      headerName: "Nợ",
+      align: "left",
+      minWidth: 100,
+      flex: 1,
+      filterKey: "balance",
+      renderCell: ({ row }) => _format.getVND(row?.balance),
+    },
+    {
+      field: "accountBalance",
+      headerName: "Số dư tài khoản",
+      align: "left",
+      minWidth: 100,
+      flex: 1,
+      filterKey: "accountBalance",
+      renderCell: ({ row }) => _format.getVND(row?.balance),
     },
     {
       field: "action",
@@ -77,6 +109,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
               action: () => handleOpenUpdate(),
               label: "Cập nhật",
             },
+
             {
               action: () => handleDeleteTaskGroup(),
               label: "Xoá",
@@ -96,7 +129,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
     defaultValue.current = currentRow;
   };
 
-  // HANDLE UPDATE GROUP TASK IN DIALOG
+  //   // HANDLE UPDATE GROUP TASK IN DIALOG
   const [Open, setOpen] = useState(false);
 
   const handleOpenUpdate = () => {
@@ -107,22 +140,22 @@ export const TaskGroupTable: React.FC<TProps> = ({
     setOpen(false);
   };
 
-  // HANDLE DELETE GROUP TASK IN DIALOG
-  const mutateDelete = useMutation(
-    (payload: { id: string }) => taskGroup.delete(payload?.id),
-    {
-      onSuccess: (data) => {
-        toast.success(data.resultMessage);
+  //   // HANDLE DELETE TRANSACTION IN DIALOG
+  //   const mutateDelete = useMutation(
+  //     (payload: { id: string }) => leaveApplication.delete(payload?.id),
+  //     {
+  //       onSuccess: (data) => {
+  //         toast.success(data.resultMessage);
 
-        refetch?.();
-      },
-    }
-  );
+  //         refetch?.();
+  //       },
+  //     }
+  //   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá nhóm task!")) {
-      mutateDelete.mutateAsync(defaultValue?.current);
-    }
+    // if (confirm("Xác nhận xoá giao dịch!")) {
+    //   mutateDelete.mutateAsync(defaultValue?.current);
+    // }
   };
 
   return (
@@ -154,14 +187,6 @@ export const TaskGroupTable: React.FC<TProps> = ({
           }}
         />
       </ContextMenuWrapper>
-
-      <TaskGroupDialog
-        onClose={handleCloseUpdate}
-        open={Open}
-        refetch={refetch}
-        type="Update"
-        defaultValue={defaultValue.current}
-      />
     </>
   );
 };
