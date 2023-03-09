@@ -46,3 +46,4 @@ export * from "./register-mission";
 export * from "./account-manager";
 export * from "./category-transaction";
 export * from "./advance-payment";
+export * from "./transaction";

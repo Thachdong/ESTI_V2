@@ -40,6 +40,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
       minWidth: 50,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
@@ -49,6 +50,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
       minWidth: 150,
       flex: 1,
       isFilter: false,
+      isSort: false,
     },
     {
       field: "typeName",
@@ -57,6 +59,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
       minWidth: 50,
       flex: 1,
       isFilter: false,
+      isSort: false,
     },
     {
       field: "updated",
@@ -65,6 +68,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
       minWidth: 50,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.updated),
     },
     {
@@ -155,6 +159,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          hideSearchbar
         />
       </ContextMenuWrapper>
 
