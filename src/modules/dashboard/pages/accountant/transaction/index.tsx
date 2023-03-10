@@ -14,6 +14,7 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { _format } from "~modules-core/utility/fomat";
+import { TransactionDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { transactionColumns } from "./data";
@@ -130,6 +131,14 @@ export const TransactionPage: React.FC = () => {
           }}
         />
       </ContextMenuWrapper>
+
+      <TransactionDialog
+        onClose={onClose}
+        open={dialog.open}
+        type={dialog.type}
+        defaultValue={defaultValue.current}
+        refetch={refetch}
+      />
     </Paper>
   );
 };
