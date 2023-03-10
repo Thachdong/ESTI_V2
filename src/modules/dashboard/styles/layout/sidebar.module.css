@@ -42,6 +42,7 @@
   left: 100%;
   z-index: 999;
   width: 250px;
+  transform: translateY(-15%);
 }
 
 .sidebar .expand-items {

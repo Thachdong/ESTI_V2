@@ -51,4 +51,10 @@ export const leaveApplication = {
     request.post(`${BASE_URL}/ConfirmLeaveApplication`, undefined, {
       ...params,
     }),
+
+  updateStatus: (payload: { leaveApplicationId: string; status: number }) =>
+    request.post<any, any>(
+      `${BASE_URL}/ConfirmLeaveApplication?leaveApplicationId=${payload?.leaveApplicationId}&status=${payload?.status}`,
+      {}
+    ),
 };

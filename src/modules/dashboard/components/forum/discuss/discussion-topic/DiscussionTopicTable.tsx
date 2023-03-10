@@ -10,7 +10,6 @@ import {
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import { discussion } from "src/api";
 import {
   ContextMenuWrapper,
@@ -19,6 +18,7 @@ import {
   StatusChip,
 } from "~modules-core/components";
 import { statusTaskTable } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { DiscussionMailReponse } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -44,36 +44,41 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
       type: "date",
       filterKey: "createdDate",
+      sortDescValue: 0,
+      sortAscValue: 10,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "topicName",
       headerName: "Đề tài",
-      align: "left",
       minWidth: 150,
-      flex: 1,
       filterKey: "topicName",
+      sortDescValue: 1,
+      sortAscValue: 9,
     },
     {
       field: "levelName",
       headerName: "Mức độ",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
       filterKey: "level",
+      sortDescValue: 2,
+      sortAscValue: 11,
+      type: "select",
+      options: [
+        { value: 1, label: "HOT" },
+        { value: 2, label: "WARM" },
+      ],
     },
     {
       field: "descriptionJob",
       headerName: "Mô tả thảo luận",
-      align: "left",
       minWidth: 250,
-      flex: 1,
       filterKey: "descriptionJob",
+      sortDescValue: 3,
+      sortAscValue: 12,
       renderCell: ({ row }) => {
         return (
           <>
@@ -91,29 +96,29 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
     {
       field: "startTime",
       headerName: "Thời gian bắt đầu",
-      align: "left",
       minWidth: 160,
-      flex: 1,
       type: "date",
       filterKey: "fromdate",
+      sortDescValue: 7,
+      sortAscValue: 16,
       renderCell: ({ row }) => _format.converseDateTime(row?.startTime),
     },
 
     {
       field: "proposerName",
       headerName: "Người đề xuất",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 150,
       filterKey: "proposerName",
+      sortDescValue: 5,
+      sortAscValue: 14,
     },
     {
       field: "participants",
       headerName: "Người tham gia",
-      align: "left",
       minWidth: 150,
-      flex: 1,
       filterKey: "participantsName",
+      sortDescValue: 6,
+      sortAscValue: 15,
       renderCell: ({ row }) => {
         const newParticipants = JSON.parse(row?.participants || "[]");
         return (
@@ -134,12 +139,12 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 130,
       type: "select",
       options: statusTaskTable as any,
       filterKey: "status",
+      sortDescValue: 4,
+      sortAscValue: 13,
       renderCell: ({ row }) => {
         return (
           <>

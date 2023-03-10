@@ -15,7 +15,7 @@ import {
   DiscussionTopicTable,
 } from "~modules-dashboard/components";
 
-export const DiscussionTopicPage = () => {
+export const DiscussionTopicPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { query } = useRouter();

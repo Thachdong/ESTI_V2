@@ -35,23 +35,23 @@ export const TopicListTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
       minWidth: 50,
+      isSort: false,
       flex: 1,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "topicName",
       headerName: "Đề tài",
-      align: "left",
       minWidth: 50,
+      isSort: false,
       flex: 1,
     },
     {
       field: "totalItem",
       headerName: "Tổng đề tài",
-      align: "left",
       minWidth: 50,
+      isSort: false,
       flex: 1,
     },
     {
@@ -141,6 +141,7 @@ export const TopicListTable: React.FC<TProps> = ({
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          hideSearchbar
         />
       </ContextMenuWrapper>
 

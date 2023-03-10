@@ -10,6 +10,7 @@ import {
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { ConfirmRegisterMission } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { LeaveApplycationDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -35,52 +36,54 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
       type: "date",
       filterKey: "createdDate",
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "applicantCode",
       headerName: "Mã Nhân viên",
-      align: "left",
       minWidth: 150,
-      flex: 1,
       filterKey: "applicantCode",
+      sortAscValue: 9,
+      sortDescValue: 1,
     },
     {
       field: "applicantName",
       headerName: "Người nộp đơn",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 150,
       filterKey: "applicantName",
+      sortAscValue: 11,
+      sortDescValue: 2,
     },
     {
       field: "startTime",
       headerName: "Thời gian nghỉ phép",
-      align: "left",
       minWidth: 150,
-      flex: 1,
       filterKey: "startTime",
+      sortAscValue: 16,
+      sortDescValue: 7,
+      type: "date",
       renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
       field: "numberOfDay",
       headerName: "Số ngày",
-      align: "left",
       minWidth: 100,
-      flex: 1,
       filterKey: "numberOfDay",
+      sortAscValue: 13,
+      sortDescValue: 4,
     },
     {
       field: "season",
       headerName: "Lý do",
-      align: "left",
       minWidth: 150,
       filterKey: "season",
+      sortAscValue: 14,
+      sortDescValue: 5,
       flex: 1,
       renderCell: ({ row }) => {
         return (
@@ -99,17 +102,15 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
     {
       field: "headOfDepartmentName",
       headerName: "Trưởng bộ phận",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 150,
       filterKey: "headOfDepartmentName",
+      sortAscValue: 15,
+      sortDescValue: 6,
     },
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 130,
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
         return (
@@ -120,6 +121,11 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
           />
         );
       },
+      filterKey: "status",
+      type: "select",
+      options: ConfirmRegisterMission,
+      sortAscValue: 12,
+      sortDescValue: 3,
     },
     {
       field: "action",
@@ -198,7 +204,7 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    if (confirm("Xác nhận xoá đơn nghỉ phép!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };
