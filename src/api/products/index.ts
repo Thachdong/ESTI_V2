@@ -57,4 +57,7 @@ export const products = {
 
   getProductBySupplier: (supplierId: string) =>
     request.get<any>(`${BASE_URL}/ProductInSupplier?supplierId=${supplierId}`),
+
+  export: (params?: any) =>
+    request.get<any>(`${BASE_URL}/export-excel`, { ...params }),
 };

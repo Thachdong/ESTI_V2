@@ -83,4 +83,7 @@ export const mainOrder = {
 
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
+  export: (params?: any) =>
+    request.get<any>(`${BASE_URL}/ExportExcel`, { ...params }),
 };

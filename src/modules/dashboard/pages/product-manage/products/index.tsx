@@ -17,6 +17,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   FormInputBase,
   generatePaginationProps,
@@ -225,10 +226,12 @@ export const ProductsPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-3 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
+      <Box className="grid xl:grid-cols-3 gap-4 mb-3">
+        <Box className="w-1/3 xl:w-1/2">
+          <SearchBox label="Tìm kiếm sale phụ trách" />
+        </Box>
 
-        <Box className="flex items-center justify-end gap-3 col-span-2">
+        <Box className="xl:col-span-2 flex items-center justify-end gap-3 ml-3">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
@@ -250,8 +253,15 @@ export const ProductsPage = () => {
               />
             </InputLabel>
           </AddButton>
+
           <FilterButton listFilterKey={[]} />
+
           <RefreshButton onClick={() => refetch()} />
+
+          <ExportButton
+            api={products.export}
+            filterParams={{ ...query, pageSize: 99999 }}
+          />
         </Box>
       </Box>
 

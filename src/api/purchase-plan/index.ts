@@ -13,7 +13,7 @@ export type TCreatePurchasePlan = {
 
 export type TUpdatePurchasePlan = TCreatePurchasePlan & {
   id: string;
-}
+};
 
 const BASE_URL = "NeedToBuy";
 
@@ -29,4 +29,7 @@ export const purchasePlan = {
     request.put<TUpdatePurchasePlan, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  export: (params?: any) =>
+    request.get<any>(`${BASE_URL}/ExportExcel`, { ...params }),
 };
