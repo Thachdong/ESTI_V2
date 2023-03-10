@@ -1,4 +1,13 @@
-import { Box, ButtonBase, Drawer, Tooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  ButtonBase,
+  Drawer,
+  List,
+  ListItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
@@ -124,17 +133,17 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
       sortDescValue: 6,
       renderCell: ({ row }) => {
         const listParticipant = JSON.parse(row?.participant || "[]");
+
         return (
-          <>
-            <Box className="grid ">
-              {listParticipant.map((item: any) => (
-                <Typography className="text-sm">
-                  {" "}
-                  {item?.paticipantName}
-                </Typography>
-              ))}
-            </Box>
-          </>
+          <List className="p-0 grid grid-cols-5 gap-2">
+            {listParticipant?.map((item: any) => (
+              <ListItem className="p-0">
+                <Tooltip title={item?.paticipantName}>
+                  <Avatar className="w-[24px] h-[24px]" />
+                </Tooltip>
+              </ListItem>
+            ))}
+          </List>
         );
       },
     },

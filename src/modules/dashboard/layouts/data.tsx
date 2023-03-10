@@ -193,19 +193,19 @@ export const menu = [
     childrens: [
       {
         title: "Nhóm task",
-        link: "forum/task/task-group",
+        link: "forum/task-group",
       },
       {
         title: "Danh sách task",
-        link: "forum/task/task-list",
+        link: "forum/task-list",
       },
       {
         title: "Nhóm đề tài",
-        link: "forum/discuss/topic",
+        link: "forum/topic",
       },
       {
         title: "Thảo luận",
-        link: "forum/discuss/discussion-topic",
+        link: "forum/discussion-topic",
       },
       {
         title: "Họp triển khai",
