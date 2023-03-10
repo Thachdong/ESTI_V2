@@ -2,7 +2,6 @@ import { Box, ButtonBase, Drawer, Tooltip, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import {
   meetingDeploy,
   registerMission,
@@ -16,7 +15,9 @@ import {
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { ConfirmRegisterMission } from "~modules-core/constance";
 import { useSession } from "~modules-core/customHooks/useSession";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import {
   MeetingDeployDialog,
@@ -49,62 +50,69 @@ export const RegisterMissionTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
       minWidth: 120,
       flex: 1,
       type: "date",
       filterKey: "createdDate",
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "applicantCode",
       headerName: "Mã nhân viên",
-      align: "left",
       minWidth: 150,
       flex: 1,
       filterKey: "applicantCode",
+      sortAscValue: 9,
+      sortDescValue: 1,
     },
     {
       field: "applicantName",
       headerName: "Người nộp đơn",
-      align: "left",
       minWidth: 150,
       flex: 1,
       filterKey: "applicantName",
+      sortAscValue: 11,
+      sortDescValue: 2,
     },
     {
       field: "startTime",
       headerName: "Thời gian công tác",
-      align: "left",
       minWidth: 190,
       flex: 1,
       filterKey: "startTime",
+      sortAscValue: 16,
+      sortDescValue: 7,
       renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
       field: "endTime",
       headerName: "Thời gian kết thúc",
-      align: "left",
       minWidth: 190,
       flex: 1,
       filterKey: "endTime",
+      sortAscValue: 17,
+      sortDescValue: 8,
       renderCell: ({ row }) => _format.converseDate(row?.endTime),
     },
     {
       field: "numberOfDay",
       headerName: "Số ngày",
-      align: "left",
       minWidth: 100,
       flex: 1,
       filterKey: "numberOfDay",
+      sortAscValue: 13,
+      sortDescValue: 4,
     },
     {
       field: "seasonMission",
       headerName: "Lý do công tác",
-      align: "left",
       minWidth: 300,
       filterKey: "seasonMission",
       flex: 1,
+      sortAscValue: 14,
+      sortDescValue: 5,
       renderCell: ({ row }) => {
         return (
           <>
@@ -122,17 +130,19 @@ export const RegisterMissionTable: React.FC<TProps> = ({
     {
       field: "headOfDepartmentName",
       headerName: "Trưởng bộ phân",
-      align: "left",
       minWidth: 150,
       flex: 1,
       filterKey: "headOfDepartmentName",
+      sortAscValue: 15,
+      sortDescValue: 6,
     },
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
       minWidth: 150,
       flex: 1,
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
         return (
@@ -143,6 +153,9 @@ export const RegisterMissionTable: React.FC<TProps> = ({
           />
         );
       },
+      filterKey: "status",
+      type: "select",
+      options: ConfirmRegisterMission,
     },
     {
       field: "action",

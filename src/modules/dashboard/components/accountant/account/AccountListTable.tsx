@@ -38,53 +38,53 @@ export const AccountListTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
       minWidth: 50,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "account",
       headerName: "Tài khoản",
-      align: "left",
       minWidth: 150,
       flex: 1,
       isFilter: false,
+      isSort: false,
     },
     {
       field: "branchCode",
       headerName: "Chi nhánh",
-      align: "left",
       minWidth: 50,
       flex: 1,
       isFilter: false,
+      isSort: false,
     },
     {
       field: "goal",
       headerName: "Mục tiêu",
-      align: "left",
       minWidth: 150,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => _format.getVND(row?.goal),
     },
     {
       field: "percent",
       headerName: "Phần trăm",
-      align: "left",
       minWidth: 100,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => row?.percent + " %",
     },
     {
       field: "balance",
       headerName: "Tiền còn lại",
-      align: "left",
       minWidth: 100,
       flex: 1,
       isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => _format.getVND(row?.balance),
     },
     {
@@ -177,6 +177,7 @@ export const AccountListTable: React.FC<TProps> = ({
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          hideSearchbar
         />
       </ContextMenuWrapper>
 

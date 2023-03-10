@@ -24,7 +24,9 @@ export const TaskListDialog: React.FC<TDialog> = ({
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset, setValue } = useForm<any>({});
+  const { control, handleSubmit, reset, setValue, watch } = useForm<any>({});
+
+  const level = watch("level");
 
   useEffect(() => {
     if (type == "Update") {
@@ -205,7 +207,8 @@ export const TaskListDialog: React.FC<TDialog> = ({
                 onChange={(val: any) =>
                   setValue("level", val?.target?._wrapperState?.initialValue)
                 }
-                value={defaultValue?.level || 0}
+                value={level || 0}
+                // value={defaultValue?.level || 0}
               />
             </Box>
             <FormInput

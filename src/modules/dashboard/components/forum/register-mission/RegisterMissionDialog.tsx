@@ -131,7 +131,7 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
     <Dialog
       onClose={onClose}
       open={open}
-      maxWidth={type == "Update" ? "xs" : "md"}
+      maxWidth={type == "Update" ? "sm" : "md"}
       title={renderTitle()}
     >
       <Box className="grid grid-cols-2 gap-4">
@@ -222,6 +222,8 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
               label="Trạng thái đăng ký"
               options={ConfirmRegisterMission}
               className="col-span-2"
+              labelKey="label"
+              valueKey="value"
             />
           </>
         )}

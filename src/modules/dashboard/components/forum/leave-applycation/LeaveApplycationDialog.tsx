@@ -17,7 +17,7 @@ import {
   FormSelectAsync,
   FormUploadfiles,
 } from "~modules-core/components";
-import { department, statusTask } from "~modules-core/constance";
+import { ConfirmRegisterMission, department, statusTask } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
@@ -56,8 +56,8 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
 
   //   UPDATE STATUS
   const mutateUpdateStatus = useMutation(
-    (payload: { meetingDeployId: string; status: number }) =>
-      meetingDeploy.updateStatus(payload),
+    (payload: { leaveApplicationId: string; status: number }) =>
+    leaveApplication.updateStatus(payload),
     {
       onSuccess: (data) => {
         toast.success("Cập nhật trạng thái thành công");
@@ -71,7 +71,7 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
 
   const handleUpdateStatus = async (data: any) => {
     await mutateUpdateStatus.mutateAsync({
-      meetingDeployId: defaultValue?.id,
+      leaveApplicationId: defaultValue?.id,
       status: data?.status,
     });
   };
@@ -211,7 +211,18 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
             </Box>
           </>
         ) : (
-          <>{defaultValue?.contentSeason}</>
+          <FormSelect
+              controlProps={{
+                control: control,
+                name: "status",
+                rules: { required: "Phải chọn trạng thái cuộc họp" },
+              }}
+              label="Trạng thái"
+              options={ConfirmRegisterMission}
+              className="col-span-2"
+              valueKey="value"
+              labelKey="label"
+            />
         )}
       </Box>
 

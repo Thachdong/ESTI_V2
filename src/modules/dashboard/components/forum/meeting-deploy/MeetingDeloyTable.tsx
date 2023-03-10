@@ -43,46 +43,48 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
       minWidth: 100,
-      flex: 1,
       type: "date",
       filterKey: "createdDate",
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "departmentName",
       headerName: "Phòng ban",
-      align: "left",
       minWidth: 150,
-      flex: 1,
-      filterKey: "jobGroupName",
+      filterKey: "departmentName",
+      sortAscValue: 9,
+      sortDescValue: 1,
     },
     {
       field: "startTime",
       headerName: "Ngày tiến hành",
-      align: "left",
       minWidth: 150,
-      flex: 1,
-      filterKey: "performDate",
+      filterKey: "startTime",
+      sortAscValue: 16,
+      sortDescValue: 7,
+      type: "date",
       renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
       field: "endTime",
       headerName: "Thời gian kết thúc",
-      align: "left",
-      minWidth: 150,
-      flex: 1,
+      minWidth: 175,
       filterKey: "endTime",
+      sortAscValue: 17,
+      sortDescValue: 8,
+      type: "date",
       renderCell: ({ row }) => _format.converseDate(row?.endTime),
     },
     {
       field: "descriptionJob",
       headerName: "Mô tả công việc",
-      align: "left",
       minWidth: 250,
-      flex: 1,
-      filterKey: "petitionerName",
+      filterKey: "descriptionJob",
+      sortAscValue: 11,
+      sortDescValue: 2,
       renderCell: ({ row }) => {
         return (
           <>
@@ -100,26 +102,26 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     {
       field: "proposerName",
       headerName: "Người đề xuất",
-      align: "left",
       minWidth: 150,
       filterKey: "proposerName",
-      flex: 1,
+      sortAscValue: 13,
+      sortDescValue: 4,
     },
     {
       field: "secretaryName",
       headerName: "Thư ký",
-      align: "left",
       minWidth: 150,
-      flex: 1,
       filterKey: "secretaryName",
+      sortAscValue: 14,
+      sortDescValue: 5,
     },
     {
       field: "participant",
       headerName: "Nguời tham gia",
-      align: "left",
       minWidth: 200,
-      flex: 1,
-      filterKey: "co_ParticipantName",
+      filterKey: "participantsName",
+      sortAscValue: 15,
+      sortDescValue: 6,
       renderCell: ({ row }) => {
         const listParticipant = JSON.parse(row?.participant || "[]");
         return (
@@ -139,26 +141,32 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 150,
       renderCell: ({ row }) => {
-        const colors = ["success", "default", "error"];
+        const colors = ["default", "secondary", "success", "error"];
         return (
           <StatusChip
             status={row?.status}
             label={row?.statusName}
-            color={colors[row?.status] as any}
+            color={colors[row?.status - 1] as any}
           />
         );
       },
+      filterKey: "status",
+      type: "select",
+      sortAscValue: 12,
+      sortDescValue: 3,
+      options: [
+        { value: 1, label: "Chưa thực hiện" },
+        { value: 2, label: "Đang thực hiện" },
+        { value: 3, label: "Hoàn thành" },
+        { value: 4, label: "Hủy" },
+      ],
     },
     {
       field: "accept",
       headerName: "Tham gia",
-      align: "left",
       minWidth: 100,
-      flex: 1,
       renderCell: ({ row }) => {
         const listParticipant = JSON.parse(row?.participant || "[]");
         const isAccept = listParticipant.find(

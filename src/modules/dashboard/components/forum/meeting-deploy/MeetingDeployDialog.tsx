@@ -224,7 +224,12 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
                 rules: { required: "Phải chọn trạng thái cuộc họp" },
               }}
               label="Trạng thái"
-              options={statusTask}
+              options={[
+                { id: 1, name: "Chưa thực hiện" },
+                { id: 2, name: "Đang thực hiện" },
+                { id: 3, name: "Hoàn thành" },
+                { id: 4, name: "Hủy" },
+              ]}
               className="col-span-2"
             />
           </>

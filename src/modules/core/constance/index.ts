@@ -366,10 +366,10 @@ export const department = [
 ];
 
 export const ConfirmRegisterMission = [
-  { id: 1, name: "Chưa phản hồi" },
-  { id: 2, name: "Không đồng ý" },
-  { id: 3, name: "Đồng ý" },
-  { id: 4, name: "Huỷ" },
+  { value: 1, label: "Chưa phản hồi" },
+  { value: 2, label: "Không đồng ý" },
+  { value: 3, label: "Đồng ý" },
+  { value: 4, label: "Huỷ" },
 ];
 
 export const TypeTransaction = [
