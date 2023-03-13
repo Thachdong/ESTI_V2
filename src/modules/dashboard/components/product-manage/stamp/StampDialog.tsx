@@ -13,12 +13,17 @@ import { productTypesStamp } from "~modules-core/constance";
 import { TDialog } from "~types/dialog";
 import { StampButtons } from "./StampButtons";
 
-export const StampDialog: React.FC<TDialog> = ({
+type TProps = TDialog & {
+  historyPayload?: any
+}
+
+export const StampDialog: React.FC<TProps> = ({
   onClose,
   open,
   type,
   refetch,
   defaultValue,
+  historyPayload
 }) => {
   const [isUpdate, setIsUpdate] = useState(false);
 
@@ -212,6 +217,7 @@ export const StampDialog: React.FC<TDialog> = ({
               refetch={refetch}
               refetchDetail={refetchDetail}
               setIsUpdate={setIsUpdate}
+              historyPayload={historyPayload}
             />
           </Box>
         </Box>

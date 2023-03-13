@@ -250,7 +250,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    if (confirm("Xác nhận xoá!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };

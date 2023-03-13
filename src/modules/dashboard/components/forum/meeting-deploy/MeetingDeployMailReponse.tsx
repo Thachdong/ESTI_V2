@@ -151,8 +151,8 @@ export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
           </List>
         )}
       </Box>
-      {(data?.status === 1 && userInfo?.userInfo?.roleCode == "TK") ||
-      (data?.status === 2 && userInfo?.userInfo?.roleCode == "TK") ? (
+      {(data?.status === 1) ||
+      (data?.status === 2) ? (
         <Box className="px-3 absolute bottom-1 gap-3  w-full">
           <Box>
             <FormInput

@@ -14,22 +14,25 @@ export const StampHistoryDialog: React.FC<TDialog> = ({
   open,
   title,
   onClose,
+  defaultValue,
 }) => {
   const [pagination, setPagination] = useState(defaultPagination);
 
   const { data, isLoading, isFetching } = useQuery(
-    ["LabelHistoryList", { ...pagination }],
+    ["LabelHistoryList", { ...pagination }, defaultValue?.id],
     () =>
       labelHistory
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
+          productLabelId: defaultValue?.id,
         })
         .then((res) => res.data),
     {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data?.totalItem });
       },
+      enabled: !!defaultValue?.id,
     }
   );
 

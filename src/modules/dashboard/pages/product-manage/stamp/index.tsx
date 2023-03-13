@@ -201,6 +201,7 @@ export const StampPage = () => {
         onClose={() => setHistoryDialog(false)}
         open={historyDialog}
         title="Lịch sử nhãn"
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );
