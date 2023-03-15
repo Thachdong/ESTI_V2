@@ -1,13 +1,9 @@
 import { TabContext, TabList } from "@mui/lab";
-import { Box, Tab, Typography } from "@mui/material";
+import { Box, Tab, Tooltip, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  products,
-  TProduct,
-  TProductPayload,
-} from "src/api";
+import { products, TProduct, TProductPayload } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -17,6 +13,8 @@ import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 import { ProductsInfoForm } from "./ProductsInfoForm";
 import { ProductsWebsiteInfoForm } from "./ProductsWebsiteInfoForm";
+import StarIcon from "@mui/icons-material/StarOutlineOutlined";
+import { Feedback } from "./Feedback";
 
 const infoFields = [
   "productName",
@@ -318,6 +316,25 @@ export const ProductsDialog: React.FC<TDialog> = ({
                 }
                 value="2"
               />
+              {type !== "Add" && (
+                <Tab
+                  label={
+                    <Box className="flex items-center">
+                      <Typography
+                        sx={{ color: websiteFieldsError ? "red" : "ỉnherit" }}
+                      >
+                        Đánh giá
+                      </Typography>
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                    </Box>
+                  }
+                  value="3"
+                />
+              )}
             </TabList>
           </Box>
 
@@ -328,6 +345,10 @@ export const ProductsDialog: React.FC<TDialog> = ({
 
             <TabPanelContainForm value="2" index={"2"}>
               <ProductsWebsiteInfoForm isDisable={disabled} />
+            </TabPanelContainForm>
+
+            <TabPanelContainForm value="3" index={"3"}>
+              <Feedback id={defaultValue?.id as string} />
             </TabPanelContainForm>
           </FormProvider>
         </TabContext>

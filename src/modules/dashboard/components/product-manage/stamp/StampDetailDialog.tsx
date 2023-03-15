@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { branchs, labelHistory, stamp } from "src/api";
@@ -11,13 +11,16 @@ import {
   FormSelectAsync,
   PrintButton,
 } from "~modules-core/components";
-import { TDialog } from "~types/dialog";
+import { TDefaultDialogState, TDialog } from "~types/dialog";
+import { PrintStampDialog } from "./PrintStampDialog";
 
 export const StampDetailDialog: React.FC<TDialog> = ({
   onClose,
   open,
   defaultValue,
 }) => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+
   const title = "Thông tin nhãn sản phẩm";
 
   const { id: warehouseSessionId } = useRouter().query;
@@ -26,7 +29,9 @@ export const StampDetailDialog: React.FC<TDialog> = ({
     mode: "onBlur",
   });
 
-  const { control } = methods;
+  const { control, watch } = methods;
+
+  const { branch, branchAddress } = watch();
 
   const { productLabelId, lotNumber, manufactor, specs } = defaultValue || {};
 
@@ -81,6 +86,14 @@ export const StampDetailDialog: React.FC<TDialog> = ({
       }
     }
   }, [stampHistoryDetail, defaultValue]);
+
+  const handleClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  const handleOpen = useCallback(() => {
+    setDialog({ open: true });
+  }, []);
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -207,11 +220,9 @@ export const StampDetailDialog: React.FC<TDialog> = ({
               />
 
               {!!QRCode ? (
-                <img
-                  className="w-full min-h-[200px]"
-                  src={QRCode}
-                  alt="stamp qr code"
-                />
+                <Box className="flex items-center justify-center">
+                  <img className="w-[250px]" src={QRCode} alt="stamp qr code" />
+                </Box>
               ) : (
                 "Không có QRCode"
               )}
@@ -219,10 +230,24 @@ export const StampDetailDialog: React.FC<TDialog> = ({
           </Box>
 
           <Box className="flex justify-end items-center mt-4">
-            <PrintButton>In nhãn</PrintButton>
+            <PrintButton onClick={handleOpen}>In nhãn</PrintButton>
           </Box>
         </Box>
       </FormProvider>
+
+      <PrintStampDialog
+        onClose={handleClose}
+        open={dialog.open}
+        defaultValue={
+          {
+            ...defaultValue,
+            ...stampDetail,
+            QRCode,
+            branchName: branch,
+            branchAddress,
+          } as any
+        }
+      />
     </Dialog>
   );
 };

@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import {
   BillDetailTitle,
+  DashboardTitle,
   OrderDetailTitle,
   PurchaseBillDetailTitle,
   PurchaseRequestTitle,
@@ -43,6 +44,8 @@ export const Header: React.FC<TProps> = ({ data }) => {
         return <WarehouseExportDetailTitle />;
       case "warehouse-import-detail-page":
         return <WarehouseImportDetailTitle />;
+        case "dashboard-page":
+          return <DashboardTitle />;
       default:
         return title;
     }
