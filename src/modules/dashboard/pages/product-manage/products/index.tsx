@@ -48,7 +48,7 @@ const excelEstensions = [
   "xlr",
 ];
 
-export const ProductsPage = () => {
+export const ProductsPage: React.FC = () => {
   const router = useRouter();
 
   const { query } = router;
@@ -201,6 +201,13 @@ export const ProductsPage = () => {
           id={row?.id as string}
           items={[
             {
+              // action: () =>
+              //   router.push({
+              //     pathname: "/dashboard/product-manage/product-detail",
+              //     query: {
+              //       id: row?.id,
+              //     },
+              //   }),
               action: () => setDialog({ open: true, type: "View" }),
               label: "Thông tin chi tiết",
             },
@@ -238,6 +245,13 @@ export const ProductsPage = () => {
           >
             Thêm sản phẩm
           </AddButton>
+
+          {/* <AddButton
+            onClick={() => router.push("/dashboard/product-manage/product-detail")}
+            variant="contained"
+          >
+            Thêm sản phẩm
+          </AddButton> */}
 
           <AddButton variant="contained" className="">
             <InputLabel

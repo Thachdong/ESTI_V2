@@ -115,6 +115,10 @@ export const menu = [
         link: "product-manage/category",
       },
       {
+        title: "Thuộc tính sản phẩm",
+        link: "product-manage/product-attribute",
+      },
+      {
         title: "Nhãn sản phẩm",
         link: "product-manage/stamp",
       },

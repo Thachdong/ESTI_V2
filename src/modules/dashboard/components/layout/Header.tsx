@@ -16,6 +16,7 @@ import {
   WarehouseImportDetailTitle,
 } from "./titles";
 import { useCallback } from "react";
+import { ProductDetailTitle } from "./titles/ProductDetailTitle";
 
 type TProps = {
   data: any;
@@ -44,8 +45,10 @@ export const Header: React.FC<TProps> = ({ data }) => {
         return <WarehouseExportDetailTitle />;
       case "warehouse-import-detail-page":
         return <WarehouseImportDetailTitle />;
-        case "dashboard-page":
-          return <DashboardTitle />;
+      case "dashboard-page":
+        return <DashboardTitle />;
+      case "product-detail-page":
+        return <ProductDetailTitle />;
       default:
         return title;
     }

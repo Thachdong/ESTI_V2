@@ -14,3 +14,4 @@ export * from "./card-base";
 export * from "./FormCustomer";
 export * from "./SendMailDialog";
 export * from "./StatusChip";
+export * from "./FormCategory";

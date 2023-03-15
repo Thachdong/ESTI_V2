@@ -10,3 +10,4 @@ export * from "./FormCheckbox";
 export * from "./FormSelect";
 export * from "./FormInputNumber";
 export * from "./FormInputUserName";
+export * from "./FormInputFile";
