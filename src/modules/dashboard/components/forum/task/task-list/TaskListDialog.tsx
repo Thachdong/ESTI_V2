@@ -2,15 +2,7 @@ import { Box, Rating, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
-import {
-  customer,
-  staff,
-  taskGroup,
-  taskList,
-  TJobGroup,
-  TTaskListUpdate,
-} from "src/api";
+import { staff, taskGroup, taskList, TTaskListUpdate } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -21,6 +13,7 @@ import {
   FormUploadfiles,
 } from "~modules-core/components";
 import { statusTask } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 
@@ -31,7 +24,9 @@ export const TaskListDialog: React.FC<TDialog> = ({
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset, setValue } = useForm<any>({});
+  const { control, handleSubmit, reset, setValue, watch } = useForm<any>({});
+
+  const level = watch("level");
 
   useEffect(() => {
     if (type == "Update") {
@@ -54,10 +49,10 @@ export const TaskListDialog: React.FC<TDialog> = ({
   );
 
   const handleAdd = async (data: any) => {
-    const newCo_Participant = data?.co_Participant?.map((item: string) => item);
     const dataPost = {
       ...data,
-      co_Participant: newCo_Participant.toString().replaceAll("["),
+      co_Participant: data?.co_Participant.toString().replaceAll("["),
+      attachFile: data?.attachFile.toString().replaceAll("["),
     };
     mutateAdd.mutateAsync(dataPost);
   };
@@ -212,7 +207,8 @@ export const TaskListDialog: React.FC<TDialog> = ({
                 onChange={(val: any) =>
                   setValue("level", val?.target?._wrapperState?.initialValue)
                 }
-                value={defaultValue?.level || 0}
+                value={level || 0}
+                // value={defaultValue?.level || 0}
               />
             </Box>
             <FormInput

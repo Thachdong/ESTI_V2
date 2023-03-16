@@ -3,28 +3,33 @@ import React from "react";
 import { useCallback, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { AddButton } from "~modules-core/components";
+import { TDefaultDialogState } from "~types/dialog";
 import { CustomerDetailContact } from "./CustomerDetailContact";
+import { CustomerDetailCuratorDialog } from "./CustomerDetailCuratorDialog";
 
 type TProps = {
   isUpdate: boolean;
+  refetch: () => void;
 };
 
-export const CustomerDetailContactList: React.FC<TProps> = ({ isUpdate }) => {
-  const { control, watch } = useFormContext();
+export const CustomerDetailContactList: React.FC<TProps> = ({
+  isUpdate,
+  refetch,
+}) => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
-  const { contacts } = watch();
+  const { watch } = useFormContext();
 
-  const { remove, append } = useFieldArray({
-    control,
-    name: "contacts",
-  });
+  const contacts = watch("contacts");
 
   // METHODS
-  const handleRemove = useCallback((index: number) => {
-    if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
-      remove(index);
-    }
+  const onClose = useCallback(() => {
+    setDialog({ open: false });
   }, []);
+
+  const onOpen = useCallback(() => {
+    setDialog({open: true})
+  }, [])
 
   return (
     <Box className="flex flex-col mb-4">
@@ -38,14 +43,19 @@ export const CustomerDetailContactList: React.FC<TProps> = ({ isUpdate }) => {
             key={index}
             isDisable={!isUpdate}
             index={index}
-            handleRemove={handleRemove}
+            refetch={refetch}
           />
         ))}
 
-        <AddButton className="!font-medium" onClick={() => append({})}>
-          Thêm thông tin liên hệ
-        </AddButton>
+        <AddButton onClick={onOpen} className="!font-medium">Thêm thông tin liên hệ</AddButton>
       </List>
+
+      <CustomerDetailCuratorDialog
+        onClose={onClose}
+        open={dialog.open}
+        refetch={refetch}
+        title="Tạo thông tin liên hệ"
+      />
     </Box>
   );
 };

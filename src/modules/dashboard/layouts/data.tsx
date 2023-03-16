@@ -7,6 +7,7 @@ import SettingsIcon from "@mui/icons-material/SettingsSuggestOutlined";
 import RequestQuoteOutlinedIcon from "@mui/icons-material/RequestQuoteOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ForumIcon from "@mui/icons-material/Forum";
+import ContactsIcon from "@mui/icons-material/Contacts";
 
 export const menu = [
   {
@@ -25,6 +26,25 @@ export const menu = [
     ],
   },
   {
+    id: "supplier-quotes",
+    title: "Hỏi giá",
+    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Giá tham khảo",
+        link: "supplier-quotes/reference-price",
+      },
+      {
+        title: "Sản phẩm cần hỏi giá",
+        link: "supplier-quotes/product",
+      },
+      {
+        title: "Đơn hỏi giá",
+        link: "supplier-quotes/quotes",
+      },
+    ],
+  },
+  {
     id: "orders",
     title: "Đơn hàng",
     icon: <OrderIcon className="w-[24px] h-[24px]" />,
@@ -36,21 +56,6 @@ export const menu = [
       {
         title: "Hóa đơn",
         link: "orders/bill-list",
-      },
-    ],
-  },
-  {
-    id: "supplier-quotes",
-    title: "Hỏi giá",
-    icon: <RequestQuoteOutlinedIcon className="w-[24px] h-[24px]" />,
-    childrens: [
-      {
-        title: "Sản phẩm cần hỏi giá",
-        link: "supplier-quotes/product",
-      },
-      {
-        title: "Đơn hỏi giá",
-        link: "supplier-quotes/quotes",
       },
     ],
   },
@@ -108,6 +113,10 @@ export const menu = [
       {
         title: "Danh mục sản phẩm",
         link: "product-manage/category",
+      },
+      {
+        title: "Thuộc tính sản phẩm",
+        link: "product-manage/product-attribute",
       },
       {
         title: "Nhãn sản phẩm",
@@ -188,19 +197,19 @@ export const menu = [
     childrens: [
       {
         title: "Nhóm task",
-        link: "forum/task/task-group",
+        link: "forum/task-group",
       },
       {
         title: "Danh sách task",
-        link: "forum/task/task-list",
+        link: "forum/task-list",
       },
       {
         title: "Nhóm đề tài",
-        link: "forum/discuss/topic",
+        link: "forum/topic",
       },
       {
         title: "Thảo luận",
-        link: "forum/discuss/discussion-topic",
+        link: "forum/discussion-topic",
       },
       {
         title: "Họp triển khai",
@@ -209,6 +218,29 @@ export const menu = [
       {
         title: "Nghỉ phép",
         link: "forum/leave-application",
+      },
+      {
+        title: "Đăng ký công tác",
+        link: "forum/register-mission",
+      },
+    ],
+  },
+  {
+    id: "accountant",
+    title: "Kế toán",
+    icon: <ContactsIcon className="w-[24px] h-[24px]" />,
+    childrens: [
+      {
+        title: "Quản lý tài khoản",
+        link: "accountant/account",
+      },
+      {
+        title: "Danh mục giao dịch",
+        link: "accountant/trading-directory",
+      },
+      {
+        title: "Quản lý giao dịch",
+        link: "accountant/transaction",
       },
     ],
   },

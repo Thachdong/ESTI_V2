@@ -49,8 +49,7 @@ export const CustomerDetailOrder: React.FC = () => {
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          //   customerCode: customerDetail?.customer?.code,
-          customerCode: "KH-00019",
+          customerCode: customerDetail?.customer?.code,
           ...query,
         })
         .then((res) => res.data),
@@ -82,24 +81,26 @@ export const CustomerDetailOrder: React.FC = () => {
         menuId="order_request_table_menu"
         menuComponent={
           <Menu className="p-0" id="order_request_table_menu">
-            <Item id="view-order">Xem chi tiết</Item>
-
-            <Item id="update-status" onClick={() => undefined}>
-              Trạng thái
-            </Item>
-
-            <Item id="order-note" onClick={() => undefined}>
-              Ghi chú
+            <Item
+              id="view-order"
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/orders/order-detail/",
+                  query: { id: defaultValue.current?.id },
+                })
+              }
+            >
+              Xem chi tiết
             </Item>
 
             <Item
               id="delete-order"
-              //   onClick={() =>
-              //     router.push({
-              //       pathname: "/dashboard/orders/bill-detail/",
-              //       query: { fromOrderId: defaultValue.current?.id },
-              //     })
-              //   }
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/orders/bill-detail/",
+                  query: { fromOrderId: defaultValue.current?.id },
+                })
+              }
             >
               Tạo hóa đơn
             </Item>
@@ -117,12 +118,8 @@ export const CustomerDetailOrder: React.FC = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
-              //   onDoubleClick: handleViewProduct,
             },
           }}
-          //   getRowClassName={({ id }) =>
-          //     dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
-          //   }
         />
       </ContextMenuWrapper>
     </Box>

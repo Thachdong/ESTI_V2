@@ -42,6 +42,14 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
   const { curatorEmail, status = 1 } = watch();
 
   // METHODS
+  const onClose = useCallback(() => {
+    setDialog({ open: false });
+  }, []);
+
+  const onOpen = useCallback((type: string) => {
+    setDialog({ open: true, type });
+  }, []);
+
   const mutateCreate = useMutation(
     (payload: TCreatePurchase) => purchaseOrder.create(payload),
     {
@@ -83,23 +91,24 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
         setIsUpdate(false);
 
         refetch?.();
-
-        setDialog({ open: false });
       },
     }
   );
 
-  const handleUpdate = useCallback(async (data: any) => {
-    const { products, paymentDocument, ...rest } = data || {};
+  const handleUpdate = useCallback(
+    async (data: any) => {
+      const { products, paymentDocument, ...rest } = data || {};
 
-    const payload = {
-      ...rest,
-      id,
-      paymentDocument: paymentDocument.join(","),
-    };
+      const payload = {
+        ...rest,
+        id,
+        paymentDocument: paymentDocument.join(","),
+      };
 
-    await mutateUpdate.mutateAsync(payload);
-  }, []);
+      await mutateUpdate.mutateAsync(payload);
+    },
+    [id]
+  );
 
   const mutateSendMail = useMutation(
     (payload: TSendMailProps) => purchaseOrder.sendMail(payload),
@@ -109,7 +118,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
 
         refetch?.();
 
-        setDialog({ open: false });
+        onClose();
       },
     }
   );
@@ -127,6 +136,38 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
       };
 
       await mutateSendMail.mutateAsync(payload);
+    },
+    [id]
+  );
+
+  const mutateSendAdvancePaymentMail = useMutation(
+    (payload: TSendMailProps) => purchaseOrder.sendAdvancePaymentMail(payload),
+    {
+      onSuccess: (response: any) => {
+        toast.success(response?.resultMessage);
+
+        refetch?.();
+
+        onClose();
+      },
+    }
+  );
+
+  const handleSendAdvancePaymentMail = useCallback(
+    async (data: any) => {
+      const { cc, bcc, content, title, to } = data || {};
+
+      const payload = {
+        // id: id as string,
+        id: to, // as api docs
+        cc: cc as string[],
+        bcc: bcc as string[],
+        title: title as string,
+        content,
+        to,
+      };
+
+      await mutateSendAdvancePaymentMail.mutateAsync(payload);
     },
     [id]
   );
@@ -172,7 +213,10 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
                   tooltipText="Cập nhật"
                   onClick={() => setIsUpdate(true)}
                 />
-                <SendButton onClick={() => setDialog({ open: true })}>
+                <SendButton onClick={() => onOpen("accountant")}>
+                  Gửi kế toán
+                </SendButton>
+                <SendButton onClick={() => onOpen("normal")}>
                   Gửi khách hàng
                 </SendButton>
               </>
@@ -197,10 +241,18 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
       {renderButtons()}
 
       <SendMailDialog
-        onClose={() => setDialog({ open: false })}
-        open={dialog.open}
+        onClose={onClose}
+        open={dialog.open && dialog.type === "normal"}
         sendMailHandler={handleSendMail}
         defaultValue={{ to: curatorEmail, cc: [] } as any}
+      />
+
+      <SendMailDialog
+        onClose={onClose}
+        open={dialog.open && dialog.type === "accountant"}
+        sendMailHandler={handleSendAdvancePaymentMail}
+        defaultValue={{ cc: [] } as any}
+        isToAccountant={true}
       />
     </Box>
   );

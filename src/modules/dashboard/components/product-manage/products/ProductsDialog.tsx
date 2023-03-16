@@ -1,13 +1,9 @@
 import { TabContext, TabList } from "@mui/lab";
-import { Box, Tab, Typography } from "@mui/material";
+import { Box, Tab, Tooltip, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  products,
-  TProduct,
-  TProductPayload,
-} from "src/api";
+import { products, TProduct, TProductPayload } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -17,6 +13,8 @@ import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 import { ProductsInfoForm } from "./ProductsInfoForm";
 import { ProductsWebsiteInfoForm } from "./ProductsWebsiteInfoForm";
+import StarIcon from "@mui/icons-material/StarOutlineOutlined";
+import { Feedback } from "./Feedback";
 
 const infoFields = [
   "productName",
@@ -126,21 +124,21 @@ export const ProductsDialog: React.FC<TDialog> = ({
       : "Thông tin sản phẩm";
 
   // DIALOG MUTATION DECLARATIONS
-  const mutationAddProduct = useMutation(
-    (payload: TProductPayload) => products.create(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
+  // const mutationAddProduct = useMutation(
+  //   (payload: TCreateProduct) => products.create(payload),
+  //   {
+  //     onSuccess: (data) => {
+  //       toast.success(data?.resultMessage);
 
-        refetch?.();
+  //       refetch?.();
 
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
+  //       onClose();
+  //     },
+  //     onError: (error: any) => {
+  //       toast.error(error?.resultMessage);
+  //     },
+  //   }
+  // );
 
   const handleAddProduct = async (data: any) => {
     const {
@@ -170,26 +168,26 @@ export const ProductsDialog: React.FC<TDialog> = ({
       },
     };
 
-    await mutationAddProduct.mutateAsync(payload);
+    // await mutationAddProduct.mutateAsync(payload);
   };
 
-  const mutationUpdateProduct = useMutation(
-    (payload: TProduct) => products.update(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
+  // const mutationUpdateProduct = useMutation(
+  //   (payload: TProduct) => products.update(payload),
+  //   {
+  //     onSuccess: (data) => {
+  //       toast.success(data?.resultMessage);
 
-        refetch?.();
+  //       refetch?.();
 
-        onClose();
+  //       onClose();
 
-        setIsUpdate(false);
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
+  //       setIsUpdate(false);
+  //     },
+  //     onError: (error: any) => {
+  //       toast.error(error?.resultMessage);
+  //     },
+  //   }
+  // );
 
   const handleUpdateProduct = async (data: any) => {
     const {
@@ -226,7 +224,7 @@ export const ProductsDialog: React.FC<TDialog> = ({
       },
     };
 
-    await mutationUpdateProduct.mutateAsync(payload);
+    // await mutationUpdateProduct.mutateAsync(payload);
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE
@@ -318,6 +316,25 @@ export const ProductsDialog: React.FC<TDialog> = ({
                 }
                 value="2"
               />
+              {type !== "Add" && (
+                <Tab
+                  label={
+                    <Box className="flex items-center">
+                      <Typography
+                        sx={{ color: websiteFieldsError ? "red" : "ỉnherit" }}
+                      >
+                        Đánh giá
+                      </Typography>
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                      <StarIcon color="warning" />
+                    </Box>
+                  }
+                  value="3"
+                />
+              )}
             </TabList>
           </Box>
 
@@ -328,6 +345,10 @@ export const ProductsDialog: React.FC<TDialog> = ({
 
             <TabPanelContainForm value="2" index={"2"}>
               <ProductsWebsiteInfoForm isDisable={disabled} />
+            </TabPanelContainForm>
+
+            <TabPanelContainForm value="3" index={"3"}>
+              <Feedback id={defaultValue?.id as string} />
             </TabPanelContainForm>
           </FormProvider>
         </TabContext>

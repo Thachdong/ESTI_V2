@@ -80,4 +80,10 @@ export const mainOrder = {
     ),
   getMainOrderDetail: (id: string) =>
     request.get<any>(`${BASE_URL}/MainOrderDetail`, { id }),
+
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
+  export: (params?: any) =>
+    request.get<any>(`${BASE_URL}/ExportExcel`, { ...params }),
 };

@@ -309,6 +309,14 @@ export const statusTask = [
   { id: 4, name: "Chưa hoàn thành" },
   { id: 5, name: "Huỷ" },
 ];
+
+export const statusTaskTable = [
+  { value: 1, label: "Chưa thực hiện" },
+  { value: 2, label: "Đang thực hiện" },
+  { value: 3, label: "Đã kết thúc" },
+  { value: 4, label: "Huỷ" },
+];
+
 export const customerCareStatus = [
   { value: 1, label: "Chưa thực hiện" },
   { value: 2, label: "Đang thực hiện" },
@@ -324,17 +332,49 @@ export const chartjsOptions = {
     },
   },
   scales: {
-    xAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: 'probability'
-      }
-    }],
-    yAxes: [{
-      scaleLabel: {
-        display: true,
-        labelString: 'probability',
-      }
-    }],
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "probability",
+        },
+      },
+    ],
+    yAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "probability",
+        },
+      },
+    ],
   },
 };
+
+export const referencePriceProductStatus = [
+  { value: 1, label: "Sản phẩm mới" },
+  { value: 2, label: "Nhu cầu cao" },
+  { value: 3, label: "Cạnh tranh cao" },
+  { value: 4, label: "Ngừng sản xuất" },
+]
+export const department = [
+  { id: 1, name: "Phòng kinh doanh" },
+  { id: 2, name: "Phòng kế toán" },
+  { id: 3, name: "Phòng chăm sóc khách hàng" },
+  { id: 4, name: "Phòng ban khách" },
+  { id: 5, name: "Toàn công ty" },
+];
+
+export const ConfirmRegisterMission = [
+  { value: 1, label: "Chưa phản hồi" },
+  { value: 2, label: "Không đồng ý" },
+  { value: 3, label: "Đồng ý" },
+  { value: 4, label: "Huỷ" },
+];
+
+export const TypeTransaction = [
+  { id: 1, name: "Income" },
+  { id: 2, name: "Expense" },
+];
+
+export const defaultBranchId = "4307e21e-a064-47b4-adda-08daa785f29a"

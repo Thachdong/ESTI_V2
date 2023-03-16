@@ -12,6 +12,7 @@ type TProps = {
   refetch?: () => void;
   setIsUpdate: Dispatch<SetStateAction<boolean>>;
   refetchDetail: () => void;
+  historyPayload?: any;
 };
 export const StampButtons: React.FC<TProps> = ({
   type,
@@ -19,7 +20,8 @@ export const StampButtons: React.FC<TProps> = ({
   onClose,
   refetch,
   setIsUpdate,
-  refetchDetail
+  refetchDetail,
+  historyPayload,
 }) => {
   const {
     formState: { isDirty },
@@ -49,6 +51,7 @@ export const StampButtons: React.FC<TProps> = ({
       productId: data?.productId,
       chemicalName: data?.chemicalName,
       casCode: data?.casCode,
+      labelHistoryCreate: historyPayload || null,
     };
 
     await mutationAddStamp.mutateAsync(payload);
@@ -88,7 +91,6 @@ export const StampButtons: React.FC<TProps> = ({
         <>
           <BaseButton
             onClick={handleSubmit(handleAddStamp)}
-            disabled={!isDirty}
           >
             Tạo
           </BaseButton>

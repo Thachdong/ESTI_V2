@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import { topic } from "src/api";
 import { BaseButton, Dialog, FormInput } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 

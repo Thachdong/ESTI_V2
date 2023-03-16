@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { purchasePlan } from "src/api";
+import { purchaseOrder, purchasePlan } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   generatePaginationProps,
   RefreshButton,
@@ -145,6 +146,7 @@ export const PurchasePlanPage = () => {
         <Box className="flex gap-2">
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
+          <ExportButton api={purchaseOrder.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
 

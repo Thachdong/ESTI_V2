@@ -123,12 +123,15 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
       sx={{ width: expand ? "250px" : "64px" }}
     >
       <Box className={styles["logo-box"]}>
-        {!expand ? (
-          <img src="/logo-small.png" alt="Esti" width={40} height={40} />
-        ) : (
-          <img src="/logo-full.png" alt="Esti" width={134} height={59} />
-        )}
-
+        <Link href={"/dashboard"} className="cursor-pointer">
+          <a>
+            {!expand ? (
+              <img src="/logo-small.png" alt="Esti" width={40} height={40} />
+            ) : (
+              <img src="/logo-full.png" alt="Esti" width={134} height={59} />
+            )}
+          </a>
+        </Link>
         <BaseButton
           variant="text"
           onClick={() => setExpand(!expand)}

@@ -1,15 +1,18 @@
+import { ButtonBase, Tooltip, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { taskGroup, taskList, TJobGroup } from "src/api";
+import { leaveApplication } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { ConfirmRegisterMission } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
+import { LeaveApplycationDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -29,78 +32,85 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
 }) => {
   const defaultValue = useRef<any>();
 
-  const [repply, setReply] = useState(false);
-
   const columns: TGridColDef[] = [
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
       type: "date",
       filterKey: "createdDate",
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
-      field: "jobGroupName",
-      headerName: "Nhân viên",
-      align: "left",
+      field: "applicantCode",
+      headerName: "Mã Nhân viên",
       minWidth: 150,
-      flex: 1,
-      filterKey: "jobGroupName",
+      filterKey: "applicantCode",
+      sortAscValue: 9,
+      sortDescValue: 1,
     },
     {
-      field: "performDate",
+      field: "applicantName",
       headerName: "Người nộp đơn",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
-      filterKey: "performDate",
-      renderCell: ({ row }) => _format.converseDate(row?.performDate),
+      minWidth: 150,
+      filterKey: "applicantName",
+      sortAscValue: 11,
+      sortDescValue: 2,
     },
     {
-      field: "descriptionsJob",
+      field: "startTime",
       headerName: "Thời gian nghỉ phép",
-      align: "left",
       minWidth: 150,
-      flex: 1,
-      filterKey: "descriptionsJob",
+      filterKey: "startTime",
+      sortAscValue: 16,
+      sortDescValue: 7,
+      type: "date",
+      renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
-      field: "petitionerName",
+      field: "numberOfDay",
       headerName: "Số ngày",
-      align: "left",
       minWidth: 100,
-      flex: 1,
-      filterKey: "petitionerName",
+      filterKey: "numberOfDay",
+      sortAscValue: 13,
+      sortDescValue: 4,
     },
     {
-      field: "inChargeOfPersonName",
+      field: "season",
       headerName: "Lý do",
-      align: "left",
       minWidth: 150,
-      filterKey: "inChargeOfPersonName",
+      filterKey: "season",
+      sortAscValue: 14,
+      sortDescValue: 5,
       flex: 1,
+      renderCell: ({ row }) => {
+        return (
+          <>
+            <Tooltip title="Xem phản hồi">
+              <ButtonBase onClick={handleOpenUpdate}>
+                <Typography className="text-main text-sm text-left">
+                  {row?.season}
+                </Typography>
+              </ButtonBase>
+            </Tooltip>
+          </>
+        );
+      },
     },
     {
-      field: "co_Participant",
+      field: "headOfDepartmentName",
       headerName: "Trưởng bộ phận",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
-      filterKey: "co_ParticipantName",
-      renderCell: ({ row }) => {
-        // console.log(row?.co_Participant);
-        return <></>;
-      },
+      minWidth: 150,
+      filterKey: "headOfDepartmentName",
+      sortAscValue: 15,
+      sortDescValue: 6,
     },
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 130,
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
         return (
@@ -111,6 +121,11 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
           />
         );
       },
+      filterKey: "status",
+      type: "select",
+      options: ConfirmRegisterMission,
+      sortAscValue: 12,
+      sortDescValue: 3,
     },
     {
       field: "action",
@@ -121,8 +136,8 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
           id={row?.id as string}
           items={[
             {
-              action: () => handleOpenUpdate(),
-              label: "Cập nhật trạng thái",
+              action: () => handleDeleteCancel(),
+              label: "Huỷ đơn",
             },
 
             {
@@ -155,9 +170,30 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
     setOpen(false);
   };
 
+  //   HANDLE CANCEL
+  const mutateCancel = useMutation(
+    (payload: { leaveApplicationId: string; status: number }) =>
+      leaveApplication.confirmLeaveApplication(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+        refetch?.();
+      },
+    }
+  );
+
+  const handleDeleteCancel = () => {
+    if (confirm("Xác nhận huỷ đơn xin nghỉ!")) {
+      mutateCancel.mutateAsync({
+        leaveApplicationId: defaultValue?.current?.id,
+        status: 4,
+      });
+    }
+  };
+
   // HANDLE DELETE GROUP TASK IN DIALOG
   const mutateDelete = useMutation(
-    (payload: { id: string }) => taskList.delete(payload?.id),
+    (payload: { id: string }) => leaveApplication.delete(payload?.id),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -168,7 +204,7 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    if (confirm("Xác nhận xoá đơn nghỉ phép!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };
@@ -179,8 +215,8 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
         menuId="taskGroup_table_menu"
         menuComponent={
           <Menu className="p-0" id="taskGroup_table_menu">
-            <Item id="update-product" onClick={handleOpenUpdate}>
-              Cập nhật trạng thái
+            <Item id="update-product" onClick={handleDeleteCancel}>
+              Huỷ đơn
             </Item>
             <Item id="delete-product" onClick={handleDeleteTaskGroup}>
               Xóa
@@ -202,6 +238,14 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
           }}
         />
       </ContextMenuWrapper>
+
+      <LeaveApplycationDialog
+        onClose={handleCloseUpdate}
+        open={Open}
+        type="Update"
+        refetch={refetch}
+        defaultValue={defaultValue?.current}
+      />
     </>
   );
 };

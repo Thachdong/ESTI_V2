@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
@@ -14,6 +14,7 @@ import { _format } from "~modules-core/utility/fomat";
 import {
   DocumentDialog,
   ProductsDialog,
+  StampDetailDialog,
   StampDialog,
 } from "~modules-dashboard/components";
 import { productColumns } from "~modules-dashboard/pages/warehouse/import-detail/data";
@@ -139,16 +140,25 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
               Tạo tài liệu SP
             </Item>
 
-            <Item
-              id="create-product-label"
-              onClick={() => handleOpen("CreateLabel")}
-            >
-              Tạo nhãn SP
-            </Item>
+            {!!defaultValue?.productLabelId ? (
+              <Item
+                id="create-product-label"
+                onClick={() => handleOpen("ViewLabel")}
+              >
+                Xem nhãn SP
+              </Item>
+            ) : (
+              <Item
+                id="create-product-label"
+                onClick={() => handleOpen("CreateLabel")}
+              >
+                Tạo nhãn SP
+              </Item>
+            )}
           </Menu>
         );
     }
-  }, [importStatus, productList]);
+  }, [importStatus, productList, defaultValue]);
 
   const renderActionButtons = useCallback(
     (row: any) => {
@@ -233,7 +243,42 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       renderCell: ({ row }) => renderActionButtons(row),
     },
   ];
-  console.log(defaultValue);
+
+  const renderStampDialog = useCallback(() => {
+    const { productLabelId } = defaultValue || {};
+
+    const { type, open } = dialog || {};
+
+    if (!!productLabelId) {
+      return (
+        <StampDetailDialog
+          onClose={handleClose}
+          open={open && type === "ViewLabel"}
+          type={"ViewLabel"}
+          defaultValue={{ ...defaultValue } as any}
+        />
+      );
+    } else {
+      const historyPayload = {
+        warehouseSessionId: router.query.id,
+        lotNumber: defaultValue?.lotNumber,
+        quantity: defaultValue?.quantity,
+        positionId: defaultValue?.positionId,
+        dateManufacture: defaultValue?.dateManufacture,
+        dateExpiration: defaultValue?.dateExpiration,
+      };
+
+      return (
+        <StampDialog
+          onClose={handleClose}
+          open={open && type === "CreateLabel"}
+          type={"CreateLabel"}
+          defaultValue={{ id: productLabelId } as any}
+          historyPayload={historyPayload}
+        />
+      );
+    }
+  }, [defaultValue, dialog]);
 
   return (
     <Box className="">
@@ -322,15 +367,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
       />
 
       {/* STAMP DIALOG */}
-      <StampDialog
-        onClose={handleClose}
-        open={
-          dialog?.open &&
-          (dialog?.type === "CreateLabel" || dialog?.type === "ViewLabel")
-        }
-        type={!!defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"}
-        defaultValue={{ id: defaultValue?.productLabelId } as any}
-      />
+      {renderStampDialog()}
     </Box>
   );
 };

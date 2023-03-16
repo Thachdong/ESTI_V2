@@ -121,7 +121,7 @@ export const BillDetailProducts: React.FC<TProps> = ({
     <Box className="flex flex-col col-span-2">
       <Box className="flex items-center mb-3 justify-between">
         <Typography className="font-bold uppercase mr-3 text-sm">
-          Sản phẩm
+          Thông tin sản phẩm
         </Typography>
 
         <AddButton disabled={!!id} onClick={() => onOpen("Add")}>

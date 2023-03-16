@@ -2,7 +2,6 @@
 // + DEFAULT HIDDEN FILE INPUT,
 // + UPLOAD METHOD
 
-import { Box } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useMutation } from "react-query";
@@ -11,7 +10,14 @@ import { TRenderControllerParams } from "~types/react-hook-form";
 import { FormInputBase } from "./FormInputBase";
 
 export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
-  const { controlProps, loader, renderTitle, multiple = false, disabled = false } = props;
+  const {
+    controlProps,
+    loader,
+    renderTitle,
+    successToast,
+    multiple = false,
+    disabled = false,
+  } = props;
 
   const [loading, setLoading] = useState(false);
 
@@ -42,10 +48,15 @@ export const FormUploadBase: React.FC<TFormUploadBase> = (props) => {
       const urls = await Promise.all(promises);
 
       const currentVal = Array.isArray(value) ? value : [];
-
-      onChange([...currentVal, ...urls]);
+      if (multiple) {
+        onChange([...currentVal, ...urls]);
+      } else {
+        onChange(urls[0]);
+      }
 
       setLoading(false);
+
+      successToast?.();
     };
 
     return (

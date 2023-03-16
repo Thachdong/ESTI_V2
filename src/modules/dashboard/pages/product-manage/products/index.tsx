@@ -17,6 +17,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   FormInputBase,
   generatePaginationProps,
@@ -47,7 +48,7 @@ const excelEstensions = [
   "xlr",
 ];
 
-export const ProductsPage = () => {
+export const ProductsPage: React.FC = () => {
   const router = useRouter();
 
   const { query } = router;
@@ -200,7 +201,13 @@ export const ProductsPage = () => {
           id={row?.id as string}
           items={[
             {
-              action: () => setDialog({ open: true, type: "View" }),
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/product-manage/product-detail",
+                  query: {
+                    id: row?.id,
+                  },
+                }),
               label: "Thông tin chi tiết",
             },
             {
@@ -225,12 +232,16 @@ export const ProductsPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid grid-cols-3 mb-3">
-        <SearchBox label="Tìm kiếm sale phụ trách" />
+      <Box className="grid xl:grid-cols-3 gap-4 mb-3">
+        <Box className="w-1/3 xl:w-1/2">
+          <SearchBox label="Tìm kiếm sale phụ trách" />
+        </Box>
 
-        <Box className="flex items-center justify-end gap-3 col-span-2">
+        <Box className="xl:col-span-2 flex items-center justify-end gap-3 ml-3">
           <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
+            onClick={() =>
+              router.push("/dashboard/product-manage/product-detail")
+            }
             variant="contained"
           >
             Thêm sản phẩm
@@ -250,8 +261,15 @@ export const ProductsPage = () => {
               />
             </InputLabel>
           </AddButton>
+
           <FilterButton listFilterKey={[]} />
+
           <RefreshButton onClick={() => refetch()} />
+
+          <ExportButton
+            api={products.export}
+            filterParams={{ ...query, pageSize: 99999 }}
+          />
         </Box>
       </Box>
 
@@ -261,7 +279,14 @@ export const ProductsPage = () => {
           <Menu className="p-0" id="product_table_menu">
             <Item
               id="view-product"
-              onClick={() => setDialog({ open: true, type: "View" })}
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/product-detail",
+                  query: {
+                    id: defaultValue.current?.id,
+                  },
+                })
+              }
             >
               Xem chi tiết
             </Item>

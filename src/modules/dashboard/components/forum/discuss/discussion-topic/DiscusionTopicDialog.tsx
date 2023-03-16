@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import { discussion, staff, TDiscussionUpdate, topic } from "src/api";
 import {
   BaseButton,
@@ -13,6 +12,7 @@ import {
   FormSelectAsync,
   FormUploadfiles,
 } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
 
@@ -47,7 +47,12 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
 
   const handleAdd = async (data: any) => {
     const newParticipants = data?.participants.toString().replaceAll("[");
-    await mutateAdd.mutateAsync({ ...data, participants: newParticipants });
+    const newAttachFile = data?.attachFile.toString().replaceAll("[");
+    await mutateAdd.mutateAsync({
+      ...data,
+      participants: newParticipants,
+      attachFile: newAttachFile,
+    });
   };
 
   return (
@@ -127,14 +132,14 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           multiple
           className="col-span-2"
         />
-        {/* <Box className="col-span-2">
+        <Box className="col-span-2">
           <FormUploadfiles
             loader={discussion.uploadFile}
             controlProps={{ control, name: "attachFile" }}
             title="Tải file"
             className="col-span-2 grid grid-cols-5 p-0 mb-3"
           />
-        </Box> */}
+        </Box>
       </Box>
 
       <Box className="flex justify-center items-center mt-4">

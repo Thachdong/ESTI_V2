@@ -1,15 +1,30 @@
+import {
+  Avatar,
+  Box,
+  ButtonBase,
+  Drawer,
+  List,
+  ListItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { taskGroup, taskList, TJobGroup } from "src/api";
+import { meetingDeploy, taskGroup, taskList, TJobGroup } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { useSession } from "~modules-core/customHooks/useSession";
 import { _format } from "~modules-core/utility/fomat";
+import {
+  MeetingDeployDialog,
+  MeetingDeployMailReponse,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -31,92 +46,152 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
 
   const [repply, setReply] = useState(false);
 
+  const { userInfo } = useSession();
+
   const columns: TGridColDef[] = [
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
+      minWidth: 100,
       type: "date",
       filterKey: "createdDate",
+      sortAscValue: 10,
+      sortDescValue: 0,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
-      field: "jobGroupName",
+      field: "departmentName",
       headerName: "Phòng ban",
-      align: "left",
       minWidth: 150,
-      flex: 1,
-      filterKey: "jobGroupName",
+      filterKey: "departmentName",
+      sortAscValue: 9,
+      sortDescValue: 1,
     },
     {
-      field: "performDate",
+      field: "startTime",
       headerName: "Ngày tiến hành",
-      align: "left",
-      minWidth: 50,
-      flex: 1,
-      filterKey: "performDate",
-      renderCell: ({ row }) => _format.converseDate(row?.performDate),
-    },
-    {
-      field: "descriptionsJob",
-      headerName: "Thời gian",
-      align: "left",
       minWidth: 150,
-      flex: 1,
-      filterKey: "descriptionsJob",
+      filterKey: "startTime",
+      sortAscValue: 16,
+      sortDescValue: 7,
+      type: "date",
+      renderCell: ({ row }) => _format.converseDate(row?.startTime),
     },
     {
-      field: "petitionerName",
+      field: "endTime",
+      headerName: "Thời gian kết thúc",
+      minWidth: 175,
+      filterKey: "endTime",
+      sortAscValue: 17,
+      sortDescValue: 8,
+      type: "date",
+      renderCell: ({ row }) => _format.converseDate(row?.endTime),
+    },
+    {
+      field: "descriptionJob",
       headerName: "Mô tả công việc",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
-      filterKey: "petitionerName",
-    },
-    {
-      field: "inChargeOfPersonName",
-      headerName: "Người đề xuất",
-      align: "left",
-      minWidth: 150,
-      filterKey: "inChargeOfPersonName",
-      flex: 1,
-    },
-    {
-      field: "co_Participant",
-      headerName: "Thư ký",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
-      filterKey: "co_ParticipantName",
+      minWidth: 250,
+      filterKey: "descriptionJob",
+      sortAscValue: 11,
+      sortDescValue: 2,
       renderCell: ({ row }) => {
-        // console.log(row?.co_Participant);
-        return <></>;
+        return (
+          <>
+            <Tooltip title="Xem phản hồi">
+              <ButtonBase onClick={() => setReply(true)}>
+                <Typography className="text-main text-sm text-left">
+                  {row?.descriptionJob}
+                </Typography>
+              </ButtonBase>
+            </Tooltip>
+          </>
+        );
       },
     },
     {
-      field: "sdgfs",
+      field: "proposerName",
+      headerName: "Người đề xuất",
+      minWidth: 150,
+      filterKey: "proposerName",
+      sortAscValue: 13,
+      sortDescValue: 4,
+    },
+    {
+      field: "secretaryName",
+      headerName: "Thư ký",
+      minWidth: 150,
+      filterKey: "secretaryName",
+      sortAscValue: 14,
+      sortDescValue: 5,
+    },
+    {
+      field: "participant",
       headerName: "Nguời tham gia",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
-      filterKey: "co_ParticipantName",
+      minWidth: 200,
+      filterKey: "participantsName",
+      sortAscValue: 15,
+      sortDescValue: 6,
+      renderCell: ({ row }) => {
+        const listParticipant = JSON.parse(row?.participant || "[]");
+
+        return (
+          <List className="p-0 grid grid-cols-5 gap-2">
+            {listParticipant?.map((item: any) => (
+              <ListItem className="p-0">
+                <Tooltip title={item?.paticipantName}>
+                  <Avatar className="w-[24px] h-[24px]" />
+                </Tooltip>
+              </ListItem>
+            ))}
+          </List>
+        );
+      },
     },
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 100,
-      flex: 1,
+      minWidth: 150,
       renderCell: ({ row }) => {
-        const colors = ["success", "default", "error"];
+        const colors = ["default", "secondary", "success", "error"];
         return (
           <StatusChip
             status={row?.status}
             label={row?.statusName}
-            color={colors[row?.status] as any}
+            color={colors[row?.status - 1] as any}
           />
+        );
+      },
+      filterKey: "status",
+      type: "select",
+      sortAscValue: 12,
+      sortDescValue: 3,
+      options: [
+        { value: 1, label: "Chưa thực hiện" },
+        { value: 2, label: "Đang thực hiện" },
+        { value: 3, label: "Hoàn thành" },
+        { value: 4, label: "Hủy" },
+      ],
+    },
+    {
+      field: "accept",
+      headerName: "Tham gia",
+      minWidth: 100,
+      renderCell: ({ row }) => {
+        const listParticipant = JSON.parse(row?.participant || "[]");
+        const isAccept = listParticipant.find(
+          (item: any) => item?.id == userInfo?.userInfo?.userId
+        );
+        return (
+          <>
+            {isAccept ? (
+              <ButtonBase
+                onClick={() => handleAcceptMeeting(row?.id)}
+                className="bg-success text-white px-2 py-1 rounded font-semibold"
+              >
+                Tham gia
+              </ButtonBase>
+            ) : null}
+          </>
         );
       },
     },
@@ -132,7 +207,6 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
               action: () => handleOpenUpdate(),
               label: "Cập nhật trạng thái",
             },
-
             {
               action: () => handleDeleteTaskGroup(),
               label: "Xoá",
@@ -165,7 +239,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
 
   // HANDLE DELETE GROUP TASK IN DIALOG
   const mutateDelete = useMutation(
-    (payload: { id: string }) => taskList.delete(payload?.id),
+    (payload: { id: string }) => meetingDeploy.delete(payload?.id),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -176,9 +250,26 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   );
 
   const handleDeleteTaskGroup = () => {
-    if (confirm("Xác nhận xoá task!")) {
+    if (confirm("Xác nhận xoá!")) {
       mutateDelete.mutateAsync(defaultValue?.current);
     }
+  };
+
+  //   HANDLE ACCEPT MEETING
+  const mutateAccept = useMutation(
+    (payload: { meetingDeployId: string }) =>
+      meetingDeploy.acceptMetting(payload),
+    {
+      onSuccess: (data) => {
+        toast.success(data.resultMessage);
+
+        refetch?.();
+      },
+    }
+  );
+
+  const handleAcceptMeeting = (id: string) => {
+    mutateAccept.mutateAsync({ meetingDeployId: id });
   };
 
   return (
@@ -210,6 +301,16 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
           }}
         />
       </ContextMenuWrapper>
+      <MeetingDeployDialog
+        onClose={handleCloseUpdate}
+        open={Open}
+        refetch={refetch}
+        type="Update"
+        defaultValue={defaultValue.current}
+      />
+      <Drawer anchor={"right"} open={repply} onClose={() => setReply(false)}>
+        <MeetingDeployMailReponse data={defaultValue.current} />
+      </Drawer>
     </>
   );
 };

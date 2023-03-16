@@ -34,31 +34,31 @@ export const TaskGroupTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
       minWidth: 50,
       flex: 1,
+      isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "jobGroupName",
       headerName: "Nhóm task",
-      align: "left",
       minWidth: 50,
       flex: 1,
+      isSort: false,
     },
     {
       field: "totalItem",
       headerName: "Tổng số task",
-      align: "left",
       minWidth: 50,
       flex: 1,
+      isSort: false,
     },
     {
       field: "updated",
       headerName: "Ngày cập nhật",
-      align: "left",
       minWidth: 50,
       flex: 1,
+      isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.updated),
     },
     {
@@ -148,6 +148,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
               onMouseEnter: onMouseEnterRow,
             },
           }}
+          hideSearchbar
         />
       </ContextMenuWrapper>
 

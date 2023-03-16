@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   generatePaginationProps,
   RefreshButton,
@@ -81,7 +82,7 @@ export const PurchaseRequestTable: React.FC<TProps> = ({
         .then((res) => res.data),
     {
       onSuccess: (data) => {
-        setPagination({ ...pagination, total: data?.pageSize });
+        setPagination({ ...pagination, total: data?.totalItem });
       },
     }
   );
@@ -162,6 +163,7 @@ export const PurchaseRequestTable: React.FC<TProps> = ({
           <StatisticButton onClick={onViewReport} View={ViewReport} />
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
+          <ExportButton api={purchaseOrder.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
 

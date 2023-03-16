@@ -15,13 +15,13 @@ import { CustomerDetailReceiver } from "./CustomerDetailReceiver";
 type TProps = {
   isDisable: boolean;
   index: number;
-  handleRemove: (index: number) => void;
+  refetch: () => void;
 };
 
 export const CustomerDetailContact: React.FC<TProps> = ({
   isDisable,
   index,
-  handleRemove,
+  refetch
 }) => {
   const [status, setStatus] = useState<number>();
 
@@ -88,10 +88,6 @@ export const CustomerDetailContact: React.FC<TProps> = ({
               <ExpandMore className="mb-[-5px]" />
             )}
           </Typography>
-
-          {index > 0 && (
-            <DeleteButton color="error" onClick={() => handleRemove(index)} />
-          )}
         </ListItemButton>
 
         <AutoCompleteBase
@@ -112,7 +108,7 @@ export const CustomerDetailContact: React.FC<TProps> = ({
         unmountOnExit
         className="w-full"
       >
-        <CustomerDetailCurator isDisable={isDisable} index={index} />
+        <CustomerDetailCurator isDisable={isDisable} index={index} refetch={refetch} />
 
         <CustomerDetailReceiver isDisable={isDisable} index={index} />
 

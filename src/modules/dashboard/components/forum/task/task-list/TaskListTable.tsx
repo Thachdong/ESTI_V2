@@ -1,9 +1,9 @@
 import {
-  Box,
+  Avatar,
   ButtonBase,
-  Chip,
   Drawer,
-  Paper,
+  List,
+  ListItem,
   Rating,
   Tooltip,
   Typography,
@@ -11,17 +11,16 @@ import {
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
-import { taskGroup, taskList, TJobGroup } from "src/api";
+import { taskList } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
   StatusChip,
 } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import {
-  TaskGroupDialog,
   TaskListDialog,
   TaskListMailReponse,
 } from "~modules-dashboard/components";
@@ -50,37 +49,42 @@ export const TaskListTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
+      minWidth: 100,
       flex: 1,
       type: "date",
       filterKey: "createdDate",
+      sortDescValue: 0,
+      sortAscValue: 10,
       renderCell: ({ row }) => _format.converseDate(row?.created),
     },
     {
       field: "jobGroupName",
       headerName: "Nhóm task",
-      align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "jobGroupName",
+      sortDescValue: 1,
+      sortAscValue: 9,
     },
     {
       field: "performDate",
       headerName: "Thời gian thực hiện",
-      align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "performDate",
+      type: "date",
+      sortDescValue: 18,
+      sortAscValue: 19,
       renderCell: ({ row }) => _format.converseDate(row?.performDate),
     },
     {
       field: "descriptionsJob",
       headerName: "Mô tả task",
-      align: "left",
-      minWidth: 150,
+      minWidth: 250,
       flex: 1,
       filterKey: "descriptionsJob",
+      sortDescValue: 3,
+      sortAscValue: 12,
       renderCell: ({ row }) => {
         return (
           <>
@@ -98,37 +102,73 @@ export const TaskListTable: React.FC<TProps> = ({
     {
       field: "petitionerName",
       headerName: "Người yêu cầu",
-      align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       filterKey: "petitionerName",
+      sortDescValue: 5,
+      sortAscValue: 14,
     },
     {
       field: "inChargeOfPersonName",
       headerName: "Người phụ trách",
-      align: "left",
-      minWidth: 50,
+      minWidth: 200,
       filterKey: "inChargeOfPersonName",
       flex: 1,
+      sortDescValue: 6,
+      sortAscValue: 15,
     },
     {
       field: "co_Participant",
       headerName: "Người cùng tham gia",
-      align: "left",
-      minWidth: 50,
+      minWidth: 200,
       flex: 1,
       filterKey: "co_ParticipantName",
+      sortDescValue: 7,
+      sortAscValue: 16,
       renderCell: ({ row }) => {
-        // console.log(row?.co_Participant);
-        return <></>;
+        const { co_Participant } = row || {};
+
+        let newParticipants: any[] = [];
+
+        if (!!co_Participant && typeof co_Participant === "string") {
+          try {
+            newParticipants = JSON.parse(co_Participant);
+          } catch (err) {
+            console.log(err);
+          }
+        }
+
+        return (
+          <>
+            <List className="p-0 grid grid-cols-5 gap-2">
+              {newParticipants?.map((item: any) => (
+                <ListItem className="p-0">
+                  <Tooltip title={item?.co_PaticipantName}>
+                    <Avatar className="w-[24px] h-[24px]" />
+                  </Tooltip>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        );
       },
     },
     {
       field: "status",
       headerName: "Trạng thái",
-      align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
+      filterKey: "status",
+      type: "select",
+      sortDescValue: 4,
+      sortAscValue: 13,
+      options: [
+        { label: "Chưa thực hiện", value: 1 },
+        { label: "Đang thực hiện", value: 2 },
+        { label: "Hoàn thành", value: 3 },
+        { label: "Chưa hoàn thành", value: 4 },
+        { label: "Hủy", value: 5 },
+      ],
       renderCell: ({ row }) => {
         const colors = ["success", "default", "error"];
         return (
@@ -143,12 +183,13 @@ export const TaskListTable: React.FC<TProps> = ({
     {
       field: "level",
       headerName: "Đánh giá",
-      align: "left",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       filterKey: "level",
+      sortDescValue: 2,
+      sortAscValue: 11,
       renderCell: ({ row }) => (
-        <Rating className="text-xl" value={row?.level} readOnly />
+        <Rating className="text-sm" value={row?.level} readOnly />
       ),
     },
     {

@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
 import { useCallback } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
+import { curator, customer } from "src/api";
 import { customerType } from "src/api/customer-type";
 import {
+  BaseButton,
   FormDatepicker,
   FormInput,
   FormSelect,
@@ -14,30 +16,37 @@ import {
   discountTypeOptions,
   genderData,
 } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 
 type TProps = {
   isDisable: boolean;
   index: number;
+  refetch: () => void;
 };
 
 export const CustomerDetailCurator: React.FC<TProps> = ({
   isDisable,
   index,
+  refetch,
 }) => {
   const { control, watch } = useFormContext();
 
-  const accountType = watch(`contacts[${index}].accountType`);
+  const contactDetails = watch(`contacts[${index}]`);
+
+  const { accountType, id, userName } = contactDetails || {};
 
   useFieldArray({
     control,
     name: "contacts",
   });
 
+  // DATA FETCHING
   const { data: customerTypeOptions = [] } = useQuery(
     ["CustomerTypesList"],
     () => customerType.getAll().then((res) => res.data)
   );
 
+  // METHODS
   const renderDiscountTypeOptions = useCallback(
     (discountTypeOptions: any[]) => {
       if (accountType === 1) {
@@ -61,6 +70,32 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
     },
     [accountType]
   );
+
+  const mutationDelete = useMutation((id: string) => curator.delete(id), {
+    onSuccess: (data: any) => {
+      toast.success(data?.resultMessage);
+
+      refetch();
+    },
+  });
+
+  const handleDelete = useCallback(async () => {
+    if (confirm("Xác nhận xóa: " + userName)) {
+      await mutationDelete.mutateAsync(id);
+    }
+  }, [userName, id]);
+
+  const mutateUpdate = useMutation((id: string) => customer.resetPassword(id), {
+    onSuccess: (data: any) => {
+      toast.success(data?.resultMessage);
+    },
+  });
+
+  const handleRessetPassword = useCallback(async () => {
+    if (confirm("Xác nhận cấp lại mật khẩu tài khoản: " + userName)) {
+      await mutateUpdate.mutateAsync(id);
+    }
+  }, [id, userName]);
 
   return (
     <>
@@ -113,6 +148,15 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
           label="Loại chiết khấu"
           disabled={isDisable || !accountType}
         />
+
+        <Box className="col-span-2 flex items-center justify-end">
+          <BaseButton onClick={handleRessetPassword} className="mr-3">
+            Cấp lại mật khẩu
+          </BaseButton>
+          <BaseButton onClick={handleDelete} className="!bg-main-1">
+            Xóa khách hàng
+          </BaseButton>
+        </Box>
       </Box>
 
       <Box

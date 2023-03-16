@@ -41,6 +41,8 @@ export const staff = {
 
   getListStockerStaff: () => request.get<any>(`${BASE_URL}/StockerList`),
 
+  getListAccountantStaff: () => request.get<any>(`${BASE_URL}/AccountantList`),
+
   uploadAvatar: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
 

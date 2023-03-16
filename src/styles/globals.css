@@ -17,7 +17,7 @@ input {
 }
 
 input .disable-form-input,
-.Mui-disabled:not(button) {
+.Mui-disabled:not(button):not(label):not(.MuiFormControlLabel-label):not(.MuiCheckbox-root) {
   @apply !border-disabled-input-border !cursor-not-allowed !bg-[#edecec]  !text-[#504e4e] !rounded;
   -webkit-text-fill-color: #504e4e !important;
 }

@@ -60,7 +60,7 @@ export const TopicPage = () => {
       </Box>
       <TopicListTable
         refetch={refetch}
-        data={data}
+        data={data?.items}
         isFetching={isFetching}
         isLoading={isLoading}
         paginationProps={paginationProps}

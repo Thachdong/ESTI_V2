@@ -16,7 +16,7 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
   data,
 }) => {
   const [pagination, setPagination] = useState(defaultPagination);
-  console.log(data);
+
   const columns: TGridColDef[] = [
     {
       field: "STT",

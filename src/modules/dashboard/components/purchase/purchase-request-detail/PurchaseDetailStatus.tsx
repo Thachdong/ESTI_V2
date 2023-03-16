@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import { purchaseOrder } from "src/api";
@@ -19,14 +19,11 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
 }) => {
   const { id } = useRouter().query;
 
-  const { control, watch } = useForm({
-    defaultValues: {
-      status: currentStatus,
-    },
-  });
+  const { control, watch, setValue } = useForm<any>();
 
   const { status } = watch();
 
+  // METHODS
   const mutateUpdate = useMutation(
     (payload: { id: string; status: number }) =>
       purchaseOrder.updateStatus(payload),
@@ -47,6 +44,11 @@ export const PurchaseDetailStatus: React.FC<TProps> = ({
     }
     await mutateUpdate.mutateAsync({ id: id as string, status });
   }, [status, id]);
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    setValue("status", currentStatus);
+  }, [currentStatus]);
 
   return (
     <Box className="flex flex-col col-span-2 mb-4">

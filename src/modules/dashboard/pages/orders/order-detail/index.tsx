@@ -8,6 +8,7 @@ import { FormCheckbox } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
 import {
   OrderDetailAddition,
+  OrderDetailAdvancePayment,
   OrderDetailAttach,
   OrderDetailButtons,
   OrderDetailCurator,
@@ -206,6 +207,12 @@ export const OrderDetailPage: React.FC = () => {
               <QuoteDetailInvoiceHistory
                 orderStatus={orderDetail?.mainOrder?.status}
                 orderCode={orderDetail?.mainOrder?.mainOrderCode}
+              />
+            </Box>
+
+            <Box className="col-span-2">
+              <OrderDetailAdvancePayment
+                status={orderDetail?.mainOrder?.status}
               />
             </Box>
           </>

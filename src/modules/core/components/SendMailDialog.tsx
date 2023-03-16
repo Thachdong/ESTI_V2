@@ -1,14 +1,17 @@
 import { Box, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useQuery } from "react-query";
+import { staff } from "src/api";
 import { TDialog } from "~types/dialog";
 import { BaseButton } from "./buttons";
 import { Dialog } from "./Dialog";
 import { FormInputBase, FormInputCreatableBase } from "./form-bases";
-import { FormInput, FormTextEditor } from "./form-hooks";
+import { FormInput, FormSelect, FormTextEditor } from "./form-hooks";
 
 type TProps = TDialog & {
   sendMailHandler: (data: any) => void;
+  isToAccountant?: boolean;
 };
 
 export const SendMailDialog: React.FC<TProps> = ({
@@ -16,10 +19,20 @@ export const SendMailDialog: React.FC<TProps> = ({
   open,
   defaultValue,
   sendMailHandler,
+  isToAccountant = false,
 }) => {
   const [sendList, setSendList] = useState({ cc: [], bcc: [] });
 
   const { control, handleSubmit } = useForm();
+
+  // DATA FETCHING
+  const { data: accountantList } = useQuery(
+    ["AccountantList"],
+    () => staff.getListAccountantStaff().then((res) => res.data),
+    {
+      enabled: !!isToAccountant,
+    }
+  );
 
   // METHODS
   const handleSendList = useCallback((key: string, value: string[]) => {
@@ -28,17 +41,17 @@ export const SendMailDialog: React.FC<TProps> = ({
 
   const handleSendMail = useCallback(
     async (data: any) => {
-      const { title, content } = data || {};
+      const { title, content, to } = data || {};
 
       const { cc, bcc } = sendList;
 
-      await sendMailHandler({ title, content, cc, bcc });
+      await sendMailHandler({ title, content, cc, bcc, to });
     },
     [sendList]
   );
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" title="Gửi mail">
+    <Dialog open={open} onClose={onClose} maxWidth="md" title={isToAccountant ? "Gửi mail kế toán" : "Gửi mail"}>
       <Box
         component="form"
         className="grid gap-3"
@@ -47,12 +60,29 @@ export const SendMailDialog: React.FC<TProps> = ({
         <Box className="flex items-center gap-3">
           <Typography className="text-right w-[50px]">To: </Typography>
 
-          <FormInputBase
-            title=""
-            disabled
-            value={defaultValue?.to}
-            shrinkLabel
-          />
+          {isToAccountant ? (
+            <Box className="flex-grow">
+              <FormSelect
+                label=""
+                controlProps={{
+                  control,
+                  name: "to",
+                }}
+                labelKey="email"
+                options={accountantList}
+                className="w-full"
+              />
+            </Box>
+          ) : (
+            <Box className="flex-grow">
+              <FormInputBase
+                title=""
+                disabled
+                value={defaultValue?.to}
+                shrinkLabel
+              />
+            </Box>
+          )}
         </Box>
 
         <Box className="flex items-center gap-3">

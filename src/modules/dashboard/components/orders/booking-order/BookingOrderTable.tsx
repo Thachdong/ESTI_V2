@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   generatePaginationProps,
   RefreshButton,
@@ -34,6 +35,8 @@ export const BookingOrderTable: React.FC<TProps> = ({
   onViewReport,
   ViewReport,
 }) => {
+  const [defaultValue, setDefaultValue] = useState<any>();
+
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const [pagination, setPagination] = useState(defaultPagination);
@@ -41,8 +44,6 @@ export const BookingOrderTable: React.FC<TProps> = ({
   const router = useRouter();
 
   const { query } = router;
-
-  const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
 
@@ -128,7 +129,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
 
     const currentRow = data?.items.find((item: any) => item.id === id);
 
-    defaultValue.current = currentRow;
+    setDefaultValue(currentRow);
   };
 
   // METHODS
@@ -167,6 +168,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
           <StatisticButton onClick={onViewReport} View={ViewReport} />
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
+          <ExportButton api={mainOrder.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
       <ContextMenuWrapper
@@ -178,7 +180,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
               onClick={() =>
                 router.push({
                   pathname: "/dashboard/orders/order-detail/",
-                  query: { id: defaultValue.current?.id },
+                  query: { id: defaultValue?.id },
                 })
               }
             >
@@ -198,10 +200,10 @@ export const BookingOrderTable: React.FC<TProps> = ({
               onClick={() =>
                 router.push({
                   pathname: "/dashboard/warehouse/export-detail/",
-                  query: { fromOrderId: defaultValue.current?.id },
+                  query: { fromOrderId: defaultValue?.id },
                 })
               }
-              disabled={defaultValue.current?.status !== 2}
+              disabled={defaultValue?.status !== 2}
             >
               Tạo phiếu xuất kho
             </Item>
@@ -211,7 +213,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
               onClick={() =>
                 router.push({
                   pathname: "/dashboard/orders/bill-detail/",
-                  query: { fromOrderId: defaultValue.current?.id },
+                  query: { fromOrderId: defaultValue?.id },
                 })
               }
             >
@@ -243,14 +245,14 @@ export const BookingOrderTable: React.FC<TProps> = ({
         onClose={onClose}
         open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
         type={dialog.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
       />
 
       <BookingOrderNoteDialog
         onClose={onClose}
         open={Boolean(dialog.open && dialog.type === "AddNote")}
         type={dialog.type}
-        defaultValue={defaultValue.current}
+        defaultValue={defaultValue}
       />
       <ViewListProductDrawer
         Open={Open}
