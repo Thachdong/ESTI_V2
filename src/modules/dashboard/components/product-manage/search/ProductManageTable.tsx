@@ -157,7 +157,7 @@ export const ProductManageTable = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="flex items-center gap-3 w-3/5">
+      <Box className="flex items-center gap-3 w-3/5 mb-4">
         <Box className="flex items-center justify-end">
           <DownloadButton
             onClick={() =>
@@ -189,8 +189,8 @@ export const ProductManageTable = () => {
         }
       >
         <DataTable
-          experimentalFeatures={{ columnGrouping: true }}
-          columnGroupingModel={columnGroupingModel}
+          // experimentalFeatures={{ columnGrouping: true }}
+          // columnGroupingModel={columnGroupingModel}
           rows={data?.items as []}
           columns={columns}
           gridProps={{
@@ -202,7 +202,6 @@ export const ProductManageTable = () => {
             },
           }}
           getRowId={(row) => row.rowId}
-          className="grouping-column "
         />
       </ContextMenuWrapper>
 
