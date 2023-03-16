@@ -1,3 +1,4 @@
+import moment from "moment";
 import { TGridColDef } from "~types/data-grid";
 
 export const stampColumns: TGridColDef[] = [
@@ -54,42 +55,45 @@ export const stampColumns: TGridColDef[] = [
 
 export const stampHistoryColumns: TGridColDef[] = [
   {
-    field: "q1",
+    field: "created",
     headerName: "Ngày tạo",
     isFilter: false,
     isSort: false,
     width: 150,
+    renderCell: ({row}) => row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__"
   },
   {
-    field: "q2",
+    field: "warehouseSessionCode",
     headerName: "Mã nhập kho",
     isFilter: false,
     isSort: false,
     width: 150,
   },
   {
-    field: "q3",
+    field: "lotNumber",
     headerName: "LOT",
     isFilter: false,
     isSort: false,
     width: 150,
   },
   {
-    field: "q4",
+    field: "dateManufacture",
     headerName: "Ngày sản xuất",
     isFilter: false,
     isSort: false,
     width: 150,
+    renderCell: ({row}) => row?.dateManufacture ? moment(row?.dateManufacture).format("DD/MM/YYYY") : "__"
   },
   {
-    field: "q5",
+    field: "dateExpiration",
     headerName: "Ngày hết hạn",
     isFilter: false,
     isSort: false,
     width: 150,
+    renderCell: ({row}) => row?.dateExpiration ? moment(row?.dateExpiration).format("DD/MM/YYYY") : "__"
   },
   {
-    field: "q6",
+    field: "createdByName",
     headerName: "Người tạo",
     isFilter: false,
     isSort: false,
