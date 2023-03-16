@@ -1,47 +1,42 @@
 import { request } from "../method";
 
-export type TPosition = {
-  warehouseConfigID: string;
-  warehouseConfigCode: string;
-  positionName: string;
-  positionSize: string;
-  note: string;
-  positionStatus: number;
-  positionStatusName: string;
-  positionMaxSlot: number;
-  id: string;
-  created: number;
-  createdBy: string;
-  updated: number;
-  updatedBy: string;
-  active: boolean;
-};
-
 export type TCreatePosition = {
   warehouseConfigID: string;
   positionName: string;
   positionSize: string;
   note: string;
   positionStatus: number;
+  positionMaxSlot: number;
+  productMaterial: number;
+  productType: number;
+  mass: string;
+  volume: string;
+  storageConditions: number;
+};
+
+export type TUpdatePosition = TCreatePosition & {
+  id: string;
 };
 
 const BASE_URL = "position";
 
 export const position = {
   getList: (params?: any) =>
-    request.getPagination<TPosition>(BASE_URL, { ...params }),
+    request.getPagination<any>(BASE_URL, { ...params }),
+
+  getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
   create: (payload: TCreatePosition) =>
     request.post<TCreatePosition, any>(BASE_URL, payload),
 
-  update: (payload: Partial<TPosition>) =>
-    request.put<Partial<TPosition>, any>(BASE_URL, payload),
+  update: (payload: TUpdatePosition) =>
+    request.put<TUpdatePosition, any>(BASE_URL, payload),
 
   getProductByPositionId: (params?: any) =>
-  request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: products list
+    request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: products list
 
   getPositionByProduct: (params?: any) =>
-  request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: position list
+    request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: position list
 
   getHistoryByPositionId: (params?: any) =>
     request.getPagination<any>(`${BASE_URL}/GetHistory`, { ...params }),

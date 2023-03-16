@@ -1,32 +1,21 @@
 import { Box } from "@mui/material";
 import _ from "lodash";
-import { useCallback, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { useQuery } from "react-query";
-import { position, TPosition } from "src/api";
+import { position } from "src/api";
 import { AddButton } from "~modules-core/components";
 import {
-  StorageCreatePositionDialog,
-  StoragePositionDialog,
   StoragePositionList,
   StoragePositionStatus,
 } from "~modules-dashboard/components";
-import { TDefaultDialogState } from "~types/dialog";
 
 export const StoragePage: React.FC = () => {
-  // EXTRACT PROPS
-  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
+  const router = useRouter();
 
-  const defaultValue = useRef<any>();
-
-  // DIALOG METHODS
-  const onDialogClose = useCallback(() => {
-    setDialog({ open: false });
-  }, []);
-
-  const onDialogOpen = useCallback((type: string, data: TPosition) => {
-    setDialog({ open: true, type });
-
-    defaultValue.current = data;
+  // METHODS
+  const redirectToCreate = useCallback(() => {
+    router.push("/dashboard/product-manage/position-detail")
   }, []);
 
   // DATA FETCHING
@@ -70,7 +59,7 @@ export const StoragePage: React.FC = () => {
 
         <Box className="">
           <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
+            onClick={redirectToCreate}
             variant="contained"
           >
             Thêm vị trí
@@ -81,29 +70,11 @@ export const StoragePage: React.FC = () => {
       <Box className="grid grid-cols-2 gap-4">
         {data?.items.map((item: any) => (
           <StoragePositionList
-            onDialogOpen={onDialogOpen}
             warehouse={item}
             key={item?.warehouseConfigID}
           />
         ))}
       </Box>
-
-      <StorageCreatePositionDialog
-        onClose={onDialogClose}
-        open={dialog.open}
-        type={dialog.type}
-        refetch={refetch}
-        defaultValue={{} as any}
-        title="THÊM MỚI VỊ TRÍ"
-      />
-
-      <StoragePositionDialog
-        onClose={onDialogClose}
-        open={dialog.open && dialog.type === "View"}
-        refetch={refetch}
-        defaultValue={defaultValue.current}
-        title="THÔNG TIN VỊ TRÍ LƯU"
-      />
     </Box>
   );
 };

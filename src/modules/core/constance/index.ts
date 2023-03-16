@@ -356,7 +356,7 @@ export const referencePriceProductStatus = [
   { value: 2, label: "Nhu cầu cao" },
   { value: 3, label: "Cạnh tranh cao" },
   { value: 4, label: "Ngừng sản xuất" },
-]
+];
 export const department = [
   { id: 1, name: "Phòng kinh doanh" },
   { id: 2, name: "Phòng kế toán" },
@@ -377,4 +377,28 @@ export const TypeTransaction = [
   { id: 2, name: "Expense" },
 ];
 
-export const defaultBranchId = "4307e21e-a064-47b4-adda-08daa785f29a"
+export const defaultBranchId = "4307e21e-a064-47b4-adda-08daa785f29a";
+
+export const materialTypes = [
+  { value: 1, label: "Dạng rắn" },
+  { value: 2, label: "Dạng lỏng" },
+  { value: 3, label: "Thủy tinh" },
+  { value: 4, label: "Nhựa" },
+  { value: 5, label: "Sứ" },
+  { value: 6, label: "Kim loại" },
+  { value: 7, label: "Vật liệu khác" },
+];
+
+export const storageCondition = [
+  { value: 1, label: "Lạnh âm sâu" },
+  { value: 2, label: "Lưu mát" },
+  { value: 3, label: "Nguyên thùng" },
+  { value: 4, label: "Nguyên pallet" },
+];
+
+export const storageProductType = [
+  { value: 1, label: "Thiết bị" },
+  { value: 2, label: "Hóa chất" },
+  { value: 3, label: "Dụng cụ" },
+  { value: 4, label: "Vật tư tiêu hao" },
+];
