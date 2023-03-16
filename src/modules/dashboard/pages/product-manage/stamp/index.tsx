@@ -136,7 +136,7 @@ export const StampPage = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="flex gap-3 w-3/5 items-center mb-3">
+      <Box className="flex gap-3 items-center mb-3">
         <Box className="flex items-center justify-end">
           <AddButton
             onClick={() => setDialog({ open: true, type: "Add" })}
@@ -151,6 +151,8 @@ export const StampPage = () => {
             controlProps={{ control, name: "labelType" }}
             label="Nhóm sản phẩm"
             options={productTypesStamp}
+            className="max-w-[200px]"
+            shrinkLabel
           />
         </Box>
       </Box>
@@ -201,6 +203,7 @@ export const StampPage = () => {
         onClose={() => setHistoryDialog(false)}
         open={historyDialog}
         title="Lịch sử nhãn"
+        defaultValue={defaultValue.current}
       />
     </Paper>
   );

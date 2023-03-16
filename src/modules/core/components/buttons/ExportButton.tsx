@@ -1,6 +1,7 @@
 import DownloadIcon from "@mui/icons-material/SimCardDownloadOutlined";
+import { Box, CircularProgress } from "@mui/material";
 import clsx from "clsx";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { TBaseButton } from "~types/buttons";
 import { BaseButton } from "./BaseButton";
 
@@ -10,10 +11,13 @@ type TProps = TBaseButton & {
 };
 
 export const ExportButton: React.FC<TProps> = (props) => {
+  const [loading, setLoading] = useState(false);
+
   const { api, filterParams, className, children, ...restProps } = props;
 
   const handleExport = useCallback(async () => {
     try {
+      setLoading(true);
       const res = await api(filterParams);
 
       const { FileContents, FileDownloadName, ContentType } = res.data || {};
@@ -31,6 +35,8 @@ export const ExportButton: React.FC<TProps> = (props) => {
       a.remove();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }, [api, filterParams]);
 
@@ -44,8 +50,16 @@ export const ExportButton: React.FC<TProps> = (props) => {
       )}
       onClick={handleExport}
     >
-      <DownloadIcon />
-      {children}
+      {loading ? (
+        <Box>
+          <CircularProgress size="1.25rem" />
+        </Box>
+      ) : (
+        <>
+          <DownloadIcon />
+          {children}
+        </>
+      )}
     </BaseButton>
   );
 };

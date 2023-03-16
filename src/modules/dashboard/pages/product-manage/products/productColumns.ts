@@ -1,4 +1,5 @@
 import moment from "moment";
+import { VAT } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
 
 export const productColumns: TGridColDef[] = [
@@ -68,11 +69,33 @@ export const productColumns: TGridColDef[] = [
     filterKey: "unitName",
   },
   {
+    field: "vat",
+    headerName: "Thuế GTGT",
+    sortAscValue: 26,
+    sortDescValue: 24,
+    filterKey: "vat",
+    type: "select",
+    options: [
+      { value: "0", label: "0%" },
+      { value: "5", label: "5%" },
+      { value: "8", label: "8%" },
+      { value: "10", label: "10%" },
+    ]
+  },
+  {
     field: "casCode",
     headerName: "Mã CAS",
     sortAscValue: 21,
     sortDescValue: 9,
     filterKey: "casCode",
+  },
+  {
+    field: "chemicalAppendix",
+    headerName: "Phụ lục hóa chất",
+    minWidth: 175,
+    sortAscValue: 27,
+    sortDescValue: 25,
+    filterKey: "chemicalAppendix",
   },
   {
     field: "chemicalName",

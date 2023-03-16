@@ -376,3 +376,5 @@ export const TypeTransaction = [
   { id: 1, name: "Income" },
   { id: 2, name: "Expense" },
 ];
+
+export const defaultBranchId = "4307e21e-a064-47b4-adda-08daa785f29a"

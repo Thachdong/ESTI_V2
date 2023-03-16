@@ -46,6 +46,7 @@
     "react-responsive": "^9.0.2",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.0.8",
+    "recharts": "^2.4.3",
     "sass": "^1.58.3",
     "tinymce": "^6.3.1"
   },

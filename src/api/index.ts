@@ -47,3 +47,6 @@ export * from "./account-manager";
 export * from "./category-transaction";
 export * from "./advance-payment";
 export * from "./transaction";
+export * from "./feedback";
+export * from "./dashboard";
+export * from "./product-attributes";

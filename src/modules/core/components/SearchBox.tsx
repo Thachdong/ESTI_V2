@@ -8,11 +8,15 @@ import { useRouter } from "next/router";
 type TSearchBox = {
   isHotSearch?: boolean;
   label?: string;
+  callback?: (val: string) => void;
+  disabledRouterSearch?: boolean;
 };
 
 export const SearchBox: React.FC<TSearchBox> = ({
   isHotSearch = false,
   label = "Tìm kiếm",
+  callback,
+  disabledRouterSearch = false
 }) => {
   const router = useRouter();
 
@@ -24,7 +28,8 @@ export const SearchBox: React.FC<TSearchBox> = ({
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     if (isHotSearch) {
-      router.push({ query: { ...query, searchContent: e.target.value } });
+      !disabledRouterSearch && router.push({ query: { ...query, searchContent: e.target.value } });
+      callback?.(e.target.value);
     }
 
     setContent(e.target.value);
@@ -32,16 +37,18 @@ export const SearchBox: React.FC<TSearchBox> = ({
 
   const handleEnter = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.code.includes("Enter")) {
-      router.push({ query: { ...query, searchContent: content } });
+      !disabledRouterSearch && router.push({ query: { ...query, searchContent: content } });
+      callback?.(content);
     }
   };
 
   const endAdornment = (
     <InputAdornment
       position="end"
-      onClick={() =>
-        router.push({ query: { ...query, searchContent: content } })
-      }
+      onClick={() => {
+        !disabledRouterSearch && router.push({ query: { ...query, searchContent: content } });
+        callback?.(content);
+      }}
       className="cursor-pointer "
     >
       <SearchRoundedIcon className="text-main" />

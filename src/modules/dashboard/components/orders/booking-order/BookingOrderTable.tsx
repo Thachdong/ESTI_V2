@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   generatePaginationProps,
   RefreshButton,
@@ -167,6 +168,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
           <StatisticButton onClick={onViewReport} View={ViewReport} />
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
+          <ExportButton api={mainOrder.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
       <ContextMenuWrapper

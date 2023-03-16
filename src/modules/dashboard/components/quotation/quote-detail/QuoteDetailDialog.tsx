@@ -62,7 +62,7 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
 
   useEffect(() => {
     type === "Add" && isSelectedProduct();
-  }, [products, productId])
+  }, [products, productId]);
 
   // METHODS
   const callback = useCallback((data: any) => {
@@ -88,9 +88,17 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
 
   const updateProduct = useCallback(
     (data: any) => {
-      const updatedProducts = products.map((prod: any) =>
-        prod?.productId === data?.productId ? { ...product, ...data } : { ...prod }
-      );
+      const updatedProducts = products.map((prod: any) => {
+        const { id, productId } = prod || {};
+
+        if (!!id) {
+          return id === data?.id ? { ...product, ...data } : { ...prod };
+        } else {
+          return productId === data?.productId
+            ? { ...product, ...data }
+            : { ...prod };
+        }
+      });
 
       setContextValue("products", updatedProducts);
 
@@ -121,7 +129,7 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
     }
 
     return false;
-  }, [products, productId])
+  }, [products, productId]);
 
   return (
     <Dialog

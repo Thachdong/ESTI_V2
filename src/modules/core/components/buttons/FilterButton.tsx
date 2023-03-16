@@ -8,11 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import clsx from "clsx";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { FormDatepicker, FormSelect } from "../form-hooks";
 import { useForm } from "react-hook-form";
 import router, { useRouter } from "next/router";
+import moment from "moment";
 
 export const FilterButton: React.FC<
   ButtonProps & { listFilterKey: string[] }
@@ -68,9 +69,11 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
   anchorEl,
   listFilterKey,
 }) => {
-  const { control, getValues } = useForm();
+  const { control, setValue, watch, reset } = useForm();
 
   const { query } = useRouter();
+
+  const { fromDate, toDate, period } = watch();
 
   const OptionFilterDate = [
     {
@@ -107,6 +110,93 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
     },
   ];
 
+  const handleSearch = useCallback(() => {
+    router.push({
+      query: {
+        ...query,
+        fromDate,
+        toDate,
+      },
+    });
+  }, [fromDate, toDate]);
+
+  const handleCancelSearch = useCallback(() => {
+    reset({});
+
+    delete query["fromDate"];
+
+    delete query["toDate"];
+
+    router.push({ query });
+    
+    OnClose();
+  }, []);
+
+  useEffect(() => {
+    switch (period) {
+      case 1: {
+        const targetDate = moment().subtract(30, "days").valueOf();
+
+        setValue("fromDate", targetDate);
+
+        setValue("toDate", moment().valueOf());
+        break;
+      }
+      case 2: {
+        setValue("fromDate", moment().startOf("month").valueOf());
+
+        setValue("toDate", moment().valueOf());
+        break;
+      }
+      case 3: {
+        setValue("fromDate", moment().startOf("quarter").valueOf());
+
+        setValue("toDate", moment().endOf("quarter").valueOf());
+        break;
+      }
+      case 4: {
+        setValue("fromDate", moment().startOf("quarter").valueOf());
+
+        setValue("toDate", moment().valueOf());
+        break;
+      }
+      case 5: {
+        setValue("fromDate", moment().startOf("year").valueOf());
+
+        setValue("toDate", moment().endOf("year").valueOf());
+        break;
+      }
+      case 6: {
+        setValue("fromDate", moment().startOf("year").valueOf());
+
+        setValue("toDate", moment().valueOf());
+        break;
+      }
+      case 7: {
+        const startOfYear = moment().startOf("year");
+
+        const halfYear =  moment().startOf("year").add(6, "months").valueOf()
+
+        setValue("fromDate", startOfYear.valueOf());
+
+        setValue("toDate", halfYear);
+        break;
+      }
+      case 8: {
+        const endOfYear = moment().endOf("year");
+
+        const halfYear = moment().endOf("year").subtract(6, "months").valueOf()
+
+        setValue("fromDate", halfYear);
+
+        setValue("toDate", endOfYear.valueOf());
+        break;
+      }
+      default:
+        break;
+    }
+  }, [period]);
+
   return (
     <Popover
       id={"filter"}
@@ -135,9 +225,8 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
             options={OptionFilterDate}
             label={"Kỳ"}
             controlProps={{
-              name: "year",
+              name: "period",
               control: control,
-              rules: undefined,
             }}
             defaultValue={OptionFilterDate?.[0]}
             className="col-span-2"
@@ -146,43 +235,32 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
             <Box className="grid grid-cols-2 gap-3 w-full">
               <FormDatepicker
                 controlProps={{
-                  name: "fromdate",
+                  name: "fromDate",
                   control,
-                  rules: { required: "Phải nhập ngày sinh" },
+                  // rules: { required: "Phải nhập ngày sinh" },
                 }}
                 label="Từ ngày"
                 shrinkLabel
               />
               <FormDatepicker
                 controlProps={{
-                  name: "todate",
+                  name: "toDate",
                   control,
-                  rules: { required: "Phải nhập ngày sinh" },
+                  // rules: { required: "Phải nhập ngày sinh" },
                 }}
                 label="Đến ngày"
                 shrinkLabel
               />
             </Box>
             <ButtonBase
-              onClick={() =>
-                router.push({
-                  query: {
-                    ...query,
-                    fromdate: parseInt(getValues("fromdate")),
-                    todate: parseInt(getValues("todate")),
-                  },
-                })
-              }
+              onClick={handleSearch}
               className="px-3 py-1 h-[40px] bg-info text-white rounded text-base font-semibold"
+              disabled={!fromDate || !toDate}
             >
               Lọc
             </ButtonBase>
             <ButtonBase
-              onClick={() => {
-                delete query["fromdate"];
-                delete query["todate"];
-                router.push({ query });
-              }}
+              onClick={handleCancelSearch}
               className="px-3 py-1 h-[40px] bg-warning text-white rounded text-base font-semibold"
             >
               Huỷ
