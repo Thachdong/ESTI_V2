@@ -99,7 +99,7 @@ export const menu = [
     icon: <ProductionIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
-        title: "Tra cứu vị trí",
+        title: "Vị trí hàng hoá",
         link: "product-manage/storage",
       },
       {

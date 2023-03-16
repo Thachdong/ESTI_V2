@@ -45,7 +45,7 @@ export const StoragePositionList: React.FC<TProps> = ({
             variant="text"
             className={clsx(
               getClassByStatus(position?.positionStatus),
-              "border border-solid border-[#f5f3f3] text-center"
+              "border border-solid border-[#f5f3f3] text-center truncate px-2"
             )}
             onClick={() => onDialogOpen("View", position)}
             key={position?.id}
