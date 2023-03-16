@@ -35,6 +35,12 @@ export const position = {
   getProductByPositionId: (params?: any) =>
     request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: products list
 
+  getImportProduct: (params?: any) =>
+    request.getPagination<any>(`${BASE_URL}/GetImportHistory`, { ...params }), // response: products list
+
+  getExportProduct: (params?: any) =>
+    request.getPagination<any>(`${BASE_URL}/GetExportHistory`, { ...params }), // response: products list
+
   getPositionByProduct: (params?: any) =>
     request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: position list
 

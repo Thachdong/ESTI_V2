@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import {
   PositionDetailForm,
   PositionDetailHistory,
-  PositionDetailProducts,
+  PositionDetailProductTabs,
 } from "~modules-dashboard/components/product-manage/position-detail";
 
 export const PositionDetailPage: React.FC = () => {
@@ -15,7 +15,7 @@ export const PositionDetailPage: React.FC = () => {
 
       {!!id && (
         <>
-          <PositionDetailProducts />
+          <PositionDetailProductTabs />
 
           <PositionDetailHistory />
         </>

@@ -1,3 +1,3 @@
 export * from "./PositionDetailForm";
 export * from "./PositionDetailHistory";
-export * from "./PositionDetailProducts";
+export * from "./PositionDetailProductTabs";

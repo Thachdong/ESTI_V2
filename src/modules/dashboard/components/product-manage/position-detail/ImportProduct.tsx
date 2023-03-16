@@ -1,25 +1,32 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { position } from "src/api";
-import { DataTable, RefreshButton } from "~modules-core/components";
+import {
+  DataTable,
+  generatePaginationProps,
+  RefreshButton,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import { positionProductColumns } from "~modules-dashboard/pages/product-manage/storage/data";
+import { importColumns } from "~modules-dashboard/pages/product-manage/position-detail/data";
 
-export const PositionDetailProducts: React.FC = () => {
+export const ImportProduct: React.FC = () => {
   const router = useRouter();
 
   const { query } = router;
 
   const { id } = query;
 
-  const [pagination, setPagination] = useState(defaultPagination);
+  const [pagination, setPagination] = useState({
+    ...defaultPagination,
+    pageSize: 5,
+  });
 
   const [searchParams, setSearchParams] = useState<any>({});
 
-  usePathBaseFilter(pagination);
+  usePathBaseFilter();
 
   // WATCHING QUERY AND TRIGGER FETCHING DATA
   useEffect(() => {
@@ -28,8 +35,10 @@ export const PositionDetailProducts: React.FC = () => {
     const params: any = {};
 
     queryKeys.map((key) => {
-      if (!key.includes("history_")) {
-        params[key] = query[key];
+      if (key.includes("import_")) {
+        const paramKey = key.replace("import_", "");
+
+        params[paramKey] = query[key];
       }
     });
 
@@ -37,9 +46,9 @@ export const PositionDetailProducts: React.FC = () => {
   }, [query]);
 
   // FETCH DATA
-  const { data, refetch } = useQuery(
+  const { data, refetch, isLoading, isFetching } = useQuery(
     [
-      "ProductListIn_" + id,
+      "ImportProductList" + id,
       {
         ...pagination,
         searchParams,
@@ -47,7 +56,7 @@ export const PositionDetailProducts: React.FC = () => {
     ],
     () =>
       position
-        .getProductByPositionId({
+        .getImportProduct({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           positionId: id,
@@ -62,23 +71,22 @@ export const PositionDetailProducts: React.FC = () => {
     }
   );
 
+  const paginationProps = generatePaginationProps(pagination, setPagination);
+
   return (
     <Box className="mb-4">
-      <Box className="flex items-center justify-between mb-3">
-        <Typography className="font-bold uppercase mb-3 text-sm">
-          THÔNG TIN SẢN PHẨM
-        </Typography>
+      <Box className="flex items-center justify-end mb-3 pr-3">
         <RefreshButton onClick={() => refetch()} />
       </Box>
-
-      <Box className="bg-white">
-        <DataTable
-          columns={positionProductColumns}
-          rows={data?.items || []}
-          autoHeight={true}
-          paginationMode="client"
-        />
-      </Box>
+      <DataTable
+        columns={importColumns}
+        rows={data?.items || []}
+        gridProps={{
+          loading: isLoading || isFetching,
+          ...paginationProps,
+        }}
+        autoHeight={true}
+      />
     </Box>
   );
 };
