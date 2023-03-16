@@ -2,12 +2,16 @@ import { Box } from "@mui/system";
 import { General } from "./General";
 import { Warranty } from "./Warranty";
 
-export const ProductDetailGeneral: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+}
+
+export const ProductDetailGeneral: React.FC<TProps> = ({disabled}) => {
   return (
     <Box>
-      <General />
+      <General disabled={disabled} />
 
-      <Warranty />
+      <Warranty disabled={disabled} />
     </Box>
   );
 };

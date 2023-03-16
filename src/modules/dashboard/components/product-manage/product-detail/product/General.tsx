@@ -4,9 +4,8 @@ import clsx from "clsx";
 import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { productAtribute, products, suppliers, units } from "src/api";
+import { category, productAtribute, products, suppliers, units } from "src/api";
 import {
-  AddButton,
   BaseButton,
   FormCategory,
   FormCheckbox,
@@ -18,14 +17,16 @@ import {
 } from "~modules-core/components";
 import { VAT } from "~modules-core/constance";
 
-export const General: React.FC = () => {
+type TProps = {
+  disabled: boolean;
+};
+
+export const General: React.FC<TProps> = ({ disabled }) => {
   const { control, watch, setValue } = useFormContext();
 
   const { image } = watch();
 
   const { hidePrice } = watch();
-
-  const disabled = false;
 
   const { data: productGroups } = useQuery(["productGroups"], () =>
     products.getProductGroups().then((res) => res.data)
@@ -67,6 +68,7 @@ export const General: React.FC = () => {
             name: "hidePrice",
           }}
           label={"Ẩn giá bán"}
+          disabled={disabled}
         />
 
         <FormInput
@@ -90,16 +92,27 @@ export const General: React.FC = () => {
           />
         )}
 
-        <FormCategory
+        <FormSelect
           options={productGroups}
           controlProps={{
             control,
             name: "productGroup",
             rules: { required: "Phải chọn nhóm SP" },
           }}
-          label="Danh mục SP"
+          label="Nhóm SP"
           disabled={disabled}
           className="flex-grow"
+        />
+
+        <FormCategory
+          controlProps={{
+            control,
+            name: "categorys",
+            rules: { required: "Phải chọn danh mục sản phẩm" },
+          }}
+          label="Danh mục SP"
+          multiple={true}
+          disabled={disabled}
         />
 
         <FormInput

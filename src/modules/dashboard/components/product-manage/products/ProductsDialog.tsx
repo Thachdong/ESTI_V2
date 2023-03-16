@@ -124,21 +124,21 @@ export const ProductsDialog: React.FC<TDialog> = ({
       : "Thông tin sản phẩm";
 
   // DIALOG MUTATION DECLARATIONS
-  const mutationAddProduct = useMutation(
-    (payload: TProductPayload) => products.create(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
+  // const mutationAddProduct = useMutation(
+  //   (payload: TCreateProduct) => products.create(payload),
+  //   {
+  //     onSuccess: (data) => {
+  //       toast.success(data?.resultMessage);
 
-        refetch?.();
+  //       refetch?.();
 
-        onClose();
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
+  //       onClose();
+  //     },
+  //     onError: (error: any) => {
+  //       toast.error(error?.resultMessage);
+  //     },
+  //   }
+  // );
 
   const handleAddProduct = async (data: any) => {
     const {
@@ -168,26 +168,26 @@ export const ProductsDialog: React.FC<TDialog> = ({
       },
     };
 
-    await mutationAddProduct.mutateAsync(payload);
+    // await mutationAddProduct.mutateAsync(payload);
   };
 
-  const mutationUpdateProduct = useMutation(
-    (payload: TProduct) => products.update(payload),
-    {
-      onSuccess: (data) => {
-        toast.success(data?.resultMessage);
+  // const mutationUpdateProduct = useMutation(
+  //   (payload: TProduct) => products.update(payload),
+  //   {
+  //     onSuccess: (data) => {
+  //       toast.success(data?.resultMessage);
 
-        refetch?.();
+  //       refetch?.();
 
-        onClose();
+  //       onClose();
 
-        setIsUpdate(false);
-      },
-      onError: (error: any) => {
-        toast.error(error?.resultMessage);
-      },
-    }
-  );
+  //       setIsUpdate(false);
+  //     },
+  //     onError: (error: any) => {
+  //       toast.error(error?.resultMessage);
+  //     },
+  //   }
+  // );
 
   const handleUpdateProduct = async (data: any) => {
     const {
@@ -224,7 +224,7 @@ export const ProductsDialog: React.FC<TDialog> = ({
       },
     };
 
-    await mutationUpdateProduct.mutateAsync(payload);
+    // await mutationUpdateProduct.mutateAsync(payload);
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE

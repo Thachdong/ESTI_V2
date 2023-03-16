@@ -1,13 +1,17 @@
 import { Box } from "@mui/material";
+import clsx from "clsx";
 import { useCallback, useState } from "react";
+import { category } from "src/api";
 import { CategoryDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
-import { TAutocomplete } from "~types/form-controlled/form-select";
+import { TAutocompleteAsync } from "~types/form-controlled/form-select";
 import { AddButton } from "./buttons";
-import { FormSelect } from "./form-hooks";
+import { FormSelectAsync } from "./form-hooks";
 
-export const FormCategory: React.FC<TAutocomplete> = (props) => {
-  const [dialog, setDialog] = useState<TDefaultDialogState>({open: false});
+type TProps = Omit<TAutocompleteAsync, "fetcher">;
+
+export const FormCategory: React.FC<TProps> = (props) => {
+  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
   const onClose = useCallback(() => {
     setDialog({ open: false });
@@ -16,11 +20,11 @@ export const FormCategory: React.FC<TAutocomplete> = (props) => {
   const onOpen = useCallback(() => {
     setDialog({ open: true, type: "Add" });
   }, []);
-  
+
   return (
     <>
-      <Box className="flex items-center w-full">
-      <FormSelect {...props} />
+      <Box className="flex items-start w-full">
+        <FormSelectAsync fetcher={category.getList} {...props} className={clsx(props.className, "flex-grow")} />
 
         <AddButton
           disabled={props?.disabled}
@@ -28,12 +32,8 @@ export const FormCategory: React.FC<TAutocomplete> = (props) => {
           className="!w-[32px] ml-2 !min-w-[40px]"
         />
       </Box>
-      
-      <CategoryDialog
-        onClose={onClose}
-        open={dialog.open}
-        type={dialog.type}
-      />
+
+      <CategoryDialog onClose={onClose} open={dialog.open} type={dialog.type} />
     </>
   );
 };

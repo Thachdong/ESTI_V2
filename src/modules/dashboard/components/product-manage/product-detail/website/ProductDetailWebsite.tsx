@@ -1,18 +1,18 @@
 import { Box, Typography } from "@mui/material";
 import clsx from "clsx";
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { category, products } from "src/api";
+import { products } from "src/api";
 import {
   FormImageGallery,
   FormInput,
-  FormSelectAsync,
   FormTextEditor,
 } from "~modules-core/components";
 
-export const ProductDetailWebsite: React.FC = () => {
-  const disabled = false;
+type TProps = {
+  disabled: boolean;
+};
 
+export const ProductDetailWebsite: React.FC<TProps> = ({ disabled }) => {
   const { control } = useFormContext();
 
   return (
@@ -23,18 +23,6 @@ export const ProductDetailWebsite: React.FC = () => {
         </Typography>
 
         <Box className="grid grid-cols-2 gap-4 bg-white shadow p-4">
-          <FormSelectAsync
-            fetcher={category.getList}
-            controlProps={{
-              control,
-              name: "categorys",
-              rules: { required: "Phải chọn danh mục sản phẩm" },
-            }}
-            label="Danh mục sản phẩm"
-            multiple={true}
-            disabled={disabled}
-          />
-
           <FormInput
             controlProps={{
               control,

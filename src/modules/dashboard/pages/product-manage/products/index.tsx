@@ -201,14 +201,13 @@ export const ProductsPage: React.FC = () => {
           id={row?.id as string}
           items={[
             {
-              // action: () =>
-              //   router.push({
-              //     pathname: "/dashboard/product-manage/product-detail",
-              //     query: {
-              //       id: row?.id,
-              //     },
-              //   }),
-              action: () => setDialog({ open: true, type: "View" }),
+              action: () =>
+                router.push({
+                  pathname: "/dashboard/product-manage/product-detail",
+                  query: {
+                    id: row?.id,
+                  },
+                }),
               label: "Thông tin chi tiết",
             },
             {
@@ -240,18 +239,13 @@ export const ProductsPage: React.FC = () => {
 
         <Box className="xl:col-span-2 flex items-center justify-end gap-3 ml-3">
           <AddButton
-            onClick={() => setDialog({ open: true, type: "Add" })}
+            onClick={() =>
+              router.push("/dashboard/product-manage/product-detail")
+            }
             variant="contained"
           >
             Thêm sản phẩm
           </AddButton>
-
-          {/* <AddButton
-            onClick={() => router.push("/dashboard/product-manage/product-detail")}
-            variant="contained"
-          >
-            Thêm sản phẩm
-          </AddButton> */}
 
           <AddButton variant="contained" className="">
             <InputLabel
@@ -285,7 +279,14 @@ export const ProductsPage: React.FC = () => {
           <Menu className="p-0" id="product_table_menu">
             <Item
               id="view-product"
-              onClick={() => setDialog({ open: true, type: "View" })}
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/product-manage/product-detail",
+                  query: {
+                    id: defaultValue.current?.id,
+                  },
+                })
+              }
             >
               Xem chi tiết
             </Item>

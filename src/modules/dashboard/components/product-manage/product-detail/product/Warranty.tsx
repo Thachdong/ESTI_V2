@@ -3,9 +3,11 @@ import { Box } from "@mui/system";
 import { useFormContext } from "react-hook-form";
 import { FormInput, FormInputNumber } from "~modules-core/components";
 
-export const Warranty: React.FC = () => {
-  const disabled = false;
+type TProps = {
+  disabled: boolean;
+}
 
+export const Warranty: React.FC<TProps> = ({disabled}) => {
   const { control } = useFormContext();
 
   return (

@@ -86,7 +86,7 @@ export const products = {
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
 
-  getById: (id: string) => request.get<TProduct>(`${BASE_URL}/${id}`),
+  getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
   getBySupplierId: (id: string) =>
     request.get<TProduct[]>(`${BASE_URL}/ProductInSupplier?supplierId=${id}`),

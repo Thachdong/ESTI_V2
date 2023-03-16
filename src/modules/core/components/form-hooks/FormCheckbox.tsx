@@ -29,7 +29,7 @@ export const FormCheckbox: React.FC<TFormCheckbox> = (props) => {
         control={<Checkbox size="small" {...defaultProps} />}
         label={updateLabel}
         className={clsx(
-          "!border !border-[#ffff] !rounded",
+          "!border !border-[#ffff] !rounded mr-0",
           textFieldProps?.className
         )}
         value={!!value}
