@@ -8,6 +8,7 @@ import {
   BillDetailTitle,
   DashboardTitle,
   OrderDetailTitle,
+  PositionDetailTitle,
   PurchaseBillDetailTitle,
   PurchaseRequestTitle,
   QuoteDetailTitle,
@@ -49,6 +50,8 @@ export const Header: React.FC<TProps> = ({ data }) => {
         return <DashboardTitle />;
       case "product-detail-page":
         return <ProductDetailTitle />;
+      case "position-detail-page":
+        return <PositionDetailTitle />;
       default:
         return title;
     }

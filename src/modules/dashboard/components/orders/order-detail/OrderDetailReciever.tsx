@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useFormContext } from "react-hook-form";
 import { FormCheckbox, FormInput, FormSelect } from "~modules-core/components";
 import { paymentExpiredIn, paymentTypes } from "~modules-core/constance";
@@ -8,12 +9,10 @@ type TProps = {
 };
 
 export const OrderDetailReciever: React.FC<TProps> = ({ disabled }) => {
-  const { control, watch } = useFormContext();
+  const { control } = useFormContext();
 
-  const { paymentType } = watch();
+  const { id } = useRouter().query;
 
-  console.log(paymentType);
-  
   return (
     <Box>
       <Typography className="font-bold uppercase mb-3 text-sm">
@@ -48,18 +47,27 @@ export const OrderDetailReciever: React.FC<TProps> = ({ disabled }) => {
           label="Số điện thoại:"
           disabled={disabled}
         />
-
-        <FormSelect
-          controlProps={{
-            name: "paymentType",
-            control,
-          }}
-          label="Hình thức TT:"
-          options={paymentTypes}
-          disabled={disabled}
-          valueKey="name"
-          freeSolo
-        />
+        {!!id ? (
+          <FormInput
+            controlProps={{
+              name: "paymentType",
+              control,
+            }}
+            label="Hình thức TT:"
+            disabled={disabled}
+          />
+        ) : (
+          <FormSelect
+            controlProps={{
+              name: "paymentType",
+              control,
+            }}
+            label="Hình thức TT:"
+            options={paymentTypes}
+            valueKey="name"
+            freeSolo
+          />
+        )}
 
         <FormSelect
           controlProps={{

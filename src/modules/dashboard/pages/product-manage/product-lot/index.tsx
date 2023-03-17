@@ -3,26 +3,26 @@ import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { productManage, products, warehouseConfig } from "src/api";
+import { productDocument, productLot, TDocument } from "src/api";
 import {
+  AddButton,
   ContextMenuWrapper,
   DataTable,
-  DownloadButton,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { ProductManageDialog } from "~modules-dashboard/components";
-import {
-  productManageColumns,
-} from "~modules-dashboard/pages/product-manage/search/data";
+import { ProductLotDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
+import { lotColumns } from "./data";
 
-export const ProductManageTable = () => {
+export const ProductLotPage: React.FC = () => {
+  // EXTRACT PROPS
   const router = useRouter();
 
   const { query } = router;
@@ -41,32 +41,22 @@ export const ProductManageTable = () => {
   }, []);
 
   // DATA FETCHING
-  const { data, refetch } = useQuery(
+  const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "productsList",
+      "ProductLotList",
       {
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
+        ...pagination,
         ...query,
       },
     ],
     () =>
-      productManage
+      productLot
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           ...query,
         })
-        .then((res) => {
-          const { items } = res.data;
-          // ADD ID TO EACH ITEM
-          const updatedItems = items?.map((item, index) => ({
-            ...item,
-            rowId: "row_id_" + index,
-          }));
-
-          return { ...res.data, items: updatedItems };
-        }),
+        .then((res) => res.data),
     {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data.totalItem });
@@ -74,20 +64,8 @@ export const ProductManageTable = () => {
     }
   );
 
-  const { data: warehouseIds } = useQuery(["warehouseIds"], () =>
-    warehouseConfig.getList({ pageIndex: 1, pageSize: 999 }).then((res) =>
-      res.data?.items?.map((item: any) => ({
-        value: item?.id,
-        label: item?.code,
-      }))
-    )
-  );
-
   // DATA TABLE
-  const mutateDelete = useMutation((id: string) => products.delete(id), {
-    onError: (error: any) => {
-      toast.error(error?.resultMessage);
-    },
+  const mutateDelete = useMutation((id: string) => productLot.delete(id), {
     onSuccess: (data) => {
       toast.success(data.resultMessage);
 
@@ -95,26 +73,24 @@ export const ProductManageTable = () => {
     },
   });
 
-  const columns: TGridColDef[] = [
-    {
-      field: "warehouseConfigCode",
-      headerName: "Mã Kho",
-      sortAscValue: 7,
-      sortDescValue: 0,
-      filterKey: "warehouseConfigId",
-      minWidth: 150,
-      flex: 1,
-      type: "select",
-      options: warehouseIds as [],
-    },
-    ...productManageColumns,
+  const handleDelete = useCallback(async () => {
+    const { lotNumber, id } = defaultValue.current || {};
+
+    if (confirm("Xác nhận xóa LOT: " + lotNumber)) {
+      await mutateDelete.mutateAsync(id as string);
+    }
+  }, [defaultValue]);
+
+  const columns: TGridColDef<TDocument>[] = [
+    ...lotColumns,
     {
       field: "action",
       headerName: "",
+      align: "center",
       width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
-          id={row?.id}
+          id={row?.id as string}
           items={[
             {
               action: () => setDialog({ open: true, type: "View" }),
@@ -130,59 +106,46 @@ export const ProductManageTable = () => {
     },
   ];
 
-  const handleDelete = useCallback(async () => {
-    const { id, productName } = defaultValue.current || {};
-
-    if (!id) {
-      toast.error("Có lỗi xảy ra, vui lòng thử lại!");
-
-      return;
-    }
-
-    if (confirm("Xác nhận xóa SP: " + productName)) {
-      await mutateDelete.mutateAsync(id as string);
-    }
-  }, [defaultValue]);
-
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.rowId === id);
+    const currentRow = data?.items.find((item) => item.id === id);
 
     defaultValue.current = currentRow;
   };
 
   const paginationProps = generatePaginationProps(pagination, setPagination);
 
+  // DOM RENDER
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="flex items-center gap-3 w-3/5 mb-4">
+      <Box className="flex items-center gap-3 w-3/5 mb-3">
         <Box className="flex items-center justify-end">
-          <DownloadButton
-            onClick={() =>
-              productManage.exportStockExcel({ pageSize: 9999, pageIndex: 1 })
-            }
+          <AddButton
+            onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
-            className=""
           >
-            Tải file excel
-          </DownloadButton>
+            Thêm LOT
+          </AddButton>
         </Box>
-        <SearchBox label="Tra cứu mã kho, mã sp, tên sp, hãng sản xuất" />
+
+        <SearchBox label="Tìm kiếm" />
+
+        <FilterButton listFilterKey={[]} />
       </Box>
 
       <ContextMenuWrapper
-        menuId="product_table_menu"
+        menuId="product_lot_menu"
         menuComponent={
-          <Menu className="p-0" id="product_table_menu">
+          <Menu className="p-0" id="product_lot_menu">
             <Item
-              id="view-product"
+              id="view-lot"
               onClick={() => setDialog({ open: true, type: "View" })}
             >
-              Xem chi tiết SP
+              Xem chi tiết
             </Item>
-            <Item id="delete-product" onClick={handleDelete}>
-              Xóa SP
+            <Item id="delete-lot" onClick={handleDelete}>
+              Xóa
             </Item>
           </Menu>
         }
@@ -191,6 +154,7 @@ export const ProductManageTable = () => {
           rows={data?.items as []}
           columns={columns}
           gridProps={{
+            loading: isLoading || isFetching,
             ...paginationProps,
           }}
           componentsProps={{
@@ -198,11 +162,10 @@ export const ProductManageTable = () => {
               onMouseEnter: onMouseEnterRow,
             },
           }}
-          getRowId={(row) => row.rowId}
         />
       </ContextMenuWrapper>
 
-      <ProductManageDialog
+      <ProductLotDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

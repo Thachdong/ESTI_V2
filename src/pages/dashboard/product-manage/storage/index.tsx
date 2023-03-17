@@ -3,12 +3,12 @@ import { TNextPageWithLayout } from "~types/_app";
 
 const Index: TNextPageWithLayout = () => <StoragePage />
 
-Index.displayName = "Tra cứu vị trí";
+Index.displayName = "Vị trí hàng hoá";
 
 Index.layoutName = "Dashboard";
 
 Index.data = {
-    title: "Quản lý sản phẩm / tra cứu vị trí",
+    title: "Quản lý sản phẩm / Vị trí hàng hoá",
 }
 
 export default Index;

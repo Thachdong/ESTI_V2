@@ -20,8 +20,6 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
 
   const { control, watch } = useFormContext();
 
-  const paymentTypesValue = watch("paymentType");
-
   const { data } = useQuery(["PaymentDocument"], () =>
     paymentDocument.getList().then((res) => res.data)
   );
@@ -41,19 +39,31 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
 
           <ListItem disableGutters className="pb-0 text-sm">
             - Hình thức thanh toán/ Payment term:
-            <FormSelect
-              controlProps={{
-                name: "paymentType",
-                control,
-              }}
-              label=""
-              options={paymentTypes}
-              disabled={disabled}
-              valueKey="name"
-              freeSolo
-              className="w-[200px] ml-2"
-              shrinkLabel
-            />
+            {!!id ? (
+              <FormInput
+                controlProps={{
+                  name: "paymentType",
+                  control,
+                }}
+                label=""
+                disabled={disabled}
+                className="w-[200px] ml-2"
+                shrinkLabel
+              />
+            ) : (
+              <FormSelect
+                controlProps={{
+                  name: "paymentType",
+                  control,
+                }}
+                label=""
+                options={paymentTypes}
+                valueKey="name"
+                freeSolo
+                className="w-[200px] ml-2"
+                shrinkLabel
+              />
+            )}
           </ListItem>
 
           <ListItem disableGutters className="pb-0 text-sm">

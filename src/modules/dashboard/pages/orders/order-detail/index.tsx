@@ -226,6 +226,7 @@ export const OrderDetailPage: React.FC = () => {
               cc: [orderDetail?.mainOrder?.curatorEmail],
             }}
             orderDetail={orderDetail}
+            refetch={refetch}
           />
         </Box>
       </Box>

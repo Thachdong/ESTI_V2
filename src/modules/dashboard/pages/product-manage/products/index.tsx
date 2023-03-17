@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import {
   ChangeEvent,
   useCallback,
-  useEffect,
   useState,
   MouseEvent,
   useRef,
@@ -27,7 +26,6 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { ProductsDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { productColumns } from "./productColumns";
@@ -55,16 +53,9 @@ export const ProductsPage: React.FC = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
-
   const defaultValue = useRef<any>();
 
   usePathBaseFilter(pagination);
-
-  // DIALOG METHODS
-  const onDialogClose = useCallback(() => {
-    setDialog({ open: false });
-  }, []);
 
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
@@ -310,14 +301,6 @@ export const ProductsPage: React.FC = () => {
           }}
         />
       </ContextMenuWrapper>
-
-      <ProductsDialog
-        onClose={onDialogClose}
-        open={dialog.open}
-        type={dialog.type}
-        refetch={refetch}
-        defaultValue={defaultValue.current}
-      />
     </Paper>
   );
 };

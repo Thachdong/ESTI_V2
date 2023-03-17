@@ -1,144 +1,126 @@
-import { Box, Typography } from "@mui/material";
-import clsx from "clsx";
-import { useFormContext } from "react-hook-form";
+import { Box, ImageList, ImageListItem, ListSubheader } from "@mui/material";
 import { useQuery } from "react-query";
-import { suppliers, units } from "src/api";
 import { products } from "src/api/products";
-import {
-  FormImageGallery,
-  FormInput,
-  FormSelect,
-  FormSelectAsync,
-} from "~modules-core/components";
+import { FormInputBase } from "~modules-core/components";
 
-export const ProductManageForm: React.FC = () => {
-  const { control, watch } = useFormContext();
+type TProps = {
+  productId: string;
+};
 
-  const { data: productGroups } = useQuery(["productGroups"], () =>
-    products.getProductGroups().then((res) => res.data)
+export const ProductManageForm: React.FC<TProps> = ({ productId }) => {
+  const { data: productDetail } = useQuery(
+    ["productDetail", productId],
+    () => products.getById(productId).then((res) => res.data),
+    {
+      enabled: !!productId,
+    }
   );
 
+  const { suppliers } = productDetail?.product || {};
+
+  let supplierList: string;
+
+  try {
+    supplierList = JSON.parse(suppliers || "[]")
+      .map((sup: any) => sup?.supplierName)
+      .join(", ");
+  } catch (err: any) {
+    supplierList = "";
+  }
+
+  const productGallery = productDetail?.product?.gallery?.split(",") || [];
+
   return (
-    <Box className="grid grid-cols-3 gap-3 py-3">
-      <Box className="grid grid-cols-2 col-span-2 gap-3">
-        <FormInput
-          controlProps={{
-            control,
-            name: "productName",
-          }}
-          label="Tên SP"
-          disabled={true}
-        />
+    <Box className="grid grid-cols-2 col-span-2 gap-4 my-4">
+      <FormInputBase
+        label="Tên SP:"
+        disabled={true}
+        value={productDetail?.product?.productName}
+      />
 
-        <FormSelect
-          options={productGroups}
-          controlProps={{
-            control,
-            name: "productGroup",
-          }}
-          label="Nhóm sản phẩm"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Mã SP:"
+        disabled={true}
+        value={productDetail?.product?.productCode}
+      />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "casCode",
-          }}
-          label="Mã CAS"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Nhóm SP:"
+        disabled={true}
+        value={productDetail?.product?.productGroupName}
+      />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "chemicalName",
-          }}
-          label="Công thức hóa học"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Mã CAS:"
+        disabled={true}
+        value={productDetail?.product?.casCode}
+      />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "manufactor",
-          }}
-          label="Hãng sản xuất"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Công thức hóa học:"
+        disabled={true}
+        value={productDetail?.product?.chemicalName}
+      />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "origin",
-          }}
-          label="Xuất xứ"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Hãng sản xuất:"
+        disabled={true}
+        value={productDetail?.product?.manufactor}
+      />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "specs",
-          }}
-          label="Quy cách"
-          disabled={true}
-        />
+      <FormInputBase
+        label="Xuất xứ:"
+        disabled={true}
+        value={productDetail?.product?.origin}
+      />
 
-        <FormSelectAsync
-          fetcher={units.getList}
-          controlProps={{
-            control,
-            name: "unitId",
-          }}
-          label="Đơn vị tính"
-          disabled={true}
-          labelKey="unitName"
-        />
+      <FormInputBase
+        label="Quy cách:"
+        disabled={true}
+        value={productDetail?.product?.specs}
+      />
 
-        <FormSelectAsync
-          fetcher={suppliers.getList}
-          controlProps={{
-            control,
-            name: "suppliers",
-          }}
-          label="Nhà cung cấp"
-          className="col-span-2"
-          disabled={true}
-          multiple={true}
-          labelKey="supplierName"
-        />
-      </Box>
+      <FormInputBase
+        label="Đơn vị tính:"
+        disabled={true}
+        value={productDetail?.product?.unitName}
+      />
 
-      <Box>
-        <FormInput
-          controlProps={{
-            control,
-            name: "productCode",
-          }}
-          label="Mã SP"
-          disabled={true}
-          className="mb-3"
-        />
+      <FormInputBase
+        label="Nhà cung cấp:"
+        disabled={true}
+        value={supplierList}
+      />
 
-        <Box
-          component="fieldset"
-          className={clsx("!border-grey-2 !rounded-[4px] mb-3")}
-        >
-          <legend>Ảnh sản phẩm</legend>
-          {!watch("image") && (
-            <Typography className="text-grey-3 italic mb-2">
-              Không có hình ảnh để hiển thị
-            </Typography>
+      <FormInputBase
+        label="Danh mục HC:"
+        disabled={true}
+        value={productDetail?.product?.chemicalAppendix}
+      />
+
+      <FormInputBase
+        label="Thuế VAT:"
+        disabled={true}
+        value={productDetail?.product?.vat}
+      />
+
+      <ImageList className="col-span-2 mt-0">
+        <ImageListItem>
+          <ListSubheader className="text-[#000] pl-0">
+            Hình ảnh sản phẩm
+          </ListSubheader>
+
+          {productGallery.length === 0 && (
+            <ListSubheader className="font-normal">Không có hình ảnh được hiển thị</ListSubheader>
           )}
-          <FormImageGallery
-            loader={products.uploadImage}
-            controlProps={{ control, name: "image" }}
-            title="Tải ảnh"
-            disabled={true}
-          />
-        </Box>
-      </Box>
+        </ImageListItem>
+
+        {productGallery.map((img: string, index: number) => (
+          <ImageListItem key={index}>
+            <img src={img} alt={productDetail?.product?.productName} />
+          </ImageListItem>
+        ))}
+      </ImageList>
     </Box>
   );
 };
