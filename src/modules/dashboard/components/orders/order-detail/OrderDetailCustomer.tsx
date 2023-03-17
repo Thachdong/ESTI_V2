@@ -56,7 +56,7 @@ export const OrderDetailCustomer: React.FC = () => {
 
       setValue("paymentLimit", paymentLimit);
 
-      setValue("paymentType", paymentType);
+      !id && setValue("paymentType", paymentType);
     }
   }, [defaultReceiver, customerDetail]);
 

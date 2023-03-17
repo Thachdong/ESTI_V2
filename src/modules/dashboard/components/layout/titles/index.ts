@@ -7,3 +7,4 @@ export * from "./BillDetailTitle";
 export * from "./PurchaseRequestTitle";
 export * from "./PurchaseBillDetailTitle";
 export * from "./DashboardTitle";
+export * from "./PositionDetailTitle";

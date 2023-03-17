@@ -50,3 +50,5 @@ export * from "./transaction";
 export * from "./feedback";
 export * from "./dashboard";
 export * from "./product-attributes";
+export * from "./stock-plan";
+export * from "./product-lot";

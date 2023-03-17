@@ -19,6 +19,7 @@ import {
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination, parentCategoryId } from "~modules-core/constance";
+import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { DocumentDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
@@ -37,17 +38,7 @@ export const DocumentsPage: React.FC = () => {
 
   const defaultValue = useRef<any>();
 
-  // SIDE EFFECTS
-  // PUSH PAGINATION QUERY
-  useEffect(() => {
-    const initQuery = {
-      ...query,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    router.push({ query: initQuery });
-  }, [pagination, router.isReady]);
+  usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {

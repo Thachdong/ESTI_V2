@@ -99,11 +99,11 @@ export const menu = [
     icon: <ProductionIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
-        title: "Tra cứu vị trí",
+        title: "Vị trí hàng hoá",
         link: "product-manage/storage",
       },
       {
-        title: "Tra cứu sản phẩm",
+        title: "Tra cứu tồn kho",
         link: "product-manage/search",
       },
       {
@@ -121,6 +121,10 @@ export const menu = [
       {
         title: "Nhãn sản phẩm",
         link: "product-manage/stamp",
+      },
+      {
+        title: "Quản lý lô",
+        link: "product-manage/product-lot",
       },
       {
         title: "Tài liệu sản phẩm",

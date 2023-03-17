@@ -1,28 +1,32 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { position } from "src/api";
-import { DataTable, RefreshButton } from "~modules-core/components";
+import {
+  DataTable,
+  generatePaginationProps,
+  RefreshButton,
+} from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
-import { positionProductColumns } from "~modules-dashboard/pages/product-manage/storage/data";
+import { importColumns } from "~modules-dashboard/pages/product-manage/position-detail/data";
 
-type TProps = {
-  positionId: string;
-  open: boolean;
-};
-
-export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
+export const ImportProduct: React.FC = () => {
   const router = useRouter();
 
   const { query } = router;
 
-  const [pagination, setPagination] = useState(defaultPagination);
+  const { id } = query;
+
+  const [pagination, setPagination] = useState({
+    ...defaultPagination,
+    pageSize: 5,
+  });
 
   const [searchParams, setSearchParams] = useState<any>({});
 
-  usePathBaseFilter(pagination);
+  usePathBaseFilter();
 
   // WATCHING QUERY AND TRIGGER FETCHING DATA
   useEffect(() => {
@@ -31,8 +35,10 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
     const params: any = {};
 
     queryKeys.map((key) => {
-      if (!key.includes("history_")) {
-        params[key] = query[key];
+      if (key.includes("import_")) {
+        const paramKey = key.replace("import_", "");
+
+        params[paramKey] = query[key];
       }
     });
 
@@ -40,9 +46,9 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
   }, [query]);
 
   // FETCH DATA
-  const { data, refetch } = useQuery(
+  const { data, refetch, isLoading, isFetching } = useQuery(
     [
-      "ProductListIn_" + positionId,
+      "ImportProductList" + id,
       {
         ...pagination,
         searchParams,
@@ -50,35 +56,36 @@ export const StoragePosition: React.FC<TProps> = ({ positionId, open }) => {
     ],
     () =>
       position
-        .getProductByPositionId({
+        .getImportProduct({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          positionId,
+          positionId: id,
           ...searchParams,
         })
         .then((res) => res.data),
     {
-      enabled: Boolean(positionId) && open,
+      enabled: !!id,
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data?.totalItem });
       },
     }
   );
 
+  const paginationProps = generatePaginationProps(pagination, setPagination);
+
   return (
     <Box className="mb-4">
-      <Box className="flex items-center mb-3">
-        <Typography className="flex-grow text-sm font-semibold">
-          THÔNG TIN SẢN PHẨM
-        </Typography>
+      <Box className="flex items-center justify-end mb-3 pr-3">
         <RefreshButton onClick={() => refetch()} />
       </Box>
-
       <DataTable
-        columns={positionProductColumns}
+        columns={importColumns}
         rows={data?.items || []}
+        gridProps={{
+          loading: isLoading || isFetching,
+          ...paginationProps,
+        }}
         autoHeight={true}
-        paginationMode="client"
       />
     </Box>
   );

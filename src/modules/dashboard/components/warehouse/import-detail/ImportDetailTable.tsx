@@ -13,7 +13,6 @@ import {
 import { _format } from "~modules-core/utility/fomat";
 import {
   DocumentDialog,
-  ProductsDialog,
   StampDetailDialog,
   StampDialog,
 } from "~modules-dashboard/components";
@@ -297,7 +296,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
           </AddButton>
           <AddButton
             variant="contained"
-            onClick={() => handleOpen("CreateProduct")}
+            onClick={() => router.push("/dashboard/product-manage/product-detail/")}
             disabled={disabled}
           >
             Tạo SP mới
@@ -344,13 +343,6 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         open={Boolean(dialog.open && dialog?.type?.includes?.("Product"))}
         type={dialog?.type}
         defaultValue={defaultValue}
-      />
-
-      {/* ADD PRODUCT DIALOG */}
-      <ProductsDialog
-        onClose={handleClose}
-        open={dialog.open && dialog?.type === "CreateProduct"}
-        type="Add"
       />
 
       {/* PRODUCT DOCUMENT DIALOG */}

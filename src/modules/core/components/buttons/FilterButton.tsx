@@ -1,7 +1,6 @@
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import {
   Box,
-  Button,
   ButtonBase,
   ButtonProps,
   Popover,
@@ -73,7 +72,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
 
   const { query } = useRouter();
 
-  const { fromDate, toDate, period } = watch();
+  const { fromdate, todate, period } = watch();
 
   const OptionFilterDate = [
     {
@@ -114,18 +113,18 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
     router.push({
       query: {
         ...query,
-        fromDate,
-        toDate,
+        fromdate,
+        todate,
       },
     });
-  }, [fromDate, toDate]);
+  }, [fromdate, todate]);
 
   const handleCancelSearch = useCallback(() => {
     reset({});
 
-    delete query["fromDate"];
+    delete query["fromdate"];
 
-    delete query["toDate"];
+    delete query["todate"];
 
     router.push({ query });
     
@@ -137,39 +136,39 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
       case 1: {
         const targetDate = moment().subtract(30, "days").valueOf();
 
-        setValue("fromDate", targetDate);
+        setValue("fromdate", targetDate);
 
-        setValue("toDate", moment().valueOf());
+        setValue("todate", moment().valueOf());
         break;
       }
       case 2: {
-        setValue("fromDate", moment().startOf("month").valueOf());
+        setValue("fromdate", moment().startOf("month").valueOf());
 
-        setValue("toDate", moment().valueOf());
+        setValue("todate", moment().valueOf());
         break;
       }
       case 3: {
-        setValue("fromDate", moment().startOf("quarter").valueOf());
+        setValue("fromdate", moment().startOf("quarter").valueOf());
 
-        setValue("toDate", moment().endOf("quarter").valueOf());
+        setValue("todate", moment().endOf("quarter").valueOf());
         break;
       }
       case 4: {
-        setValue("fromDate", moment().startOf("quarter").valueOf());
+        setValue("fromdate", moment().startOf("quarter").valueOf());
 
-        setValue("toDate", moment().valueOf());
+        setValue("todate", moment().valueOf());
         break;
       }
       case 5: {
-        setValue("fromDate", moment().startOf("year").valueOf());
+        setValue("fromdate", moment().startOf("year").valueOf());
 
-        setValue("toDate", moment().endOf("year").valueOf());
+        setValue("todate", moment().endOf("year").valueOf());
         break;
       }
       case 6: {
-        setValue("fromDate", moment().startOf("year").valueOf());
+        setValue("fromdate", moment().startOf("year").valueOf());
 
-        setValue("toDate", moment().valueOf());
+        setValue("todate", moment().valueOf());
         break;
       }
       case 7: {
@@ -177,9 +176,9 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
 
         const halfYear =  moment().startOf("year").add(6, "months").valueOf()
 
-        setValue("fromDate", startOfYear.valueOf());
+        setValue("fromdate", startOfYear.valueOf());
 
-        setValue("toDate", halfYear);
+        setValue("todate", halfYear);
         break;
       }
       case 8: {
@@ -187,9 +186,9 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
 
         const halfYear = moment().endOf("year").subtract(6, "months").valueOf()
 
-        setValue("fromDate", halfYear);
+        setValue("fromdate", halfYear);
 
-        setValue("toDate", endOfYear.valueOf());
+        setValue("todate", endOfYear.valueOf());
         break;
       }
       default:
@@ -235,7 +234,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
             <Box className="grid grid-cols-2 gap-3 w-full">
               <FormDatepicker
                 controlProps={{
-                  name: "fromDate",
+                  name: "fromdate",
                   control,
                   // rules: { required: "Phải nhập ngày sinh" },
                 }}
@@ -244,7 +243,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
               />
               <FormDatepicker
                 controlProps={{
-                  name: "toDate",
+                  name: "todate",
                   control,
                   // rules: { required: "Phải nhập ngày sinh" },
                 }}
@@ -255,7 +254,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
             <ButtonBase
               onClick={handleSearch}
               className="px-3 py-1 h-[40px] bg-info text-white rounded text-base font-semibold"
-              disabled={!fromDate || !toDate}
+              disabled={!fromdate || !todate}
             >
               Lọc
             </ButtonBase>
