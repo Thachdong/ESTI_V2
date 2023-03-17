@@ -58,9 +58,9 @@ export const productTypes = [
 
 export const productTypesStamp = [
   // USE IN STAMP CONFIG PAGE
-  { id: 1, name: "Thiết bị" },
-  { id: 2, name: "Hóa chất" },
-  { id: 3, name: "Dụng cụ" },
+  { id: 1, name: "Hóa chất" },
+  { id: 2, name: "Vật tư" },
+  { id: 3, name: "Thiết bị" },
 ];
 
 export const curatorDepartments = [
@@ -401,4 +401,9 @@ export const storageProductType = [
   { value: 2, label: "Hóa chất" },
   { value: 3, label: "Dụng cụ" },
   { value: 4, label: "Vật tư tiêu hao" },
+];
+
+export const lotStatus = [
+  { value: 1, label: "Chưa nhập kho" },
+  { value: 2, label: "Đã nhập kho" },
 ];

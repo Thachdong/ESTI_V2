@@ -1,7 +1,17 @@
 import moment from "moment";
+import { productTypesStamp } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
 
 export const stampColumns: TGridColDef[] = [
+  {
+    field: "created",
+    headerName: "Ngày tạo",
+    isFilter: false,
+    isSort: false,
+    width: 150,
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__",
+  },
   {
     field: "productCode",
     headerName: "Mã SP",
@@ -17,7 +27,7 @@ export const stampColumns: TGridColDef[] = [
     sortDescValue: 2,
     filterKey: "productName",
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
   {
     field: "chemicalName",
@@ -60,7 +70,15 @@ export const stampHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     width: 150,
-    renderCell: ({row}) => row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__"
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "__",
+  },
+  {
+    field: "quantity",
+    headerName: "Số lượng",
+    isFilter: false,
+    isSort: false,
+    width: 150,
   },
   {
     field: "warehouseSessionCode",
@@ -82,7 +100,10 @@ export const stampHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     width: 150,
-    renderCell: ({row}) => row?.dateManufacture ? moment(row?.dateManufacture).format("DD/MM/YYYY") : "__"
+    renderCell: ({ row }) =>
+      row?.dateManufacture
+        ? moment(row?.dateManufacture).format("DD/MM/YYYY")
+        : "__",
   },
   {
     field: "dateExpiration",
@@ -90,7 +111,10 @@ export const stampHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     width: 150,
-    renderCell: ({row}) => row?.dateExpiration ? moment(row?.dateExpiration).format("DD/MM/YYYY") : "__"
+    renderCell: ({ row }) =>
+      row?.dateExpiration
+        ? moment(row?.dateExpiration).format("DD/MM/YYYY")
+        : "__",
   },
   {
     field: "createdByName",
@@ -98,6 +122,6 @@ export const stampHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
-]
+];

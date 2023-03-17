@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FilterButton,
   generatePaginationProps,
   SearchBox,
 } from "~modules-core/components";
@@ -127,7 +128,10 @@ export const ProductLotPage: React.FC = () => {
             Thêm LOT
           </AddButton>
         </Box>
+
         <SearchBox label="Tìm kiếm" />
+
+        <FilterButton listFilterKey={[]} />
       </Box>
 
       <ContextMenuWrapper

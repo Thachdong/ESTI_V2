@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState, MouseEvent, useRef } from "react";
+import { useCallback, useState, MouseEvent, useRef } from "react";
 import { Item, Menu } from "react-contexify";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
