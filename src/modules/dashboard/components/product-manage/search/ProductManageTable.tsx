@@ -17,7 +17,6 @@ import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import { ProductManageDialog } from "~modules-dashboard/components";
 import {
-  columnGroupingModel,
   productManageColumns,
 } from "~modules-dashboard/pages/product-manage/search/data";
 import { TGridColDef } from "~types/data-grid";
@@ -189,8 +188,6 @@ export const ProductManageTable = () => {
         }
       >
         <DataTable
-          // experimentalFeatures={{ columnGrouping: true }}
-          // columnGroupingModel={columnGroupingModel}
           rows={data?.items as []}
           columns={columns}
           gridProps={{

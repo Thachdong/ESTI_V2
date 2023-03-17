@@ -8,52 +8,24 @@ import {
   BaseButton,
   Dialog,
   FormInput,
+  FormInputBase,
   TabPanelContainForm,
 } from "~modules-core/components";
 import { ProductManageForm } from "./ProductManageForm";
 import { ProductManageHistoryTable } from "./ProductManageHistoryTable";
+import { ProductManagePositionTable } from "./ProductManagePositionTable";
 
 export const ProductManageDialog: React.FC<any> = ({
   onClose,
   open,
   defaultValue,
 }) => {
-  const [tab, setTab] = useState("1");
+  const [tab, setTab] = useState("info");
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
-
-  const methods = useForm<any>({ mode: "onBlur", reValidateMode: "onSubmit" });
-
-  const { reset, control, watch } = methods;
-
-  useQuery(
-    ["productDetail"],
-    () =>
-      products.getById(defaultValue?.productId as string).then((res) => {
-        const product = res.data;
-        // PARSE SUPLIERS
-        const suppliers = JSON.parse(product?.suppliers || "[]").map(
-          (supplier: any) => supplier?.id
-        );
-
-        // SPLIT IMAGE INTO AN ARRAY
-        const image = product.image;
-
-        const imageArr = image ? image.split(",") : [];
-
-        reset({
-          ...product,
-          warehouseConfigCode: defaultValue?.warehouseConfigCode,
-          image: imageArr,
-          suppliers,
-        });
-      }),
-    {
-      enabled: Boolean(open && defaultValue?.id),
-    }
-  );
+  console.log(defaultValue);
 
   return (
     <Dialog
@@ -65,14 +37,10 @@ export const ProductManageDialog: React.FC<any> = ({
     >
       <Box component="form">
         <Box className="grid grid-cols-3">
-          <FormInput
-            controlProps={{
-              control,
-              name: "warehouseConfigCode",
-              rules: { required: "Phải nhập tên SP" },
-            }}
-            label="Mã kho lưu trữ"
+          <FormInputBase
+            label="Mã kho lưu trữ:"
             disabled={true}
+            value={defaultValue?.warehouseConfigCode}
           />
         </Box>
 
@@ -85,37 +53,41 @@ export const ProductManageDialog: React.FC<any> = ({
                     Thông tin sản phẩm
                   </Typography>
                 }
-                value="1"
+                value="info"
               />
               <Tab
                 label={<Typography>Lịch sử nhập xuất</Typography>}
-                value="2"
+                value="history"
+              />
+              <Tab
+                label={<Typography>Thông tin vị trí</Typography>}
+                value="storage"
+              />
+              <Tab
+                label={<Typography>Kế hoạch stock hàng</Typography>}
+                value="stockPlan"
               />
             </TabList>
           </Box>
 
-          <FormProvider {...methods}>
-            <TabPanelContainForm value="1" index={"1"}>
-              <ProductManageForm />
-            </TabPanelContainForm>
+          <TabPanelContainForm value="info" index={"info"}>
+            <ProductManageForm productId={defaultValue?.productId as string} />
+          </TabPanelContainForm>
 
-            <TabPanelContainForm value="2" index={"2"}>
-              <ProductManageHistoryTable
-                warehouseId={defaultValue?.warehouseConfigId}
-                productId={defaultValue?.productId}
-              />
-            </TabPanelContainForm>
-          </FormProvider>
+          <TabPanelContainForm value="history" index={"history"}>
+            <ProductManageHistoryTable
+              warehouseId={defaultValue?.warehouseConfigId}
+              productId={defaultValue?.productId}
+            />
+          </TabPanelContainForm>
+
+          <TabPanelContainForm value="storage" index={"storage"}>
+            <ProductManagePositionTable
+              warehouseConfigCode={defaultValue?.warehouseConfigCode}
+              productCode={defaultValue?.productCode}
+            />
+          </TabPanelContainForm>
         </TabContext>
-        <Box className="flex justify-center">
-          <BaseButton
-            type="button"
-            className="!bg-main-1 ml-3"
-            onClick={onClose}
-          >
-            Đóng
-          </BaseButton>
-        </Box>
       </Box>
     </Dialog>
   );

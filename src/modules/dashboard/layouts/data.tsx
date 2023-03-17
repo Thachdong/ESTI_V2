@@ -103,7 +103,7 @@ export const menu = [
         link: "product-manage/storage",
       },
       {
-        title: "Tra cứu sản phẩm",
+        title: "Tra cứu tồn kho",
         link: "product-manage/search",
       },
       {

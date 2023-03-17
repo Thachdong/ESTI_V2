@@ -1,50 +1,50 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { productManage } from "src/api";
+import { position } from "src/api";
 import {
   DataTable,
   generatePaginationProps,
   RefreshButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
-import { productHistoryColumns } from "~modules-dashboard/pages/product-manage/search/data";
+import { positionColumns, productHistoryColumns } from "~modules-dashboard/pages/product-manage/search/data";
 
 type TProps = {
-  productId: string;
-  warehouseId: string;
+  productCode: string;
+  warehouseConfigCode: string;
 };
 
-export const ProductManageHistoryTable: React.FC<TProps> = ({
-  warehouseId,
-  productId,
+export const ProductManagePositionTable: React.FC<TProps> = ({
+  warehouseConfigCode,
+  productCode,
 }) => {
   const [pagination, setPagination] = useState(defaultPagination);
-
+  
   // DATA FETCHING
   const { data, refetch, isLoading, isFetching } = useQuery(
     [
-      "product-history",
+      "PositionList",
       {
         ...pagination,
-        productId,
-        warehouseId,
+        productCode,
+        warehouseConfigCode,
       },
     ],
     () =>
-      productManage
-        .historyList({
+      position
+        .getPositionByProduct({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
-          productId,
-          warehouseConfigId: warehouseId,
+          productCode,
+          warehouseConfigCode,
         })
         .then((res) => res.data),
     {
       onSuccess: (data) => {
         setPagination({ ...pagination, total: data.totalItem });
       },
-      enabled: Boolean(productId),
+      enabled: !!productCode && !!warehouseConfigCode,
     }
   );
 
@@ -58,7 +58,7 @@ export const ProductManageHistoryTable: React.FC<TProps> = ({
 
       <DataTable
         rows={data?.items as []}
-        columns={productHistoryColumns}
+        columns={positionColumns}
         gridProps={{
           loading: isFetching || isLoading,
           ...paginationProps,

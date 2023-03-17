@@ -1,4 +1,3 @@
-import { GridColumnGroupingModel } from "@mui/x-data-grid";
 import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -9,7 +8,7 @@ export const productManageColumns: TGridColDef[] = [
     headerName: "Mã SP",
     sortAscValue: 8,
     sortDescValue: 1,
-    filterKey: "code",
+    filterKey: "productCode",
     width: 150,
   },
   {
@@ -17,7 +16,7 @@ export const productManageColumns: TGridColDef[] = [
     headerName: "Tên SP",
     sortAscValue: 9,
     sortDescValue: 2,
-    filterKey: "name",
+    filterKey: "productName",
     width: 150,
   },
   {
@@ -26,6 +25,14 @@ export const productManageColumns: TGridColDef[] = [
     sortAscValue: 10,
     sortDescValue: 3,
     filterKey: "manufactor",
+    width: 150,
+  },
+  {
+    field: "origin",
+    headerName: "Xuất xứ",
+    sortAscValue: 11,
+    sortDescValue: 4,
+    filterKey: "origin",
     width: 150,
   },
   {
@@ -45,67 +52,35 @@ export const productManageColumns: TGridColDef[] = [
     width: 150,
   },
   {
-    field: "importQuantity",
-    headerName: "SL nhập kho",
-    isSort: false,
-    isFilter: false,
-    width: 150,
-  },
-  {
-    field: "importTotalPrice",
-    headerName: "GT nhập kho",
-    isSort: false,
-    isFilter: false,
-    width: 150,
-    renderCell: (({row}) => _format.getVND(row?.importTotalPrice))
-  },
-  {
-    field: "exportQuantity",
-    headerName: "SL xuất kho",
-    isSort: false,
-    isFilter: false,
-    width: 150,
-  },
-  {
-    field: "exportTotalPrice",
-    headerName: "GT xuất kho",
-    isSort: false,
-    isFilter: false,
-    width: 150,
-    renderCell: (({row}) => _format.getVND(row?.exportTotalPrice))
-  },
-  {
     field: "lastQuantity",
-    headerName: "SL Cuối Kỳ",
-    isSort: false,
+    headerName: "SL tồn",
+    sortAscValue: 14,
+    sortDescValue: 15,
+    filterKey: "quantity",
+    width: 150,
+  },
+  {
+    field: "avaibilityQuatity",
+    headerName: "SL có thể bán",
+    sortAscValue: 16,
+    sortDescValue: 17,
+    filterKey: "unitName",
+    width: 150,
+  },
+  {
+    field: "ntbQuantity",
+    headerName: "SL đặt bổ sung",
     isFilter: false,
+    isSort: false,
     width: 150,
   },
   {
     field: "lastTotalPrice",
-    headerName: "GT Cuối Kỳ",
-    isSort: false,
+    headerName: "Tổng giá trị",
     isFilter: false,
+    isSort: false,
     width: 150,
-    renderCell: (({row}) => _format.getVND(row?.lastTotalPrice))
-  },
-];
-
-export const columnGroupingModel: GridColumnGroupingModel = [
-  {
-    groupId: "warehouse-import",
-    headerName: "NHẬP KHO",
-    children: [{ field: "importQuantity" }, { field: "importTotalPrice" }],
-  },
-  {
-    groupId: "warehouse-export",
-    headerName: "XUẤT KHO",
-    children: [{ field: "exportQuantity" }, { field: "exportTotalPrice" }],
-  },
-  {
-    groupId: "warehouse-final",
-    headerName: "CUỐI KỲ",
-    children: [{ field: "lastQuantity" }, { field: "lastTotalPrice" }],
+    renderCell: ({ row }) => _format.getVND(row?.lastTotalPrice),
   },
 ];
 
@@ -116,36 +91,44 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => moment(row?.created).format("DD/MM/YYYY"),
+    renderCell: ({ row }) => moment(row?.created).format("DD/MM/YYYY"),
   },
   {
     field: "importCode",
     headerName: "Mã nhập kho",
     isFilter: false,
     isSort: false,
-    minWidth: 150
+    minWidth: 150,
   },
   {
     field: "exportCode",
     headerName: "Mã xuất kho",
     isFilter: false,
     isSort: false,
-    minWidth: 150
+    minWidth: 150,
   },
   {
     field: "quantity",
     headerName: "SL",
     isFilter: false,
     isSort: false,
-    minWidth: 50
+    minWidth: 50,
   },
   {
-    field: "price",
-    headerName: "Đơn giá",
+    field: "importProductPrice",
+    headerName: "Đơn giá nhập",
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => _format.getVND(row?.price)
+    renderCell: ({ row }) => _format.getVND(row?.importProductPrice),
+  },
+  {
+    field: "price",
+    headerName: "Đơn giá bán",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    renderCell: ({ row }) => _format.getVND(row?.price),
   },
   {
     field: "totalPrice",
@@ -153,7 +136,7 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => _format.getVND(row?.price)
+    renderCell: ({ row }) => _format.getVND(row?.price),
   },
   {
     field: "lotNumber",
@@ -161,7 +144,7 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => _format.getVND(row?.price)
+    renderCell: ({ row }) => _format.getVND(row?.price),
   },
   {
     field: "dateManufacture",
@@ -169,7 +152,7 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => moment(row?.dateManufacture).format("DD/MM/YYYY")
+    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
   },
   {
     field: "dateExpiration",
@@ -177,6 +160,61 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({row}) => moment(row?.dateExpiration).format("DD/MM/YYYY")
+    renderCell: ({ row }) => moment(row?.dateExpiration).format("DD/MM/YYYY"),
+  },
+];
+
+export const positionColumns: TGridColDef[] = [
+  {
+    field: "positionName",
+    headerName: "Vị trí lưu",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "quantity",
+    headerName: "SL tồn",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "availableQuantity",
+    headerName: "SL có thể bán",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "price",
+    headerName: "Đơn giá",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    renderCell: ({ row }) => _format.getVND(row?.price),
+  },
+  {
+    field: "lotNumber",
+    headerName: "Số LOT",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "dateManufacture",
+    headerName: "Ngày SX",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
+  },
+  {
+    field: "dateExpiration",
+    headerName: "Hạn SD",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
   },
 ]
