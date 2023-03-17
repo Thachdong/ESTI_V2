@@ -1,3 +1,4 @@
+import { List, ListItem } from "@mui/material";
 import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -91,7 +92,8 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => moment(row?.created).format("DD/MM/YYYY"),
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "",
   },
   {
     field: "importCode",
@@ -152,7 +154,10 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
+    renderCell: ({ row }) =>
+      row?.dateManufacture
+        ? moment(row?.dateManufacture).format("DD/MM/YYYY")
+        : "",
   },
   {
     field: "dateExpiration",
@@ -160,7 +165,10 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => moment(row?.dateExpiration).format("DD/MM/YYYY"),
+    renderCell: ({ row }) =>
+      row?.dateExpiration
+        ? moment(row?.dateExpiration).format("DD/MM/YYYY")
+        : "",
   },
 ];
 
@@ -207,7 +215,10 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
+    renderCell: ({ row }) =>
+      row?.dateManufacture
+        ? moment(row?.dateManufacture).format("DD/MM/YYYY")
+        : "",
   },
   {
     field: "dateExpiration",
@@ -215,6 +226,66 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => moment(row?.dateManufacture).format("DD/MM/YYYY"),
+    renderCell: ({ row }) =>
+      row?.dateManufacture
+        ? moment(row?.dateManufacture).format("DD/MM/YYYY")
+        : "",
   },
-]
+];
+
+export const stockPlanColumns: TGridColDef[] = [
+  {
+    field: "created",
+    headerName: "Ngày tạo",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "",
+  },
+  {
+    field: "salesName",
+    headerName: "Mã nhân viên",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "customerName",
+    headerName: "Tên khách hàng",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+  },
+  {
+    field: "estimatedQuantity",
+    headerName: "Nội dung kế hoạch",
+    isFilter: false,
+    isSort: false,
+    minWidth: 150,
+    flex: 1,
+    renderCell: ({ row }) => {
+      let data: any[];
+
+      try {
+        data = JSON.parse(row?.estimatedQuantity || "[]");
+      } catch (error: any) {
+        console.log(error);
+
+        data = [];
+      }
+
+      return (
+        <List>
+          {data.map((d: any, index: number) => (
+            <ListItem key={index}>
+              {`Tháng ${
+                d?.time ? moment(d.time).format("MM/YYYY") : "__"
+              } - số lượng: ${d?.estimatedQuantity}`}
+            </ListItem>
+          ))}
+        </List>
+      );
+    },
+  },
+];

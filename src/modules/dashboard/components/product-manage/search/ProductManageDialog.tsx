@@ -1,19 +1,15 @@
 import { TabContext, TabList } from "@mui/lab";
 import { Box, Tab, Typography } from "@mui/material";
 import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
-import { products } from "src/api";
 import {
-  BaseButton,
   Dialog,
-  FormInput,
   FormInputBase,
   TabPanelContainForm,
 } from "~modules-core/components";
 import { ProductManageForm } from "./ProductManageForm";
 import { ProductManageHistoryTable } from "./ProductManageHistoryTable";
 import { ProductManagePositionTable } from "./ProductManagePositionTable";
+import { ProductManageStockPlan } from "./ProductManageStockPlan";
 
 export const ProductManageDialog: React.FC<any> = ({
   onClose,
@@ -25,7 +21,6 @@ export const ProductManageDialog: React.FC<any> = ({
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     setTab(newValue);
   };
-  console.log(defaultValue);
 
   return (
     <Dialog
@@ -85,6 +80,14 @@ export const ProductManageDialog: React.FC<any> = ({
             <ProductManagePositionTable
               warehouseConfigCode={defaultValue?.warehouseConfigCode}
               productCode={defaultValue?.productCode}
+            />
+          </TabPanelContainForm>
+
+          <TabPanelContainForm value="stockPlan" index={"stockPlan"}>
+            <ProductManageStockPlan
+              productId={defaultValue?.productId}
+              productCode={defaultValue?.productCode as string}
+              productName={defaultValue?.productName as string}
             />
           </TabPanelContainForm>
         </TabContext>

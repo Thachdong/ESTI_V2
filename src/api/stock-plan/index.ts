@@ -10,13 +10,22 @@ export type TCreateStockPlan = {
   }[];
 };
 
-export type TUpdateStockPlan = Omit<TCreateStockPlan, "warehouseConfigProductId"> & {
+export type TUpdateStockPlan = Omit<
+  TCreateStockPlan,
+  "warehouseConfigProductId"
+> & {
   id: string;
+};
+
+type TChartParams = {
+  warehouseConfigProductId: string;
+  fromDate: number;
+  toDate: number;
 };
 
 const BASE_URL = "StockPlan";
 
-export const suppliers = {
+export const stockPlan = {
   getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
@@ -26,5 +35,8 @@ export const suppliers = {
 
   delete: (supplierId: string) => request.delete(`${BASE_URL}/${supplierId}`),
 
-  update: (payload: TUpdateStockPlan) => request.put(BASE_URL, payload),
+  update: (payload: TUpdateStockPlan) => request.patch<TUpdateStockPlan, any>(BASE_URL, payload),
+
+  getChartData: (params: TChartParams) =>
+    request.get<TChartParams>(`${BASE_URL}/GetStockPlan`, { ...params }),
 };
