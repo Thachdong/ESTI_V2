@@ -123,6 +123,10 @@ export const menu = [
         link: "product-manage/stamp",
       },
       {
+        title: "Quản lý lô",
+        link: "product-manage/product-lot",
+      },
+      {
         title: "Tài liệu sản phẩm",
         link: "product-manage/documents",
       },

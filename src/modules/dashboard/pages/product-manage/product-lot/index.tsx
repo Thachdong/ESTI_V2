@@ -1,15 +1,9 @@
-import { Box, Button, Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import {
-  category,
-  documentCareer,
-  documentType,
-  productDocument,
-  TDocument,
-} from "src/api";
+import { productDocument, productLot, TDocument } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -18,15 +12,15 @@ import {
   generatePaginationProps,
   SearchBox,
 } from "~modules-core/components";
-import { defaultPagination, parentCategoryId } from "~modules-core/constance";
+import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { DocumentDialog } from "~modules-dashboard/components";
+import { ProductLotDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { documentColumns } from "./data";
+import { lotColumns } from "./data";
 
-export const DocumentsPage: React.FC = () => {
+export const ProductLotPage: React.FC = () => {
   // EXTRACT PROPS
   const router = useRouter();
 
@@ -48,15 +42,14 @@ export const DocumentsPage: React.FC = () => {
   // DATA FETCHING
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
-      "product-documents",
-      "loading",
+      "ProductLotList",
       {
         ...pagination,
         ...query,
       },
     ],
     () =>
-      productDocument
+      productLot
         .getList({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
@@ -70,35 +63,8 @@ export const DocumentsPage: React.FC = () => {
     }
   );
 
-  const { data: parentCategorys } = useQuery(["parentCategorys"], () =>
-    category
-      .getList({ pageIndex: 1, pageSize: 50, parentId: parentCategoryId })
-      .then((res) =>
-        res.data.items.map((item) => ({ value: item.id, label: item.name }))
-      )
-  );
-
-  const { data: documentTypes } = useQuery(["DocumentType"], () =>
-    documentType
-      .getList()
-      .then((res) =>
-        res.data?.map((item: any) => ({ value: item.id, label: item.name }))
-      )
-  );
-
-  const { data: documentCareers } = useQuery(["DocumentCareer"], () =>
-    documentCareer
-      .getList()
-      .then((res) =>
-        res.data.map((item: any) => ({ value: item.id, label: item.name }))
-      )
-  );
-
   // DATA TABLE
-  const mutateDelete = useMutation((id: string) => productDocument.delete(id), {
-    onError: (error: any) => {
-      toast.error(error?.resultMessage);
-    },
+  const mutateDelete = useMutation((id: string) => productLot.delete(id), {
     onSuccess: (data) => {
       toast.success(data.resultMessage);
 
@@ -107,67 +73,15 @@ export const DocumentsPage: React.FC = () => {
   });
 
   const handleDelete = useCallback(async () => {
-    const { productName, id } = defaultValue.current || {};
+    const { lotNumber, id } = defaultValue.current || {};
 
-    if (confirm("Xác nhận xóa tài liệu SP: " + productName)) {
+    if (confirm("Xác nhận xóa LOT: " + lotNumber)) {
       await mutateDelete.mutateAsync(id as string);
     }
   }, [defaultValue]);
 
   const columns: TGridColDef<TDocument>[] = [
-    {
-      ...documentColumns[0],
-    },
-    {
-      field: "categoryName",
-      headerName: "Nhóm SP",
-      sortAscValue: 9,
-      sortDescValue: 1,
-      filterKey: "category",
-      type: "select",
-      options: parentCategorys,
-      width: 150,
-    },
-    ...documentColumns.slice(1),
-    {
-      field: "documentTypeName",
-      headerName: "Loại tài liệu",
-      sortAscValue: 14,
-      sortDescValue: 6,
-      filterKey: "type",
-      width: 150,
-      type: "select",
-      options: documentTypes,
-    },
-    {
-      field: "documentCareerName",
-      headerName: "Tài liệu chuyên ngành",
-      sortAscValue: 15,
-      sortDescValue: 7,
-      filterKey: "careerSlug",
-      width: 200,
-      type: "select",
-      options: documentCareers,
-    },
-    {
-      field: "attachFile",
-      headerName: "File",
-      isFilter: false,
-      isSort: false,
-      width: 125,
-      renderCell: ({ row }) => (
-        <Button variant="text" className="truncate">
-          <a
-            href={row.attachFiles?.[0]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="no-underline text-main text-sm font-semibold"
-          >
-            Xem chi tiết
-          </a>
-        </Button>
-      ),
-    },
+    ...lotColumns,
     {
       field: "action",
       headerName: "",
@@ -210,23 +124,23 @@ export const DocumentsPage: React.FC = () => {
             onClick={() => setDialog({ open: true, type: "Add" })}
             variant="contained"
           >
-            Thêm tài liệu
+            Thêm LOT
           </AddButton>
         </Box>
         <SearchBox label="Tìm kiếm" />
       </Box>
 
       <ContextMenuWrapper
-        menuId="product_table_menu"
+        menuId="product_lot_menu"
         menuComponent={
-          <Menu className="p-0" id="product_table_menu">
+          <Menu className="p-0" id="product_lot_menu">
             <Item
-              id="view-product"
+              id="view-lot"
               onClick={() => setDialog({ open: true, type: "View" })}
             >
               Xem chi tiết
             </Item>
-            <Item id="delete-product" onClick={handleDelete}>
+            <Item id="delete-lot" onClick={handleDelete}>
               Xóa
             </Item>
           </Menu>
@@ -247,7 +161,7 @@ export const DocumentsPage: React.FC = () => {
         />
       </ContextMenuWrapper>
 
-      <DocumentDialog
+      <ProductLotDialog
         onClose={onDialogClose}
         open={dialog.open}
         type={dialog.type}

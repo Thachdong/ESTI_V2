@@ -9,3 +9,4 @@ export * from "./stamp";
 export * from "./product-detail";
 export * from "./product-attribute";
 export * from "./position-detail";
+export * from "./product-lot";

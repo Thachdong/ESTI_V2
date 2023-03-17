@@ -7,3 +7,4 @@ export * from "./document";
 export * from "./document-type";
 export * from "./product-detail";
 export * from "./product-attribute";
+export * from "./product-lot";
