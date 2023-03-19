@@ -5,7 +5,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { quoteRequest } from "src/api";
 import { FormCheckbox } from "~modules-core/components";
-import { useSession } from "~modules-core/customHooks/useSession";
 import {
   QuoteRequestDetailAddition,
   QuoteRequestDetailAttach,

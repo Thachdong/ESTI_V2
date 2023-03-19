@@ -52,3 +52,4 @@ export * from "./dashboard";
 export * from "./product-attributes";
 export * from "./stock-plan";
 export * from "./product-lot";
+export * from "./mail-to-customer";

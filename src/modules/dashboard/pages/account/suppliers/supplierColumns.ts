@@ -60,7 +60,7 @@ export const supplider2Columns: TGridColDef<TSupplier>[] = [
     filterKey: "curatorEmail",
   },
   {
-    field: "CreatedBy",
+    field: "createdByName",
     headerName: "Người tạo",
     minWidth: 150,
     sortAscValue: 15,

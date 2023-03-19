@@ -201,8 +201,8 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             value={filterData.searchTerm}
             className="w-10/12 border-0 bg-[#F3F6F9] "
           >
-            {options?.map(({ value, label }) => (
-              <option key={value} value={value} className="min-w-[200px] p-2">
+            {options?.map(({ value, label }, index: number) => (
+              <option key={`${label}-${value}-${index}`} value={value} className="min-w-[200px] p-2">
                 {label}
               </option>
             ))}
@@ -239,7 +239,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     }
   };
 
-  const renderFilterBox = useCallback(() => {
+  const renderFilterBox = () => {
     if (!isFilter || field === "action")
       return <Box className="!bg-[#F3F6F9] w-full h-[28px]" />;
 
@@ -255,7 +255,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
         {renderInputTagBaseOnType()}
       </>
     );
-  }, [isFilter, type, filterData]);
+  };
 
   return (
     <Box className="w-full h-[68px]">

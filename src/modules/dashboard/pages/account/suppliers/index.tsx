@@ -9,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  ExportButton,
   FilterButton,
   generatePaginationProps,
   RefreshButton,
@@ -150,6 +151,7 @@ export const SuppliersPage = () => {
         <Box className="flex items-center gap-3">
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
+          <ExportButton api={suppliers.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
 

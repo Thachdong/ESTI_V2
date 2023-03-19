@@ -53,13 +53,6 @@ export const OrderDetailPage: React.FC = () => {
   useEffect(() => {
     const { mainOrder = {}, mainOrderDetail = [] } = orderDetail || {};
 
-    // SET PRODUCTS
-    const orderProducts = mainOrderDetail.map((order: any) => ({
-      ...order,
-      manufactor: order?.productManufactor,
-      specs: order?.productSpecs,
-    }));
-
     // SET DETAIL
     const {
       status,
@@ -116,7 +109,7 @@ export const OrderDetailPage: React.FC = () => {
       totalTax,
       salesAdminNote,
       deliverNote,
-      products: [...orderProducts],
+      products: [...mainOrderDetail],
       attachFile: !attachFile ? [] : attachFile.split(","),
     });
   }, [orderDetail]);

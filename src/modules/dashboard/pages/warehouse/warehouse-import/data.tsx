@@ -67,6 +67,14 @@ export const importWarehouseColumns: TGridColDef[] = [
     sortDescValue: 7,
   },
   {
+    field: "stockerCode",
+    headerName: "Thủ kho",
+    minWidth: 120,
+    filterKey: "stockerCode",
+    sortAscValue: 21,
+    sortDescValue: 20,
+  },
+  {
     field: "deliveryCode",
     headerName: "GIAO NHẬN",
     minWidth: 120,

@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
@@ -11,28 +11,13 @@ import {
 } from "~modules-core/components";
 import { useRouter } from "next/router";
 
-type TProps = {
-  orderData: any;
-};
-
-export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
+export const ExportDetailRecipient: React.FC = () => {
   // EEXTRACT PROPS
-  const { transactionId } = useRouter().query;
+  const { id } = useRouter().query;
 
-  const { receiverFullName, receiverPhone, receiverAddress } = orderData;
-
-  const { control, setValue, watch } = useFormContext();
+  const { control, watch } = useFormContext();
 
   const isDefaultReceiver = watch("isDefaultReceiver");
-
-  // SIDE EFFECTS
-  useEffect(() => {
-    setValue("receiverFullName", receiverFullName);
-
-    setValue("receiverPhone", receiverPhone);
-
-    setValue("receiverAddress", receiverAddress);
-  }, [receiverFullName, receiverPhone, receiverAddress]);
 
   // DATA FETCHING
   const { data: paymentOptions } = useQuery(["paymentOptions"], () =>
@@ -47,7 +32,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
       </Typography>
 
       <Box className="grid gap-3 rounded p-3 bg-white">
-        {!transactionId && (
+        {!id && (
           <FormCheckbox
             controlProps={{
               name: "isDefaultReceiver",
@@ -65,7 +50,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
             rules: { required: "Phải nhập người nhận hàng" },
           }}
           label="Người nhận hàng"
-          disabled={isDefaultReceiver || !!transactionId}
+          disabled={isDefaultReceiver || !!id}
         />
 
         <FormInput
@@ -75,7 +60,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
             rules: { required: "Phải nhập SĐT" },
           }}
           label="SĐT"
-          disabled={isDefaultReceiver || !!transactionId}
+          disabled={isDefaultReceiver || !!id}
         />
 
         <FormInput
@@ -85,7 +70,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
             rules: { required: "Phải nhập Đ/c nhận hàng" },
           }}
           label="Đ/c nhận hàng"
-          disabled={isDefaultReceiver || !!transactionId}
+          disabled={isDefaultReceiver || !!id}
           multiline
           minRows={2}
         />
@@ -97,7 +82,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
             rules: { required: "Phải chọn ngày giao dự kiến" },
           }}
           label="Ngày giao dự kiên"
-          disabled={!!transactionId}
+          disabled={!!id}
         />
 
         <FormSelect
@@ -107,7 +92,7 @@ export const ExportDetailRecipient: React.FC<TProps> = ({ orderData = {} }) => {
           }}
           label="Chứng từ thanh toán"
           options={paymentOptions || []}
-          disabled={!!transactionId}
+          disabled={!!id}
           labelKey="paymentDocumentName"
           multiple
         />

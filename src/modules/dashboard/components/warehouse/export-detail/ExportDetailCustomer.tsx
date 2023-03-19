@@ -8,6 +8,8 @@ type TProps = {
 export const ExportDetailCustomer: React.FC<TProps> = ({
   customerData = {},
 }) => {
+  console.log(customerData);
+  
   return (
     <Box className="col-span-2 grid grid-cols-2 gap-4">
       <Box className="">
@@ -17,25 +19,25 @@ export const ExportDetailCustomer: React.FC<TProps> = ({
 
         <Box className="grid gap-3 rounded p-3 bg-white">
           <FormInputBase
-            value={customerData.companyName}
+            value={customerData?.companyName}
             disabled={true}
             label="Khách hàng"
           />
 
           <FormInputBase
-            value={customerData.companyAddress}
+            value={customerData?.companyAddress || customerData?.receiverAddress}
             disabled={true}
             label="Đ/c nhận hàng"
           />
 
           <FormInputBase
-            value={customerData.companyTaxCode}
+            value={customerData?.companyTaxCode}
             disabled={true}
             label="Mã số thuế"
           />
 
           <FormInputBase
-            value={customerData.conpanyProfessionName}
+            value={customerData?.companyProfression || customerData?.conpanyProfessionName}
             disabled={true}
             label="Lĩnh vực KD"
           />

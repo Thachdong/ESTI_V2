@@ -36,7 +36,7 @@ export const QuoteRequestDetailAttach: React.FC = () => {
           {attachFile?.map((file: string) => (
             <ListItem
               key={file}
-              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded "
+              className="flex justify-between py-0 px-3 bg-[#f4f6f8] gap-2 rounded truncate"
               disableGutters
             >
               <Typography
@@ -47,7 +47,7 @@ export const QuoteRequestDetailAttach: React.FC = () => {
                 className="flex gap-2 items-center truncate no-underline text-main 2xl:max-w-[500px] max-w-[400px] "
               >
                 <AttachFileIcon className="rotate-90 text-xl" />{" "}
-                <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+                <span className="truncate">
                   {file}
                 </span>
               </Typography>

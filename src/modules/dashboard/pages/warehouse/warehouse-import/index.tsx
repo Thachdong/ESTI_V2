@@ -113,7 +113,7 @@ export const WarehouseImportPage: React.FC = () => {
   }, [defaultValue]);
 
   const deleteMutation = useMutation(
-    (id: string) => warehouse.deleteTransaction(id),
+    (data: any) => warehouse.updateImportSessionStatus(data?.id, data?.status),
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
@@ -126,8 +126,8 @@ export const WarehouseImportPage: React.FC = () => {
   const handleDeleteTransaction = useCallback(async () => {
     const { warehouseSessionCode, id } = defaultValue.current || {};
 
-    if (confirm("Xác nhận xóa phiên nhập kho " + warehouseSessionCode)) {
-      await deleteMutation.mutateAsync(id);
+    if (confirm("Xác nhận hủy phiên nhập kho " + warehouseSessionCode)) {
+      await deleteMutation.mutateAsync({id, status: 2});
     }
   }, [deleteMutation, defaultValue]);
 

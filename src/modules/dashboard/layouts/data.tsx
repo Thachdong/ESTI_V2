@@ -84,12 +84,12 @@ export const menu = [
     icon: <WarehouseIcon className="w-[24px] h-[24px]" />,
     childrens: [
       {
-        title: "Xuất kho",
-        link: "warehouse/warehouse-export",
-      },
-      {
         title: "Nhập kho",
         link: "warehouse/warehouse-import",
+      },
+      {
+        title: "Xuất kho",
+        link: "warehouse/warehouse-export",
       },
     ],
   },
@@ -156,6 +156,10 @@ export const menu = [
       {
         title: "Danh sách CSKH",
         link: "account/customer-care",
+      },
+      {
+        title: "Thông báo khách hàng",
+        link: "account/mail-to-customer",
       },
       {
         title: "Danh sách nhân viên",
