@@ -19,6 +19,7 @@ import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import {
+  CustomerFilterBox,
   CustomersCuratorDrawer,
   CustomersDialog,
 } from "~modules-dashboard/components";
@@ -52,7 +53,6 @@ export const CustomersPage = () => {
     const id: any = e.currentTarget.dataset.id;
 
     drawerRef.current = id;
-console.log("dfadfasdf");
 
     setOpen(true);
   }, []);
@@ -154,8 +154,13 @@ console.log("dfadfasdf");
           <SearchBox label="Tìm kiếm" />
         </Box>
         <Box className="flex items-center gap-3">
-          <FilterButton listFilterKey={[]} />
+          <FilterButton
+            listFilterKey={[]}
+            renderFilterComponent={() => <CustomerFilterBox />}
+          />
+
           <RefreshButton onClick={() => refetch()} />
+
           <ExportButton
             api={customer.export}
             filterParams={{ ...query, pageSize: 99999 }}

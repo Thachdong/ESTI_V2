@@ -14,21 +14,25 @@ export const CustomerDetailStatisticChart: React.FC = () => {
       enabled: !!id,
     }
   );
-  console.log(data);
 
   return (
     <Box className="flex flex-col my-4">
-      <Typography className="font-bold uppercase text-sm mr-3">
+      <Typography className="font-bold uppercase text-sm mr-3 mb-3">
         Biểu đồ giá trị đơn hàng
       </Typography>
+      <Box className="bg-white p-3">
+        <Typography className="text-right font-semibold">
+          Năm: {data?.inYear?.year}
+        </Typography>
 
-      <Typography className="text-right font-semibold">Năm: {data?.inYear?.year}</Typography>
+        <BarChart data={(data?.inYear?.GetValueMainOrder as []) || []} />
 
-      <BarChart data={data?.inYear?.GetValueMainOrder as [] || []} />
+        <Typography className="text-right font-semibold">
+          Năm: {data?.lastYear?.year}
+        </Typography>
 
-      <Typography className="text-right font-semibold">Năm: {data?.lastYear?.year}</Typography>
-
-      <BarChart data={data?.lastYear?.GetValueMainOrder as [] || []} />
+        <BarChart data={(data?.lastYear?.GetValueMainOrder as []) || []} />
+      </Box>
     </Box>
   );
 };

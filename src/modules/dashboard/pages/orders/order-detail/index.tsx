@@ -11,6 +11,7 @@ import {
   OrderDetailAdvancePayment,
   OrderDetailAttach,
   OrderDetailButtons,
+  OrderDetailCommission,
   OrderDetailCurator,
   OrderDetailCustomer,
   OrderDetailGeneral,
@@ -207,6 +208,10 @@ export const OrderDetailPage: React.FC = () => {
               <OrderDetailAdvancePayment
                 status={orderDetail?.mainOrder?.status}
               />
+            </Box>
+
+            <Box className="col-span-2">
+              <OrderDetailCommission orderId={id as string} />
             </Box>
           </>
         )}

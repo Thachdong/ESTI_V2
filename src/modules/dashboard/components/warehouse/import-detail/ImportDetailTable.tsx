@@ -23,10 +23,13 @@ import { ImportDetailProductDialog } from "./ImportDetailProductDialog";
 
 type TProps = {
   transactionData: any;
-  warehouseConfigId: string
+  warehouseConfigId: string;
 };
 
-export const ImportDetailTable: React.FC<TProps> = ({ transactionData, warehouseConfigId }) => {  
+export const ImportDetailTable: React.FC<TProps> = ({
+  transactionData,
+  warehouseConfigId,
+}) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -116,21 +119,15 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData, warehouse
       case importStatus > 0:
         return (
           <Menu className="p-0" id="product_table_menu">
-            <Item
-              id="view-product-document"
-              onClick={() =>
-                router.push({
-                  pathname: "/public/documents/",
-                  query: {
-                    productId: defaultValue?.productId,
-                    productCode: defaultValue?.productCode,
-                    lotNumber: defaultValue?.lotNumber,
-                    importId: router.query.id,
-                  },
-                })
-              }
-            >
-              Xem tài liệu SP
+            <Item id="view-product-document">
+              <a
+                target="_blank"
+                href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                rel="noopener noreferrer"
+                className="no-underline !text-[#504e4e]"
+              >
+                Xem tài liệu SP
+              </a>
             </Item>
 
             <Item
@@ -201,17 +198,17 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData, warehouse
               id={row?.id}
               items={[
                 {
-                  action: () =>
-                    router.push({
-                      pathname: "/public/documents/",
-                      query: {
-                        productId: defaultValue?.productId,
-                        productCode: defaultValue?.productCode,
-                        lotNumber: defaultValue?.lotNumber,
-                        importId: router.query.id,
-                      },
-                    }),
-                  label: "Xem tài liệu SP",
+                  action: () => console.log(),
+                  label: (
+                    <a
+                      target="_blank"
+                      href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                      rel="noopener noreferrer"
+                      className="no-underline !text-[#504e4e]"
+                    >
+                      Xem tài liệu SP
+                    </a>
+                  ),
                 },
                 {
                   action: () => handleOpen("CreateDocument"),
@@ -297,7 +294,9 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData, warehouse
           </AddButton>
           <AddButton
             variant="contained"
-            onClick={() => router.push("/dashboard/product-manage/product-detail/")}
+            onClick={() =>
+              router.push("/dashboard/product-manage/product-detail/")
+            }
             disabled={disabled}
           >
             Tạo SP mới

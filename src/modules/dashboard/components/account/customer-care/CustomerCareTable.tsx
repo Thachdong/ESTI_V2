@@ -12,7 +12,6 @@ import {
   FilterButton,
   generatePaginationProps,
   RefreshButton,
-  SearchBox,
   StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";

@@ -84,7 +84,7 @@ export const WarehouseImportPage: React.FC = () => {
               label: "Hủy nhập kho",
             },
             {
-              action: () => console.log(""),
+              action: () => setDialog({ open: true, type: "note" }),
               label: "Ghi chú",
             },
           ]}
