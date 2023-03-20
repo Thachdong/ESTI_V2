@@ -37,7 +37,7 @@ export const ExportDetailCustomer: React.FC<TProps> = ({
           />
 
           <FormInputBase
-            value={customerData?.companyProfression || customerData?.conpanyProfessionName}
+            value={customerData?.conpanyProfessionName}
             disabled={true}
             label="Lĩnh vực KD"
           />

@@ -20,7 +20,7 @@ import {
   PurchaseDetailTerms,
 } from "~modules-dashboard/components";
 
-export const PurchaseRequestDetailPage = () => {
+export const PurchaseRequestDetailPage: React.FC = () => {
   const [isUpdate, setIsUpdate] = useState(false);
 
   const { id } = useRouter().query;

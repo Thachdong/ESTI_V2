@@ -18,11 +18,13 @@ import { useRef } from "react";
 type TPayload = {
   importStatus?: 0 | 1 | 2;
   transactionData: any;
+  refetch: () => void;
 };
 
 export const ImportDetailButtonsBox: React.FC<TPayload> = ({
   importStatus,
   transactionData,
+  refetch
 }) => {
   const router = useRouter();
 
@@ -47,6 +49,7 @@ export const ImportDetailButtonsBox: React.FC<TPayload> = ({
     {
       onSuccess: (data) => {
         toast.success(data.resultMessage);
+        refetch?.();
       },
     }
   );

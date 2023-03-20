@@ -215,7 +215,7 @@ export const OrderDetailPage: React.FC = () => {
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
             sendMailData={{
-              to: orderDetail?.mainOrder?.receiverEmail,
+              to: orderDetail?.mainOrder?.curatorEmail,
               cc: [orderDetail?.mainOrder?.curatorEmail],
             }}
             orderDetail={orderDetail}

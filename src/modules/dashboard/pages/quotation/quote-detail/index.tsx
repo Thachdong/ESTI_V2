@@ -12,6 +12,7 @@ import {
   QuoteDetailButtons,
   QuoteDetailContact,
   QuoteDetailCustomer,
+  QuoteDetailFeedback,
   QuoteDetailGeneral,
   QuoteDetailGeneralView,
   QuoteDetailProduct,
@@ -147,6 +148,8 @@ export const QuoteDetailPage: React.FC = () => {
               <QuoteDetailShopManagerNote disabled={true} />
 
               <QuoteDetailSaleNote disabled={true} />
+
+              <QuoteDetailFeedback />
             </>
           )}
         </Box>

@@ -117,7 +117,7 @@ export const QuoteListPage = () => {
             {
               action: () => handleRedirect("/dashboard/orders/order-request"),
               label: "Tạo đơn đặt hàng",
-              disabled: defaultValue.current?.status !== 1,
+              // disabled: defaultValue.current?.status !== 1,
             },
             {
               action: handleCancel,

@@ -47,11 +47,11 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
             <Box className="grid grid-cols-3 gap-3">
               <FormInputBase
                 value={supplier?.supplierCode || supplier?.code}
-                label="Mã nhà cung cấp"
+                label="Mã NCC"
                 disabled
               />
               <FormInputBase
-                label="Tên nhà cung cấp"
+                label="Tên NCC"
                 className="col-span-2"
                 disabled
                 value={supplier?.supplierName || supplier?.name}
@@ -69,7 +69,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
           <FormInputBase
             name="taxCode"
             label="Mã số thuế"
-            value={supplier?.suppliertaxCode || supplier?.taxCode}
+            value={supplier?.supplierTaxCode || supplier?.taxCode}
             disabled
           />
         </Box>

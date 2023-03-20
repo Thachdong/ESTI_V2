@@ -1,4 +1,5 @@
 import { Box, Tooltip } from "@mui/material";
+import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -76,6 +77,33 @@ export const productColumns: TGridColDef[] = [
     field: "note",
     headerName: "Ghi chú",
     minWidth: 80,
+    flex: 1,
+  },
+];
+
+export const feedbackColumns: TGridColDef[] = [
+  {
+    field: "created",
+    headerName: "Thời gian",
+    minWidth: 50,
+    renderCell: ({ row }) =>
+      row?.created ? moment(row?.created).format("DD/MM/YYYY") : "",
+  },
+  {
+    field: "statusName",
+    headerName: "Trạng thái",
+    minWidth: 75,
+  },
+  {
+    field: "createdByName",
+    headerName: "Nguồn gửi",
+    minWidth: 150,
+  },
+  {
+    field: "note",
+    headerName: "Nội dung",
+    minWidth: 150,
+    renderCell: ({row}) => <div dangerouslySetInnerHTML={{__html: row?.note}} />,
     flex: 1,
   },
 ];

@@ -90,7 +90,7 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
 
         <FormInputBase
           disabled
-          value={data?.deliveryFullName}
+          value={data?.deliveryName}
           label="Giao nhận"
         />
 

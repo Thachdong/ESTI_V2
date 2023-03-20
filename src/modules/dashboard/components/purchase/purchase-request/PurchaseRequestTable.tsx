@@ -216,12 +216,14 @@ export const PurchaseRequestTable: React.FC<TProps> = ({
         onClose={handleCloseDialog}
         open={Boolean(dialog?.open && dialog.type === "Note")}
         defaultValue={defaultValue?.current}
+        refetch={refetch}
       />
 
       <PurchaseRequestStatusDialog
         onClose={handleCloseDialog}
         open={Boolean(dialog?.open && dialog.type === "Status")}
         defaultValue={defaultValue?.current}
+        refetch={refetch}
       />
 
       <ViewListProductDrawer

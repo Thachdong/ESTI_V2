@@ -11,9 +11,10 @@ import {
 import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNumber";
 import { TDialog } from "~types/dialog";
 import { position, products } from "src/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "~modules-core/toast";
 import _ from "lodash";
+import moment from "moment";
 
 type TProps = {
   productOptions: any[];
@@ -62,9 +63,9 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
   useEffect(() => {
     if (!lotNumber) {
-      setValue("positionId", "")
+      setValue("positionId", "");
     }
-  }, [lotNumber])
+  }, [lotNumber]);
 
   // DATA FETCHING
   const { data: lotOptions } = useQuery(
@@ -80,7 +81,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
     // 1. DATA VALIDATION
     const { quantity } = data;
 
-    if (quantity > selectedLot?.quantity) {
+    if (quantity > selectedPosition?.quantity) {
       setError("quantity", {
         type: "quantity",
         message: "Số lượng không được lớn hơn tồn kho!",
@@ -158,6 +159,23 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
     onClose();
   };
 
+  const getPositionLabel = useCallback((opt: any) => {
+    if (!opt) return "";
+
+    const { positionName, quantity, dateManufacture, dateExpiration } =
+      opt || {};
+
+    return !!opt
+      ? `${positionName} - SL: ${quantity} - NSX: ${
+          !!dateManufacture
+            ? moment(dateManufacture).format("DD/MM/YYYY")
+            : "__"
+        } - HSD: ${
+          !!dateExpiration ? moment(dateExpiration).format("DD/MM/YYYY") : "__"
+        }`
+      : "";
+  }, []);
+
   return (
     <Dialog
       open={open}
@@ -177,7 +195,9 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             }}
             label="Mã sản phẩm"
             callback={(opt) => setSelectedProduct(opt)}
-            labelKey="productCode"
+            getOptionLabel={(opt: any) =>
+              !!opt ? `${opt?.productCode} - ${opt?.productName}` : ""
+            }
           />
         ) : (
           <FormSelect
@@ -204,10 +224,10 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           label="Chọn LOT"
           callback={(opt) => setSelectedLot(opt)}
           valueKey="lotNumber"
-          labelKey="lotNumber"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.lotNumber} - SL: ${opt?.quantity}` : ""
+          }
         />
-
-        <FormInputBase value={selectedLot?.quantity} label="Tồn kho" disabled />
 
         <FormSelectAsync
           controlProps={{
@@ -226,9 +246,9 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           defaultOptions={
             type === "Update" ? [defaultValue?.selectedPosition] : []
           }
-          labelKey="positionName"
           valueKey="positionId"
           disabled={!lotNumber}
+          getOptionLabel={getPositionLabel}
         />
 
         <FormInputNumber

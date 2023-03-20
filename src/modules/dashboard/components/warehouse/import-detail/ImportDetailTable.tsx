@@ -23,9 +23,10 @@ import { ImportDetailProductDialog } from "./ImportDetailProductDialog";
 
 type TProps = {
   transactionData: any;
+  warehouseConfigId: string
 };
 
-export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
+export const ImportDetailTable: React.FC<TProps> = ({ transactionData, warehouseConfigId }) => {  
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
@@ -343,6 +344,7 @@ export const ImportDetailTable: React.FC<TProps> = ({ transactionData }) => {
         open={Boolean(dialog.open && dialog?.type?.includes?.("Product"))}
         type={dialog?.type}
         defaultValue={defaultValue}
+        warehouseConfigId={warehouseConfigId}
       />
 
       {/* PRODUCT DOCUMENT DIALOG */}

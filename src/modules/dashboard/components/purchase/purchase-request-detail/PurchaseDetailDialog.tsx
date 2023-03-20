@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
+import { useQuery } from "react-query";
 import { products as productApi } from "src/api";
 import {
   BaseButton,
@@ -30,7 +31,18 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
 
   const { setValue: setProductsValue, getValues } = useFormContext();
 
+  const supplierId = getValues("supplierId");
+
   const title = type === "Add" ? "Thêm SP" : "Cập nhật SP";
+
+  // DATA FETCHING
+  const { data: productList } = useQuery(
+    ["ProductList", supplierId],
+    () => productApi.getBySupplierId(supplierId as string).then(res => res.data),
+    {
+      enabled: !!supplierId,
+    }
+  );
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -39,7 +51,7 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
     } else {
       const { productId, quantity, price, vat, note, id } = defaultValue || {};
 
-      reset({ productId, quantity, price, vat: String(vat), note, id });
+      reset({ productId, quantity, price, vat: String(vat), note, id, totalPrice: quantity * price });
     }
   }, [defaultValue, type]);
 
@@ -124,27 +136,18 @@ export const PurchaseDetailDialog: React.FC<TDialog> = ({
       headerClassName="text-center"
     >
       <Box className="grid gap-4">
-        <FormSelectAsync
+        <FormSelect
           controlProps={{
             control,
             name: "productId",
-            rules: { required: "Phải nhập mã SP" },
+            rules: { required: "Phải chọn SP" },
           }}
-          label="Mã SP"
-          labelKey="productCode"
-          fetcher={productApi.getList}
+          getOptionLabel={(opt) => !!opt ? `${opt?.productCode} - ${opt?.productName}` : ""}
+          label="Sản phẩm"
+          valueKey="productId"
           callback={(prod) => setSelectedProduct(prod)}
-        />
-
-        <FormSelectAsync
-          controlProps={{
-            control,
-            name: "productId",
-          }}
-          label="Tên SP"
-          labelKey="productName"
-          fetcher={productApi.getList}
-          callback={(prod) => setSelectedProduct(prod)}
+          options={productList || []}
+          disabled={type !== "Add"}
         />
 
         <FormInputBase
