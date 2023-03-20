@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
   ImportDetailButtonsBox,
@@ -14,11 +14,17 @@ import { purchaseOrder, warehouse } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
 import { useRouter } from "next/router";
 
-export const ImportDetailPage = () => {
+export const ImportDetailPage: React.FC = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const router = useRouter();
 
   const { query } = router;
+
+  const [warehouseConfigId, setWarehouseConfigId] = useState("");
+
+  const handleUpdateWarehouseId = useCallback((id: string) => {
+    setWarehouseConfigId(id);
+  }, []);
 
   const methods = useForm<any>({
     defaultValues: {
@@ -97,8 +103,6 @@ export const ImportDetailPage = () => {
         productOrderDetail.map((prod: any) => ({
           ...prod,
           rowId: prod?.id,
-          manufactor: prod?.productManufactor,
-          specs: prod?.productSpecs,
         }))
       );
     } else {
@@ -153,7 +157,10 @@ export const ImportDetailPage = () => {
                 checked={withoutPurchaseInvoice}
               />
             </Box>
-            <ImportDetailGeneralInfo orderDetail={orderDetail} />
+            <ImportDetailGeneralInfo
+              orderDetail={orderDetail}
+              handleUpdateWarehouseId={handleUpdateWarehouseId}
+            />
           </>
         )}
 
@@ -161,11 +168,13 @@ export const ImportDetailPage = () => {
 
         <ImportDetailTable
           transactionData={transactionData?.warehouseSession}
+          warehouseConfigId={warehouseConfigId}
         />
 
         <ImportDetailButtonsBox
           importStatus={transactionData?.warehouseSession?.importStatus}
           transactionData={transactionData}
+          refetch={refetchTransaction}
         />
       </FormProvider>
     </Box>

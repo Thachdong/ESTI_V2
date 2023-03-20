@@ -22,10 +22,10 @@ export const QuoteDetailGeneral: React.FC = () => {
 
   // DATA FETCHING
   const { data: quoteRequestDetail } = useQuery(
-    ["quoteRequestDetail", preOrderId],
-    () => quoteRequestApi.getById(preOrderId).then((res) => res.data),
+    ["quoteRequestDetail", preOrderId, fromRequestId],
+    () => quoteRequestApi.getById(preOrderId || fromRequestId).then((res) => res.data),
     {
-      enabled: !!preOrderId,
+      enabled: !!preOrderId || !!fromRequestId,
     }
   );
 
@@ -98,8 +98,8 @@ export const QuoteDetailGeneral: React.FC = () => {
 
               <FormDatepickerBase
                 label="Ngày YC"
-                renderInputProps={{ disabled: true }}
                 value={quoteRequestDetail?.created}
+                disabled={true}
               />
             </>
           )}

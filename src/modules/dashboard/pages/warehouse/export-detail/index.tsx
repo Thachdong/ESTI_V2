@@ -31,15 +31,13 @@ export const ExportDetailPage = () => {
 
   const { watch, reset, setValue } = methods;
 
-  const isForDelete = watch("isForDelete");
-
-  const orderId = watch("mainOrderId");
-
+  const { isForDelete, mainOrderId, isDefaultReceiver } = watch();
+  
   // DATA FETCHING
   const { data: orderDetailData } = useQuery(
-    ["orderDetail", { orderId }],
+    ["orderDetail", { mainOrderId }],
     () =>
-      mainOrder.getById(orderId).then((res) => {
+      mainOrder.getById(mainOrderId).then((res) => {
         const { mainOrderDetail = [], mainOrder = {} } = res.data || {};
 
         // REMOVE ALL PRODUCTS WITH STATUS 2 - ĐÃ HOÀN THÀNH
@@ -54,7 +52,7 @@ export const ExportDetailPage = () => {
         return { ...res.data, mainOrderDetail: products };
       }),
     {
-      enabled: !!orderId,
+      enabled: !!mainOrderId,
     }
   );
 
@@ -100,21 +98,33 @@ export const ExportDetailPage = () => {
     const { productOrder = {}, productOrderDetail } = transactionData || {};
 
     const {
+      id,
       deliveryUnit,
       codeVD,
       packageNumber,
       packageWeight,
       shippingFee,
       exportStatus,
+      receiverFullName,
+      receiverPhone,
+      receiverAddress,
+      deliveryDate,
+      paymentDocument
     } = productOrder;
 
     reset({
+      id,
       deliveryUnit,
       codeVD,
       packageNumber,
       packageWeight,
       shippingFee,
       exportStatus,
+      receiverFullName,
+      receiverPhone,
+      receiverAddress,
+      deliveryDate,
+      paymentDocument: !paymentDocument ? [] : paymentDocument.split(","),
       productList: productOrderDetail,
     });
   }, [transactionData]);
@@ -122,6 +132,19 @@ export const ExportDetailPage = () => {
   useEffect(() => {
     setValue("mainOrderId", fromOrderId);
   }, [fromOrderId]);
+
+  useEffect(() => {
+    if (!!isDefaultReceiver && !!orderDetailData) {
+      const { receiverFullName, receiverPhone, receiverAddress } =
+        orderDetailData?.mainOrder || {};
+
+      setValue("receiverFullName", receiverFullName);
+
+      setValue("receiverPhone", receiverPhone);
+
+      setValue("receiverAddress", receiverAddress);
+    }
+  }, [isDefaultReceiver, orderDetailData]);
 
   // DOM RENDERING
   return (
@@ -159,11 +182,7 @@ export const ExportDetailPage = () => {
               }
             />
 
-            <ExportDetailRecipient
-              orderData={
-                id ? transactionData?.productOrder : orderDetailData?.mainOrder
-              }
-            />
+            <ExportDetailRecipient />
 
             <ExportDetailShipping
               exportStatus={transactionData?.productOrder?.exportStatus}

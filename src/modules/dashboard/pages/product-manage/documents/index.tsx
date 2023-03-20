@@ -1,6 +1,8 @@
 import { Box, Button, Paper } from "@mui/material";
+import { Stack } from "@mui/system";
+import moment from "moment";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -24,7 +26,6 @@ import { toast } from "~modules-core/toast";
 import { DocumentDialog } from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
-import { documentColumns } from "./data";
 
 export const DocumentsPage: React.FC = () => {
   // EXTRACT PROPS
@@ -73,25 +74,15 @@ export const DocumentsPage: React.FC = () => {
   const { data: parentCategorys } = useQuery(["parentCategorys"], () =>
     category
       .getList({ pageIndex: 1, pageSize: 50, parentId: parentCategoryId })
-      .then((res) =>
-        res.data.items.map((item) => ({ value: item.id, label: item.name }))
-      )
+      .then((res) => res.data.items)
   );
 
   const { data: documentTypes } = useQuery(["DocumentType"], () =>
-    documentType
-      .getList()
-      .then((res) =>
-        res.data?.map((item: any) => ({ value: item.id, label: item.name }))
-      )
+    documentType.getList().then((res) => res.data)
   );
 
   const { data: documentCareers } = useQuery(["DocumentCareer"], () =>
-    documentCareer
-      .getList()
-      .then((res) =>
-        res.data.map((item: any) => ({ value: item.id, label: item.name }))
-      )
+    documentCareer.getList().then((res) => res.data)
   );
 
   // DATA TABLE
@@ -114,9 +105,17 @@ export const DocumentsPage: React.FC = () => {
     }
   }, [defaultValue]);
 
-  const columns: TGridColDef<TDocument>[] = [
+  const columns: TGridColDef[] = [
     {
-      ...documentColumns[0],
+      sortAscValue: 8,
+      sortDescValue: 0,
+      filterKey: "createdDate",
+      field: "created",
+      headerName: "Ngày tạo",
+      type: "date",
+      minWidth: 150,
+      renderCell: ({ row }) =>
+        row.created ? moment(row.created).format("DD/MM/YYYY") : "__",
     },
     {
       field: "categoryName",
@@ -125,19 +124,57 @@ export const DocumentsPage: React.FC = () => {
       sortDescValue: 1,
       filterKey: "category",
       type: "select",
-      options: parentCategorys,
-      width: 150,
+      options: parentCategorys?.map?.((item) => ({
+        value: item.id,
+        label: item.name,
+      })),
+      minWidth: 150,
     },
-    ...documentColumns.slice(1),
     {
       field: "documentTypeName",
       headerName: "Loại tài liệu",
       sortAscValue: 14,
       sortDescValue: 6,
       filterKey: "type",
-      width: 150,
+      minWidth: 150,
       type: "select",
-      options: documentTypes,
+      options: documentTypes?.map((item: any) => ({
+        value: item?.id,
+        label: item?.name,
+      })),
+    },
+    {
+      field: "productCode",
+      headerName: "Mã SP",
+      sortAscValue: 10,
+      sortDescValue: 2,
+      filterKey: "productCode",
+      minWidth: 150,
+    },
+    {
+      field: "productName",
+      headerName: "Tên SP",
+      sortAscValue: 11,
+      sortDescValue: 3,
+      filterKey: "productName",
+      minWidth: 150,
+      flex: 1,
+    },
+    {
+      field: "productManufactor",
+      headerName: "Nhà sản xuất",
+      sortAscValue: 12,
+      sortDescValue: 4,
+      filterKey: "productManufactor",
+      minWidth: 150,
+    },
+    {
+      field: "lotNumber",
+      headerName: "LOT#",
+      sortAscValue: 13,
+      sortDescValue: 5,
+      filterKey: "lotNumber",
+      minWidth: 150,
     },
     {
       field: "documentCareerName",
@@ -145,34 +182,45 @@ export const DocumentsPage: React.FC = () => {
       sortAscValue: 15,
       sortDescValue: 7,
       filterKey: "careerSlug",
-      width: 200,
+      minWidth: 200,
       type: "select",
-      options: documentCareers,
+      options: documentCareers?.map((item: any) => ({
+        value: item?.id,
+        label: item?.name,
+      })),
     },
     {
       field: "attachFile",
       headerName: "File",
       isFilter: false,
       isSort: false,
-      width: 125,
-      renderCell: ({ row }) => (
-        <Button variant="text" className="truncate">
-          <a
-            href={row.attachFiles?.[0]}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="no-underline text-main text-sm font-semibold"
-          >
-            Xem chi tiết
-          </a>
-        </Button>
-      ),
+      minWidth: 125,
+      renderCell: ({ row }) => {
+        const { attachFiles = [] } = row || {};
+
+        return (
+          <Stack>
+            {attachFiles?.map?.((file: string, index: number) => (
+              <Button key={file} variant="text" className="truncate">
+                <a
+                  href={file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline text-main text-sm font-semibold"
+                >
+                  File {index + 1}
+                </a>
+              </Button>
+            ))}
+          </Stack>
+        );
+      },
     },
     {
       field: "action",
       headerName: "",
       align: "center",
-      width: 50,
+      minWidth: 50,
       renderCell: ({ row }) => (
         <DropdownButton
           id={row?.id as string}

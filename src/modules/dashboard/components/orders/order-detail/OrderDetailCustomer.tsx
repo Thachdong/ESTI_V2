@@ -35,30 +35,21 @@ export const OrderDetailCustomer: React.FC = () => {
     setValue("curatorPhone", curatorPhone);
 
     setValue("curatorEmail", curatorEmail);
+
+    const { fullName, phone1, address } = curator?.receiverById || {};
+
+    setValue("receiverFullName", fullName);
+
+    setValue("receiverPhone", phone1);
+
+    setValue("receiverAddress", address);
+
+    const { paymentLimit, paymentTypeName } = customerDetail?.companyInfo || {};
+
+    setValue("paymentLimit", paymentLimit);
+
+    !id && setValue("paymentType", paymentTypeName);
   }, [customerDetail, curatorId, defaultReceiver]);
-
-  useEffect(() => {
-    if (!!defaultReceiver) {
-      const { curatorInfo = [], companyInfo = {} } = customerDetail || {};
-
-      const curator = curatorInfo.find((cur: any) => cur?.id === curatorId);
-
-      const { receiverById } = curator || {};
-      const { fullName, phone1, address } = receiverById || {};
-
-      setValue("receiverFullName", fullName);
-
-      setValue("receiverPhone", phone1);
-
-      setValue("receiverAddress", address);
-
-      const { paymentLimit, paymentType } = companyInfo;
-
-      setValue("paymentLimit", paymentLimit);
-
-      !id && setValue("paymentType", paymentType);
-    }
-  }, [defaultReceiver, customerDetail]);
 
   const { address, taxCode, professionName } =
     customerDetail?.companyInfo || {};

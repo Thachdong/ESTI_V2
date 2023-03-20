@@ -38,6 +38,9 @@ export const quoteRequest = {
 
   getHeaderOrder: () => request.get<any>(`${BASE_URL}/GetHeaderOrder`),
 
+  getChartData: (id: string) =>
+    request.get<any>(`${BASE_URL}/GetHeaderPercentOrder?salesId=${id}`),
+
   cancel: (preOrderId: string) =>
     request.post<any, any>(
       `${BASE_URL}/CancelOrder?preOrderId=${preOrderId}&status=4`,

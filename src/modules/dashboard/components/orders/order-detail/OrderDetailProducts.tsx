@@ -41,6 +41,8 @@ export const OrderDetailProducts: React.FC<TProps> = ({ data, disabled }) => {
     };
 
     columnsBaseId.splice(7, 3, field);
+
+    delete columnsBaseId[11];
   }
 
   const columns: TGridColDef[] = [

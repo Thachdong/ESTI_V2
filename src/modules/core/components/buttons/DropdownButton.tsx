@@ -6,7 +6,7 @@ import DotsIcon from "@mui/icons-material/MoreVertRounded";
 
 type TDropdownButton = {
   items: {
-    label: string;
+    label: string | React.ReactNode;
     action: Function;
     disabled?: boolean;
   }[];

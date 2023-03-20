@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { useState } from "react";
 import {
   CustomerCareStatistics,
@@ -9,13 +8,13 @@ export const CustomerCarePage: React.FC = () => {
   const [viewReport, setViewReport] = useState(false);
 
   return (
-    <Box>
+    <>
       {viewReport && <CustomerCareStatistics />}
 
       <CustomerCareTable
         onViewReport={() => setViewReport(!viewReport)}
         viewReport={viewReport}
       />
-    </Box>
+    </>
   );
 };

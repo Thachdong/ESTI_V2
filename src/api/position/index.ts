@@ -32,6 +32,8 @@ export const position = {
   update: (payload: TUpdatePosition) =>
     request.put<TUpdatePosition, any>(BASE_URL, payload),
 
+  delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
   getProductByPositionId: (params?: any) =>
     request.getPagination<any>(`${BASE_URL}/GetByProduct`, { ...params }), // response: products list
 

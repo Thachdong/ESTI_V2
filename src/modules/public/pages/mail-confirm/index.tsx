@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -9,6 +10,7 @@ import { preQuote, TPreQuoteMailConfirm } from "src/api";
 import * as animate from "~assets/json/expired-code.json";
 import { FormInput, SendButton } from "~modules-core/components";
 import { MailConfirmAttach } from "~modules-public/components";
+import styles from "~modules-public/styles/layout.module.css";
 
 const defaultOptions = {
   loop: true,
@@ -28,18 +30,17 @@ export const MailConfirmPage: React.FC = () => {
 
   const { control, handleSubmit } = methods;
 
-
   // status: 2: báo giá lại
   //         3: chấp nhận
   //         4: từ chối
   const { data } = useQuery(
     ["CheckIsValidCode", code],
-    () => preQuote.checkMailCode(code as string).then(res => res.data),
+    () => preQuote.checkMailCode(code as string).then((res) => res.data),
     {
       enabled: !!code,
     }
   );
-  
+
   const renderContent = useCallback(() => {
     const { status, result } = data || {};
 
@@ -108,8 +109,6 @@ export const MailConfirmPage: React.FC = () => {
     {
       onSuccess: (data: any) => {
         toast.success(data?.resultMessage);
-
-        router.push("/dashboard/quotation/quote-request/");
       },
     }
   );
@@ -122,44 +121,53 @@ export const MailConfirmPage: React.FC = () => {
   );
 
   return (
-    <Box className="max-w-[600px] w-full bg-white rounded-lg p-[40px] h-[70vh] overflow-y-auto">
-      <Box>
-        <img src="/logo-full.png" width={100} alt="Esti" />
-      </Box>
-
-      <Box>{renderContent()}</Box>
-
-      {!!data?.result && (
-        <FormProvider {...methods}>
-          <Box className="grid gap-4 mt-4">
-            <FormInput
-              controlProps={{
-                name: "title",
-                control,
-              }}
-              label="Tiêu đề"
-              shrinkLabel
-            />
-
-            <FormInput
-              controlProps={{
-                name: "note",
-                control,
-              }}
-              label="Nội dung phản hồi"
-              multiline
-              minRows={5}
-              shrinkLabel
-            />
-
-            <MailConfirmAttach />
-
-            <Box className="text-right mt-3">
-              <SendButton onClick={handleSubmit(handleConfirm)}>Gửi phản hồi</SendButton>
-            </Box>
-          </Box>
-        </FormProvider>
+    <Box
+      className={clsx(
+        "flex items-center justify-center w-screen h-screen",
+        styles["public-layout"]
       )}
+    >
+      <Box className="max-w-[600px] w-full bg-white rounded-lg p-[40px] h-[70vh] overflow-y-auto">
+        <Box>
+          <img src="/logo-full.png" width={100} alt="Esti" />
+        </Box>
+
+        <Box>{renderContent()}</Box>
+
+        {!!data?.result && (
+          <FormProvider {...methods}>
+            <Box className="grid gap-4 mt-4">
+              <FormInput
+                controlProps={{
+                  name: "title",
+                  control,
+                }}
+                label="Tiêu đề"
+                shrinkLabel
+              />
+
+              <FormInput
+                controlProps={{
+                  name: "note",
+                  control,
+                }}
+                label="Nội dung phản hồi"
+                multiline
+                minRows={5}
+                shrinkLabel
+              />
+
+              <MailConfirmAttach />
+
+              <Box className="text-right mt-3">
+                <SendButton onClick={handleSubmit(handleConfirm)}>
+                  Gửi phản hồi
+                </SendButton>
+              </Box>
+            </Box>
+          </FormProvider>
+        )}
+      </Box>
     </Box>
   );
 };

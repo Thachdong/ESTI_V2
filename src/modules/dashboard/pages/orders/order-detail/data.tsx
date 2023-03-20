@@ -22,13 +22,13 @@ export const detailColumns: TGridColDef[] = [
     minWidth: 150,
     flex: 1,
   },
-  { field: "manufactor", headerName: "Hãng SX", minWidth: 100 },
+  { field: "manufactor", headerName: "Hãng SX", minWidth: 100},
   {
-    field: "productOrigin",
+    field: "origin",
     headerName: "xuất xứ",
     minWidth: 100,
   },
-  { field: "productSpecs", headerName: "Quy cách", minWidth: 100 },
+  { field: "specs", headerName: "Quy cách", minWidth: 100 },
   { field: "unitName", headerName: "Đơn vị tính", minWidth: 100 },
   {
     field: "quantity",
@@ -73,6 +73,18 @@ export const detailColumns: TGridColDef[] = [
         </Tooltip>
       );
     },
+  },
+  {
+    field: "tProductStatus",
+    headerName: "Trạng thái",
+    minWidth: 120,
+    renderCell: ({row}) => {
+      const {productStatusName, tProductStatus} = row || {};
+
+      const colors = ["default", "primary", "success"]
+
+      return <StatusChip status={tProductStatus} label={productStatusName} color={colors[tProductStatus] as any} />
+    }
   },
   {
     field: "note",

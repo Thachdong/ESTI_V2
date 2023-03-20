@@ -63,6 +63,9 @@ export const preQuote = {
       {}
     ),
 
+  getFeedbacks: (preQuoteId: string) =>
+    request.get<any>(`${BASE_URL}/GetResponseMail?preQuoteId=${preQuoteId}`),
+
   create: (payload: TCreatePreQuote) =>
     request.post<TCreatePreQuote, any>(BASE_URL, payload),
 
@@ -86,8 +89,10 @@ export const preQuote = {
       `${BASE_URL}/MailResponse?code=${payload.code}&title=${payload?.title}&note=${payload?.note}&attachFile=${payload?.attachFile}`,
       {}
     ),
+
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
   getPreQuoteDetail: (id: string) =>
     request.get<any>(`${BASE_URL}/PreQuoteDetail`, { id }),
 };

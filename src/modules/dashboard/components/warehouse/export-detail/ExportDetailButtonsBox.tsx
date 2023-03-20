@@ -133,11 +133,26 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
   };
 
   const handleUpdateProducts = async (data: any) => {
-    const { productList, id } = data;
+    const {
+      productList,
+      id,
+      codeVD,
+      deliveryUnit,
+      packageNumber,
+      packageWeight,
+      shippingFee,
+      note,
+    } = data;
 
     const payload = {
       warehouseUpdate: productList,
       id,
+      codeVD,
+      deliveryUnit,
+      packageNumber,
+      packageWeight,
+      shippingFee,
+      note,
     };
 
     await mutateUpdate.mutateAsync(payload);
@@ -173,7 +188,7 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
             disabled={exportStatus !== undefined && exportStatus > 0}
           >
             <UpdateIcon className="mr-2" />
-            Cập nhật SP
+            Cập nhật
           </BaseButton>
 
           <PrintButton className="bg-error" onClick={handlePrint}>

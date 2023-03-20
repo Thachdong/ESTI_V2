@@ -18,7 +18,11 @@ import {
 import { defaultPagination } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
-import { CustomersDialog } from "~modules-dashboard/components";
+import {
+  CustomerFilterBox,
+  CustomersCuratorDrawer,
+  CustomersDialog,
+} from "~modules-dashboard/components";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
 import { CustomerColumns } from "./customerColumns";
@@ -32,13 +36,25 @@ export const CustomersPage = () => {
 
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
 
+  const [open, setOpen] = useState(false);
+
   const defaultValue = useRef<any>();
+
+  const drawerRef = useRef<any>();
 
   usePathBaseFilter(pagination);
 
   // DIALOG METHODS
   const onDialogClose = useCallback(() => {
     setDialog({ open: false });
+  }, []);
+
+  const onOpenDrawer = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const id: any = e.currentTarget.dataset.id;
+
+    drawerRef.current = id;
+
+    setOpen(true);
   }, []);
 
   // DATA FETCHING
@@ -138,9 +154,17 @@ export const CustomersPage = () => {
           <SearchBox label="Tìm kiếm" />
         </Box>
         <Box className="flex items-center gap-3">
-          <FilterButton listFilterKey={[]} />
+          <FilterButton
+            listFilterKey={[]}
+            renderFilterComponent={() => <CustomerFilterBox />}
+          />
+
           <RefreshButton onClick={() => refetch()} />
-          <ExportButton api={customer.export} filterParams={{...query, pageSize: 99999}} />
+
+          <ExportButton
+            api={customer.export}
+            filterParams={{ ...query, pageSize: 99999 }}
+          />
         </Box>
       </Box>
 
@@ -150,10 +174,12 @@ export const CustomersPage = () => {
           <Menu className="p-0" id="customer_table_menu">
             <Item
               id="view-product"
-              onClick={() => router.push({
-                pathname: "/dashboard/account/customer-detail",
-                query: { id: defaultValue?.current?.id },
-              })}
+              onClick={() =>
+                router.push({
+                  pathname: "/dashboard/account/customer-detail",
+                  query: { id: defaultValue?.current?.id },
+                })
+              }
             >
               Chi tiết / cập nhật
             </Item>
@@ -173,8 +199,12 @@ export const CustomersPage = () => {
           componentsProps={{
             row: {
               onMouseEnter: onMouseEnterRow,
+              onDoubleClick: onOpenDrawer,
             },
           }}
+          getRowClassName={({ id }) =>
+            drawerRef?.current == id && open ? "!bg-[#fde9e9]" : ""
+          }
         />
       </ContextMenuWrapper>
 
@@ -184,6 +214,12 @@ export const CustomersPage = () => {
         type={dialog.type}
         refetch={refetch}
         defaultValue={defaultValue.current}
+      />
+
+      <CustomersCuratorDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        customerId={drawerRef.current}
       />
     </Paper>
   );

@@ -82,15 +82,15 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
 
         setIsUpdate(false);
 
-        refetch();
+        refetch?.();
       },
     }
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const { id, salesId, curatorId, customerId } = data || {};
+    const { salesId, curatorId, customerId } = data || {};
 
-    await mutateUpdate.mutateAsync({ id, salesId, curatorId, customerId });
+    await mutateUpdate.mutateAsync({ id: id as string, salesId, curatorId, customerId });
   }, []);
 
   const printAreaRef = useRef<HTMLTableElement>(null);

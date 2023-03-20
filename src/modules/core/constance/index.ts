@@ -94,10 +94,10 @@ export const productTemplates = [
 export const parentCategoryId = "00000000-0000-0000-0000-000000000000";
 
 export const searchParams = [
-  { id: 1, name: "Mã sản phẩm" },
-  { id: 2, name: "Tên sản phẩm" },
-  { id: 3, name: "Nhà sản xuất" },
-  { id: 4, name: "Lô sản xuất" },
+  { id: "1", name: "Mã sản phẩm" },
+  { id: "2", name: "Tên sản phẩm" },
+  { id: "3", name: "Nhà sản xuất" },
+  { id: "4", name: "Lô sản xuất" },
 ];
 
 export const positionStatus = [

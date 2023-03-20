@@ -5,6 +5,7 @@ const Index: TNextPageWithLayout = () => <MailConfirmPage />
 
 Index.displayName = "Phản hồi email báo giá";
 
-Index.layoutName = "PublicPage";
+Index.layoutName = "DefaultPage";
+// Index.layoutName = "PublicPage";
 
 export default Index;

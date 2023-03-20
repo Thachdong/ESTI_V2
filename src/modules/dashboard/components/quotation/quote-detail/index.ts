@@ -13,3 +13,4 @@ export * from "./QuoteDetailGeneralView";
 export * from "./QuoteDetailDeliveryHistory";
 export * from "./QuoteDetailInvoiceHistory";
 export * from "./PrintQuoteDetail";
+export * from "./QuoteDetailFeedback";

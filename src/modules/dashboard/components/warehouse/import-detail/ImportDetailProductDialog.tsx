@@ -19,11 +19,17 @@ import { FormInputNumber } from "~modules-core/components/form-hooks/FormInputNu
 import { VAT } from "~modules-core/constance";
 import { TDialog } from "~types/dialog";
 
-export const ImportDetailProductDialog: React.FC<TDialog> = ({
+type TProps = TDialog & {
+  warehouseConfigId: string;
+};
+
+export const ImportDetailProductDialog: React.FC<TProps> = ({
   open,
   onClose,
   type,
   defaultValue,
+  warehouseConfigId,
+  refetch,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const { id } = useRouter().query;
@@ -177,7 +183,11 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
         break;
       case "CopyProduct":
         !!defaultValue &&
-          reset({ ...defaultValue, rowId: new Date().getTime().toString() });
+          reset({
+            ...defaultValue,
+            rowId: new Date().getTime().toString(),
+            id: null,
+          });
         break;
       default:
         !!defaultValue && reset({ ...defaultValue });
@@ -201,21 +211,10 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
             name: "productId",
             rules: { required: "Phải chọn mã SP" },
           }}
-          label="Mã SP"
-          labelKey="productCode"
-          valueKey="productId"
-        />
-
-        <FormSelect
-          options={getProductOptions()}
-          callback={getSelectedProduct}
-          controlProps={{
-            control,
-            name: "productId",
-            rules: { required: "Phải chọn tên SP" },
-          }}
-          label="Tên SP"
-          labelKey="productName"
+          label="Sản phẩm"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.productCode} - ${opt?.productName}` : ""
+          }
           valueKey="productId"
         />
 
@@ -265,6 +264,7 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập số LOT" },
           }}
           label="Số LOT"
+          inputProps={{ sx: { textTransform: "uppercase" } }}
         />
 
         <FormDatepicker
@@ -288,6 +288,7 @@ export const ImportDetailProductDialog: React.FC<TDialog> = ({
         <FormSelectAsync
           fetcher={position.getList}
           callback={getSelectedPosition}
+          fetcherParams={{ warehouseConfigId }}
           controlProps={{
             control,
             name: "positionId",
