@@ -207,7 +207,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
       case !!id && !isUpdate:
         return (
           <Box className="flex items-center justify-end gap-3">
-            {status <= 2 && (
+            {status <= 3 && (
               <>
                 <EditButton
                   tooltipText="Cập nhật"
@@ -225,6 +225,7 @@ export const PurchaseDetailButtons: React.FC<TProps> = ({
             <PrintButton className="!bg-error" onClick={handlePrint}>
               In
             </PrintButton>
+
             <Box className="hidden">
               <PrintPurchaseDetail
                 printAreaRef={printAreaRef}

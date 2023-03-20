@@ -62,37 +62,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
   }, [curatorId, curators]);
 
   const renderCuratorTag = useCallback(() => {
-    if (!!id) {
-      if (customerId) {
-        return (
-          <FormSelect
-            controlProps={{
-              name: "curatorId",
-              control: control,
-              rules: { required: "Phải chọn người phụ trách" },
-            }}
-            options={curators}
-            label="Người phụ trách:"
-            disabled={disabled}
-            getOptionLabel={(opt) => !!opt ? opt?.curatorName + " - " + opt?.statusName : ""}
-          />
-        );
-      } else {
-        return (
-          <FormInput
-            controlProps={{
-              name: "curatorName",
-              control: control,
-              rules: { required: "Phải nhập người phụ trách" },
-            }}
-            label="Người phụ trách:"
-            disabled={disabled}
-          />
-        );
-      }
-    }
-
-    if (customerAvailable || !!id) {
+    if (!!customerAvailable) {
       return (
         <FormSelect
           controlProps={{
@@ -102,9 +72,22 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={curators}
           label="Người phụ trách:"
-          className="mb-4"
           disabled={disabled}
-          getOptionLabel={(opt) => !!opt ? opt?.curatorName + " - " + opt?.statusName : ""}
+          getOptionLabel={(opt) =>
+            !!opt ? opt?.curatorName + " - " + opt?.statusName : ""
+          }
+        />
+      );
+    } else {
+      return (
+        <FormInput
+          controlProps={{
+            name: "curatorName",
+            control: control,
+            rules: { required: "Phải nhập người phụ trách" },
+          }}
+          label="Người phụ trách:"
+          disabled={disabled}
         />
       );
     }

@@ -57,8 +57,8 @@ export const QuoteDetailDialog: React.FC<TDialog> = ({
   useEffect(() => {
     const total = quantity * price;
 
-    setValue("totalPrice", total + (total * vat) / 100);
-  }, [quantity, price, vat]);
+    setValue("totalPrice", total);
+  }, [quantity, price]);
 
   useEffect(() => {
     type === "Add" && isSelectedProduct();

@@ -246,6 +246,7 @@ export const BookingOrderTable: React.FC<TProps> = ({
         open={Boolean(dialog.open && dialog.type === "UpdateStatus")}
         type={dialog.type}
         defaultValue={defaultValue}
+        refetch={refetch}
       />
 
       <BookingOrderNoteDialog

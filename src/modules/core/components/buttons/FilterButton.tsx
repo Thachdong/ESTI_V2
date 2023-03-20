@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { FormDatepicker, FormSelect } from "../form-hooks";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,10 @@ import router, { useRouter } from "next/router";
 import moment from "moment";
 
 export const FilterButton: React.FC<
-  ButtonProps & { listFilterKey: string[] }
+  ButtonProps & {
+    listFilterKey: string[];
+    renderFilterComponent?: () => ReactNode;
+  }
 > = (props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -48,6 +51,7 @@ export const FilterButton: React.FC<
         title={props?.title || "Bộ lọc"}
         anchorEl={anchorEl}
         listFilterKey={props.listFilterKey || []}
+        renderFilterComponent={props?.renderFilterComponent}
       />
     </>
   );
@@ -59,6 +63,7 @@ type TDialogFilter = {
   title: string;
   anchorEl: HTMLButtonElement | null;
   listFilterKey: string[];
+  renderFilterComponent?: () => ReactNode;
 };
 
 export const FilterDialog: React.FC<TDialogFilter> = ({
@@ -67,6 +72,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
   title = "Bộ lọc",
   anchorEl,
   listFilterKey,
+  renderFilterComponent,
 }) => {
   const { control, setValue, watch, reset } = useForm();
 
@@ -127,8 +133,6 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
     delete query["todate"];
 
     router.push({ query });
-    
-    OnClose();
   }, []);
 
   useEffect(() => {
@@ -174,7 +178,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
       case 7: {
         const startOfYear = moment().startOf("year");
 
-        const halfYear =  moment().startOf("year").add(6, "months").valueOf()
+        const halfYear = moment().startOf("year").add(6, "months").valueOf();
 
         setValue("fromdate", startOfYear.valueOf());
 
@@ -184,7 +188,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
       case 8: {
         const endOfYear = moment().endOf("year");
 
-        const halfYear = moment().endOf("year").subtract(6, "months").valueOf()
+        const halfYear = moment().endOf("year").subtract(6, "months").valueOf();
 
         setValue("fromdate", halfYear);
 
@@ -230,6 +234,7 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
             defaultValue={OptionFilterDate?.[0]}
             className="col-span-2"
           />
+
           <Box className="col-span-2 flex gap-3 items-center w-full">
             <Box className="grid grid-cols-2 gap-3 w-full">
               <FormDatepicker
@@ -265,6 +270,9 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
               Huỷ
             </ButtonBase>
           </Box>
+
+          {renderFilterComponent?.()}
+
           {listFilterKey.map((item) => (
             <FormSelect
               options={OptionFilterDate}

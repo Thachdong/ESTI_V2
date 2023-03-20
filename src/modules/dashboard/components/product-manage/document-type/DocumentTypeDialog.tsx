@@ -13,10 +13,15 @@ import { searchParams } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
-export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
-  // EXTRACT PROPS
-  const { onClose, open, type, refetch, defaultValue } = props;
-
+export const DocumentTypeDialog: React.FC<TDialog> = ({
+  onClose,
+  open,
+  type,
+  refetch,
+  defaultValue,
+}) => {
+  console.log(defaultValue);
+  
   const [isUpdate, setIsUpdate] = useState(false);
 
   const disable = type === "View" && !isUpdate;
@@ -38,10 +43,12 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
     }
 
     if (type === "View" && defaultValue) {
+      const { name, paramSearch = [], id } = defaultValue || {};
+
       const defaultRecord = {
-        name: defaultValue.name,
-        paramSearch: parseInt(defaultValue?.paramSearch),
-        id: defaultValue?.id,
+        id,
+        name,
+        paramSearch: paramSearch?.split?.(",") || [],
       };
 
       reset(defaultRecord);
@@ -76,11 +83,11 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleAdd = useCallback(async (data: any) => {
-    const paramSearch = data?.paramSearch || "";
+    const { name, paramSearch = [] } = data || {};
 
     const payload = {
-      name: data?.name,
-      paramSearch: `${paramSearch}`,
+      name,
+      paramSearch: paramSearch ? paramSearch?.join?.(",") : null,
     };
 
     await mutateAdd.mutateAsync(payload);
@@ -105,11 +112,11 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleUpdate = useCallback(async (data: any) => {
-    const paramSearch = data?.paramSearch || [];
+    const { name, paramSearch = [] } = data || {};
 
     const payload = {
-      name: data?.name,
-      paramSearch: paramSearch.join(", "),
+      name,
+      paramSearch: paramSearch?.join?.(","),
       id: data?.id,
     };
 
@@ -200,6 +207,7 @@ export const DocumentTypeDialog: React.FC<TDialog> = (props) => {
             }}
             label="Tiêu chí tìm kiếm"
             disabled={disable}
+            multiple
           />
         </Box>
       </Box>

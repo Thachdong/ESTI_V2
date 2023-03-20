@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import moment from "moment";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { branchs, purchaseOrder, staff } from "src/api";
@@ -12,9 +12,13 @@ import {
 
 type TProps = {
   orderDetail: any;
+  handleUpdateWarehouseId: (id: string) => void;
 };
 
-export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
+export const ImportDetailGeneralInfo: React.FC<TProps> = ({
+  orderDetail,
+  handleUpdateWarehouseId,
+}) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [selectedBranch, setSelectedBranch] = useState<any>();
 
@@ -71,6 +75,13 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({ orderDetail }) => {
         </>
       );
   }, [withoutPurchaseInvoice, orderDetail]);
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    const { warehouseConfigId } = selectedBranch || {};
+
+    !!warehouseConfigId && handleUpdateWarehouseId(warehouseConfigId);
+  }, [selectedBranch]);
 
   return (
     <Box className="">

@@ -20,7 +20,7 @@ type TProps = {
 export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
   const { control, reset, handleSubmit } = useForm();
 
-  const { transactionId } = useRouter().query;
+  const { id } = useRouter().query;
 
   useEffect(() => {
     !!data && reset({ exportStatus: data?.exportStatus });
@@ -39,7 +39,7 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
 
   const _onSubmit = async (data: any) => {
     await mutateUpdateStatus.mutateAsync({
-      id: transactionId,
+      id: id,
       status: data.exportStatus,
     });
   };
@@ -61,7 +61,7 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
 
         <FormInputBase
           disabled
-          value={data?.productOrderCode}
+          value={data?.mainOrderCode}
           label="Mã đơn bán hàng"
         />
 
@@ -71,7 +71,7 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
 
         <FormInputBase
           disabled
-          value={data?.deliveryFullName}
+          value={data?.deliveryName}
           label="Giao nhận"
         />
 
@@ -84,12 +84,12 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
           valueKey="value"
           labelKey="label"
           label={"Trạng thái xuất kho"}
-          disabled={data?.exportStatus > 0}
+          // disabled={data?.exportStatus > 0}
         />
 
         <Box className="col-span-2 flex justify-end">
           <BaseButton
-            disabled={data?.exportStatus > 0}
+            // disabled={data?.exportStatus > 0}
             onClick={handleSubmit(_onSubmit)}
             variant="contained"
           >

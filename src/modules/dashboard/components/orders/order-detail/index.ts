@@ -12,3 +12,4 @@ export * from "./OrderDetailGeneralView";
 export * from "./OrderDetailStatus";
 export * from "./PrintOrderDetail";
 export * from "./OrderDetailAdvancePayment";
+export * from "./OrderDetailCommission";

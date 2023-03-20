@@ -94,8 +94,6 @@ export const BillDetailPage: React.FC = () => {
       const orderProducts = mainOrderDetail.map((prod: any, index: number) => ({
         ...prod,
         no: index + 1,
-        manufactor: prod?.productManufactor,
-        specs: prod?.productSpecs,
       }));
 
       setValue("products", orderProducts);

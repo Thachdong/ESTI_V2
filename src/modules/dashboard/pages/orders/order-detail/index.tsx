@@ -11,6 +11,7 @@ import {
   OrderDetailAdvancePayment,
   OrderDetailAttach,
   OrderDetailButtons,
+  OrderDetailCommission,
   OrderDetailCurator,
   OrderDetailCustomer,
   OrderDetailGeneral,
@@ -52,13 +53,6 @@ export const OrderDetailPage: React.FC = () => {
   // SIDE EFFECTS
   useEffect(() => {
     const { mainOrder = {}, mainOrderDetail = [] } = orderDetail || {};
-
-    // SET PRODUCTS
-    const orderProducts = mainOrderDetail.map((order: any) => ({
-      ...order,
-      manufactor: order?.productManufactor,
-      specs: order?.productSpecs,
-    }));
 
     // SET DETAIL
     const {
@@ -116,7 +110,7 @@ export const OrderDetailPage: React.FC = () => {
       totalTax,
       salesAdminNote,
       deliverNote,
-      products: [...orderProducts],
+      products: [...mainOrderDetail],
       attachFile: !attachFile ? [] : attachFile.split(","),
     });
   }, [orderDetail]);
@@ -215,6 +209,10 @@ export const OrderDetailPage: React.FC = () => {
                 status={orderDetail?.mainOrder?.status}
               />
             </Box>
+
+            <Box className="col-span-2">
+              <OrderDetailCommission orderId={id as string} />
+            </Box>
           </>
         )}
         <Box className="col-span-2">
@@ -222,7 +220,7 @@ export const OrderDetailPage: React.FC = () => {
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
             sendMailData={{
-              to: orderDetail?.mainOrder?.receiverEmail,
+              to: orderDetail?.mainOrder?.curatorEmail,
               cc: [orderDetail?.mainOrder?.curatorEmail],
             }}
             orderDetail={orderDetail}
