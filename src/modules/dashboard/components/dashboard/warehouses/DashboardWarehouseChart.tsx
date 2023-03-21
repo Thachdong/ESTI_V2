@@ -154,14 +154,14 @@ export const DashboardWarehouseChart: React.FC = () => {
               borderBottom: "1px solid #ccc",
               paddingBottom: "0.5rem",
             }}
-            formatter={(value, name, props) => _format.getVND(value as number)}
+            formatter={(value: any) => _format.getVND(value as number)}
           />
 
           <Legend
             iconSize={10}
             iconType="circle"
             margin={{ top: 20 }}
-            formatter={(value) => (
+            formatter={(value: any) => (
               <span
                 style={{
                   fontSize: "12px",
