@@ -42,6 +42,10 @@ export const BarChart: React.FC<TProps> = ({ data }) => {
   };
 
   return (
-    <Bar options={chartjsOptions as any} data={config as any} height={100} />
+    <Bar
+      // options={chartjsOptions as any}
+      data={config as any}
+      height={100}
+    />
   );
 };

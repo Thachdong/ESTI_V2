@@ -84,7 +84,7 @@ export const CustomerCareStatistics: React.FC = () => {
           label={dataType === "Month" ? "Chọn tháng" : "Chọn năm"}
           views={
             dataType === "Month"
-              ? ["month", "year", "week", "quater"]
+              ? ["month", "year"]
               : ["year"]
           }
           inputFormat={dataType === "Year" ? "YYYY" : "MM/YYYY"}
