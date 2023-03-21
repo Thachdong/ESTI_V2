@@ -211,7 +211,8 @@ export const businessAreas = [
   },
 ];
 
-export const defaultRoute = "/dashboard/quotation/quote-list";
+export const defaultRoute = "/dashboard/account/staff";
+// export const defaultRoute = "/dashboard/quotation/quote-list";
 
 export const accountTypeOptions = [
   { id: 1, name: "Normal" },
