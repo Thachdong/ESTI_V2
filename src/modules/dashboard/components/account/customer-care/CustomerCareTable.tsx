@@ -138,7 +138,9 @@ export const CustomerCareTable: React.FC<TProps> = ({onViewReport, viewReport}) 
 
         <Box className="flex gap-2">
           <StatisticButton onClick={onViewReport} View={viewReport} />
+
           <FilterButton listFilterKey={[]} />
+          
           <RefreshButton onClick={() => refetch()} />
         </Box>
       </Box>
