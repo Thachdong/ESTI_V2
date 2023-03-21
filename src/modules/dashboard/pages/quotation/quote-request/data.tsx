@@ -30,6 +30,7 @@ export const quotationRequestColumns: TGridColDef[] = [
     filterKey: "customerCode",
     sortAscValue: 10,
     sortDescValue: 2,
+    flex: 1,
   },
   {
     field: "companyName",
@@ -39,6 +40,24 @@ export const quotationRequestColumns: TGridColDef[] = [
     filterKey: "companyName",
     sortAscValue: 11,
     sortDescValue: 3,
+  },
+  {
+    field: "accountCode",
+    headerName: "Tài khoản con",
+    flex: 1,
+    minWidth: 150,
+    filterKey: "curatorAccount",
+    // sortAscValue: 11,
+    // sortDescValue: 3,
+  },
+  {
+    field: "curatorName",
+    headerName: "Tên người liên hệ",
+    flex: 1,
+    minWidth: 175,
+    filterKey: "curatorName",
+    // sortAscValue: 11,
+    // sortDescValue: 3,
   },
   {
     field: "preOrderStatusName",

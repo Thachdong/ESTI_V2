@@ -13,6 +13,7 @@ import {
   FilterButton,
   generatePaginationProps,
   RefreshButton,
+  SearchBox,
   StatisticButton,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -162,9 +163,15 @@ export const WarehouseExportTable: React.FC<TProps> = ({
         </Box>
         <Box className="flex gap-2">
           <StatisticButton onClick={onViewReport} View={ViewReport} />
+
           <FilterButton listFilterKey={[]} />
+
           <RefreshButton onClick={() => refetch()} />
         </Box>
+      </Box>
+
+      <Box className="mb-4 w-1/2">
+        <SearchBox />
       </Box>
 
       <ContextMenuWrapper

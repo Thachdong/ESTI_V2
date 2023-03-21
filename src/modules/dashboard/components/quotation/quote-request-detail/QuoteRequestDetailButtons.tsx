@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -90,7 +91,12 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
   const handleUpdate = useCallback(async (data: any) => {
     const { salesId, curatorId, customerId } = data || {};
 
-    await mutateUpdate.mutateAsync({ id: id as string, salesId, curatorId, customerId });
+    await mutateUpdate.mutateAsync({
+      id: id as string,
+      salesId,
+      curatorId,
+      customerId,
+    });
   }, []);
 
   const printAreaRef = useRef<HTMLTableElement>(null);
@@ -144,9 +150,19 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
                 </AddButton>
               </>
             ) : (
-              <ViewButton variant="contained" className="bg-main">
-                {" "}
-                Xem báo giá
+              <ViewButton
+                variant="contained"
+                className="bg-main !text-white"
+                tooltipText="Xem báo giá"
+              >
+                <Link
+                  href={
+                    "/dashboard/quotation/quote-detail/?id=" +
+                    requestDetail?.preOrderView?.preQuoteId
+                  }
+                >
+                  <a className="text-white no-underline">Xem báo giá</a>
+                </Link>
               </ViewButton>
             )}
             <PrintButton className="!bg-error" onClick={handlePrint}>
@@ -161,7 +177,7 @@ export const QuoteRequestDetailButtons: React.FC<TProps> = ({
           </Box>
         );
     }
-  }, [id, isUpdate, status]);
+  }, [id, isUpdate, status, requestDetail]);
 
   return <Box className="flex justify-end mt-4">{renderButtons()}</Box>;
 };
