@@ -24,9 +24,6 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
     }
   );
 
-  console.log(chartData);
-  
-
   let labels: number[] = [];
   let sendMail: number[] = [];
   let messager: number[] = [];
@@ -50,7 +47,7 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
         type: "bar" as const,
         label: "Gửi mail",
         data: sendMail,
-        backgroundColor: "rgb(255, 29, 132)",
+        backgroundColor: "#1976d2",
         tension: 0.3,
         borderRadius: 3,
         barThickness: 15,
@@ -59,7 +56,7 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
         type: "bar" as const,
         label: "Nhắn tin",
         data: messager,
-        backgroundColor: "rgb(255, 29, 132)",
+        backgroundColor: "#e74c3c",
         tension: 0.3,
         borderRadius: 3,
         barThickness: 15,
@@ -68,7 +65,7 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
         type: "bar" as const,
         label: "Tặng quà",
         data: gift,
-        backgroundColor: "rgb(255, 29, 132)",
+        backgroundColor: "#4cd964",
         tension: 0.3,
         borderRadius: 3,
         barThickness: 15,
@@ -77,7 +74,7 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
         type: "bar" as const,
         label: "Gọi điện",
         data: callPhone,
-        backgroundColor: "rgb(255, 29, 132)",
+        backgroundColor: "#5856d6",
         tension: 0.3,
         borderRadius: 3,
         barThickness: 15,
@@ -95,6 +92,10 @@ export const YearChart: React.FC<TProps> = ({ fromdate, todate }) => {
   };
 
   return (
-    <Bar options={chartjsOptions as any} data={config as any} height={100} />
+    <Bar
+      // options={chartjsOptions as any}
+      data={config as any}
+      height={100}
+    />
   );
 };
