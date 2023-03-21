@@ -8,7 +8,7 @@ export const defaultPagination: TPagination = {
 export const quoteOrderStatus = [
   { value: 0, label: "Chưa thực hiện" },
   { value: 1, label: "Đang thực hiện" },
-  { value: 2, label: "Kết chuyển báo cáo" },
+  { value: 2, label: "Kết chuyển báo giá" },
   { value: 3, label: "Hủy yêu cầu" },
   { value: 4, label: "Tạm ngưng" },
   { value: 5, label: "Hủy báo giá" },
