@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { customer } from "src/api";
 import { CustomersDialog } from "~modules-dashboard/components";
 import { TDefaultDialogState } from "~types/dialog";
+import { TAutocompleteAsync } from "~types/form-controlled/form-select";
 import { TControllerProps } from "~types/react-hook-form";
 import { AddButton } from "./buttons";
 import { FormSelectAsync } from "./form-hooks";
@@ -15,6 +16,7 @@ type TProps = {
   callback?: (opt: any) => void;
   defaultValue?: any;
   onAddCallback?: (opt: any) => void;
+  shrinkLabel?: boolean;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
@@ -24,7 +26,8 @@ export const FormCustomer: React.FC<TProps> = ({
   disabled = false,
   callback,
   onAddCallback,
-  defaultValue
+  defaultValue,
+  shrinkLabel = false
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -52,6 +55,7 @@ export const FormCustomer: React.FC<TProps> = ({
           className="w-full"
           disabled={disabled}
           callback={callback}
+          shrinkLabel
         />
 
         <AddButton

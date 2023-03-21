@@ -11,9 +11,9 @@ import {
 
 type TProps = {
   disabled: boolean;
-}
+};
 
-export const CustomerCareInfo: React.FC<TProps> = ({disabled}) => {
+export const CustomerCareInfo: React.FC<TProps> = ({ disabled }) => {
   const [curator, setCurator] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -35,10 +35,8 @@ export const CustomerCareInfo: React.FC<TProps> = ({disabled}) => {
   }, [customerId]);
 
   useEffect(() => {
-    console.log(customerDetail, curatorId);
-    
     if (!!curatorId) {
-      setValue("curatorId", curatorId)
+      setValue("curatorId", curatorId);
     }
   }, [customerDetail]);
 
@@ -54,27 +52,32 @@ export const CustomerCareInfo: React.FC<TProps> = ({disabled}) => {
             controlProps={{
               name: "customerId",
               control: control,
-              rules: { required: "Phải chọn mã khách hàng" }
+              rules: { required: "Phải chọn mã khách hàng" },
             }}
             disabled={disabled}
+            shrinkLabel
+            label="Khách hàng"
           />
 
           <FormInputBase
             value={customerId ? companyInfo?.address : ""}
             disabled={true}
             label="Địa chỉ:"
+            shrinkLabel
           />
 
           <FormInputBase
             value={customerId ? companyInfo?.taxCode : ""}
             disabled={true}
             label="Mã số thuế:"
+            shrinkLabel
           />
 
           <FormInputBase
             value={customerId ? companyInfo?.professionName : ""}
             disabled={true}
             label="Lĩnh vực KD:"
+            shrinkLabel
           />
         </Box>
       </Box>
@@ -94,26 +97,32 @@ export const CustomerCareInfo: React.FC<TProps> = ({disabled}) => {
             options={curatorInfo || []}
             label={"Người liên hệ:"}
             callback={(opt) => setCurator(opt)}
-            labelKey="curatorName"
+            getOptionLabel={(opt: any) =>
+              !!opt ? `${opt.curatorName} - ${opt.accountCode} - ${opt.statusName}` : ""
+            }
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormInputBase
             value={curatorId ? curator?.curatorDepartmentName : ""}
             disabled={true}
             label="Phòng ban"
+            shrinkLabel
           />
 
           <FormInputBase
             value={curatorId ? curator?.curatorPhone : ""}
             disabled={true}
             label="Điện thoại"
+            shrinkLabel
           />
 
           <FormInputBase
             value={curatorId ? curator?.curatorEmail : ""}
             disabled={true}
             label="Email"
+            shrinkLabel
           />
         </Box>
       </Box>

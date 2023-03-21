@@ -1,16 +1,19 @@
 import { Box, Collapse, List, ListItem, ListItemButton } from "@mui/material";
 import styles from "~modules-dashboard/styles/layout/sidebar.module.css";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { menu } from "~modules-dashboard/layouts/data";
+import { menu as rawMenu } from "~modules-dashboard/layouts/data";
 import clsx from "clsx";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ExpandedMenu } from "./ExpandedMenu";
 import { BaseButton } from "~modules-core/components";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { useMediaQuery } from "react-responsive";
+import { useSession } from "~modules-core/customHooks/useSession";
+import { useQuery } from "react-query";
+import { role } from "src/api";
+import _ from "lodash";
 
 type TProps = {
   expand: boolean;
@@ -18,11 +21,55 @@ type TProps = {
 };
 
 export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
-  // LOCAL STATE AND EXTRACT PROPS
-  let isTabletOrMobile = useMediaQuery({ query: "(max-width: 1024px)" });
   const [collapses, setCollapses] = useState<string[]>([]);
 
+  const [menu, setMenu] = useState<any[]>([]);
+
+  const { userInfo } = useSession()?.userInfo || {};
+
   const { pathname } = useRouter();
+
+  // DATA FETCHING
+  const { data: privilegeList } = useQuery(
+    ["UserPrivilege", userInfo?.roleId],
+    () => role.getByCode(userInfo?.roleId as string).then((res) => res.data),
+    {
+      enabled: !!userInfo?.roleId,
+    }
+  );
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    const { controllers = [] } = privilegeList || {};
+
+    // 1. GET ALL KEY
+    const grandList = controllers
+      .filter((data: any) => !!data?.grant)
+      .map((d: any) => d?.id);
+
+    // 2. DELETE ALL GRAN = FALSE ITEM
+    const userMenu = rawMenu.map((data: any) => {
+      const { apiKey = [], childrens = [] } = data || {};
+
+      const isGrand = _.intersection(apiKey, grandList).length > 0;
+
+      if (!isGrand) {
+        return null;
+      }
+
+      return {
+        ...data,
+        childrens: childrens.filter((child: any) =>
+          grandList.includes(child?.apiKey)
+        ),
+      };
+    });
+
+    // 3. Remove falsy value item
+    const compactMenu = _.compact(userMenu);
+
+    setMenu(compactMenu);
+  }, [privilegeList]);
 
   // METHODS
   const handleCollapse = (id: string) => {
@@ -89,7 +136,7 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
 
             <Collapse in={collapses.includes(item.id)}>
               <List className="p-0">
-                {item.childrens.map((child) => (
+                {item.childrens.map((child: any) => (
                   <Link href={`/dashboard/${child.link}`} key={child.link}>
                     <a className="w-full d-block no-underline text-[#fff] ">
                       <ListItem
@@ -116,7 +163,6 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
   }, [expand, menu, styles, collapses, pathname]);
 
   // DOM RENDERING
-
   return (
     <Box
       className={clsx(styles["sidebar"])}
@@ -146,9 +192,16 @@ export const Sidebar: React.FC<TProps> = ({ expand, setExpand }) => {
       </Box>
       <Box className={clsx(!expand ? "hidden" : styles["avatar-box"])}>
         <Box className={clsx("!h-fit text-center")}>
-          <img src="/Avatar.jpeg" alt="Esti" width={100} height={100} />
-          <p className="m-0 text-xs">Director - Director</p>
-          <p className="m-0 pt-2 font-medium text-sm">ADMIN-004</p>
+          <img
+            src={userInfo?.thumbnail || "/Avatar.jpeg"}
+            alt="Esti"
+            width={100}
+            height={100}
+          />
+          <p className="m-0 text-xs truncate">
+            {userInfo?.fullName + " - " + userInfo?.roleName}
+          </p>
+          <p className="m-0 pt-2 font-medium text-sm">{userInfo?.code}</p>
         </Box>
       </Box>
       {renderMenu()}

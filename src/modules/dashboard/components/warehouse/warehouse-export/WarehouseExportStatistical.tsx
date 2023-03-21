@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { warehouse } from "src/api";
 import { CardReport } from "~modules-core/components";
 
 export const WarehouseExportStatistical = () => {
+  const query = useRouter().query;
+
   const { data: statisticalData } = useQuery(["getExportStatisticalData"], () =>
-    warehouse.getExportStatisticalData().then((res) => res.data)
+    warehouse.getExportStatisticalData({...query}).then((res) => res.data)
   );
 
   return (

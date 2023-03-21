@@ -75,8 +75,8 @@ export const warehouse = {
   getExportSessionById: (id: string) =>
     request.get<any>(`${BASE_URL}/ExportWarehouse/${id}`),
 
-  getExportStatisticalData: () =>
-    request.get<any>(`${BASE_URL}/GetHeaderExportWarehouse`),
+  getExportStatisticalData: (params: any) =>
+    request.get<any>(`${BASE_URL}/GetHeaderExportWarehouse`, {...params}),
 
   updateExportSessionStatus: (id: string, status: number) =>
     request.post<any, any>(

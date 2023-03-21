@@ -40,8 +40,9 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           }}
           options={options[0]?.data || []}
           label={"Sale phụ trách"}
-          labelKey="fullName"
           disabled={disabled}
+          getOptionLabel={(opt: any) => !!opt ? `${opt.fullName} - ${opt.code}` : ""}
+          shrinkLabel
         />
 
         <FormSelect
@@ -54,6 +55,7 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           label={"Nhóm"}
           labelKey="actionName"
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormDatepicker
@@ -63,6 +65,7 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           }}
           label={"Ngày thực hiện"}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormSelect
@@ -75,6 +78,7 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           valueKey="value"
           labelKey="label"
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInput
@@ -86,6 +90,7 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           multiline
           minRows={3}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInput
@@ -97,6 +102,7 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           multiline
           minRows={3}
           disabled={disabled}
+          shrinkLabel
         />
       </Box>
     </Box>

@@ -1,7 +1,8 @@
-import { Box, Drawer, Typography } from "@mui/material";
+import { Box, Drawer, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { DataTable } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
+import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
 type TProps = {
@@ -52,9 +53,38 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
       minWidth: 150,
     },
     {
+      field: "price",
+      headerName: "Giá",
+      minWidth: 150,
+      renderCell: ({ row }) => _format.getVND(row?.price),
+    },
+    {
       field: "quantity",
       headerName: "Số lượng",
       minWidth: 150,
+    },
+    {
+      field: "vat",
+      headerName: "Thuế GTGT",
+      minWidth: 150,
+    },
+    {
+      field: "totalPrice",
+      headerName: "Thành tiền",
+      minWidth: 120,
+      renderCell: ({ row }) => {
+        const { quantity, price, vat } = row || {};
+  
+        const total = quantity * price;
+  
+        const tax = (total * +vat) / 100;
+  
+        return (
+          <Tooltip title={"Sau thuế: " + _format.getVND(total + tax)}>
+            <Box>{_format.getVND(row.totalPrice)}</Box>
+          </Tooltip>
+        );
+      },
     },
     {
       field: "note",
@@ -65,7 +95,7 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
 
   return (
     <Drawer anchor={"bottom"} open={Open} onClose={onClose}>
-      <Box className="w-[100%] mb-4">
+      <Box className="w-[100%] mb-4 pb-4">
         <Typography className="p-3 font-semibold text-sm">
           DANH SÁCH SẢN PHẨM
         </Typography>
