@@ -139,7 +139,7 @@ export const ImportDetailTable: React.FC<TProps> = ({
 
             {!!defaultValue?.productLabelId ? (
               <Item
-                id="create-product-label"
+                id="view-product-label"
                 onClick={() => handleOpen("ViewLabel")}
               >
                 Xem nhãn SP

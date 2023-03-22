@@ -1,7 +1,13 @@
-import { Box, Drawer, Tooltip, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { useCallback } from "react";
 import { DataTable } from "~modules-core/components";
-import { defaultPagination } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
 
@@ -9,15 +15,18 @@ type TProps = {
   Open: boolean;
   onClose: () => void;
   data: any[];
+  extraData?: {
+    requirements: string;
+    attachFile: string;
+  };
 };
 
 export const ViewListProductDrawer: React.FC<TProps> = ({
   Open,
   onClose,
   data,
+  extraData,
 }) => {
-  const [pagination, setPagination] = useState(defaultPagination);
-
   const columns: TGridColDef[] = [
     {
       field: "STT",
@@ -74,11 +83,11 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
       minWidth: 120,
       renderCell: ({ row }) => {
         const { quantity, price, vat } = row || {};
-  
+
         const total = quantity * price;
-  
+
         const tax = (total * +vat) / 100;
-  
+
         return (
           <Tooltip title={"Sau thuế: " + _format.getVND(total + tax)}>
             <Box>{_format.getVND(row.totalPrice)}</Box>
@@ -93,23 +102,58 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
     },
   ];
 
+  const renderExtraData = useCallback(() => {
+    if (!!extraData) {
+      const { requirements, attachFile } = extraData || {};
+
+      const fileList = attachFile?.split(",");
+
+      return (
+        <Box className="p-4">
+          <Box>
+            <span className="font-semibold">Yêu cầu bổ sung:</span>{" "}
+            {requirements}
+          </Box>
+          <Box>
+            <span className="font-semibold">File đính kèm: </span>
+            {!attachFile && (
+              <span className="text-xs">(Không có file đính kèm)</span>
+            )}
+          </Box>
+          <List>
+            {!!attachFile &&
+              fileList.map((file: string) => (
+                <ListItem key={file}>
+                  <a
+                    href={file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="truncate"
+                  >
+                    {file}
+                  </a>
+                </ListItem>
+              ))}
+          </List>
+        </Box>
+      );
+    }
+  }, [extraData]);
+
   return (
     <Drawer anchor={"bottom"} open={Open} onClose={onClose}>
-      <Box className="w-[100%] mb-4 pb-4">
+      {renderExtraData()}
+      <Box className="w-full mb-4 pb-4">
         <Typography className="p-3 font-semibold text-sm">
           DANH SÁCH SẢN PHẨM
         </Typography>
+
         <DataTable
           rows={data}
           columns={columns}
           hideFooter
           hideSearchbar
           autoHeight
-          paginationMode="client"
-          gridProps={{
-            loading: false,
-            ...pagination,
-          }}
         />
       </Box>
     </Drawer>

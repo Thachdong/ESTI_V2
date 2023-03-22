@@ -172,17 +172,19 @@ export const StampDetailDialog: React.FC<TDialog> = ({
                 labelKey="name"
                 valueKey="name"
                 fetcher={branchs.getList}
+                shrinkLabel
               />
 
               <FormSelectAsync
                 controlProps={{
                   control,
-                  name: "branchAdress",
+                  name: "branchAddress",
                 }}
                 label="Địa chỉ"
                 labelKey="address"
                 valueKey="address"
                 fetcher={branchs.getList}
+                shrinkLabel
               />
             </Box>
 
@@ -245,6 +247,7 @@ export const StampDetailDialog: React.FC<TDialog> = ({
             QRCode,
             branchName: branch,
             branchAddress,
+            labelType: stampDetail?.labelType
           } as any
         }
       />
