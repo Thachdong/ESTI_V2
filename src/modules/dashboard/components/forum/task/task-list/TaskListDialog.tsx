@@ -28,11 +28,14 @@ export const TaskListDialog: React.FC<TDialog> = ({
 
   const level = watch("level");
 
+  // SIDE EFFECTS
   useEffect(() => {
     if (type == "Update") {
       reset({ status: defaultValue?.status });
+    } else {
+      reset({})
     }
-  }, [defaultValue]);
+  }, [defaultValue, type]);
 
   //   ADD
   const mutateAdd = useMutation(
@@ -51,8 +54,8 @@ export const TaskListDialog: React.FC<TDialog> = ({
   const handleAdd = async (data: any) => {
     const dataPost = {
       ...data,
-      co_Participant: data?.co_Participant.toString().replaceAll("["),
-      attachFile: data?.attachFile.toString().replaceAll("["),
+      co_Participant: data?.co_Participant?.join(","),
+      attachFile: data?.attachFile?.join(","),
     };
     mutateAdd.mutateAsync(dataPost);
   };
@@ -82,10 +85,8 @@ export const TaskListDialog: React.FC<TDialog> = ({
     switch (type) {
       case "Add":
         return "Thêm mới task";
-        break;
       case "Update":
         return "Cập nhật task";
-        break;
       default:
         break;
     }
@@ -107,7 +108,6 @@ export const TaskListDialog: React.FC<TDialog> = ({
             </BaseButton>
           </>
         );
-        break;
       case "Update":
         return (
           <>
@@ -124,7 +124,6 @@ export const TaskListDialog: React.FC<TDialog> = ({
             </BaseButton>
           </>
         );
-        break;
       default:
         break;
     }

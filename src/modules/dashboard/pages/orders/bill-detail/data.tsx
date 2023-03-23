@@ -35,7 +35,7 @@ export const productColumns: TGridColDef[] = [
     minWidth: 50,
   },
   {
-    field: "quantity",
+    field: "billQuantity",
     headerName: "Số lượng",
     minWidth: 50,
   },

@@ -46,13 +46,19 @@ export const BillDetailPaymentHistory: React.FC<TProps> = ({
         />
       </Box>
 
-      {paidData?.unPaid > 0 && (
+      {/* {paidData?.unPaid > 0 && (
         <Box className="flex justify-end">
           <AddButton onClick={onOpen} className="max-w-[250px] !ml-auto my-3">
             Thêm phiếu thanh toán
           </AddButton>
         </Box>
-      )}
+      )} */}
+
+      <Box className="flex justify-end">
+        <AddButton onClick={onOpen} className="max-w-[250px] !ml-auto my-3">
+          Thêm phiếu thanh toán
+        </AddButton>
+      </Box>
 
       <BillListBillDialog
         onClose={onClose}

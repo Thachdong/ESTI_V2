@@ -137,11 +137,11 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // IMPLEMENT FILTER OPERATIONS
   const [filterData, setFilterData] = useState<any>({ isCheck: false });
 
-  useEffect(() => {
-    if (type === "select" && !!options && !!filterKey) {
-      setFilterData({...filterData, searchTerm: options?.[0]?.value})
-    }
-  }, [options, type, filterKey])
+  // useEffect(() => {
+  //   if (type === "select" && !!options && !!filterKey) {
+  //     setFilterData({...filterData, searchTerm: options?.[0]?.value})
+  //   }
+  // }, [options, type, filterKey])
 
   const handleFilter = (value: string | number) => {
     const updateQuery = {

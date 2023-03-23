@@ -14,7 +14,6 @@ import {
   BaseButton,
   EditButton,
   PrintButton,
-  SendButton,
   SendMailDialog,
 } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
@@ -60,7 +59,7 @@ export const SupplierQuotesDetailButtons: React.FC<TProps> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    const { products = [], paymentDocument, ...rest } = data || {};
+    const { products = [], paymentDocument, supplierCode, ...rest } = data || {};
 
     const productPayload = products.map((prod: any) => ({
       needToPriceId: prod?.id,
@@ -110,6 +109,7 @@ export const SupplierQuotesDetailButtons: React.FC<TProps> = ({
         productId,
         productCode,
         productName,
+        supplierCode,
         ...rest
       } = prod;
 

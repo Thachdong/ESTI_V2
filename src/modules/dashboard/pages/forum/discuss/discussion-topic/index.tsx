@@ -5,7 +5,9 @@ import { useQuery } from "react-query";
 import { discussion } from "src/api";
 import {
   AddButton,
+  FilterButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -62,9 +64,17 @@ export const DiscussionTopicPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3 flex gap-3 w-3/5">
-        <AddButton children="Tạo thảo luận" onClick={onAddDiscussionTopic} />
-        <SearchBox />
+      <Box className="flex justify-between">
+        <Box className="mb-3 flex gap-3 w-3/5">
+          <AddButton children="Tạo thảo luận" onClick={onAddDiscussionTopic} />
+
+          <SearchBox />
+        </Box>
+        <Box className="flex gap-2">
+          <FilterButton listFilterKey={[]} />
+
+          <RefreshButton onClick={() => refetch()} />
+        </Box>
       </Box>
       <DiscussionTopicTable
         refetch={refetch}

@@ -19,6 +19,7 @@ import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { toast } from "~modules-core/toast";
 import clsx from "clsx";
 import { useSession } from "~modules-core/customHooks/useSession";
+import { ForumCommentBox } from "../task/task-list";
 
 type TProps = {
   data: any;
@@ -81,8 +82,17 @@ export const RegisterMissionMailReponse: React.FC<TProps> = ({ data }) => {
                     className="flex gap-3 items-start border border-solid border-[#f2f2f2] rounded w-full shadow min-h-[76px]"
                   >
                     <Box className="text-center">
-                      <Tooltip title={item?.createdByName || "Anonymus"}>
-                        <Avatar className="m-auto" />
+                      <Tooltip title={item?.fullName || "Anonymus"}>
+                        {item?.avatar ? (
+                          <img
+                            src={item?.avatar}
+                            width={30}
+                            height={30}
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <Avatar className="m-auto" />
+                        )}
                       </Tooltip>
                     </Box>
                     <Box className="w-full">
@@ -92,14 +102,14 @@ export const RegisterMissionMailReponse: React.FC<TProps> = ({ data }) => {
                             {item?.title}
                           </Typography>
                           <Typography className="text-xs text-[#908d8d]">
-                            {_format.converseDate(item?.created)}
+                            {_format.converseDateTime(item?.created)}
                           </Typography>
                         </Box>
-                        <Box>
+                        {/* <Box>
                           <Typography className="text-xs text-main border border-solid px-2 py-[2px] border-main rounded-full font-semibold">
                             {item?.statusName}
                           </Typography>
-                        </Box>
+                        </Box> */}
                       </Box>
                       <Typography className="text-sm mt-2 text-[#838181]">
                         {item?.content}
@@ -119,47 +129,15 @@ export const RegisterMissionMailReponse: React.FC<TProps> = ({ data }) => {
           </List>
         )}
       </Box>
+
       {(data?.status === 1 && userInfo?.userInfo?.roleCode == "TK") ||
-      (data?.status === 2 && userInfo?.userInfo?.roleCode == "TK") ? (
-        <Box className="px-3 absolute bottom-1 gap-3  w-full">
-          <Box>
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "title",
-                rules: undefined,
-              }}
-              placeholder="Nhập tiêu đề"
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start">
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "note",
-                rules: undefined,
-              }}
-              placeholder="Nhập nội dung phản hồi"
-              label=""
-              multiline
-              rows={3}
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start justify-between">
-            <ButtonBase className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded">
-              <InsertLinkIcon />
-            </ButtonBase>
-            <ButtonBase
-              className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded"
-              onClick={handleSubmit(handleRepply)}
-            >
-              <SendIcon />
-            </ButtonBase>
-          </Box>
-        </Box>
-      ) : null}
+        (data?.status === 2 && userInfo?.userInfo?.roleCode == "TK" && (
+          <ForumCommentBox
+            idObject={{ registerMissionId: data?.id }}
+            mutateAdd={mutateRepply}
+            fileLoader={registerMission.uploadFile}
+          />
+        ))}
     </Box>
   );
 };

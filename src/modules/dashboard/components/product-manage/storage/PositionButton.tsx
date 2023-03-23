@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { Item, Menu, useContextMenu } from "react-contexify";
-import { useMutation } from "react-query";
+import { BaseButton } from "~modules-core/components";
 import styles from "~modules-dashboard/styles/product-manage/warehouse.module.css";
 
 const getClassByStatus = (status: number) => {
@@ -21,10 +21,13 @@ const getClassByStatus = (status: number) => {
 
 type TProps = {
   position: any;
-  handleDelete: (position: any) => Promise<void>
+  handleDelete: (position: any) => Promise<void>;
 };
 
-export const PositionButton: React.FC<TProps> = ({ position, handleDelete }) => {
+export const PositionButton: React.FC<TProps> = ({
+  position,
+  handleDelete,
+}) => {
   const router = useRouter();
 
   const { show } = useContextMenu({
@@ -42,7 +45,8 @@ export const PositionButton: React.FC<TProps> = ({ position, handleDelete }) => 
 
   return (
     <>
-      <Button
+      <BaseButton
+        tooltipText={`${position?.productQuantity} / ${position?.positionMaxSlot}`}
         variant="text"
         className={clsx(
           getClassByStatus(position?.positionStatus),
@@ -55,7 +59,7 @@ export const PositionButton: React.FC<TProps> = ({ position, handleDelete }) => 
         <Typography className="w-full px-2 truncate">
           {position?.positionName}
         </Typography>
-      </Button>
+      </BaseButton>
 
       <Menu className="p-0" id={position?.id}>
         <Item

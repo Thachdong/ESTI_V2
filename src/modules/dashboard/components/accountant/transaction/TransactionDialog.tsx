@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -29,8 +29,6 @@ export const TransactionDialog: React.FC<TDialog> = ({
   defaultValue,
   refetch,
 }) => {
-  console.log(defaultValue);
-
   const { control, watch, reset, handleSubmit } = useForm();
 
   const { partnerGroup, transactionGroup } = watch();
@@ -102,8 +100,7 @@ export const TransactionDialog: React.FC<TDialog> = ({
   );
 
   const handleCreate = useCallback(async (data: any) => {
-    console.log(data);
-    const { customerId, supplierId, transactionGroup, partnerGroup, ...rest } =
+    const { customerId, supplierId, transactionGroup, partnerGroup, owe, moneyCollect, ...rest } =
       data || {};
 
     let partner = "";
@@ -120,10 +117,15 @@ export const TransactionDialog: React.FC<TDialog> = ({
         return;
     }
 
-    const payload = {
+    const payload = transactionGroup === 1 ? {
       ...rest,
       partner,
-    };
+      moneyCollect
+    } : {
+      ...rest,
+      partner,
+      owe
+    }
 
     await mutateAdd.mutateAsync(payload);
   }, []);
@@ -246,25 +248,29 @@ export const TransactionDialog: React.FC<TDialog> = ({
           disabled={type === "View"}
         />
 
-        <FormInputNumber
-          controlProps={{
-            control,
-            name: "owe",
-            rules: { required: "Phải nhập giá trị" },
-          }}
-          label="Nợ"
-          disabled={type === "View"}
-        />
+        {transactionGroup === 1 && (
+          <FormInputNumber
+            controlProps={{
+              control,
+              name: "moneyCollect",
+              rules: { required: "Phải nhập giá trị" },
+            }}
+            label="Tiền thu vào"
+            disabled={type === "View"}
+          />
+        )}
 
-        <FormInputNumber
-          controlProps={{
-            control,
-            name: "moneyCollect",
-            rules: { required: "Phải nhập giá trị" },
-          }}
-          label="Tiền thu vào"
-          disabled={type === "View"}
-        />
+        {transactionGroup === 2 && (
+          <FormInputNumber
+            controlProps={{
+              control,
+              name: "owe",
+              rules: { required: "Phải nhập giá trị" },
+            }}
+            label="Nợ"
+            disabled={type === "View"}
+          />
+        )}
 
         <FormInput
           controlProps={{

@@ -138,7 +138,7 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => _format.getVND(row?.price),
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
   },
   {
     field: "lotNumber",
@@ -146,7 +146,6 @@ export const productHistoryColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
-    renderCell: ({ row }) => _format.getVND(row?.price),
   },
   {
     field: "dateManufacture",

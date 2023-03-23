@@ -30,6 +30,7 @@ export const BillDetailPage: React.FC = () => {
       defaultReceiver: true,
     },
   });
+  console.log("rendering ...");
 
   const { watch, setValue } = method;
 
@@ -45,7 +46,7 @@ export const BillDetailPage: React.FC = () => {
     }
   );
 
-  const { BillView = {} } = billDetail || {};
+  const { BillView = {}, BillDetailView = [] } = billDetail || {};
 
   // FETCH ORDER DETAIL
   const { data: orderDetail } = useQuery(
@@ -82,7 +83,7 @@ export const BillDetailPage: React.FC = () => {
 
   // SIDE EFFECTS
   useEffect(() => {
-    if (!!orderDetail) {
+    if (!!orderDetail && !id) {
       const { mainOrder = {}, mainOrderDetail = [] } = orderDetail;
 
       const { attachFile } = mainOrder;
@@ -91,7 +92,12 @@ export const BillDetailPage: React.FC = () => {
 
       setValue("attachFile", !attachFile ? [] : attachFile.split?.(","));
 
-      const orderProducts = mainOrderDetail.map((prod: any, index: number) => ({
+      // REMOVE PRODUCT billQuantity = 0
+      const rawProducts = mainOrderDetail.filter(
+        (prod: any) => prod?.billQuantity > 0
+      );
+
+      const orderProducts = rawProducts.map((prod: any, index: number) => ({
         ...prod,
         no: index + 1,
       }));
@@ -107,6 +113,17 @@ export const BillDetailPage: React.FC = () => {
   useEffect(() => {
     !!fromOrderId && setValue("mainOrderId", fromOrderId);
   }, [fromOrderId]);
+
+  useEffect(() => {
+    if (!!id) {
+      const orderProducts = BillDetailView.map((prod: any, index: number) => ({
+        ...prod,
+        no: index + 1,
+      }));
+
+      setValue("products", orderProducts);
+    }
+  }, [BillDetailView]);
 
   return (
     <FormProvider {...method}>

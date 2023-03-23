@@ -45,6 +45,14 @@ export const orderColumns: TGridColDef[] = [
     filterKey: "name",
   },
   {
+    field: "accountCode",
+    headerName: "Tài khoản NLH",
+    minWidth: 150,
+    flex: 1,
+    isSort: false,
+    filterKey: "curatorAccount",
+  },
+  {
     field: "totalPrice",
     headerName: "TỔNG GT",
     minWidth: 150,

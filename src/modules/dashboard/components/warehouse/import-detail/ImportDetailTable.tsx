@@ -37,6 +37,8 @@ export const ImportDetailTable: React.FC<TProps> = ({
 
   const router = useRouter();
 
+  const { id } = router.query;
+
   const { importStatus } = transactionData || {};
 
   const { watch, setValue } = useFormContext();
@@ -99,6 +101,40 @@ export const ImportDetailTable: React.FC<TProps> = ({
             <Item id="delete-product" onClick={handleRemoveProduct}>
               Xóa
             </Item>
+
+            <Item id="view-product-document">
+              <a
+                target="_blank"
+                href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                rel="noopener noreferrer"
+                className="no-underline !text-[#504e4e]"
+              >
+                Xem tài liệu SP
+              </a>
+            </Item>
+
+            <Item
+              id="create-product-document"
+              onClick={() => handleOpen("CreateDocument")}
+            >
+              Tạo tài liệu SP
+            </Item>
+
+            {!!defaultValue?.productLabelId ? (
+              <Item
+                id="view-product-label"
+                onClick={() => handleOpen("ViewLabel")}
+              >
+                Xem nhãn SP
+              </Item>
+            ) : (
+              <Item
+                id="create-product-label"
+                onClick={() => handleOpen("CreateLabel")}
+              >
+                Tạo nhãn SP
+              </Item>
+            )}
           </Menu>
         );
       case importStatus === 0:
@@ -114,6 +150,40 @@ export const ImportDetailTable: React.FC<TProps> = ({
             <Item id="delete-product" onClick={() => handleOpen("CopyProduct")}>
               Sao chép SP
             </Item>
+
+            <Item id="view-product-document">
+              <a
+                target="_blank"
+                href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                rel="noopener noreferrer"
+                className="no-underline !text-[#504e4e]"
+              >
+                Xem tài liệu SP
+              </a>
+            </Item>
+
+            <Item
+              id="create-product-document"
+              onClick={() => handleOpen("CreateDocument")}
+            >
+              Tạo tài liệu SP
+            </Item>
+
+            {!!defaultValue?.productLabelId ? (
+              <Item
+                id="view-product-label"
+                onClick={() => handleOpen("ViewLabel")}
+              >
+                Xem nhãn SP
+              </Item>
+            ) : (
+              <Item
+                id="create-product-label"
+                onClick={() => handleOpen("CreateLabel")}
+              >
+                Tạo nhãn SP
+              </Item>
+            )}
           </Menu>
         );
       case importStatus > 0:
@@ -173,6 +243,32 @@ export const ImportDetailTable: React.FC<TProps> = ({
                   action: handleRemoveProduct,
                   label: "Xóa SP",
                 },
+                {
+                  action: () => console.log(),
+                  label: (
+                    <a
+                      target="_blank"
+                      href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                      rel="noopener noreferrer"
+                      className="no-underline !text-[#504e4e]"
+                    >
+                      Xem tài liệu SP
+                    </a>
+                  ),
+                },
+                {
+                  action: () => handleOpen("CreateDocument"),
+                  label: "Tạo tài liệu SP",
+                },
+                {
+                  action: () =>
+                    handleOpen(
+                      defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"
+                    ),
+                  label: defaultValue?.productLabelId
+                    ? "Xem nhãn SP"
+                    : "Tạo nhãn SP",
+                },
               ]}
             />
           );
@@ -188,6 +284,32 @@ export const ImportDetailTable: React.FC<TProps> = ({
                 {
                   action: () => handleOpen("CopyProduct"),
                   label: "Sao chép SP",
+                },
+                {
+                  action: () => console.log(),
+                  label: (
+                    <a
+                      target="_blank"
+                      href={`/public/documents/?productId=${defaultValue?.productId}&productCode=${defaultValue?.productCode}&lotNumber=${defaultValue?.lotNumber}&importId=${router.query.id}`}
+                      rel="noopener noreferrer"
+                      className="no-underline !text-[#504e4e]"
+                    >
+                      Xem tài liệu SP
+                    </a>
+                  ),
+                },
+                {
+                  action: () => handleOpen("CreateDocument"),
+                  label: "Tạo tài liệu SP",
+                },
+                {
+                  action: () =>
+                    handleOpen(
+                      defaultValue?.productLabelId ? "ViewLabel" : "CreateLabel"
+                    ),
+                  label: defaultValue?.productLabelId
+                    ? "Xem nhãn SP"
+                    : "Tạo nhãn SP",
                 },
               ]}
             />

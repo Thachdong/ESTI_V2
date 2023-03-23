@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   leaveApplication,
   meetingDeploy,
@@ -17,7 +17,7 @@ import {
   FormSelectAsync,
   FormUploadfiles,
 } from "~modules-core/components";
-import { ConfirmRegisterMission, department, statusTask } from "~modules-core/constance";
+import { ConfirmRegisterMission } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
@@ -29,7 +29,12 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset, setValue } = useForm<any>({});
+  const { control, handleSubmit, reset } = useForm<any>({});
+
+  // DATA FETCHING
+  const { data: saleAdmins } = useQuery(["SaleAdminList"], () =>
+    staff.getListSaleAdmin().then((res) => res.data)
+  );
 
   useEffect(() => {
     if (type == "Update") {
@@ -37,7 +42,7 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
     }
   }, [defaultValue]);
 
-  //   ADD
+  // ADD
   const mutateAdd = useMutation(
     (payload: TLeaveApplicationUpdate) => leaveApplication.create(payload),
     {
@@ -57,7 +62,7 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
   //   UPDATE STATUS
   const mutateUpdateStatus = useMutation(
     (payload: { leaveApplicationId: string; status: number }) =>
-    leaveApplication.updateStatus(payload),
+      leaveApplication.updateStatus(payload),
     {
       onSuccess: (data) => {
         toast.success("Cập nhật trạng thái thành công");
@@ -148,15 +153,15 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
               fetcher={staff.getList}
               labelKey="fullName"
             />
-            <FormSelectAsync
+            <FormSelect
               controlProps={{
                 control: control,
                 name: "headOfDepartment",
                 rules: undefined,
               }}
               label="Trường phòng"
-              fetcher={staff.getList}
               labelKey="fullName"
+              options={saleAdmins || []}
             />
             <FormInput
               controlProps={{
@@ -212,17 +217,17 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
           </>
         ) : (
           <FormSelect
-              controlProps={{
-                control: control,
-                name: "status",
-                rules: { required: "Phải chọn trạng thái cuộc họp" },
-              }}
-              label="Trạng thái"
-              options={ConfirmRegisterMission}
-              className="col-span-2"
-              valueKey="value"
-              labelKey="label"
-            />
+            controlProps={{
+              control: control,
+              name: "status",
+              rules: { required: "Phải chọn trạng thái cuộc họp" },
+            }}
+            label="Trạng thái"
+            options={ConfirmRegisterMission}
+            className="col-span-2"
+            valueKey="value"
+            labelKey="label"
+          />
         )}
       </Box>
 

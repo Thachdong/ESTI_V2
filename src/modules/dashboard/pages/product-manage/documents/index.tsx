@@ -181,7 +181,7 @@ export const DocumentsPage: React.FC = () => {
       headerName: "Tài liệu chuyên ngành",
       sortAscValue: 15,
       sortDescValue: 7,
-      filterKey: "careerSlug",
+      filterKey: "careerId",
       minWidth: 200,
       type: "select",
       options: documentCareers?.map((item: any) => ({

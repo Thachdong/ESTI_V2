@@ -1,4 +1,5 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
+import { method } from "lodash";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
@@ -8,6 +9,7 @@ import {
   ContextMenuWrapper,
   DataTable,
   DropdownButton,
+  FormInputNumber,
 } from "~modules-core/components";
 import { _format } from "~modules-core/utility/fomat";
 import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
@@ -27,7 +29,7 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
 
   const defaultValue = useRef<any>();
 
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue, control } = useFormContext();
 
   const products = watch("products");
 
@@ -177,6 +179,7 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
               {_format.getVND(getPrice.totalPrice)}
             </span>
           </ListItem>
+
           <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
             <span className="font-semibold col-span-4 text-right">
               Thuế GTGT(VNĐ):
@@ -186,7 +189,8 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
               {_format.getVND(getPrice.totalTax)}
             </span>
           </ListItem>
-          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
             <span className="font-semibold col-span-4 text-right">
               Tổng cộng tiền thanh toán(VNĐ):
             </span>
@@ -194,6 +198,19 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
               {" "}
               {_format.getVND(getPrice.finalPrice)}
             </span>
+          </ListItem>
+
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              Tiền hoa hồng(VNĐ):
+            </span>
+            <FormInputNumber
+              controlProps={{
+                control,
+                name: "commission",
+              }}
+              shrinkLabel
+            />
           </ListItem>
         </List>
       </Box>

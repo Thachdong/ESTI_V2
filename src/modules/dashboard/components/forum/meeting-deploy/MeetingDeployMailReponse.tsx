@@ -21,20 +21,16 @@ import { toast } from "~modules-core/toast";
 import clsx from "clsx";
 import { useSession } from "~modules-core/customHooks/useSession";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { ForumCommentBox } from "../task/task-list";
 
 type TProps = {
   data: any;
 };
 
 export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
-  const { control, handleSubmit } = useForm();
-
-  const { userInfo } = useSession();
-
   const {
     data: dataRepList,
     isLoading,
-    isFetching,
     refetch,
   } = useQuery(["meetingDeployMail", "loading"], () =>
     meetingDeploy
@@ -54,10 +50,6 @@ export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
       },
     }
   );
-
-  const handleRepply = (newData: any) => {
-    mutateRepply.mutateAsync({ ...newData, meetingDeployId: data?.id });
-  };
 
   return (
     <Box className="min-w-[700px] h-screen relative">
@@ -88,25 +80,34 @@ export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
                       className="flex gap-3 items-start border border-solid border-[#f2f2f2] rounded w-full shadow min-h-[76px]"
                     >
                       <Box className="text-center">
-                        <Tooltip title={item?.createdByName || "Anonymus"}>
-                          <Avatar className="m-auto" />
+                        <Tooltip title={item?.fullName || "Anonymus"}>
+                          {item?.avatar ? (
+                            <img
+                              src={item?.avatar}
+                              width={30}
+                              height={30}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <Avatar className="m-auto" />
+                          )}
                         </Tooltip>
                       </Box>
                       <Box className="w-full">
                         <Box className="flex justify-between items-start">
                           <Box>
                             <Typography className="text-base font-semibold">
-                              {item?.titleMail}
+                              {item?.title}
                             </Typography>
                             <Typography className="text-xs text-[#908d8d]">
-                              {_format.converseDate(item?.created)}
+                              {_format.converseDateTime(item?.created)}
                             </Typography>
                           </Box>
-                          <Box>
+                          {/* <Box>
                             <Typography className="text-xs text-main border border-solid px-2 py-[2px] border-main rounded-full font-semibold">
                               {item?.statusName}
                             </Typography>
-                          </Box>
+                          </Box> */}
                         </Box>
                         <Typography className="text-sm mt-2 text-[#838181]">
                           {item?.content}
@@ -151,47 +152,14 @@ export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
           </List>
         )}
       </Box>
-      {(data?.status === 1) ||
-      (data?.status === 2) ? (
-        <Box className="px-3 absolute bottom-1 gap-3  w-full">
-          <Box>
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "title",
-                rules: undefined,
-              }}
-              placeholder="Nhập tiêu đề"
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start">
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "note",
-                rules: undefined,
-              }}
-              placeholder="Nhập nội dung phản hồi"
-              label=""
-              multiline
-              rows={3}
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start justify-between">
-            <ButtonBase className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded">
-              <InsertLinkIcon />
-            </ButtonBase>
-            <ButtonBase
-              className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded"
-              onClick={handleSubmit(handleRepply)}
-            >
-              <SendIcon />
-            </ButtonBase>
-          </Box>
-        </Box>
-      ) : null}
+      {data?.status === 1 ||
+        (data?.status === 2 && (
+          <ForumCommentBox
+            fileLoader={meetingDeploy.uploadFile}
+            mutateAdd={mutateRepply}
+            idObject={{ meetingDeployId: data?.id }}
+          />
+        ))}
     </Box>
   );
 };
