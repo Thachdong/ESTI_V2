@@ -21,6 +21,7 @@ export const CustomerDetailCompany: React.FC<TProps> = ({ isUpdate }) => {
   const { control, watch } = useFormContext();
 
   const taxCode = watch("taxCode");
+    
   return (
     <Box className="flex flex-col mb-4">
       <Typography className="font-bold uppercase mb-3 text-sm">

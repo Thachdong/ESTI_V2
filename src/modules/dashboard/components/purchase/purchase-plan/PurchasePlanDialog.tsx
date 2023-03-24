@@ -65,7 +65,7 @@ export const PurchasePlanDialog: React.FC<TDialog> = ({
 
           <PurchasePlanCustomer disabled={disabled} />
 
-          <PurchasePlanProduct disabled={disabled} />
+          <PurchasePlanProduct disabled={disabled} type={type as string} />
 
           <Box className="flex items-center justify-end mt-6">
             <PurchasePlanButtons

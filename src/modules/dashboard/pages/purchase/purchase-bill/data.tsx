@@ -68,6 +68,15 @@ export const billColumns: TGridColDef[] = [
     isFilter: false,
   },
   {
+    field: "nextPaymentDate",
+    headerName: "Ngày TT tiếp theo",
+    minWidth: 150,
+    renderCell: ({ row }) => _format.converseDate(row?.nextPaymentDate),
+    isSort: false,
+    filterKey: "nextPaymentDate",
+    type: "date"
+  },
+  {
     field: "branchCode",
     headerName: "CHI NHÁNH",
     minWidth: 150,

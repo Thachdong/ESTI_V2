@@ -319,10 +319,10 @@ export const statusTaskTable = [
 ];
 
 export const customerCareStatus = [
-  { value: 1, label: "Chưa thực hiện" },
-  { value: 2, label: "Đang thực hiện" },
-  { value: 3, label: "Đã hoàn thành" },
-  { value: 4, label: "Đã hủy" },
+  { value: 0, label: "Chưa thực hiện" },
+  { value: 1, label: "Đang thực hiện" },
+  { value: 2, label: "Đã hoàn thành" },
+  { value: 3, label: "Đã hủy" },
 ];
 
 export const chartjsOptions = {

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { position, products } from "src/api";
+import { position, productLot, products } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -209,13 +209,13 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
 
   useEffect(() => {
     if (!!selectedLot) {
-      const {dateExpiration, dateManufacture}= selectedLot || {};
+      const { dateExpiration, dateManufacture } = selectedLot || {};
 
       setValue("dateManufacture", dateManufacture);
 
       setValue("dateExpiration", dateExpiration);
     }
-  }, [selectedLot])
+  }, [selectedLot]);
 
   return (
     <Dialog
@@ -336,19 +336,19 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
         {!id && (
           <Box className="flex items-center col-span-2">
             {selectAvailableLot ? (
-              <FormSelect
+              <FormSelectAsync
                 controlProps={{
                   control,
                   name: "lotNumber",
                   rules: { required: "Phải chọn số LOT" },
                 }}
                 label="Số LOT"
-                inputProps={{ sx: { textTransform: "uppercase" } }}
-                options={productLots}
-                valueKey="lotNumber"
-                labelKey="lotNumber"
-                className="flex-grow"
                 callback={(lot: any) => setSelectedLot(lot)}
+                className="flex-grow"
+                fetcher={productLot.getList}
+                fetcherParams={{ productCode: selectedProduct?.productCode }}
+                labelKey="lotNumber"
+                valueKey="lotNumber"
               />
             ) : (
               <FormInput

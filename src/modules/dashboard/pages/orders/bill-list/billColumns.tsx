@@ -52,7 +52,7 @@ export const billColumns: TGridColDef[] = [
   {
     field: "accountCode",
     headerName: "Người liên hệ",
-    minWidth: 250,
+    minWidth: 150,
     flex: 1,
     isSort: false,
     filterKey: "curatorCode",
@@ -77,9 +77,17 @@ export const billColumns: TGridColDef[] = [
   },
   {
     field: "paymentTime",
-    headerName: "Ngày thanh toán",
+    headerName: "Ngày TT",
     minWidth: 150,
     renderCell: ({ row }) => row?.paymentTime ? moment(row?.paymentTime).format("DD/MM/YYYY") : "",
+    isSort: false,
+    isFilter: false,
+  },
+  {
+    field: "nextPaymentDate",
+    headerName: "Ngày TT Tiếp theo",
+    minWidth: 175,
+    renderCell: ({ row }) => row?.nextPaymentDate ? moment(row?.nextPaymentDate).format("DD/MM/YYYY") : "",
     isSort: false,
     isFilter: false,
   },

@@ -191,7 +191,7 @@ export const ExportDetailPage = () => {
         )}
 
         <ExportDetailProducts
-          exportStatus={transactionData?.productOrder?.exportStatus}
+          transactionData={transactionData?.productOrder}
           getWarehouseConfig={getWarehouseConfig}
           productOptions={
             id

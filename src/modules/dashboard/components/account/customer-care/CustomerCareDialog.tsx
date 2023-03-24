@@ -181,13 +181,18 @@ export const CustomerCareDialog: React.FC<TDialog> = ({
     }
   }, [type, isUpdate, isDirty]);
 
+  const handleClose = useCallback(() => {
+    setIsUpdate(false);
+    onClose();
+  }, [])
+
   return (
-    <Dialog onClose={onClose} open={open} maxWidth="lg" title={title}>
+    <Dialog onClose={handleClose} open={open} maxWidth="lg" title={title}>
       <FormProvider {...methods}>
         <Box className="grid grid-cols-1 gap-4">
           <CustomerCareContent disabled={disabled} />
 
-          <CustomerCareInfo disabled={disabled} />
+          <CustomerCareInfo type={type as string} disabled={disabled} />
         </Box>
         <Box className="flex items-center justify-end">{renderButtons()}</Box>
       </FormProvider>

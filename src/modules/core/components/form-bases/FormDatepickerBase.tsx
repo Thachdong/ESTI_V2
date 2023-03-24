@@ -15,6 +15,8 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
     renderInputProps,
     helperText,
     InputProps,
+    views = ["year", "month", "day"],
+    inputFormat = "DD/MM/YYYY",
     ...restProps
   } = props;
 
@@ -64,6 +66,8 @@ export const FormDatepickerBase: React.FC<TFormDatepickerBase> = (props) => {
       dayOfWeekFormatter={(day) => `${day}`}
       onChange={handleChange}
       InputProps={defaultInputProps}
+      views={[...views]}
+      inputFormat={inputFormat}
       {...restProps}
     />
   );

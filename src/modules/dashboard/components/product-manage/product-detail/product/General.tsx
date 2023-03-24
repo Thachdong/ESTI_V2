@@ -1,11 +1,11 @@
 import { InputLabel, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import clsx from "clsx";
 import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useQuery } from "react-query";
-import { category, productAtribute, products, suppliers, units } from "src/api";
+import { useMutation, useQuery } from "react-query";
+import { productAtribute, products, suppliers, units } from "src/api";
 import {
+  AddButton,
   BaseButton,
   FormCategory,
   FormCheckbox,
@@ -16,21 +16,40 @@ import {
   FormUploadBase,
 } from "~modules-core/components";
 import { VAT } from "~modules-core/constance";
+import { toast } from "~modules-core/toast";
 
 type TProps = {
   disabled: boolean;
+  refetch?: () => void;
 };
 
-export const General: React.FC<TProps> = ({ disabled }) => {
+export const General: React.FC<TProps> = ({ disabled, refetch }) => {
   const { control, watch, setValue } = useFormContext();
 
   const { image } = watch();
 
-  const { hidePrice } = watch();
+  const { hidePrice, productGroup, productCode, barcode } = watch();
 
+  // DATA FETCHING
   const { data: productGroups } = useQuery(["productGroups"], () =>
     products.getProductGroups().then((res) => res.data)
   );
+
+  // METHODS
+  const mutateCreateBarcode = useMutation(
+    (productCode: string) => products.createBarcode(productCode),
+    {
+      onSuccess: (data: any) => {
+        toast.success(data?.resultMessage);
+
+        refetch?.();
+      },
+    }
+  );
+
+  const handleCreateBarcode = useCallback(async () => {
+    await mutateCreateBarcode.mutateAsync(productCode);
+  }, [productCode]);
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -47,9 +66,17 @@ export const General: React.FC<TProps> = ({ disabled }) => {
 
   return (
     <Box className="mt-4">
-      <Typography className="font-bold uppercase mb-3 text-sm">
-        Thông tin chung
-      </Typography>
+      <Box className="flex items-center justify-between mb-3">
+        <Typography className="font-bold uppercase text-sm">
+          Thông tin chung
+        </Typography>
+
+        {!!barcode ? (
+          <img src={barcode} alt="barcode" height={40} />
+        ) : (
+          <AddButton onClick={handleCreateBarcode}>Tạo mã vạch</AddButton>
+        )}
+      </Box>
 
       <Box className="grid grid-cols-2 gap-4 bg-white shadow p-4">
         <FormInput
@@ -189,14 +216,20 @@ export const General: React.FC<TProps> = ({ disabled }) => {
           label="Quy cách"
           disabled={disabled}
         />
-        <FormInput
-          controlProps={{
-            control,
-            name: "chemicalAppendix",
-          }}
-          label="Phụ lục HC"
-          disabled={disabled}
-        />
+
+        {/* api yêu cầu chỉ hiển thị phụ lục hóa chất khi productGroup là Hóa chất
+          productGroupId: dc039924-e248-4285-8d1a-786b3841d9b6
+        */}
+        {productGroup === "dc039924-e248-4285-8d1a-786b3841d9b6" && (
+          <FormInput
+            controlProps={{
+              control,
+              name: "chemicalAppendix",
+            }}
+            label="Phụ lục HC"
+            disabled={disabled}
+          />
+        )}
 
         <FormSelect
           controlProps={{

@@ -30,7 +30,6 @@ export const BillDetailPage: React.FC = () => {
       defaultReceiver: true,
     },
   });
-  console.log("rendering ...");
 
   const { watch, setValue } = method;
 

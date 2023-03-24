@@ -30,6 +30,9 @@ export const purchasePlan = {
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
 
+  cancel: (id: string) =>
+    request.post<any, any>(`${BASE_URL}/CancelNeedToBuy?id=${id}&status=2`, {}),
+
   export: (params?: any) =>
     request.get<any>(`${BASE_URL}/ExportExcel`, { ...params }),
 };

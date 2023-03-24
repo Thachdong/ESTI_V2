@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -56,9 +56,12 @@ export const PositionButton: React.FC<TProps> = ({
         onContextMenu={(event: any) => show({ event })}
         key={position?.id}
       >
-        <Typography className="w-full px-2 truncate">
-          {position?.positionName}
-        </Typography>
+        <Box className="flex flex-col items-center w-full px-2 truncate">
+          <Typography>{position?.positionName}</Typography>
+          <Typography className="text-[10px] italic">
+            ({position?.productQuantity})
+          </Typography>
+        </Box>
       </BaseButton>
 
       <Menu className="p-0" id={position?.id}>

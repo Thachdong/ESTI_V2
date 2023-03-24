@@ -56,6 +56,7 @@ export const CustomerDetailOrder: React.FC = () => {
           pageSize: pagination.pageSize,
           customerCode: customerDetail?.customer?.code,
           ...query,
+          id: null,
         })
         .then((res) => res.data),
     {
