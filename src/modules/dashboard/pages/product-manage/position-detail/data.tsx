@@ -57,6 +57,15 @@ export const inventoryColumns: TGridColDef[] = [
     width: 150,
   },
   {
+    field: "availableQuantity",
+    headerName: "SL có thể bán",
+    sortAscValue: 23,
+    sortDescValue: 10,
+    isFilter: false,
+    isSort: false, // api không sort, filter trường này
+    width: 200,
+  },
+  {
     field: "lotNumber",
     headerName: "Lô SX",
     sortAscValue: 16,

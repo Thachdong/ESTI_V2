@@ -1,4 +1,3 @@
-import { GridColDef } from "@mui/x-data-grid";
 import moment from "moment";
 import { StatusChip } from "~modules-core/components";
 import { orderStatus } from "~modules-core/constance";
@@ -38,81 +37,26 @@ export const orderColumns: TGridColDef[] = [
   {
     field: "companyName",
     headerName: "TÊN KH",
-    minWidth: 120,
+    minWidth: 200,
     flex: 1,
     sortAscValue: 14,
     sortDescValue: 3,
     filterKey: "name",
   },
   {
-    field: "accountCode",
-    headerName: "Tài khoản NLH",
-    minWidth: 150,
+    field: "curatorName",
+    headerName: "Tên NLH",
     flex: 1,
+    minWidth: 175,
+    filterKey: "curatorName",
     isSort: false,
+  },
+  {
+    field: "accountCode",
+    headerName: "Mã NLH",
+    flex: 1,
+    minWidth: 150,
     filterKey: "curatorAccount",
-  },
-  {
-    field: "totalPrice",
-    headerName: "TỔNG GT",
-    minWidth: 150,
-    renderCell: (params) => _format.getVND(params?.row?.totalPrice),
-    sortAscValue: 15,
-    sortDescValue: 4,
-    filterKey: "",
-  },
-  {
-    field: "exportPrice",
-    headerName: "GT ĐÃ GIAO",
-    minWidth: 150,
-    renderCell: (params) => _format.getVND(params?.row?.exportPrice),
-    sortAscValue: 16,
-    sortDescValue: 5,
-    filterKey: "exportPrice",
-  },
-  {
-    field: "totalBillPrice",
-    headerName: "GT ĐÃ XUẤT HĐ",
-    minWidth: 150,
-    renderCell: (params) => _format.getVND(params?.row?.totalBillPrice),
-    sortAscValue: 17,
-    sortDescValue: 6,
-    filterKey: "totalBillPrice",
-  },
-  {
-    field: "branchCode",
-    headerName: "CHI NHÁNH",
-    minWidth: 120,
-    sortAscValue: 19,
-    sortDescValue: 8,
-    filterKey: "branchCode",
-  },
-  {
-    field: "salesCode",
-    headerName: "SALES",
-    minWidth: 120,
-    sortAscValue: 20,
-    sortDescValue: 9,
-    filterKey: "salesId",
-  },
-  {
-    field: "statusName",
-    headerName: "TRẠNG THÁI",
-    minWidth: 120,
-    sortAscValue: 21,
-    sortDescValue: 10,
-    filterKey: "status",
-    type: "select",
-    options: orderStatus,
-    renderCell: ({ row }) => {
-      const colors = ["default", "info", "success", "error"];
-      return (
-        <StatusChip
-          label={row?.statusName}
-          status={row?.status}
-          color={colors[row?.status - 1] as any}
-        />
-      );
-    },
-  },
+    isSort: false,
+  }
 ];

@@ -82,9 +82,13 @@ export const products = {
   create: (payload: TCreateProduct) =>
     request.post<TCreateProduct, any>(BASE_URL, payload),
 
-  update: (payload: TUpdateProduct) => request.put<TUpdateProduct, any>(BASE_URL, payload),
+  update: (payload: TUpdateProduct) =>
+    request.put<TUpdateProduct, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
+  createBarcode: (productCode: string) =>
+    request.post<any, any>(`${BASE_URL}/CreateBarCode&productCode=${productCode}`, {}),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 

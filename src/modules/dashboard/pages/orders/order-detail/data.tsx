@@ -111,7 +111,7 @@ export const deliveryColumns: TGridColDef[] = [
   {
     field: "warehouseSessionCode",
     headerName: "Mã phiếu xuất kho",
-    minWidth: 120,
+    minWidth: 150,
     flex: 1,
     renderCell: ({ row }) => (
       <Link href={`/dashboard/warehouse/export-detail/?id=${row?.id}`}>
@@ -128,14 +128,14 @@ export const deliveryColumns: TGridColDef[] = [
   {
     field: "importTotalPrice",
     headerName: "Giá trị hàng bán",
-    minWidth: 120,
+    minWidth: 150,
     flex: 1,
     renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
   },
   {
     field: "deliveryCode",
     headerName: "Đơn vị vận chuyển",
-    minWidth: 120,
+    minWidth: 150,
     flex: 1,
   },
   {

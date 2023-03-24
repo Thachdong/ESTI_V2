@@ -226,6 +226,7 @@ export const ProductDetailPage: React.FC = () => {
         warrantyMonth,
         warrantyAddress,
         warrantyContent,
+        productBarcode,
         id
       } = product || {};
 
@@ -297,6 +298,7 @@ export const ProductDetailPage: React.FC = () => {
         description,
         summary,
         specifications,
+        productBarcode,
         gallery: gallery?.split(",")
       })
     }
@@ -334,7 +336,7 @@ export const ProductDetailPage: React.FC = () => {
         <FormProvider {...methods}>
           <Box className="tabpanel-container relative pb-4 pt-2">
             <TabPanelContainForm value="general" index={"general"}>
-              <ProductDetailGeneral disabled={disabled} />
+              <ProductDetailGeneral disabled={disabled} refetch={refetch} />
             </TabPanelContainForm>
 
             <TabPanelContainForm value="website" index={"website"}>

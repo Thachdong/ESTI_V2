@@ -27,7 +27,7 @@ export const customerTypeColumns: TGridColDef<TCustomerType>[] = [
   },
   {
     field: "discount",
-    headerName: "Giảm giá",
+    headerName: "Giảm giá (%)",
     flex: 1,
   },
   {

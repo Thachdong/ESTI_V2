@@ -178,6 +178,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
   },
   {
     field: "quantity",
@@ -185,6 +186,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
   },
   {
     field: "availableQuantity",
@@ -192,6 +194,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
   },
   {
     field: "price",
@@ -200,6 +203,7 @@ export const positionColumns: TGridColDef[] = [
     isSort: false,
     minWidth: 150,
     renderCell: ({ row }) => _format.getVND(row?.price),
+    flex: 1,
   },
   {
     field: "lotNumber",
@@ -207,6 +211,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
   },
   {
     field: "dateManufacture",
@@ -214,6 +219,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
     renderCell: ({ row }) =>
       row?.dateManufacture
         ? moment(row?.dateManufacture).format("DD/MM/YYYY")
@@ -225,6 +231,7 @@ export const positionColumns: TGridColDef[] = [
     isFilter: false,
     isSort: false,
     minWidth: 150,
+    flex: 1,
     renderCell: ({ row }) =>
       row?.dateManufacture
         ? moment(row?.dateManufacture).format("DD/MM/YYYY")

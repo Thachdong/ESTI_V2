@@ -23,7 +23,7 @@ class Format {
 
   converseDate = (val: number | any) => {
     const newDate = new Date(val).toLocaleString();
-    return moment(newDate).format("DD/MM/YYYY");
+    return val ? moment(newDate).format("DD/MM/YYYY") : "";
   };
 
   converseYear = (val: number | any) => {

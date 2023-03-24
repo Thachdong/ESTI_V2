@@ -21,6 +21,7 @@ export type TCreateImportWarehouse = {
   supplierId: string;
   stockerId: string;
   purchaseId: string;
+  note: string;
   warehouseCreate: TCreateImportWarehouseProduct[];
 };
 

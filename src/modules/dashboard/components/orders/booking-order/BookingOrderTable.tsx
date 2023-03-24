@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useQuery } from "react-query";
 import { mainOrder } from "src/api";
+import { customerType } from "src/api/customer-type";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -14,9 +15,11 @@ import {
   generatePaginationProps,
   RefreshButton,
   StatisticButton,
+  StatusChip,
 } from "~modules-core/components";
-import { defaultPagination } from "~modules-core/constance";
+import { defaultPagination, orderStatus } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
+import { _format } from "~modules-core/utility/fomat";
 import {
   BookingOrderNoteDialog,
   BookingOrderStatusDialog,
@@ -48,6 +51,17 @@ export const BookingOrderTable: React.FC<TProps> = ({
   usePathBaseFilter(pagination);
 
   // DATA FETCHING
+  const { data: customerTypes } = useQuery(["CustomerTypesList"], () =>
+    customerType
+      .getAll({
+        pageSize: 999,
+        pageIndex: 1,
+      })
+      .then((res) =>
+        res.data?.map?.((d: any) => ({ label: d?.levelName, value: d?.id }))
+      )
+  );
+
   const { data, isLoading, isFetching, refetch } = useQuery(
     [
       "mainOrders",
@@ -75,6 +89,87 @@ export const BookingOrderTable: React.FC<TProps> = ({
   // DATA TABLE
   const columns: TGridColDef[] = [
     ...orderColumns,
+    {
+      field: "levelName",
+      headerName: "Cấp độ NLH",
+      flex: 1,
+      minWidth: 125,
+      type: "select",
+      options: customerTypes || [],
+      filterKey: "typeAccount",
+      isSort: false,
+    },
+    {
+      field: "totalPrice",
+      headerName: "TỔNG GT",
+      minWidth: 150,
+      renderCell: (params) => _format.getVND(params?.row?.totalPrice),
+      sortAscValue: 15,
+      sortDescValue: 4,
+      filterKey: "",
+    },
+    {
+      field: "exportPrice",
+      headerName: "GT ĐÃ GIAO",
+      minWidth: 150,
+      renderCell: (params) => _format.getVND(params?.row?.exportPrice),
+      sortAscValue: 16,
+      sortDescValue: 5,
+      filterKey: "exportPrice",
+    },
+    {
+      field: "totalBillPrice",
+      headerName: "GT ĐÃ XUẤT HĐ",
+      minWidth: 150,
+      renderCell: (params) => _format.getVND(params?.row?.totalBillPrice),
+      sortAscValue: 17,
+      sortDescValue: 6,
+      filterKey: "totalBillPrice",
+    },
+    {
+      field: "billPaid",
+      headerName: "GT ĐÃ thanh toán",
+      minWidth: 150,
+      renderCell: ({row}) => _format.getVND(row?.billPaid),
+      isSort: false,
+      filterKey: "paid",
+    },
+    {
+      field: "branchCode",
+      headerName: "CHI NHÁNH",
+      minWidth: 120,
+      sortAscValue: 19,
+      sortDescValue: 8,
+      filterKey: "branchCode",
+    },
+    {
+      field: "salesCode",
+      headerName: "SALES",
+      minWidth: 120,
+      sortAscValue: 20,
+      sortDescValue: 9,
+      filterKey: "salesId",
+    },
+    {
+      field: "statusName",
+      headerName: "TRẠNG THÁI",
+      minWidth: 120,
+      sortAscValue: 21,
+      sortDescValue: 10,
+      filterKey: "status",
+      type: "select",
+      options: orderStatus,
+      renderCell: ({ row }) => {
+        const colors = ["default", "info", "success", "error"];
+        return (
+          <StatusChip
+            label={row?.statusName}
+            status={row?.status}
+            color={colors[row?.status - 1] as any}
+          />
+        );
+      },
+    },
     {
       field: "action",
       headerName: "",
@@ -168,7 +263,10 @@ export const BookingOrderTable: React.FC<TProps> = ({
           <StatisticButton onClick={onViewReport} View={ViewReport} />
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
-          <ExportButton api={mainOrder.export} filterParams={{...query, pageSize: 99999}} />
+          <ExportButton
+            api={mainOrder.export}
+            filterParams={{ ...query, pageSize: 99999 }}
+          />
         </Box>
       </Box>
       <ContextMenuWrapper

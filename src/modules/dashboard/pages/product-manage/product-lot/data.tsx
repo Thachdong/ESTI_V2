@@ -8,15 +8,20 @@ export const lotColumns: TGridColDef[] = [
   {
     sortAscValue: 10,
     sortDescValue: 0,
-    filterKey: "dateManufacture",
+    filterKey: "createdDate",
     type: "date",
     field: "created",
     headerName: "Ngày tạo",
     minWidth: 150,
-    renderCell: (params) =>
-      params.row.created
-        ? moment(params.row.created).format("DD/MM/YYYY")
-        : "__",
+    renderCell: ({ row }) => _format.converseDate(row.created),
+  },
+  {
+    isFilter: false,
+    isSort: false,
+    field: "updated",
+    headerName: "Ngày cập nhật",
+    minWidth: 150,
+    renderCell: ({ row }) => _format.converseDate(row.updated),
   },
   {
     field: "lotNumber",
@@ -25,7 +30,7 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 2,
     filterKey: "lotNumber",
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
   {
     field: "productCode",
@@ -42,7 +47,7 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 4,
     filterKey: "productName",
     minWidth: 150,
-    flex: 1
+    flex: 1,
   },
   {
     field: "importPrice",
@@ -51,7 +56,7 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 6,
     isFilter: false,
     minWidth: 150,
-    renderCell: ({row}) => _format.getVND(row?.importPrice)
+    renderCell: ({ row }) => _format.getVND(row?.importPrice),
   },
   {
     sortAscValue: 17,
@@ -61,10 +66,7 @@ export const lotColumns: TGridColDef[] = [
     headerName: "Ngày SX",
     type: "date",
     minWidth: 150,
-    renderCell: (params) =>
-      params.row.created
-        ? moment(params.row.created).format("DD/MM/YYYY")
-        : "__",
+    renderCell: ({ row }) => _format.converseDate(row.dateManufacture),
   },
   {
     sortAscValue: 18,
@@ -74,10 +76,7 @@ export const lotColumns: TGridColDef[] = [
     headerName: "Hạn sử dụng",
     type: "date",
     minWidth: 150,
-    renderCell: (params) =>
-      params.row.created
-        ? moment(params.row.created).format("DD/MM/YYYY")
-        : "__",
+    renderCell: ({ row }) => _format.converseDate(row.dateExpiration),
   },
   {
     field: "status",
@@ -86,8 +85,10 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 5,
     isFilter: false,
     minWidth: 150,
-    renderCell: ({row}) => <StatusChip status={row?.status} label={row?.statusName} />,
+    renderCell: ({ row }) => (
+      <StatusChip status={row?.status} label={row?.statusName} />
+    ),
     type: "select",
-    options: lotStatus
+    options: lotStatus,
   },
 ];

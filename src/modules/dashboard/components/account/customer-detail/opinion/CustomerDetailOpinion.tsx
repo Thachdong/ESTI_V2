@@ -49,9 +49,9 @@ export const CustomerDetailOpinion: React.FC = () => {
     defaultValue.current = currentRow;
   };
 
-  const mutateDelete = useMutation((id: string) => customerCompetitor.delete(id), {
+  const mutateDelete = useMutation((id: string) => customerOpinion.delete(id), {
     onSuccess: (data) => {
-      toast.success(data.resultMessage);
+      toast.success(data?.resultMessage);
 
       refetch();
     },

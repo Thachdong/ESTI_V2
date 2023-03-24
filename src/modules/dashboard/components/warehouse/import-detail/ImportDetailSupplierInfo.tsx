@@ -41,7 +41,9 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
               }}
               label="Nhà cung cấp"
               callback={(option) => setSelectedSupplier(option)}
-              labelKey="supplierCode"
+              getOptionLabel={(opt: any) =>
+                !!opt ? `${opt.supplierCode} - ${opt.supplierName}` : ""
+              }
             />
           ) : (
             <Box className="grid grid-cols-3 gap-3">

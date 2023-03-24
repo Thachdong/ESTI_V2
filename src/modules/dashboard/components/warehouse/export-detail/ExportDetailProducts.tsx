@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, List, ListItem, Paper, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
@@ -21,16 +21,18 @@ type TProps = {
     warehouseConfigId: string;
     warehouseConfigCode: string;
   };
-  exportStatus: number;
+  transactionData: any;
 };
 
 export const ExportDetailProducts: React.FC<TProps> = ({
   productOptions,
   getWarehouseConfig,
-  exportStatus,
+  transactionData
 }) => {
   // EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>();
+
+  const {exportStatus} = transactionData || {};
 
   const router = useRouter();
 
@@ -73,6 +75,43 @@ export const ExportDetailProducts: React.FC<TProps> = ({
       setValue("productList", updatedProductList);
     }
   }, [defaultValue, productList]);
+
+  const getPrice = useMemo(() => {
+    if (transactionData) {
+      return {
+        totalPrice: _format.getVND(transactionData?.totalPriceNotTax),
+        totalTax: _format.getVND(transactionData?.totalTax),
+        finalPrice: _format.getVND(transactionData?.totalPrice),
+      };
+    } else {
+      const initResult = {
+        totalPrice: 0,
+        totalTax: 0,
+        finalPrice: 0,
+      };
+
+      const resultObj = productList.reduce(
+        (result: any, { price = 0, quantity = 0, vat = 0 }: any) => {
+          const total = quantity * price;
+
+          const tax = (total * vat) / 100;
+
+          return {
+            totalPrice: result?.totalPrice + total,
+            totalTax: result?.totalTax + tax,
+            finalPrice: result?.finalPrice + total + tax,
+          };
+        },
+        initResult
+      );
+
+      return {
+        totalPrice: _format.getVND(resultObj.totalPrice),
+        totalTax: _format.getVND(resultObj.totalTax),
+        finalPrice: _format.getVND(resultObj.finalPrice),
+      };
+    }
+  }, [transactionData, productList]);
 
   // DATA TABLE
   const renderContextMenu = useCallback(() => {
@@ -274,14 +313,27 @@ export const ExportDetailProducts: React.FC<TProps> = ({
           />
         </ContextMenuWrapper>
 
-        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
-          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+        <List className="border-0 border-t border-solid border-grey-3 p-0 pb-1">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              {" "}
+              Thành tiền chưa có thuế(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalPrice}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):{" "}
+            </span>
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
             <span className="font-semibold col-span-4 text-right">
               Tổng cộng tiền thanh toán(VNĐ):
-            </span>
-            <span className="text-base"> {_format.getVND(totalPrice)}</span>
-          </Typography>
-        </Box>
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
+          </ListItem>
+        </List>
       </Box>
 
       <ExportDetailProductDialog

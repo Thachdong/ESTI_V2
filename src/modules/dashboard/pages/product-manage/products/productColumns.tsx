@@ -1,3 +1,4 @@
+import { height } from "@mui/system";
 import moment from "moment";
 import { VAT } from "~modules-core/constance";
 import { TGridColDef } from "~types/data-grid";
@@ -40,6 +41,18 @@ export const productColumns: TGridColDef[] = [
     minWidth: 150,
   },
   {
+    field: "productBarcode",
+    headerName: "Mã vạch",
+    isFilter: false,
+    isSort: false,
+    renderCell: ({ row }) =>
+      row?.productBarcode ? (
+        <img src={row?.productBarcode} alt={row?.productName} height={40} />
+      ) : (
+        <span className="text-xs italic">Chưa có mã vạch</span>
+      ),
+  },
+  {
     field: "manufactor",
     headerName: "Hãng sản xuất",
     sortAscValue: 17,
@@ -80,7 +93,7 @@ export const productColumns: TGridColDef[] = [
       { value: "5", label: "5%" },
       { value: "8", label: "8%" },
       { value: "10", label: "10%" },
-    ]
+    ],
   },
   {
     field: "casCode",
@@ -113,5 +126,10 @@ export const productColumns: TGridColDef[] = [
     filterKey: "createdBy",
     width: 120,
   },
-  { field: "numberOfReviews", headerName: "Đánh giá mới", isSort: false, width: 120, },
+  {
+    field: "numberOfReviews",
+    headerName: "Đánh giá mới",
+    isSort: false,
+    width: 120,
+  },
 ];

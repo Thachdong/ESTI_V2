@@ -70,7 +70,7 @@ export const PurchasePlanPage = () => {
     }
   );
 
-  const deleteMutation = useMutation((id: string) => purchasePlan.delete(id), {
+  const deleteMutation = useMutation((id: string) => purchasePlan.cancel(id), {
     onSuccess: (data) => {
       toast.success(data?.resultMessage);
 
@@ -146,7 +146,7 @@ export const PurchasePlanPage = () => {
         <Box className="flex gap-2">
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />
-          <ExportButton api={purchaseOrder.export} filterParams={{...query, pageSize: 99999}} />
+          <ExportButton api={purchasePlan.export} filterParams={{...query, pageSize: 99999}} />
         </Box>
       </Box>
 

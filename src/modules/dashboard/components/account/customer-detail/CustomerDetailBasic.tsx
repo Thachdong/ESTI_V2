@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import { customer, TUpdateCustomer } from "src/api";
-import { BaseButton } from "~modules-core/components";
+import { BaseButton, EditButton } from "~modules-core/components";
 import { toast } from "~modules-core/toast";
 import { CustomerDetailContactList } from "./contact";
 import { CustomerDetailAccount, CustomerDetailCompany } from "./generals";
@@ -54,6 +54,14 @@ export const CustomerDetailBasic: React.FC = () => {
       address,
       id: companyId,
     } = customerDetail?.companyInfo || {};
+
+    let identityCardImages: string[] = [];
+
+    try {
+      identityCardImages = identityCardImage?.split(",");
+    } catch (error) {
+      console.log(error);
+    }
 
     const contacts =
       customerDetail?.curatorInfo?.map?.((cur: any) => {
@@ -141,7 +149,7 @@ export const CustomerDetailBasic: React.FC = () => {
       paymentLimit,
       website,
       identityCard,
-      identityCardImage,
+      identityCardImage: identityCardImages,
       address,
       contacts,
     });
@@ -230,6 +238,12 @@ export const CustomerDetailBasic: React.FC = () => {
     await mutateUpdate.mutateAsync(payload);
   };
 
+  const handleBack = useCallback(() => {
+    setIsUpdate(false);
+
+    refetch?.();
+  }, []);
+
   return (
     <Box className="container-center mb-4">
       <FormProvider {...methods}>
@@ -241,9 +255,7 @@ export const CustomerDetailBasic: React.FC = () => {
 
         <Box className="flex justify-end">
           {!isUpdate ? (
-            <BaseButton type="button" onClick={() => setIsUpdate(true)}>
-              Cập nhật
-            </BaseButton>
+            <EditButton onClick={() => setIsUpdate(true)} />
           ) : (
             <>
               <BaseButton
@@ -255,7 +267,7 @@ export const CustomerDetailBasic: React.FC = () => {
               <BaseButton
                 type="button"
                 className="!bg-main-1 ml-3"
-                onClick={() => setIsUpdate(false)}
+                onClick={handleBack}
               >
                 Quay lại
               </BaseButton>
