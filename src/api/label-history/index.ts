@@ -19,5 +19,7 @@ export const labelHistory = {
   getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
 
   create: (payload: TCreateLabelHistory) =>
-  request.post<TCreateLabelHistory, any>("ProductLabel", payload),
+    request.post<TCreateLabelHistory, any>("ProductLabel", payload),
+
+  getHistoryDetail: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 };

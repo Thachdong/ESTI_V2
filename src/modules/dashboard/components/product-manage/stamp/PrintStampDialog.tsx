@@ -5,6 +5,7 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
+import moment from "moment";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useReactToPrint } from "react-to-print";
@@ -32,23 +33,37 @@ export const PrintStampDialog: React.FC<TDialog> = ({
   const handlePrint = useReactToPrint({
     content: () => printAreaRef.current,
     pageStyle: `
-      @page {
-        size: 210mm 297mm;
-      }
-    `,
+        @page {
+            size: 210mm 297mm;
+            @top {
+                content: counter(page);
+            }
+            html, body {
+                height: auto;
+            }
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+            }
+            html, body {
+                height: 100%;
+                
+            }
+
+            .print-container {
+              display: flex;
+              justify-content: center;
+              flex-wrap: wrap;
+            }
+        }
+      `,
   });
 
   const printData = {
+    ...defaultValue,
     title: `${defaultValue?.productCode} ${defaultValue?.labelTypeName} ${defaultValue?.productName}`,
-    productCode: defaultValue?.productCode,
-    chemicalName: defaultValue?.chemicalName,
-    specs: defaultValue?.specs,
-    lotNumber: defaultValue?.lotNumber,
-    manufactor: defaultValue?.manufactor,
-    origin: defaultValue?.origin,
-    branchName: defaultValue?.branchName,
-    branchAddress: defaultValue?.branchAddress,
-    QRCode: defaultValue?.QRCode,
     website: "navis.com.vn",
     tel: "02862631422",
     orther:
@@ -60,36 +75,141 @@ export const PrintStampDialog: React.FC<TDialog> = ({
   }, []);
 
   const renderSmallStamp = useCallback(
-    (_: any, index: number) => (
-      <table ref={printAreaRef} className="w-full">
-        <tbody className="w-full">
-          <tr className="w-full">
-            <td className="w-full">
-              {Array.from(Array(quantity).keys())?.map(
-                (_: any, index: number) => (
-                  <Box
-                    key={index}
-                    className="flex flex-row items-center border border-solid border-black px-2 py-3"
-                  >
-                    <Box className="flex-grow">
-                      <Typography className="text-sm whitespace-nowrap">
-                        CODE: {printData?.productCode}
-                      </Typography>
-                      <Typography className="text-sm whitespace-nowrap">
-                        LOT#: {printData?.lotNumber}
-                      </Typography>
-                    </Box>
+    (key: number) => (
+      <div
+        key={key}
+        style={{
+          width: "60mm",
+          height: "15mm",
+          border: "1px solid black",
+          padding: 5,
+          margin: 5,
+          display: "inline-block",
+          pageBreakInside: "avoid",
+        }}
+      >
+        <div
+          style={{
+            fontSize: 12,
+            fontWeight: 500,
+            display: "flex",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            gap: 5,
+          }}
+        >
+          <div style={{ width: "75%" }}>
+            <p>CODE: {printData?.productCode}</p>
+            <p>LOT#: {printData?.lotNumber}</p>
+          </div>
 
-                    <Box>
-                      <img src={printData?.QRCode} alt="qrcode" width={50} />
-                    </Box>
-                  </Box>
-                )
+          <div style={{ width: "25%", textAlign: "right" }}>
+            <img width="90%" src={printData?.QRCode} />
+          </div>
+        </div>
+      </div>
+    ),
+    [printData]
+  );
+
+  const renderlargeStamp = useCallback(
+    (key: number) => (
+      <div
+        style={{
+          width: "65mm",
+          border: "1px solid black",
+          padding: 5,
+          margin: 5,
+          pageBreakInside: "avoid",
+        }}
+      >
+        <table style={{ fontSize: 10 }}>
+          <thead>
+            <tr style={{ paddingBottom: 5 }}>
+              <th colSpan={2}>{printData?.productName}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              {printData?.labelType === 1 && (
+                <td colSpan={2}>
+                  <p> - Mã sản phẩm: {printData?.productCode}</p>
+                  <p> - Công thức hóa học: {printData?.chemicalName}</p>
+                  <p> - Quy cách: {printData?.specs}</p>
+                  <p> - LOT#: {printData?.lotNumber}</p>
+                  <p> - Hãng sản xuất: {printData?.manufactor}</p>
+                  <p> - Xuất xứ: {printData?.origin}</p>
+                </td>
               )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              {printData?.labelType === 2 && (
+                <td colSpan={2}>
+                  <p> - Mã sản phẩm: {printData?.productCode}</p>
+                  <p> - Quy cách: {printData?.specs}</p>
+                  <p> - LOT#: {printData?.lotNumber}</p>
+                  <p> - Hãng sản xuất: {printData?.manufactor}</p>
+                  <p> - Xuất xứ: {printData?.origin}</p>
+                </td>
+              )}
+              {printData?.labelType === 3 && (
+                <td colSpan={2}>
+                  <p>- Mã sản phẩm: {printData?.productCode}</p>
+                  <p>- Serial number: {printData?.lotNumber}</p>
+                  <p>
+                    - Năm sản xuất:{" "}
+                    {moment(printData?.dateManufacture).format("YYYY")}
+                  </p>
+                  <p>- Hãng sản xuất: {printData?.manufactor}</p>
+                  <p>- Xuất xứ: {printData?.origin}</p>
+                </td>
+              )}
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <p>
+                  <span style={{ textDecoration: "underline" }}>
+                    Nhà nhập khẩu:
+                  </span>{" "}
+                  {printData?.branchName}
+                </p>
+                <p>
+                  <span style={{ textDecoration: "underline" }}>Đ/c:</span>{" "}
+                  {printData?.branchAddress}
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style={{ width: "50%", verticalAlign: "top" }}>
+                <p style={{ paddingTop: 10 }}>
+                  <span style={{ textDecoration: "underline" }}>
+                    Các thông tin khác:
+                  </span>{" "}
+                  xem thêm trên bao bì hoặc tải dữ liệu sản phẩm bằng cách quét
+                  mã vạch.
+                </p>
+              </td>
+              <td style={{ width: "50%", whiteSpace: "break-spaces", alignItems: "center" }}>
+                <img width="75%" src={printData?.QRCode} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p style={{ paddingBottom: "2mm" }}>
+                  <span style={{ textDecoration: "underline" }}>Tel:</span>{" "}
+                  02862631422
+                </p>
+              </td>
+              <td>
+                <p style={{ paddingBottom: "2mm" }}>
+                  <span style={{ textDecoration: "underline" }}>Website:</span>{" "}
+                  esti.vn
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     ),
     [printData]
   );
@@ -118,16 +238,17 @@ export const PrintStampDialog: React.FC<TDialog> = ({
 
       <Box className="flex justify-end mt-4">
         <PrintButton onClick={handlePrint}>In</PrintButton>
+
         <BaseButton type="button" className="!bg-main-1 ml-3" onClick={onClose}>
           Đóng
         </BaseButton>
       </Box>
 
-      <Box className="">
-        <Box ref={printAreaRef} className="grid grid-cols-3 gap-4">
+      <Box>
+        <Box className="print-container hidden" ref={printAreaRef}>
           {size === "small"
             ? Array.from(Array(quantity).keys()).map(renderSmallStamp)
-            : Array.from(Array(quantity).keys())}
+            : Array.from(Array(quantity).keys()).map(renderlargeStamp)}
         </Box>
       </Box>
     </Dialog>

@@ -1,8 +1,8 @@
-import { Box, Rating, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { meetingDeploy, staff, taskList, TMeetingDeployUpdate } from "src/api";
+import { meetingDeploy, staff, TMeetingDeployUpdate } from "src/api";
 import {
   BaseButton,
   Dialog,
@@ -12,7 +12,7 @@ import {
   FormSelectAsync,
   FormUploadfiles,
 } from "~modules-core/components";
-import { department, statusTask } from "~modules-core/constance";
+import { department } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { TDialog } from "~types/dialog";
@@ -200,7 +200,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
                 name: "contentDescriptions",
                 rules: { required: "Phải nhập nội dung task" },
               }}
-              label="Nội dung task"
+              label="Nội dung họp"
               className="col-span-2"
               multiline
               rows={3}

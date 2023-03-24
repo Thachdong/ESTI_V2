@@ -9,6 +9,7 @@ import { position, products } from "src/api";
 import {
   BaseButton,
   Dialog,
+  FormCheckbox,
   FormDatepicker,
   FormInput,
   FormInputBase,
@@ -29,7 +30,6 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
   type,
   defaultValue,
   warehouseConfigId,
-  refetch,
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const { id } = useRouter().query;
@@ -38,11 +38,13 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
 
   const [selectedPosition, setSelectedPosition] = useState<any>();
 
+  const [selectedLot, setSelectedLot] = useState<any>();
+
   const title = type === "UpdateProduct" ? "Cập nhật SP" : "Thêm SP";
 
-  const { control, handleSubmit, setError, reset } = useForm({
-    mode: "onBlur",
-  });
+  const { control, handleSubmit, setError, reset, watch, setValue } = useForm();
+
+  const { selectAvailableLot } = watch();
 
   const { watch: contextWatch, setValue: setContextValue } = useFormContext();
 
@@ -57,6 +59,17 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
       }),
     {
       enabled: !!supplierId && !productOrderId,
+    }
+  );
+
+  const { data: productLots } = useQuery(
+    ["LotsbaseProductId", selectedProduct?.productId, warehouseConfigId],
+    () =>
+      products
+        .getLot(selectedProduct?.productId, warehouseConfigId)
+        .then((res) => res.data),
+    {
+      enabled: !!selectedProduct && !!warehouseConfigId,
     }
   );
 
@@ -194,6 +207,16 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
     }
   }, [defaultValue, type]);
 
+  useEffect(() => {
+    if (!!selectedLot) {
+      const {dateExpiration, dateManufacture}= selectedLot || {};
+
+      setValue("dateManufacture", dateManufacture);
+
+      setValue("dateExpiration", dateExpiration);
+    }
+  }, [selectedLot])
+
   return (
     <Dialog
       open={open}
@@ -257,16 +280,6 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
           label="Thành tiền"
         />
 
-        <FormInput
-          controlProps={{
-            control,
-            name: "lotNumber",
-            rules: { required: "Phải nhập số LOT" },
-          }}
-          label="Số LOT"
-          inputProps={{ sx: { textTransform: "uppercase" } }}
-        />
-
         <FormDatepicker
           controlProps={{
             control,
@@ -307,6 +320,59 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
           options={VAT}
           label="Chọn vat"
         />
+
+        {!!id && (
+          <FormInput
+            controlProps={{
+              control,
+              name: "lotNumber",
+              rules: { required: "Phải nhập số LOT" },
+            }}
+            label="Số LOT"
+            inputProps={{ sx: { textTransform: "uppercase" } }}
+          />
+        )}
+
+        {!id && (
+          <Box className="flex items-center col-span-2">
+            {selectAvailableLot ? (
+              <FormSelect
+                controlProps={{
+                  control,
+                  name: "lotNumber",
+                  rules: { required: "Phải chọn số LOT" },
+                }}
+                label="Số LOT"
+                inputProps={{ sx: { textTransform: "uppercase" } }}
+                options={productLots}
+                valueKey="lotNumber"
+                labelKey="lotNumber"
+                className="flex-grow"
+                callback={(lot: any) => setSelectedLot(lot)}
+              />
+            ) : (
+              <FormInput
+                controlProps={{
+                  control,
+                  name: "lotNumber",
+                  rules: { required: "Phải nhập số LOT" },
+                }}
+                label="Số LOT"
+                inputProps={{ sx: { textTransform: "uppercase" } }}
+                className="flex-grow"
+              />
+            )}
+
+            <FormCheckbox
+              controlProps={{
+                control,
+                name: "selectAvailableLot",
+              }}
+              label="Chọn lot có sẵn"
+              className="ml-3 min-w-[150px]"
+            />
+          </Box>
+        )}
       </Box>
 
       <Box className="flex items-center justify-center my-4">

@@ -38,7 +38,7 @@ export const SupplierQuotesDetailProduct: React.FC<TProps> = ({ disabled }) => {
 
   const { watch, setValue } = useFormContext();
 
-  const { products = [], supplierId } = watch() || [];
+  const { products = [], supplierCode } = watch() || [];
 
   // METHODS
   const handleCloseDialog = useCallback(() => {
@@ -50,7 +50,7 @@ export const SupplierQuotesDetailProduct: React.FC<TProps> = ({ disabled }) => {
   }, []);
 
   const getSupplierQuotePlan = useCallback(async () => {
-    if (!supplierId) {
+    if (!supplierCode) {
       toast.error("Vui lòng chọn nhà cung cấp trước!");
 
       return;
@@ -59,14 +59,14 @@ export const SupplierQuotesDetailProduct: React.FC<TProps> = ({ disabled }) => {
       .getList({
         pageIndex: 1,
         pageSize: 999,
-        supplierId,
+        supplierCode,
         fromdate: planDate?.formDate,
         todate: planDate?.toDate,
       })
       .then((res) => res.data.items || []);
 
     setValue("products", [...products, ...orderPlans]);
-  }, [planDate, supplierId]);
+  }, [planDate, supplierCode]);
 
   const handleRemoveProduct = useCallback(
     (id: string) => {

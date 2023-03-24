@@ -68,19 +68,21 @@ export const ExpandedMenu: React.FC<TProps> = ({ menu }) => {
 
                 {item.childrens.map((child: any) => (
                   <Link href={`/dashboard/${child?.link}`}>
-                    <ListItem
-                      key={child?.link}
-                      disablePadding
-                      className={clsx(
-                        styles["menu-items"],
-                        "text-sm font-semibold"
-                      )}
-                      sx={{ ...renderActiveStyle(child.link, "children") }}
-                    >
-                      <ListItemButton>
-                        <span className="py-2">{child?.title}</span>
-                      </ListItemButton>
-                    </ListItem>
+                    <a className="w-full d-block no-underline text-[#000]">
+                      <ListItem
+                        key={child?.link}
+                        disablePadding
+                        className={clsx(
+                          styles["menu-items"],
+                          "text-sm font-semibold"
+                        )}
+                        sx={{ ...renderActiveStyle(child.link, "children") }}
+                      >
+                        <ListItemButton>
+                          <span className="py-2">{child?.title}</span>
+                        </ListItemButton>
+                      </ListItem>
+                    </a>
                   </Link>
                 ))}
               </List>

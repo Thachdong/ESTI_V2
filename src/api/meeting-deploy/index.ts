@@ -51,10 +51,13 @@ export const meetingDeploy = {
     request.put<TMeetingDeployUpdate, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
   updateStatus: (payload: { meetingDeployId: string; status: number }) =>
     request.post(`${BASE_URL}/UpdateStatus`, undefined, payload),
+
   getListMailReponse: (params?: { meetingDeployId: string }) =>
     request.get<any>(
       `${BASE_URL}/DiscussionResponseList/${params?.meetingDeployId}`,
@@ -62,10 +65,12 @@ export const meetingDeploy = {
         ...params,
       }
     ),
+
   createMailReponse: (params?: { meetingDeployId: string }) =>
     request.post(`${BASE_URL}/MeetingDeployResponse`, undefined, {
       ...params,
     }),
+
   acceptMetting: (params?: { meetingDeployId: string }) =>
     request.post(`${BASE_URL}/IsConfimPaticipate`, undefined, {
       ...params,

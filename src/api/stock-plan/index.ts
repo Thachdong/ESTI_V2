@@ -19,8 +19,8 @@ export type TUpdateStockPlan = Omit<
 
 type TChartParams = {
   warehouseConfigProductId: string;
-  fromDate: number;
-  toDate: number;
+  fromdate: number;
+  todate: number;
 };
 
 const BASE_URL = "StockPlan";
@@ -38,5 +38,5 @@ export const stockPlan = {
   update: (payload: TUpdateStockPlan) => request.patch<TUpdateStockPlan, any>(BASE_URL, payload),
 
   getChartData: (params: TChartParams) =>
-    request.get<TChartParams>(`${BASE_URL}/GetStockPlan`, { ...params }),
+    request.get<any>(`${BASE_URL}/GetStockPlan`, { ...params }),
 };

@@ -51,7 +51,7 @@ export const CustomerCareDialog: React.FC<TDialog> = ({
       enabled: !!defaultValue?.id && type === "View",
     }
   );
-  
+
   // SIDE EFFECTS
   useEffect(() => {
     if (!!customerCareDetail && type !== "Add") {
@@ -185,9 +185,9 @@ export const CustomerCareDialog: React.FC<TDialog> = ({
     <Dialog onClose={onClose} open={open} maxWidth="lg" title={title}>
       <FormProvider {...methods}>
         <Box className="grid grid-cols-1 gap-4">
-          <CustomerCareInfo disabled={disabled} />
-
           <CustomerCareContent disabled={disabled} />
+
+          <CustomerCareInfo disabled={disabled} />
         </Box>
         <Box className="flex items-center justify-end">{renderButtons()}</Box>
       </FormProvider>

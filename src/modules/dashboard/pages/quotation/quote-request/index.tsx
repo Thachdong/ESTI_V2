@@ -4,6 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
 import { staff } from "src/api";
+import { customerType } from "src/api/customer-type";
 import { quoteRequest } from "src/api/quote-request";
 import {
   AddButton,
@@ -15,8 +16,9 @@ import {
   RefreshButton,
   SearchBox,
   StatisticButton,
+  StatusChip,
 } from "~modules-core/components";
-import { defaultPagination } from "~modules-core/constance";
+import { defaultPagination, quoteOrderStatus } from "~modules-core/constance";
 import { usePathBaseFilter } from "~modules-core/customHooks";
 import { toast } from "~modules-core/toast";
 import {
@@ -67,6 +69,17 @@ export const QuotationRequestsPage = () => {
       .getListSale()
       .then((res) =>
         res.data.map((d: any) => ({ label: d?.code, value: d?.id }))
+      )
+  );
+
+  const { data: customerTypes } = useQuery(["CustomerTypesList"], () =>
+    customerType
+      .getAll({
+        pageSize: 999,
+        pageIndex: 1,
+      })
+      .then((res) =>
+        res.data?.map?.((d: any) => ({ label: d?.levelName, value: d?.id }))
       )
   );
 
@@ -133,8 +146,61 @@ export const QuotationRequestsPage = () => {
   const columns: TGridColDef[] = [
     ...quotationRequestColumns,
     {
+      field: "levelName",
+      headerName: "Cấp độ NLH",
+      flex: 1,
+      minWidth: 125,
+      type: "select",
+      options: customerTypes || [],
+      filterKey: "typeAccount",
+      sortAscValue: 21,
+      sortDescValue: 18,
+    },
+    {
+      field: "curatorStatus",
+      headerName: "Trạng thái TK",
+      minWidth: 150,
+      filterKey: "statusAccount",
+      sortAscValue: 15,
+      sortDescValue: 7,
+      type: "select",
+      options: [
+        {
+          label: "Khách hàng mới",
+          value: null,
+        },
+        {
+          label: "Đã kích hoạt",
+          value: 0,
+        },
+        {
+          label: "Chưa kích hoạt",
+          value: 1,
+        },
+        {
+          label: "Đã khóa",
+          value: 2,
+        },
+      ],
+      renderCell: ({ row }) => {
+        const { curatorStatus, curatorStatusName } = row || {};
+
+        const colors = ["success", "default", "error"];
+
+        const color =
+          curatorStatus !== null ? colors[curatorStatus] : "secondary";
+        return (
+          <StatusChip
+            status={curatorStatus}
+            label={curatorStatusName}
+            color={color as any}
+          />
+        );
+      },
+    },
+    {
       field: "salesCode",
-      headerName: "Nhân viên sale",
+      headerName: "Mã NVKD",
       minWidth: 150,
       filterKey: "salesId",
       sortAscValue: 14,
@@ -143,9 +209,25 @@ export const QuotationRequestsPage = () => {
       options: saleStaffs,
     },
     {
+      field: "preOrderStatusName",
+      headerName: "Trạng thái YC",
+      minWidth: 150,
+      filterKey: "status",
+      sortAscValue: 15,
+      sortDescValue: 7,
+      type: "select",
+      options: quoteOrderStatus,
+      renderCell: ({ row }) => (
+        <StatusChip
+          status={row.preOrderStatus}
+          label={row.preOrderStatusName}
+          color={row.preOrderStatus === 4 ? "error" : undefined}
+        />
+      ),
+    },
+    {
       field: "action",
       headerName: "",
-      align: "center",
       width: 50,
       renderCell: ({ row }) => (
         <DropdownButton
@@ -221,13 +303,18 @@ export const QuotationRequestsPage = () => {
   };
 
   const [Open, setOpen] = useState<boolean>(false);
+
   const dataViewDetail = useRef<any>();
+
   const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
     const id: any = e.currentTarget.dataset.id;
+
     const currentRow = await quoteRequest.getPreOrderDetail(id).then((res) => {
       return res.data;
     });
+
     dataViewDetail.current = { ...currentRow, id: id };
+
     setOpen(true);
   };
 
@@ -281,6 +368,7 @@ export const QuotationRequestsPage = () => {
             }}
           />
         </ContextMenuWrapper>
+
         <ViewListProductDrawer
           Open={Open}
           onClose={() => setOpen(false)}

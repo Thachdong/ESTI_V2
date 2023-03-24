@@ -24,7 +24,7 @@ import {
 export const QuoteDetailPage: React.FC = () => {
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const { id } = useRouter().query;
+  const { id, cloneId } = useRouter().query;
 
   const method = useForm<any>({
     defaultValues: {
@@ -37,16 +37,21 @@ export const QuoteDetailPage: React.FC = () => {
 
   // DATA FETCHING
   const { data: quoteDetail, refetch } = useQuery(
-    ["QuoteDetail", id],
-    () => preQuote.getById(id as string).then((res) => res.data),
+    ["QuoteDetail", id, cloneId],
+    () => {
+      const quoteId = id || cloneId;
+
+      return preQuote.getById(quoteId as string).then((res) => res.data);
+    },
     {
-      enabled: !!id,
+      enabled: !!id || !!cloneId,
     }
   );
 
   // SIDE EFFECTS
   useEffect(() => {
     const { preQuoteView = {}, preQuoteDetailView = [] } = quoteDetail || {};
+
     const {
       salesId,
       salesNote,
@@ -66,9 +71,11 @@ export const QuoteDetailPage: React.FC = () => {
       curatorEmail,
       curatorDepartmentId,
       performBranchId,
+      preOrderId
     } = preQuoteView;
 
     let documents = [];
+
     try {
       documents = JSON.parse(paymentDocument || "[]").map(
         (doc: any) => doc?.id
@@ -78,7 +85,7 @@ export const QuoteDetailPage: React.FC = () => {
     }
 
     method.reset({
-      id,
+      id: !!cloneId ? null : id,
       status,
       salesId,
       customerId,
@@ -97,8 +104,10 @@ export const QuoteDetailPage: React.FC = () => {
       products: [...preQuoteDetailView],
       attachFile: !attachFile ? [] : attachFile.split(","),
       paymentDocument: documents,
+      preOrderId,
+      isQuoteRequest: !!preOrderId
     });
-  }, [quoteDetail]);
+  }, [quoteDetail, id, cloneId]);
 
   return (
     <Box className="container-center">

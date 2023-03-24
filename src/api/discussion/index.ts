@@ -39,16 +39,22 @@ const BASE_URL = "Discussion";
 export const discussion = {
   getList: (params: any) =>
     request.getPagination<TDiscussion>(BASE_URL, { ...params }),
+
   create: (params: TDiscussionUpdate) => request.post(BASE_URL, params),
+
   update: (params: TDiscussionUpdate) =>
     request.put<TDiscussionUpdate, null>(BASE_URL, params),
+
   delete: (id: string) => request.delete(BASE_URL + "/" + id),
+
   cancelDiscussion: (params: { discussionId: string }) =>
     request.post(BASE_URL + "/" + "CancelDiscussion", undefined, {
       ...params,
     }),
+
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
   getListMailReponse: (params?: { discussionId: string }) =>
     request.get<any>(
       `${BASE_URL}/DiscussionResponseList/${params?.discussionId}`,
@@ -56,6 +62,7 @@ export const discussion = {
         ...params,
       }
     ),
+
   createMailReponse: (params?: { discussionId: string }) =>
     request.post(`${BASE_URL}/DiscussResponse`, undefined, {
       ...params,

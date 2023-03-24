@@ -7,6 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import clsx from "clsx";
 import React, { useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
@@ -58,6 +59,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       filterKey: "topicName",
       sortDescValue: 1,
       sortAscValue: 9,
+      flex: 1,
     },
     {
       field: "levelName",
@@ -71,6 +73,8 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
         { value: 1, label: "HOT" },
         { value: 2, label: "WARM" },
       ],
+      flex: 1,
+      renderCell: ({row}) => <span className={clsx(row?.level === 1 ? "text-warning" : "text-success")}>{row?.levelName}</span>
     },
     {
       field: "descriptionJob",
@@ -79,13 +83,14 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       filterKey: "descriptionJob",
       sortDescValue: 3,
       sortAscValue: 12,
+      flex: 1,
       renderCell: ({ row }) => {
         return (
           <>
             <Tooltip title="Xem phản hồi">
               <ButtonBase onClick={() => setReply(true)}>
                 <Typography className="text-main text-sm text-left">
-                  {row?.descriptionJob}
+                  {`${row?.descriptionJob} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
               </ButtonBase>
             </Tooltip>
@@ -98,12 +103,21 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       headerName: "Thời gian bắt đầu",
       minWidth: 160,
       type: "date",
-      filterKey: "fromdate",
+      filterKey: "startTime",
       sortDescValue: 7,
       sortAscValue: 16,
       renderCell: ({ row }) => _format.converseDateTime(row?.startTime),
     },
-
+    {
+      field: "endTime",
+      headerName: "Thời gian trao đổi",
+      minWidth: 160,
+      type: "date",
+      filterKey: "endTime",
+      sortDescValue: 7,
+      sortAscValue: 16,
+      renderCell: ({ row }) => _format.converseDateTime(row?.endTime),
+    },
     {
       field: "proposerName",
       headerName: "Người đề xuất",
@@ -119,6 +133,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       filterKey: "participantsName",
       sortDescValue: 6,
       sortAscValue: 15,
+      flex: 1,
       renderCell: ({ row }) => {
         const newParticipants = JSON.parse(row?.participants || "[]");
         return (

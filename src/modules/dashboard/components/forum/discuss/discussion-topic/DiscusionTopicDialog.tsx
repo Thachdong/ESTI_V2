@@ -92,6 +92,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
             name: "startTime",
             rules: { required: "Phải chọn thời gian bắt đầu" },
           }}
+          label="Thời gian bắt đầu"
         />
         <FormDatepicker
           controlProps={{
@@ -99,6 +100,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
             name: "endTime",
             rules: { required: "Phải chọn thời gian kết thúc" },
           }}
+          label="Thời gian trao đổi"
         />
         <FormInput
           controlProps={{
@@ -108,7 +110,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           }}
           label="Mô tả thảo luận"
           multiline
-          rows={2}
+          minRows={2}
         />
         <FormInput
           controlProps={{
@@ -118,7 +120,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           }}
           label="Nội dung thảo luận"
           multiline
-          rows={2}
+          minRows={2}
         />
         <FormSelectAsync
           controlProps={{

@@ -8,7 +8,8 @@ export const lotColumns: TGridColDef[] = [
   {
     sortAscValue: 10,
     sortDescValue: 0,
-    isFilter: false,
+    filterKey: "dateManufacture",
+    type: "date",
     field: "created",
     headerName: "Ngày tạo",
     minWidth: 150,
@@ -24,6 +25,7 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 2,
     filterKey: "lotNumber",
     minWidth: 150,
+    flex: 1
   },
   {
     field: "productCode",
@@ -40,6 +42,7 @@ export const lotColumns: TGridColDef[] = [
     sortDescValue: 4,
     filterKey: "productName",
     minWidth: 150,
+    flex: 1
   },
   {
     field: "importPrice",

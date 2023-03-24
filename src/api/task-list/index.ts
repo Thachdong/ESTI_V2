@@ -51,15 +51,18 @@ export const taskList = {
     request.put<TTaskListUpdate, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
+
   updateStatus: (payload: { id: string; status: number }) =>
     request.post(`${BASE_URL}/UpdateStatus`, undefined, payload),
+
   getListMailReponse: (params?: { taskListId: string }) =>
     request.get<any>(`${BASE_URL}/MailResponseList/${params?.taskListId}`, {
       ...params,
     }),
-  createMailReponse: (params?: { taskListId: string }) =>
+  createMailReponse: (params?: any) =>
     request.post(`${BASE_URL}/MailResponse`, undefined, {
       ...params,
     }),

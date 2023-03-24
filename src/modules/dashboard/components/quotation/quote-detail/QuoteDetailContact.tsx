@@ -32,8 +32,13 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
   // SIDE EFFECTS
   useEffect(() => {
     if (!id && !!curator) {
-      const { curatorName, curatorPhone, curatorEmail, curatorDepartment, receiverById } =
-        curator || {};
+      const {
+        curatorName,
+        curatorPhone,
+        curatorEmail,
+        curatorDepartment,
+        receiverById,
+      } = curator || {};
 
       setValue("curatorName", curatorName);
 
@@ -43,14 +48,14 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
 
       setValue("curatorDepartmentId", curatorDepartment);
 
-      const {address} = receiverById || {};
+      const { address } = receiverById || {};
 
       setValue("receiverAddress", address);
     }
   }, [curator, id]);
 
   useEffect(() => {
-    const {curatorInfo = []} = data || {};
+    const { curatorInfo = [] } = data || {};
 
     const selectedCurator = curatorInfo.find((c: any) => c.id === curatorId);
 
@@ -65,7 +70,7 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
 
       setValue("receiverAddress", "");
     }
-  }, [data, curatorId])
+  }, [data, curatorId]);
 
   return (
     <Box className="flex flex-col">
@@ -82,7 +87,11 @@ export const QuoteDetailContact: React.FC<TProps> = ({ disabled }) => {
           }}
           options={data?.curatorInfo || []}
           label="Người phụ trách"
-          labelKey="curatorName"
+          getOptionLabel={(opt) =>
+            !!opt
+              ? `${opt?.curatorName} - ${opt?.accountCode} - ${opt?.statusName} - ${opt?.accountTypeName}`
+              : ""
+          }
           callback={(opt: any) => setCurator(opt)}
           disabled={isQuoteRequest || disabled}
         />

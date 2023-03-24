@@ -119,7 +119,7 @@ export const RegisterMissionTable: React.FC<TProps> = ({
             <Tooltip title="Xem phản hồi">
               <ButtonBase onClick={() => setReply(true)}>
                 <Typography className="text-main text-sm text-left">
-                  {row?.seasonMission}
+                  {`${row?.seasonMission} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
               </ButtonBase>
             </Tooltip>

@@ -338,7 +338,7 @@ export const ProductDetailPage: React.FC = () => {
             </TabPanelContainForm>
 
             <TabPanelContainForm value="website" index={"website"}>
-              <ProductDetailWebsite disabled={disabled} />
+              <ProductDetailWebsite disabled={disabled} refetch={refetch} />
             </TabPanelContainForm>
 
             <TabPanelContainForm value="feedback" index={"feedback"}>

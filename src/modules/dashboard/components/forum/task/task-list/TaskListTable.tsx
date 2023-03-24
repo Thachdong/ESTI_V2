@@ -78,6 +78,17 @@ export const TaskListTable: React.FC<TProps> = ({
       renderCell: ({ row }) => _format.converseDate(row?.performDate),
     },
     {
+      field: "completeDate",
+      headerName: "Ngày hoàn thành",
+      minWidth: 200,
+      flex: 1,
+      filterKey: "completeDate",
+      type: "date",
+      sortDescValue: 8,
+      sortAscValue: 17,
+      renderCell: ({ row }) => _format.converseDate(row?.completeDate),
+    },
+    {
       field: "descriptionsJob",
       headerName: "Mô tả task",
       minWidth: 250,
@@ -91,7 +102,7 @@ export const TaskListTable: React.FC<TProps> = ({
             <Tooltip title="Xem phản hồi">
               <ButtonBase onClick={() => setReply(true)}>
                 <Typography className="text-main text-sm text-left">
-                  {row?.descriptionsJob}
+                  {`${row?.descriptionsJob} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
               </ButtonBase>
             </Tooltip>
@@ -182,7 +193,7 @@ export const TaskListTable: React.FC<TProps> = ({
     },
     {
       field: "level",
-      headerName: "Đánh giá",
+      headerName: "Mức độ",
       minWidth: 120,
       flex: 1,
       filterKey: "level",
