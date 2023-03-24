@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  ButtonBase,
   Link,
   List,
   ListItem,
@@ -9,35 +8,27 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { discussion, taskList } from "src/api";
-import { FormInput } from "~modules-core/components";
+import { discussion } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
-import SendIcon from "@mui/icons-material/Send";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import { toast } from "react-toastify";
 import clsx from "clsx";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { ForumCommentBox } from "../../task/task-list";
 
 type TProps = {
   data: any;
 };
 
 export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
-  const { control, handleSubmit } = useForm();
-
-  const {
-    data: dataRepList,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useQuery(["taskListMail", "loading"], () =>
-    discussion
-      .getListMailReponse({
-        discussionId: data?.id,
-      })
-      .then((res) => res.data)
+  const { data: dataRepList, refetch } = useQuery(
+    ["taskListMail", "loading"],
+    () =>
+      discussion
+        .getListMailReponse({
+          discussionId: data?.id,
+        })
+        .then((res) => res.data)
   );
 
   const mutateRepply = useMutation(
@@ -50,10 +41,6 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
       },
     }
   );
-
-  const handleRepply = (newData: any) => {
-    mutateRepply.mutateAsync({ ...newData, discussionId: data?.id });
-  };
 
   return (
     <Box className="min-w-[700px] h-screen relative">
@@ -77,10 +64,20 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
                     className="flex gap-3 items-start border border-solid border-[#f2f2f2] rounded w-full shadow min-h-[76px]"
                   >
                     <Box className="text-center">
-                      <Tooltip title={item?.createdByName || "Anonymus"}>
-                        <Avatar className="m-auto" />
+                      <Tooltip title={item?.fullName || "Anonymus"}>
+                        {item?.avatar ? (
+                          <img
+                            src={item?.avatar}
+                            width={30}
+                            height={30}
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <Avatar className="m-auto" />
+                        )}
                       </Tooltip>
                     </Box>
+
                     <Box className="w-full">
                       <Box className="flex justify-between items-start">
                         <Box>
@@ -88,18 +85,22 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
                             {item?.title}
                           </Typography>
                           <Typography className="text-xs text-[#908d8d]">
-                            {_format.converseDate(item?.created)}
+                            {_format.converseDateTime(item?.created)}
                           </Typography>
                         </Box>
-                        <Box>
-                          <Typography className="text-xs text-main border border-solid px-2 py-[2px] border-main rounded-full font-semibold">
-                            {item?.statusName}
-                          </Typography>
-                        </Box>
+                        {/* {!!item?.statusName && (
+                          <Box>
+                            <Typography className="text-xs text-main border border-solid px-2 py-[2px] border-main rounded-full font-semibold">
+                              {item.statusName}
+                            </Typography>
+                          </Box>
+                        )} */}
                       </Box>
+
                       <Typography className="text-sm mt-2 text-[#838181]">
                         {item?.content}
                       </Typography>
+
                       {listAttachFile.length > 0 ? (
                         <Box className="mt-3 bg-[#eaf0f3] rounded p-3">
                           <Typography className="text-sm font-semibold text-[#484747]">
@@ -139,46 +140,15 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
           )}
         </List>
       </Box>
-      {data?.status === 1 || data?.status === 2 ? (
-        <Box className="px-3 absolute bottom-1 gap-3  w-full">
-          <Box>
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "title",
-                rules: undefined,
-              }}
-              placeholder="Nhập tiêu đề"
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start">
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "note",
-                rules: undefined,
-              }}
-              placeholder="Nhập nội dung phản hồi"
-              label=""
-              multiline
-              rows={3}
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start justify-between">
-            <ButtonBase className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded">
-              <InsertLinkIcon />
-            </ButtonBase>
-            <ButtonBase
-              className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded"
-              onClick={handleSubmit(handleRepply)}
-            >
-              <SendIcon />
-            </ButtonBase>
-          </Box>
-        </Box>
-      ) : null}
+
+      {data?.status === 1 ||
+        (data?.status === 2 && (
+          <ForumCommentBox
+            fileLoader={discussion.uploadFile}
+            mutateAdd={mutateRepply}
+            idObject={{ discussionId: data?.id }}
+          />
+        ))}
     </Box>
   );
 };

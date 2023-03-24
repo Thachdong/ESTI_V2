@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { suppliers } from "src/api";
 import {
@@ -12,10 +12,10 @@ import { productTypes } from "~modules-core/constance";
 
 export const SupplierQuotesDetailSupplier: React.FC = () => {
   const [supplierDetail, setSupplierDetail] = useState<any>();
-  
-  const {id} = useRouter().query;
 
-  const { control } = useFormContext();
+  const { id } = useRouter().query;
+
+  const { control, setValue } = useFormContext();
 
   const getProductTypesValue = useCallback(() => {
     const { productSupply } = supplierDetail || {};
@@ -24,6 +24,14 @@ export const SupplierQuotesDetailSupplier: React.FC = () => {
       ? []
       : productSupply?.split?.(",")?.map?.((prod: any) => +prod);
   }, [supplierDetail?.productSupply]);
+
+  useEffect(() => {
+    if (!!supplierDetail) {
+      setValue("supplierCode", supplierDetail?.supplierCode);
+    } else {
+      setValue("supplierCode", null);
+    }
+  }, [supplierDetail]);
 
   return (
     <Box className="grid grid-cols-2 gap-4">

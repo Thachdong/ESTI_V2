@@ -1,6 +1,5 @@
 import { Box, List, ListItem, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { paymentDocument } from "src/api";
@@ -9,7 +8,7 @@ import {
   FormInput,
   FormSelect,
 } from "~modules-core/components";
-import { paymentTypes } from "~modules-core/constance";
+import { paymentExpiredIn } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
@@ -27,60 +26,18 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
   return (
     <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3 text-sm">
-        Điều khoản của đơn đặt hàng/ Terms and conditions of purchasing order:
+        ĐIỀU KHOẢN CỦA ĐƠN ĐẶT HÀNG
       </Typography>
 
       <Box className="bg-white rounded flex-grow p-3 ">
         <List className="p-0">
           <ListItem disableGutters className="pb-0 text-sm">
-            - Tổng cộng tiền thanh toán đã bao đồm thuế GTGT và chi phí giao
-            hàng/ Total amount are included VAT and delivery fee
+            - Tổng giá trị báo giá đã bao gồm thuế GTGT, chi phí giao hàng và
+            các khoản phí, lệ phí khác (nếu có).
           </ListItem>
 
           <ListItem disableGutters className="pb-0 text-sm">
-            - Hình thức thanh toán/ Payment term:
-            {!!id ? (
-              <FormInput
-                controlProps={{
-                  name: "paymentType",
-                  control,
-                }}
-                label=""
-                disabled={disabled}
-                className="w-[200px] ml-2"
-                shrinkLabel
-              />
-            ) : (
-              <FormSelect
-                controlProps={{
-                  name: "paymentType",
-                  control,
-                }}
-                label=""
-                options={paymentTypes}
-                valueKey="name"
-                freeSolo
-                className="w-[200px] ml-2"
-                shrinkLabel
-              />
-            )}
-          </ListItem>
-
-          <ListItem disableGutters className="pb-0 text-sm">
-            - Thời gian giao hàng dự kiến / Estimated to delivery: {"  "}
-            <FormDatepicker
-              label=""
-              controlProps={{
-                control,
-                name: "deliverDate",
-              }}
-              className="min-w-[200px] ml-2"
-              disabled={disabled}
-            />
-          </ListItem>
-
-          <ListItem disableGutters className="pb-0 text-sm">
-            - Hiệu lực của báo giá / Valid Thru:
+            - Hiệu lực báo giá đến:
             <FormDatepicker
               label=""
               controlProps={{
@@ -93,22 +50,57 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
           </ListItem>
 
           <ListItem disableGutters className="pb-0 text-sm">
-            - Địa điểm giao hàng/ Place of Delivery:
+            - Thời gian giao hàng: từ 1-3 ngày làm việc đối với hàng hoá có sẵn,
+            chi tiết lịch giao hàng sẽ gửi qua email và cập nhập trên hệ thống
+            tra cứu đơn hàng.
+          </ListItem>
+
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Địa điểm giao hàng:
             <FormInput
               label=""
               controlProps={{
                 control,
                 name: "receiverAddress",
               }}
-              className="min-w-[200px] ml-2"
+              className="min-w-[250px] ml-2"
               fullWidth={false}
               shrinkLabel
               disabled={disabled}
             />
           </ListItem>
 
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Thời hạn thanh toán:
+            {!!id ? (
+              <FormInput
+                controlProps={{
+                  name: "paymentType",
+                  control,
+                }}
+                label=""
+                disabled={disabled}
+                className="w-[250px] ml-2"
+                shrinkLabel
+              />
+            ) : (
+              <FormSelect
+                controlProps={{
+                  name: "paymentType",
+                  control,
+                }}
+                label=""
+                options={paymentExpiredIn}
+                valueKey="name"
+                freeSolo
+                className="w-[250px] ml-2"
+                shrinkLabel
+              />
+            )}
+          </ListItem>
+
           <ListItem disableGutters className="text-sm">
-            - Chứng từ thanh toán / Payment documents:
+            - Chứng từ thanh toán:
             <FormSelect
               options={data}
               label=""
@@ -122,6 +114,11 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
               multiple
               disabled={disabled}
             />
+          </ListItem>
+
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Quý khách hàng xem điều khoản bảo hành tại website:
+            www.navis.com.vn.
           </ListItem>
         </List>
       </Box>

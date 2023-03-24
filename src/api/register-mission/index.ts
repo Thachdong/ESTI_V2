@@ -47,6 +47,7 @@ export const registerMission = {
     request.put<TRegisterMissionUpdate, any>(BASE_URL, payload),
 
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
   confirmLeaveApplication: (params?: {
     registerMissionId: string;
     status: 1 | 2 | 3 | 4;
@@ -54,6 +55,7 @@ export const registerMission = {
     request.post(`${BASE_URL}/ConfirmRegisterMission`, undefined, {
       ...params,
     }),
+
   getListMailReponse: (params?: { registerMissionId: string }) =>
     request.get<any>(
       `${BASE_URL}/MissionResponseList/${params?.registerMissionId}`,
@@ -61,8 +63,12 @@ export const registerMission = {
         ...params,
       }
     ),
+
   createMailReponse: (params?: { registerMissionId: string }) =>
     request.post(`${BASE_URL}/RegisterMissionResponse`, undefined, {
       ...params,
     }),
+
+  uploadFile: (file: FormData) =>
+    request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
 };

@@ -8,11 +8,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import clsx from "clsx";
+import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
-import { meetingDeploy, taskGroup, taskList, TJobGroup } from "src/api";
+import { meetingDeploy } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
@@ -20,6 +20,7 @@ import {
   StatusChip,
 } from "~modules-core/components";
 import { useSession } from "~modules-core/customHooks/useSession";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import {
   MeetingDeployDialog,
@@ -46,7 +47,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
 
   const [repply, setReply] = useState(false);
 
-  const { userInfo } = useSession();
+  const { userInfo } = useSession()?.userInfo || {};
 
   const columns: TGridColDef[] = [
     {
@@ -100,7 +101,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
             <Tooltip title="Xem phản hồi">
               <ButtonBase onClick={() => setReply(true)}>
                 <Typography className="text-main text-sm text-left">
-                  {row?.descriptionJob}
+                  {`${row?.descriptionJob} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
               </ButtonBase>
             </Tooltip>
@@ -132,18 +133,73 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
       sortAscValue: 15,
       sortDescValue: 6,
       renderCell: ({ row }) => {
-        const listParticipant = JSON.parse(row?.participant || "[]");
+        let listParticipant: any[] = [];
+
+        try {
+          listParticipant = JSON.parse(row?.participant || "[]");
+        } catch (error) {
+          console.log(error);
+        }
 
         return (
           <List className="p-0 grid grid-cols-5 gap-2">
             {listParticipant?.map((item: any) => (
               <ListItem className="p-0">
                 <Tooltip title={item?.paticipantName}>
-                  <Avatar className="w-[24px] h-[24px]" />
+                  <Avatar
+                    className={clsx(
+                      "w-[24px] h-[24px]",
+                      item?.isParticipate && "bg-main"
+                    )}
+                  />
                 </Tooltip>
               </ListItem>
             ))}
           </List>
+        );
+      },
+    },
+    {
+      field: "confirmParticipation",
+      headerName: "Tổng nguời tham gia",
+      minWidth: 250,
+      isFilter: false,
+      isSort: false,
+      renderCell: ({ row }) => {
+        let listParticipant: any[] = [];
+
+        try {
+          listParticipant = JSON.parse(row?.confirmParticipation || "[]");
+        } catch (error) {
+          console.log(error);
+        }
+
+        const joinParticipants = listParticipant.filter(
+          (p: any) => p?.isParticipate
+        ).length;
+
+        const totalParticipants = listParticipant.length;
+
+        return (
+          <Box>
+            <List className="p-0 grid grid-cols-5 gap-2">
+              {listParticipant?.map((item: any) => (
+                <ListItem className="p-0">
+                  <Tooltip title={item?.paticipantName}>
+                    <Avatar
+                      className={clsx(
+                        "w-[24px] h-[24px]",
+                        item?.isParticipate && "bg-main"
+                      )}
+                    />
+                  </Tooltip>
+                </ListItem>
+              ))}
+            </List>
+            <Typography className="text-xs italic">
+              (SL tham gia: {`${joinParticipants} / ${totalParticipants}`})
+            </Typography>
+          </Box>
         );
       },
     },
@@ -176,21 +232,38 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
       field: "accept",
       headerName: "Tham gia",
       minWidth: 100,
+      isFilter: false,
+      isSort: false,
       renderCell: ({ row }) => {
-        const listParticipant = JSON.parse(row?.participant || "[]");
-        const isAccept = listParticipant.find(
-          (item: any) => item?.id == userInfo?.userInfo?.userId
+        let listParticipant: any[] = [];
+
+        try {
+          listParticipant = JSON.parse(row?.confirmParticipation || "[]");
+        } catch (error: any) {
+          console.log(error);
+        }
+
+        const loginParticipant = listParticipant.find(
+          (item: any) => item?.id == userInfo?.userId
         );
+
         return (
           <>
-            {isAccept ? (
+            {!loginParticipant?.isParticipate ? (
               <ButtonBase
                 onClick={() => handleAcceptMeeting(row?.id)}
                 className="bg-success text-white px-2 py-1 rounded font-semibold"
               >
                 Tham gia
               </ButtonBase>
-            ) : null}
+            ) : (
+              <ButtonBase
+                onClick={() => handleAcceptMeeting(row?.id)}
+                className="bg-warning text-white text-xs px-2 py-1 rounded font-semibold"
+              >
+                Rời khỏi
+              </ButtonBase>
+            )}
           </>
         );
       },
@@ -268,9 +341,9 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
     }
   );
 
-  const handleAcceptMeeting = (id: string) => {
-    mutateAccept.mutateAsync({ meetingDeployId: id });
-  };
+  const handleAcceptMeeting = useCallback(async (id: string) => {
+    await mutateAccept.mutateAsync({ meetingDeployId: id });
+  }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@mui/material";
+import { Box, List, ListItem, Stack, Tooltip, Typography } from "@mui/material";
 import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -90,20 +90,70 @@ export const feedbackColumns: TGridColDef[] = [
       row?.created ? moment(row?.created).format("DD/MM/YYYY") : "",
   },
   {
-    field: "statusName",
-    headerName: "Trạng thái",
-    minWidth: 75,
-  },
-  {
     field: "createdByName",
     headerName: "Nguồn gửi",
     minWidth: 150,
   },
   {
+    field: "statusName",
+    headerName: "Trạng thái",
+    minWidth: 75,
+  },
+  {
+    field: "titleMail",
+    headerName: "Tiêu đề email",
+    minWidth: 125,
+    flex: 1,
+  },
+  {
     field: "note",
-    headerName: "Nội dung",
+    headerName: "Nội dung email trao đổi",
+    minWidth: 250,
+    renderCell: ({ row }) => (
+      <div dangerouslySetInnerHTML={{ __html: row?.note }} />
+    ),
+    flex: 1,
+  },
+  {
+    field: "ListItem",
+    headerName: "File đính kèm",
     minWidth: 150,
-    renderCell: ({row}) => <div dangerouslySetInnerHTML={{__html: row?.note}} />,
+    renderCell: ({ row }) => {
+      const { attachFile } = row || {};
+
+      let files: any[] = [];
+
+      try {
+        files = attachFile?.split(",");
+      } catch (error) {
+        console.log(error);
+      }
+
+      if (files.length === 0) {
+        return (
+          <Typography className="text-xs text-grey">
+            (Không có file đính kèm)
+          </Typography>
+        );
+      } else {
+        return (
+          <List className="truncate">
+            {files.map((f: string, index: number) => (
+              <ListItem key={index} className="truncate">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="truncate"
+                  href={f}
+                >
+                  {f}
+                </a>
+              </ListItem>
+            ))}
+          </List>
+        );
+      }
+    },
     flex: 1,
   },
 ];

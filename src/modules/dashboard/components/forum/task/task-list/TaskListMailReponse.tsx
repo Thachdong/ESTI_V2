@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  ButtonBase,
   List,
   ListItem,
   Skeleton,
@@ -9,29 +8,24 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
-import { taskList, TTaskList, TTaskListUpdate } from "src/api";
-import { FormInput } from "~modules-core/components";
+import { taskList } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
-import SendIcon from "@mui/icons-material/Send";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import { toast } from "~modules-core/toast";
 import clsx from "clsx";
 import Link from "next/link";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import { ForumCommentBox } from "~modules-dashboard/components";
+import { toast } from "~modules-core/toast";
 
 type TProps = {
   data: any;
 };
 
 export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
-  const { control, handleSubmit } = useForm();
-
+  // DATA FETCHING
   const {
     data: dataRepList,
     isLoading,
-    isFetching,
     refetch,
   } = useQuery(
     ["taskListMail", "loading"],
@@ -50,16 +44,12 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
     (payload: any) => taskList.createMailReponse(payload),
     {
       onSuccess: (data) => {
-        toast.success(data.resultMessage);
+        toast.success(data?.resultMessage);
 
         refetch?.();
       },
     }
   );
-
-  const handleRepply = (newData: any) => {
-    mutateRepply.mutateAsync({ ...newData, taskListId: data?.id });
-  };
 
   return (
     <Box className="w-[700px] h-screen relative">
@@ -90,8 +80,17 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
                       className="flex gap-3 items-start border border-solid border-[#f2f2f2] rounded w-full shadow min-h-[76px]"
                     >
                       <Box className="text-center">
-                        <Tooltip title={item?.createdByName || "Anonymus"}>
-                          <Avatar className="m-auto" />
+                        <Tooltip title={item?.fullName || "Anonymus"}>
+                          {item?.avatar ? (
+                            <img
+                              src={item?.avatar}
+                              width={30}
+                              height={30}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <Avatar className="m-auto" />
+                          )}
                         </Tooltip>
                       </Box>
                       <Box className="w-full">
@@ -101,14 +100,14 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
                               {item?.titleMail}
                             </Typography>
                             <Typography className="text-xs text-[#908d8d]">
-                              {_format.converseDate(item?.created)}
+                              {_format.converseDateTime(item?.created)}
                             </Typography>
                           </Box>
-                          <Box>
+                          {/* <Box>
                             <Typography className="text-xs text-main border border-solid px-2 py-[2px] border-main rounded-full font-semibold">
                               {item?.statusName}
                             </Typography>
-                          </Box>
+                          </Box> */}
                         </Box>
                         <Typography className="text-sm mt-2 text-[#838181]">
                           {item?.note}
@@ -128,7 +127,7 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
                                     <Link href={item}>
                                       <a className="text-main no-underline text-sm flex items-center font-semibold gap-3">
                                         <InsertDriveFileIcon />{" "}
-                                        <span>File {index}</span>
+                                        <span>File {index + 1}</span>
                                       </a>
                                     </Link>
                                   </ListItem>
@@ -154,46 +153,14 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
         </Box>
       )}
 
-      {data?.status === 1 || data?.status === 2 ? (
-        <Box className="px-3 absolute bottom-1 gap-3  w-full">
-          <Box>
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "title",
-                rules: undefined,
-              }}
-              placeholder="Nhập tiêu đề"
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start">
-            <FormInput
-              controlProps={{
-                control: control,
-                name: "note",
-                rules: undefined,
-              }}
-              placeholder="Nhập nội dung phản hồi"
-              label=""
-              multiline
-              rows={3}
-              shrinkLabel
-            />
-          </Box>
-          <Box className="w-full flex items-start justify-between">
-            <ButtonBase className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded">
-              <InsertLinkIcon />
-            </ButtonBase>
-            <ButtonBase
-              className="p-2 flex justify-center items-center bg-[#dde8f3] text-main rounded"
-              onClick={handleSubmit(handleRepply)}
-            >
-              <SendIcon />
-            </ButtonBase>
-          </Box>
-        </Box>
-      ) : null}
+      {data?.status === 1 ||
+        (data?.status === 2 && (
+          <ForumCommentBox
+            fileLoader={taskList.uploadFile}
+            mutateAdd={mutateRepply}
+            idObject={{ taskListId: data?.id }}
+          />
+        ))}
     </Box>
   );
 };

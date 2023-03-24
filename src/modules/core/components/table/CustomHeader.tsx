@@ -137,6 +137,12 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // IMPLEMENT FILTER OPERATIONS
   const [filterData, setFilterData] = useState<any>({ isCheck: false });
 
+  // useEffect(() => {
+  //   if (type === "select" && !!options && !!filterKey) {
+  //     setFilterData({...filterData, searchTerm: options?.[0]?.value})
+  //   }
+  // }, [options, type, filterKey])
+
   const handleFilter = (value: string | number) => {
     const updateQuery = {
       ...query,
@@ -202,7 +208,7 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
             className="w-10/12 border-0 bg-[#F3F6F9] "
           >
             {options?.map(({ value, label }, index: number) => (
-              <option key={`${label}-${value}-${index}`} value={value} className="min-w-[200px] p-2">
+              <option key={`${label}-${value}-${index}`} value={value as any} className="min-w-[200px] p-2">
                 {label}
               </option>
             ))}

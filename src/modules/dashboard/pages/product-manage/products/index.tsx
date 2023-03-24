@@ -6,6 +6,7 @@ import {
   useState,
   MouseEvent,
   useRef,
+  MouseEventHandler,
 } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
@@ -150,10 +151,10 @@ export const ProductsPage: React.FC = () => {
   }, [defaultValue]);
 
   const handleChangeStatus = async (
-    e: ChangeEvent<HTMLInputElement>,
+    e: any,
     product: TProduct
   ) => {
-    const isChecked = e.target.checked;
+    const isChecked = e?.target?.checked;
 
     const { productName } = product || {};
 
@@ -178,7 +179,7 @@ export const ProductsPage: React.FC = () => {
         <Checkbox
           checked={!row.deletedProductWebsite}
           value={row.deletedProductWebsite}
-          onChange={(e) => handleChangeStatus(e, row)}
+          onClick={(e) => handleChangeStatus(e, row)}
         />
       ),
     },

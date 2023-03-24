@@ -65,6 +65,7 @@ export const LeaveApplycationPage = () => {
         <AddButton children="Tạo nghỉ phép" onClick={onCreateMeeting} />
         <SearchBox />
       </Box>
+
       <LeaveApplycationTable
         data={data?.items}
         isFetching={isFetching}
@@ -72,6 +73,7 @@ export const LeaveApplycationPage = () => {
         refetch={refetch}
         paginationProps={paginationProps}
       />
+      
       <LeaveApplycationDialog
         onClose={handelClose}
         open={Open}

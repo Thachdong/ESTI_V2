@@ -42,38 +42,19 @@ export const quotationRequestColumns: TGridColDef[] = [
     sortDescValue: 3,
   },
   {
-    field: "accountCode",
-    headerName: "Tài khoản con",
-    flex: 1,
-    minWidth: 150,
-    filterKey: "curatorAccount",
-    // sortAscValue: 11,
-    // sortDescValue: 3,
-  },
-  {
     field: "curatorName",
-    headerName: "Tên người liên hệ",
+    headerName: "Tên NLH",
     flex: 1,
     minWidth: 175,
     filterKey: "curatorName",
-    // sortAscValue: 11,
-    // sortDescValue: 3,
+    isSort: false,
   },
   {
-    field: "preOrderStatusName",
-    headerName: "Trạng thái YC",
+    field: "accountCode",
+    headerName: "Mã NLH",
+    flex: 1,
     minWidth: 150,
-    filterKey: "status",
-    sortAscValue: 15,
-    sortDescValue: 7,
-    type: "select",
-    options: quoteOrderStatus,
-    renderCell: ({ row }) => (
-      <StatusChip
-        status={row.preOrderStatus}
-        label={row.preOrderStatusName}
-        color={row.preOrderStatus === 4 ? "error" : undefined}
-      />
-    ),
+    filterKey: "curatorAccount",
+    isSort: false,
   },
 ];

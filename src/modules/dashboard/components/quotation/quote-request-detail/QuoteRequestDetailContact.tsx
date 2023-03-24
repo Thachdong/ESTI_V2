@@ -74,7 +74,9 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
           label="Người phụ trách:"
           disabled={disabled}
           getOptionLabel={(opt) =>
-            !!opt ? opt?.curatorName + " - " + opt?.statusName : ""
+            !!opt
+              ? `${opt?.curatorName} - ${opt?.accountCode} - ${opt?.statusName} - ${opt?.accountTypeName}`
+              : ""
           }
         />
       );
