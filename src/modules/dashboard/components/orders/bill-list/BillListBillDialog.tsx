@@ -1,7 +1,4 @@
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import moment from "moment";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -25,8 +22,8 @@ export const BillListBillDialog: React.FC<TDialog> = ({
 }) => {
   const { control, handleSubmit } = useForm<any>({
     defaultValues: {
-      paymentDate: moment().valueOf()
-    }
+      paymentDate: moment().valueOf(),
+    },
   });
 
   const title = "Thêm mới phiếu thanh toán";
@@ -47,9 +44,9 @@ export const BillListBillDialog: React.FC<TDialog> = ({
 
   const handleUpdate = useCallback(
     async (data: any) => {
-      const { id, nextPaymentDate } = defaultValue || {};
+      const { id } = defaultValue || {};
 
-      const { paid, paymentDate } = data || {};
+      const { paid, paymentDate, nextPaymentDate } = data || {};
 
       await mutateUpdate.mutateAsync({
         billId: id,
@@ -73,6 +70,14 @@ export const BillListBillDialog: React.FC<TDialog> = ({
           label="Ngày thanh toán"
         />
 
+        <FormDatepicker
+          controlProps={{
+            control,
+            name: "nextPaymentDate",
+          }}
+          label="Ngày thanh toán tiếp theo"
+        />
+
         <FormInputNumber
           controlProps={{
             control,
@@ -80,6 +85,7 @@ export const BillListBillDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập số tiền thanh toán" },
           }}
           label="Số tiền thanh toán"
+          shrinkLabel
         />
 
         <Typography>

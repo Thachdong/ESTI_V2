@@ -24,7 +24,7 @@ export const PurchaseDetailImportHistory: React.FC<TProps> = ({ status }) => {
 
   // DATA FETCHING
   const {
-    data: exportHistory,
+    data: importHistory,
     isLoading,
     isFetching,
   } = useQuery(
@@ -52,7 +52,7 @@ export const PurchaseDetailImportHistory: React.FC<TProps> = ({ status }) => {
       <Box className="bg-white grid gap-4 rounded">
         <DataTable
           rows={
-            exportHistory?.items?.map?.((item: any, index: number) => ({
+            importHistory?.items?.map?.((item: any, index: number) => ({
               ...item,
               no: index + 1,
             })) || []

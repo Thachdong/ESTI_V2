@@ -1,3 +1,4 @@
+import { Box, Tooltip } from "@mui/material";
 import moment from "moment";
 import { _format } from "~modules-core/utility/fomat";
 import { TGridColDef } from "~types/data-grid";
@@ -76,6 +77,11 @@ export const productColumns: TGridColDef[] = [
       ),
   },
   {
+    field: "vat",
+    headerName: "Thuế GTGT",
+    width: 120,
+  },
+  {
     field: "price",
     headerName: "Đơn giá",
     minWidth: 120,
@@ -85,6 +91,18 @@ export const productColumns: TGridColDef[] = [
     field: "totalPrice",
     headerName: "Thành tiền",
     minWidth: 120,
-    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
+    renderCell: ({ row }) => {
+      const { quantity, price, vat } = row || {};
+
+      const total = quantity * price;
+
+      const tax = (total * +vat) / 100;
+
+      return (
+        <Tooltip title={"Sau thuế: " + _format.getVND(total + tax)}>
+          <Box>{_format.getVND(row.totalPrice)}</Box>
+        </Tooltip>
+      );
+    },
   },
 ];

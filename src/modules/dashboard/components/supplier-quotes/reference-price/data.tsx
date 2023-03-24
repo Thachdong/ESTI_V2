@@ -25,6 +25,15 @@ export const referencePriceColumns: TGridColDef[] = [
     sortDescValue: 6,
   },
   {
+    field: "supplierCode",
+    headerName: "Mã NCC",
+    minWidth: 200,
+    flex: 1,
+    filterKey: "supplierCode",
+    sortAscValue: 16,
+    sortDescValue: 5,
+  },
+  {
     field: "productCode",
     headerName: "Mã SP",
     minWidth: 75,

@@ -34,12 +34,21 @@ export const suplierQuotesColumns: TGridColDef[] = [
     },
     {
       field: "supplierName",
-      headerName: "Mã SP",
+      headerName: "Tên NCC",
       minWidth: 200,
       filterKey: "supplierName",
       flex: 1,
       sortDescValue: 5,
       sortAscValue: 17,
+    },
+    {
+      field: "totalPrice", // api chỉ trả totalPrice, không trả price, quantity
+      headerName: "Giá",
+      minWidth: 120,
+      filterKey: "totalPrice",
+      flex: 1,
+      isSort: false,
+      renderCell: ({row}) => _format.getVND(row?.totalPrice)
     },
     {
       field: "statusName",

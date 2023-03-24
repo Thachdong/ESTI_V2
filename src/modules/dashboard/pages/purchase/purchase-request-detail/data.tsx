@@ -36,15 +36,21 @@ export const purchaseDetailImportColumns: TGridColDef[] = [
     ),
   },
   {
-    field: "importTotalPrice",
+    field: "totalPrice", // api đổi từ importTotalPrice => totalPrice
     headerName: "Giá trị hàng nhập",
     minWidth: 150,
     flex: 1,
-    renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
+    renderCell: ({ row }) => _format.getVND(row?.totalPrice),
   },
   {
-    field: "deliveryCode",
+    field: "deliveryCode", // api chỉ trả về deliveryCode không có deliveryName
     headerName: "Nhân viên thực hiện",
+    minWidth: 150,
+    flex: 1,
+  },
+  {
+    field: "stockerCode", // api chỉ trả về stockerCode không có stockerName
+    headerName: "Nhân viên thủ kho",
     minWidth: 150,
     flex: 1,
   },

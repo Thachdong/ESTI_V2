@@ -98,7 +98,6 @@ export const CustomersReceiver: React.FC<TProps> = ({
         controlProps={{
           control,
           name: `contacts.${index}.receiverPhone2`,
-          rules: { required: "Phải nhập số điện thoại 2" },
         }}
         label="Số điện thoại 2"
         shrinkLabel

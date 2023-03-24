@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, List, ListItem, Typography } from "@mui/material";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
@@ -37,8 +37,6 @@ export const ImportDetailTable: React.FC<TProps> = ({
 
   const router = useRouter();
 
-  const { id } = router.query;
-
   const { importStatus } = transactionData || {};
 
   const { watch, setValue } = useFormContext();
@@ -46,15 +44,6 @@ export const ImportDetailTable: React.FC<TProps> = ({
   const { productList = [] } = watch();
 
   const disabled = importStatus !== undefined;
-
-  const totalPrice = useMemo(
-    () =>
-      productList?.reduce(
-        (total: number, product: any) => total + product?.totalPrice,
-        0
-      ),
-    [productList]
-  );
 
   // METHODS
   const handleClose = useCallback(() => {
@@ -399,6 +388,43 @@ export const ImportDetailTable: React.FC<TProps> = ({
     }
   }, [defaultValue, dialog]);
 
+  const getPrice = useMemo(() => {
+    if (transactionData) {
+      return {
+        totalPrice: _format.getVND(transactionData?.totalPriceNotTax),
+        totalTax: _format.getVND(transactionData?.totalTax),
+        finalPrice: _format.getVND(transactionData?.totalPrice),
+      };
+    } else {
+      const initResult = {
+        totalPrice: 0,
+        totalTax: 0,
+        finalPrice: 0,
+      };
+
+      const resultObj = productList.reduce(
+        (result: any, { price, quantity, vat }: any) => {
+          const total = quantity * price;
+
+          const tax = (total * vat) / 100;
+
+          return {
+            totalPrice: result?.totalPrice + total,
+            totalTax: result?.totalTax + tax,
+            finalPrice: result?.finalPrice + total + tax,
+          };
+        },
+        initResult
+      );
+
+      return {
+        totalPrice: _format.getVND(resultObj.totalPrice),
+        totalTax: _format.getVND(resultObj.totalTax),
+        finalPrice: _format.getVND(resultObj.finalPrice),
+      };
+    }
+  }, [transactionData, productList]);
+
   return (
     <Box className="">
       <Box className="flex items-center mb-3">
@@ -449,15 +475,27 @@ export const ImportDetailTable: React.FC<TProps> = ({
           />
         </ContextMenuWrapper>
 
-        <Box className="border-0 border-t border-solid border-grey-3 pb-1">
-          <Typography className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+        <List className="border-0 border-t border-solid border-grey-3 p-0 pb-1">
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
             <span className="font-semibold col-span-4 text-right">
               {" "}
-              Tổng cộng tiền thanh toán(VNĐ):
+              Thành tiền chưa có thuế(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.totalPrice}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
+            <span className="font-semibold col-span-4 text-right">
+              Thuế GTGT(VNĐ):{" "}
             </span>
-            <span className="text-base"> {_format.getVND(totalPrice)}</span>
-          </Typography>
-        </Box>
+            <span className="text-base">{getPrice.totalTax}</span>
+          </ListItem>
+          <ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
+            <span className="font-semibold col-span-4 text-right">
+              Tổng cộng tiền thanh toán(VNĐ):
+            </span>{" "}
+            <span className="text-base">{getPrice.finalPrice}</span>
+          </ListItem>
+        </List>
       </Box>
       {/* IMPLEMENT TRANSACTION DIALOG */}
       <ImportDetailProductDialog

@@ -170,7 +170,6 @@ export const CustomerTypeDialog: React.FC<TDialog> = ({
             control,
           }}
           label="Chiết khấu"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
           shrinkLabel
@@ -182,7 +181,6 @@ export const CustomerTypeDialog: React.FC<TDialog> = ({
             control,
           }}
           label="Tích điểm"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
           shrinkLabel

@@ -55,20 +55,6 @@ export const PurchaseDetailTerms: React.FC<TProps> = ({ disabled }) => {
         </ListItem>
 
         <ListItem className="px-2 pb-0">
-          - Thời gian giao hàng dự kiến / Estimated to delivery: {"  "}
-          <FormDatepicker
-            label=""
-            controlProps={{
-              control,
-              name: "deliverDate",
-            }}
-            className="min-w-[200px] ml-2"
-            disabled={disabled}
-            shrinkLabel
-          />
-        </ListItem>
-
-        <ListItem className="px-2 pb-0">
           - Địa điểm giao hàng/ Place of Delivery:
           <FormInput
             label=""

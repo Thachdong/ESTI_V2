@@ -9,12 +9,13 @@ import { BaseButton } from "./BaseButton";
 
 type TProps = TBaseButton & {
   loader: (file: FormData) => Promise<TBaseResponse<string>>;
+  refetch?: () => void;
 };
 
 export const UploadButton: React.FC<TProps> = (props) => {
   const { control } = useForm();
 
-  const { className, children, loader, ...restProps } = props;
+  const { className, children, loader, refetch, ...restProps } = props;
 
   const renderTitle = (loading: boolean) => (
     <BaseButton
@@ -40,7 +41,10 @@ export const UploadButton: React.FC<TProps> = (props) => {
       }}
       loader={loader}
       renderTitle={renderTitle}
-      successToast={() => toast.success("Tải lên file excel thành công!")}
+      successToast={() => {
+        toast.success("Tải lên file excel thành công!");
+        refetch?.();
+      }}
     />
   );
 };

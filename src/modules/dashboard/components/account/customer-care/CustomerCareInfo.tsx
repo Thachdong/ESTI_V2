@@ -11,9 +11,10 @@ import {
 
 type TProps = {
   disabled: boolean;
+  type: string;
 };
 
-export const CustomerCareInfo: React.FC<TProps> = ({ disabled }) => {
+export const CustomerCareInfo: React.FC<TProps> = ({ disabled, type }) => {
   const [curator, setCurator] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -31,8 +32,8 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled }) => {
   const { companyInfo, curatorInfo } = customerDetail || {};
 
   useEffect(() => {
-    setValue("curatorId", "");
-  }, [customerId]);
+    type !== "Add" && setValue("curatorId", "");
+  }, [customerId, type]);
 
   useEffect(() => {
     if (!!curatorId) {
@@ -54,7 +55,7 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled }) => {
               control: control,
               rules: { required: "Phải chọn mã khách hàng" },
             }}
-            disabled={disabled}
+            disabled={type === "View"}
             shrinkLabel
             label="Khách hàng"
           />
@@ -98,7 +99,9 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled }) => {
             label={"Người liên hệ:"}
             callback={(opt) => setCurator(opt)}
             getOptionLabel={(opt: any) =>
-              !!opt ? `${opt.curatorName} - ${opt.accountCode} - ${opt.statusName}` : ""
+              !!opt
+                ? `${opt.curatorName} - ${opt.accountCode} - ${opt.statusName}`
+                : ""
             }
             disabled={disabled}
             shrinkLabel

@@ -209,7 +209,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
             !!opt ? `${opt?.supplierCode} - ${opt?.supplierName}` : ""
           }
           shrinkLabel
-          disabled={disabled}
+          disabled={type === "View"}
         />
 
         <FormSelect
@@ -225,7 +225,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           shrinkLabel
           valueKey="productId"
           options={productList || []}
-          disabled={!supplierId || disabled}
+          disabled={!supplierId || type === "View"}
         />
 
         <FormInputNumber
@@ -262,7 +262,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
             control,
             name: "expireDate",
           }}
-          label={"Hạn sử dụng"}
+          label={"Ngày hết liệu lực"}
           disabled={disabled}
         />
 

@@ -52,6 +52,7 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({ disabled }) => {
                 : ""
             }
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormInputBase

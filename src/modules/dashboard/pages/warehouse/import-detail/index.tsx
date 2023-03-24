@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
@@ -13,6 +13,7 @@ import { useQuery } from "react-query";
 import { purchaseOrder, warehouse } from "src/api";
 import { _format } from "~modules-core/utility/fomat";
 import { useRouter } from "next/router";
+import { FormInput } from "~modules-core/components";
 
 export const ImportDetailPage: React.FC = () => {
   // LOCAL STATE AND EXTRACT PROPS
@@ -163,6 +164,26 @@ export const ImportDetailPage: React.FC = () => {
             />
           </>
         )}
+
+        <Box className="mt-4">
+          <Typography className="text-sm font-semibold mb-3 ">
+            GHI CHÚ
+          </Typography>
+
+          <Box className="grid gap-3 rounded p-3 bg-white">
+            <FormInput
+              controlProps={{
+                control: methods.control,
+                name: "note",
+              }}
+              shrinkLabel
+              label="Nhập ghi chú"
+              multiline
+              minRows={3}
+              disabled={!!query.id}
+            />
+          </Box>
+        </Box>
 
         <ImportDetailSupplierInfo supplierData={orderDetail} />
 

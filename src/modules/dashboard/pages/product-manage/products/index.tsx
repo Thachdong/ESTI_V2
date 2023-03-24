@@ -1,4 +1,10 @@
-import { Box, Checkbox, InputLabel, Paper } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  Paper,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import {
   ChangeEvent,
@@ -150,18 +156,15 @@ export const ProductsPage: React.FC = () => {
     }
   }, [defaultValue]);
 
-  const handleChangeStatus = async (
-    e: any,
-    product: TProduct
-  ) => {
+  const handleChangeStatus = async (e: any, product: TProduct) => {
     const isChecked = e?.target?.checked;
 
     const { productName } = product || {};
 
     if (
       confirm(
-        `Cập nhật ${
-          isChecked ? "hiển thị" : "ẩn"
+        `${
+          isChecked ? "Hiển thị" : "Ẩn"
         } sản phẩm ${productName} trên website?`
       )
     ) {
@@ -176,10 +179,12 @@ export const ProductsPage: React.FC = () => {
       field: "deletedProductWebsite",
       headerName: "Website",
       renderCell: ({ row }) => (
-        <Checkbox
-          checked={!row.deletedProductWebsite}
+        <FormControlLabel
+          control={<Checkbox size="small" />}
+          label=""
           value={row.deletedProductWebsite}
-          onClick={(e) => handleChangeStatus(e, row)}
+          onChange={(e) => handleChangeStatus(e, row)}
+          checked={!row.deletedProductWebsite}
         />
       ),
     },

@@ -120,6 +120,7 @@ export const ImportDetailButtonsBox: React.FC<TPayload> = ({
       supplierId: data?.supplierId,
       purchaseId: data?.purchaseId,
       stockerId: data?.stockerId,
+      note: data?.note,
       warehouseCreate: productList,
     };
 

@@ -7,7 +7,7 @@ import { CardReport } from "~modules-core/components";
 export const WarehouseExportStatistical = () => {
   const query = useRouter().query;
 
-  const { data: statisticalData } = useQuery(["getExportStatisticalData"], () =>
+  const { data: statisticalData } = useQuery(["getExportStatisticalData", {...query}], () =>
     warehouse.getExportStatisticalData({...query}).then((res) => res.data)
   );
 

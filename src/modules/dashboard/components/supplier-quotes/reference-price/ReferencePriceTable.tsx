@@ -148,7 +148,7 @@ export const ReferencePriceTable: React.FC<TProps> = ({
 
           <RefreshButton onClick={() => refetch()} />
 
-          <UploadButton loader={referencePrice.uploadFile} />
+          <UploadButton refetch={refetch} loader={referencePrice.uploadFile} />
         </Box>
       </Box>
 

@@ -27,7 +27,7 @@ export const CustomersReceiveInfoForm: React.FC<TProps> = ({ type }) => {
 
   // METHODS
   const handleRemove = useCallback((index: number) => {
-    if (confirm("Xác nhận xóa thông tin liên hệ " + index + 1)) {
+    if (confirm(`Xác nhận xóa thông tin liên hệ ${index + 1}`)) {
       remove(index);
     }
   }, []);
