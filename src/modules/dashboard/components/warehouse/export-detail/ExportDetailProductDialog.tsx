@@ -31,7 +31,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
   getWarehouseConfig,
   productOptions,
-}) => {
+}) => {  
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedLot, setSelectedLot] = useState<any>();
@@ -219,6 +219,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             getOptionLabel={(opt: any) =>
               !!opt ? `${opt?.productCode} - ${opt?.productName}` : ""
             }
+            disabled={type === "Update"}
           />
         ) : (
           <FormSelect
@@ -232,6 +233,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             callback={(opt) => setSelectedProduct(opt)}
             valueKey="productId"
             labelKey="productCode"
+            disabled={type === "Update"}
           />
         )}
 

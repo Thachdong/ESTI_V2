@@ -171,9 +171,9 @@ export const QuoteDetailPage: React.FC = () => {
           sendMailData={{
             to: quoteDetail?.preQuoteView?.curatorEmail,
             cc: [
-              quoteDetail?.preQuoteView?.curatorEmail,
+              // quoteDetail?.preQuoteView?.curatorEmail, api yêu cầu chỉ truyền email của sale phụ trách
               quoteDetail?.preQuoteView?.salesEmail,
-              quoteDetail?.preQuoteView?.receiverEmail,
+              // quoteDetail?.preQuoteView?.receiverEmail,
             ],
           }}
           quoteDetail={quoteDetail}

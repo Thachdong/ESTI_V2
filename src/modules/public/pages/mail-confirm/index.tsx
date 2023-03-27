@@ -114,7 +114,18 @@ export const MailConfirmPage: React.FC = () => {
 
   const handleConfirm = useCallback(
     async (data: any) => {
-      await mutate.mutateAsync({ ...data, code });
+      const {attachFile, ...rest} = data || {};
+
+      let payload = {
+        ...rest,
+        code,
+      }
+
+      if (!!attachFile && attachFile?.length > 0) {
+        payload.attachFile = attachFile.join?.(",");
+      }
+      
+      await mutate.mutateAsync(payload);
     },
     [code]
   );

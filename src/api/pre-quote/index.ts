@@ -84,10 +84,11 @@ export const preQuote = {
   checkMailCode: (code: string) =>
     request.get<any>(`${BASE_URL}/CheckCodeResponse?code=${code}`),
 
-  mailConfirm: (payload: TPreQuoteMailConfirm) =>
+  mailConfirm: (params: TPreQuoteMailConfirm) =>
     request.post<any, any>(
-      `${BASE_URL}/MailResponse?code=${payload.code}&title=${payload?.title}&note=${payload?.note}&attachFile=${payload?.attachFile}`,
-      {}
+      `${BASE_URL}/MailResponse`,
+      {},
+      {...params}
     ),
 
   uploadFile: (file: FormData) =>
