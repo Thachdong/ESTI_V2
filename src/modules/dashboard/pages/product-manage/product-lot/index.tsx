@@ -109,7 +109,7 @@ export const ProductLotPage: React.FC = () => {
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = data?.items.find((item) => item.id === id);
+    const currentRow = data?.items.find((item: any) => item.id === id);
 
     defaultValue.current = currentRow;
   };
