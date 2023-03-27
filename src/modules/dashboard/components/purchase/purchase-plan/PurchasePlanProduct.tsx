@@ -3,26 +3,30 @@ import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { products as productApi } from "src/api";
+import { products as productApi, referencePrice } from "src/api";
 import {
   FormInput,
   FormInputBase,
   FormInputNumber,
   FormSelect,
+  FormSelectAsync,
 } from "~modules-core/components";
 import { VAT } from "~modules-core/constance";
+import { _format } from "~modules-core/utility/fomat";
 
 type TProps = {
   disabled: boolean;
-  type: string
+  type: string;
 };
 
 export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
+  const [selectedReferencePrice, setSelectedReferencePrice] = useState<any>();
+
   const { control, watch, setValue } = useFormContext();
 
-  const { supplierId, quantity, price, vat } = watch();
+  const { supplierId, quantity, price, productId } = watch();
 
   // DATA FETCHING
   const { data: productBySupplier } = useQuery(
@@ -39,18 +43,23 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
     setSelectedProduct(opt);
   }, []);
 
+  // SIDE EFFECTS
   useEffect(() => {
     if (!quantity || !price) {
       setValue("totalPrice", 0);
     } else {
       const total = quantity * price;
 
-      const tax = (total * +vat) / 100;
-
-      setValue("totalPrice", total + tax);
+      setValue("totalPrice", total);
     }
-  }, [quantity, price, vat]);
+  }, [quantity, price]);
 
+  useEffect(() => {
+    if (!!selectedReferencePrice) {
+      setValue("supplierId", selectedReferencePrice?.supplierId)
+    }
+  }, [selectedReferencePrice])
+  
   return (
     <Box className="mb-4">
       <Typography className="font-semibold text-sm mb-2">
@@ -58,18 +67,96 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
       </Typography>
 
       <Box className="grid grid-cols-2 gap-3">
-        <FormSelect
+        {type === "Add" ? (
+          <FormSelect
+            controlProps={{
+              control,
+              name: "productId",
+              rules: { required: "Phải nhập mã SP" },
+            }}
+            label="Mã SP:"
+            labelKey="productCode"
+            valueKey="productId"
+            options={productBySupplier || []}
+            callback={callback}
+            shrinkLabel
+          />
+        ) : (
+          <FormSelectAsync
+            controlProps={{
+              control,
+              name: "productId",
+              rules: { required: "Phải nhập mã SP" },
+            }}
+            label="Mã SP:"
+            labelKey="productCode"
+            fetcher={productApi.getList}
+            callback={callback}
+            disabled={true}
+            shrinkLabel
+          />
+        )}
+
+        {type === "Add" ? (
+          <FormSelect
+            controlProps={{
+              control,
+              name: "productId",
+            }}
+            label="Tên SP:"
+            labelKey="productName"
+            valueKey="productId"
+            options={productBySupplier || []}
+            callback={callback}
+            shrinkLabel
+          />
+        ) : (
+          <FormSelectAsync
+            controlProps={{
+              control,
+              name: "productId",
+              rules: { required: "Phải nhập mã SP" },
+            }}
+            label="Mã SP:"
+            labelKey="productName"
+            fetcher={productApi.getList}
+            callback={callback}
+            disabled={true}
+            shrinkLabel
+          />
+        )}
+
+        <FormSelectAsync
           controlProps={{
             control,
-            name: "productId",
-            rules: { required: "Phải nhập mã SP" },
+            name: "referencePriceId",
           }}
-          label="Mã SP:"
-          labelKey="productCode"
-          valueKey="productId"
-          options={productBySupplier || []}
-          callback={callback}
-          disabled={type === "View"}
+          label="DS giá tham khảo: "
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt.supplierName} - đơn giá: ${_format.getVND(opt.price)} - ${opt.productStatus}` : ""
+          }
+          fetcher={referencePrice.getList}
+          fetcherParams={{ productId }}
+          disabled={!productId}
+          shrinkLabel
+        />
+
+        <FormInputNumber
+          controlProps={{
+            control,
+            name: "price",
+            rules: { required: "Phải nhập đơn giá" },
+          }}
+          label="Đơn giá:"
+          disabled={disabled}
+          shrinkLabel
+        />
+
+        <FormInputBase
+          label="Hãng sản xuất:"
+          value={selectedProduct?.manufactor}
+          disabled
+          shrinkLabel
         />
 
         <FormSelect
@@ -81,35 +168,15 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
           options={VAT}
           label="Thuế GTGT:"
           disabled={disabled}
-        />
-
-        <FormSelect
-          controlProps={{
-            control,
-            name: "productId",
-          }}
-          label="Tên SP:"
-          labelKey="productName"
-          valueKey="productId"
-          options={productBySupplier || []}
-          callback={callback}
-          disabled={type === "View"}
-        />
-
-        <FormInputNumber
-          controlProps={{
-            control,
-            name: "price",
-            rules: { required: "Phải nhập đơn giá" },
-          }}
-          label="Đơn giá:"
-          disabled={disabled}
+          shrinkLabel
         />
 
         <FormInputBase
-          label="Hãng sản xuất:"
-          value={selectedProduct?.manufactor}
+          label="Quy cách:"
+          value={selectedProduct?.specs}
           disabled
+          className="mb-3"
+          shrinkLabel
         />
 
         <FormInputNumber
@@ -120,31 +187,27 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
           }}
           label="Số lượng:"
           disabled={disabled}
+          shrinkLabel
         />
-        <Box>
-          <FormInputBase
-            label="Quy cách:"
-            value={selectedProduct?.specs}
-            disabled
-            className="mb-3"
-          />
 
-          <FormInputBase
-            label="Đơn vị:"
-            value={selectedProduct?.unitName}
-            disabled
-            className="mb-3"
-          />
+        <FormInputBase
+          label="Đơn vị:"
+          value={selectedProduct?.unitName}
+          disabled
+          className="mb-3"
+          shrinkLabel
+        />
 
-          <FormInputNumber
-            controlProps={{
-              control,
-              name: "totalPrice",
-            }}
-            label="Thành tiền:"
-            disabled={true}
-          />
-        </Box>
+        <FormInputNumber
+          controlProps={{
+            control,
+            name: "totalPrice",
+          }}
+          label="Thành tiền (Không thuế):"
+          disabled={true}
+          shrinkLabel
+        />
+
         <FormInput
           controlProps={{
             control,
@@ -152,9 +215,10 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
           }}
           label="Ghi chú:"
           multiline
-          minRows={5}
+          minRows={3}
           disabled={disabled}
-          className="h-fit"
+          className="col-span-2"
+          shrinkLabel
         />
       </Box>
     </Box>

@@ -29,9 +29,7 @@ export const PurchaseRequestStatusDialog: React.FC<TDialog> = ({
     }
   );
 
-  const handleUpdate = useCallback(async () => {
-    console.log(defaultValue);
-    
+  const handleUpdate = useCallback(async () => {    
     if (defaultValue?.id) {
       await mutateUpdate.mutateAsync({
         id: defaultValue?.id,
