@@ -95,4 +95,7 @@ export const preQuote = {
 
   getPreQuoteDetail: (id: string) =>
     request.get<any>(`${BASE_URL}/PreQuoteDetail`, { id }),
+
+  selectProduct: (payload: { id: string; selected: boolean }) =>
+    request.post<any, any>(`${BASE_URL}/Selected`, [payload]),
 };

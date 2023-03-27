@@ -21,36 +21,6 @@ export const PrintQuoteDetail: React.FC<{
   const { preQuoteDetailView, preQuoteView } = defaultValue || [];
 
   const rows: any = [{ send: "Phuc", recive: "Phuc" }];
-  const rowsOrder: any = [
-    {
-      stt: "1",
-      code: "B108735-25G",
-      info: "B108735-25G Hóa chất Pararosaniline hydrochloride",
-      specifications: "25 G",
-      unit: " Chai",
-      quantity: "1",
-      price: 111111,
-      intomoney: 111111,
-      note: "",
-      producer: "Aladdin",
-      origin: "Trung Quốc",
-      GTGT: "10 %",
-    },
-    {
-      stt: "1",
-      code: "B108735-25G",
-      info: "B108735-25G Hóa chất Pararosaniline hydrochloride",
-      specifications: "25 G",
-      unit: " Chai",
-      quantity: "1",
-      price: 111111,
-      intomoney: 111111,
-      note: "",
-      producer: "Aladdin",
-      origin: "Trung Quốc",
-      GTGT: "5 %",
-    },
-  ];
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {

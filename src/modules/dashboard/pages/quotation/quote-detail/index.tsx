@@ -145,6 +145,7 @@ export const QuoteDetailPage: React.FC = () => {
             <QuoteDetailProduct
               data={quoteDetail?.preQuoteView}
               disabled={disabled}
+              refetch={refetch}
             />
           </Box>
 
