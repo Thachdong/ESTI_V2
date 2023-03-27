@@ -18,7 +18,6 @@ export const PrintExportDetail: React.FC<{
   printAreaRef: any;
   defaultValue: any;
 }> = ({ defaultValue, printAreaRef }) => {
-  console.log(defaultValue);
   const { productOrder, productOrderDetail } = defaultValue || {};
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({

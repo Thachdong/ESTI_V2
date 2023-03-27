@@ -63,13 +63,13 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
   );
 
   const { data: productLots } = useQuery(
-    ["LotsbaseProductId", selectedProduct?.productId, warehouseConfigId],
+    ["ProductLots", selectedProduct],
     () =>
-      products
-        .getLot(selectedProduct?.productId, warehouseConfigId)
+      productLot
+        .getList({ productId: selectedProduct?.productId })
         .then((res) => res.data),
     {
-      enabled: !!selectedProduct && !!warehouseConfigId,
+      enabled: !!selectedProduct,
     }
   );
 
@@ -336,17 +336,16 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
         {!id && (
           <Box className="flex items-center col-span-2">
             {selectAvailableLot ? (
-              <FormSelectAsync
+              <FormSelect
                 controlProps={{
                   control,
                   name: "lotNumber",
                   rules: { required: "Phải chọn số LOT" },
                 }}
+                options={productLots || []}
                 label="Số LOT"
                 callback={(lot: any) => setSelectedLot(lot)}
                 className="flex-grow"
-                fetcher={productLot.getList}
-                fetcherParams={{ productCode: selectedProduct?.productCode }}
                 labelKey="lotNumber"
                 valueKey="lotNumber"
               />

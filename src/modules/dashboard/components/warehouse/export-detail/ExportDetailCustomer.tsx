@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FormInputBase } from "~modules-core/components";
 
 type TProps = {
@@ -8,7 +8,6 @@ type TProps = {
 export const ExportDetailCustomer: React.FC<TProps> = ({
   customerData = {},
 }) => {
-  console.log(customerData);
   
   return (
     <Box className="col-span-2 grid grid-cols-2 gap-4">

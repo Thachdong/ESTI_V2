@@ -32,6 +32,8 @@ export const suppliers = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
+  getByProductId: (productId: string) => request.get<any>(`${BASE_URL}/GetByProductID`, {productId}),
+
   uploadAvatar: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-image`, file),
 

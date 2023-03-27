@@ -19,9 +19,7 @@ export const DocumentTypeDialog: React.FC<TDialog> = ({
   type,
   refetch,
   defaultValue,
-}) => {
-  console.log(defaultValue);
-  
+}) => {  
   const [isUpdate, setIsUpdate] = useState(false);
 
   const disable = type === "View" && !isUpdate;

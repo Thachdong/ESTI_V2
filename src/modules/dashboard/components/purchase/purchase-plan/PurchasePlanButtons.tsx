@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useMutation } from "react-query";
-import { toast } from "react-toastify";
 import { purchasePlan, TCreatePurchasePlan, TUpdatePurchasePlan } from "src/api";
 import { BaseButton } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 
 type TProps = {
   type: string;

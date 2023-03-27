@@ -3,7 +3,7 @@ import { request } from "../method";
 const BASE_URL = "NeedToAskPrice";
 
 export type TCreateAskPrice = {
-    supplierId: string
+    supplierId?: string
     productId: string
     quantity: number
     // availabilityQuantity: number ====== swagger thừa
@@ -25,9 +25,11 @@ export const askPrice = {
 
     getList: (params?: any) => request.getPagination<any>(BASE_URL, {...params}),
 
+    getByProductId: (params?: any) => request.get<any>(`${BASE_URL}/NeedToAskPriceByProduct`, {...params}),
+
     getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
     update: (payload: TUpdateAskPrice) => request.patch<TUpdateAskPrice, any>(BASE_URL, payload),
 
-    cancel: (id: string) => request.post<any, any>(`${BASE_URL}/CancelNeedToPrice?id=${id}`, {})
+    cancel: (id: string) => request.post<any, any>(`${BASE_URL}/CancelNeedToPrice?id=${id}`, {}),
 }

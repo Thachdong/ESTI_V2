@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { purchaseOrder, purchasePlan } from "src/api";
+import { purchasePlan } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,

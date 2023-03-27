@@ -69,6 +69,25 @@ export const QuoteDetailGeneralView: React.FC<TProps> = ({
           value={data?.performBanchCode}
           disabled
         />
+
+        {/* Api yêu cầu hardcode 3 trường này */}
+        <FormInputBase
+          label="Đơn vị thụ hưởng"
+          value={"CONG TY TNHH NAVIS VIET NAM"}
+          disabled
+        />
+
+        <FormInputBase
+          label="Số tài khoản (VND)"
+          value={"007.1000.802.734"}
+          disabled
+        />
+
+        <FormInputBase
+          label="Tên ngân hàng"
+          value={"VIETCOMBANK HCM, CN. TÂY SÀI GÒN"}
+          disabled
+        />
       </Box>
     </Box>
   );

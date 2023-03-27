@@ -1,9 +1,19 @@
-import { Box, List, ListItem, Typography } from "@mui/material";
+import {
+  Box,
+  ButtonBase,
+  Checkbox,
+  FormControlLabel,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import { method } from "lodash";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
+import { useMutation } from "react-query";
+import { preQuote } from "src/api";
 import {
   AddButton,
   ContextMenuWrapper,
@@ -11,18 +21,25 @@ import {
   DropdownButton,
   FormInputNumber,
 } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { productColumns } from "~modules-dashboard/pages/quotation/quote-detail/data";
 import { TGridColDef } from "~types/data-grid";
 import { TDefaultDialogState } from "~types/dialog";
+import { AskPriceDialog } from "./AskPriceDialog";
 import { QuoteDetailDialog } from "./QuoteDetailDialog";
 
 type TProps = {
   data?: any;
   disabled: boolean;
+  refetch: () => void;
 };
 
-export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
+export const QuoteDetailProduct: React.FC<TProps> = ({
+  data,
+  disabled,
+  refetch,
+}) => {
   const { id } = useRouter().query;
 
   const [dialog, setDialog] = useState<TDefaultDialogState>();
@@ -32,32 +49,6 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
   const { watch, setValue, control } = useFormContext();
 
   const products = watch("products");
-
-  const columns: TGridColDef[] = [
-    ...productColumns,
-    {
-      field: "action",
-      headerName: "",
-      width: 50,
-      renderCell: ({ row }) => (
-        <DropdownButton
-          id={row?.id}
-          items={[
-            {
-              action: () => onOpen("Update"),
-              label: "Thông tin chi tiết",
-              disabled: disabled,
-            },
-            {
-              action: handleDelete,
-              label: "Xóa",
-              disabled: disabled,
-            },
-          ]}
-        />
-      ),
-    },
-  ];
 
   // METHODS
   const onClose = useCallback(() => {
@@ -117,6 +108,92 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
     }
   }, [data, products]);
 
+  const mutateSelect = useMutation(
+    (payload: { id: string; selected: boolean }) =>
+      preQuote.selectProduct(payload),
+    {
+      onSuccess: (data: any) => {
+        toast.success(data?.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleSelect = useCallback(async (row: any) => {
+    const { id, productCode, selected } = row || {};
+
+    const title = !selected
+      ? `Xác nhận thêm SP ${productCode} vào danh sách gửi mail báo giá`
+      : `Xác nhận không gửi SP ${productCode} vào mail báo giá`;
+
+    if (confirm(title)) {
+      await mutateSelect.mutateAsync({ id: id as string, selected: !selected });
+    }
+  }, []);
+
+  // DATA TABLE
+  const columns: TGridColDef[] = [
+    ...productColumns,
+    {
+      field: "action",
+      headerName: "",
+      width: 50,
+      renderCell: ({ row }) => (
+        <DropdownButton
+          id={row?.id}
+          items={[
+            {
+              action: () => onOpen("Update"),
+              label: "Thông tin chi tiết",
+              disabled: disabled,
+            },
+            {
+              action: handleDelete,
+              label: "Xóa",
+              disabled: disabled || !!id,
+            },
+          ]}
+        />
+      ),
+    },
+  ];
+
+  if (!!id) {
+    columns.splice(
+      1,
+      0,
+      {
+        field: "selectAction",
+        headerName: "Chọn báo giá",
+        minWidth: 120,
+        renderCell: ({ row }) => (
+          <FormControlLabel
+            control={<Checkbox size="small" />}
+            label=""
+            className="col-span-2"
+            value={row?.selected}
+            onChange={(e: any) => handleSelect(row)}
+            checked={row?.selected}
+          />
+        ),
+      },
+      {
+        field: "askPriceAction",
+        headerName: "Hỏi giá",
+        minWidth: 120,
+        renderCell: ({ row }) => (
+          <ButtonBase
+            onClick={() => onOpen("askPrice")}
+            className="bg-main text-white rounded-md p-1"
+          >
+            Tạo hỏi giá
+          </ButtonBase>
+        ),
+      }
+    );
+  }
+
   return (
     <Box className="flex flex-col col-span-2">
       <Box className="flex items-center mb-3 justify-between">
@@ -142,7 +219,7 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
                 Cập nhật
               </Item>
               <Item
-                disabled={disabled}
+                disabled={disabled || !!id}
                 id="delete-product"
                 onClick={handleDelete}
               >
@@ -217,8 +294,14 @@ export const QuoteDetailProduct: React.FC<TProps> = ({ data, disabled }) => {
 
       <QuoteDetailDialog
         onClose={onClose}
-        open={!!dialog?.open}
+        open={!!dialog?.open && dialog?.type !== "askPrice"}
         type={dialog?.type}
+        defaultValue={defaultValue.current}
+      />
+
+      <AskPriceDialog
+        onClose={onClose}
+        open={!!dialog?.open && dialog?.type === "askPrice"}
         defaultValue={defaultValue.current}
       />
     </Box>
