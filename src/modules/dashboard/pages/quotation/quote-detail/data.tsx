@@ -129,7 +129,7 @@ export const feedbackColumns: TGridColDef[] = [
         console.log(error);
       }
 
-      if (files.length === 0) {
+      if (files?.length === 0) {
         return (
           <Typography className="text-xs text-grey">
             (Không có file đính kèm)

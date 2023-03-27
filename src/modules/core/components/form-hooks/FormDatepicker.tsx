@@ -16,12 +16,10 @@ export const FormDatepicker: React.FC<TFormDatepicker> = (props) => {
   }: TRenderControllerParams) => {
     let safetyValue: any = {};
 
-    if (value !== "invalidDate") {
-      safetyValue.value = moment(value);
-    }
+    const drawValue = moment(value);
 
-    if (value === undefined) {
-      safetyValue.value = null;
+    if (drawValue.isValid()) {
+      safetyValue.value = !!value ? drawValue : null;
     }
 
     const defaultProps: DateTimePickerProps<any, any> = {

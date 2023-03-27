@@ -31,7 +31,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
   defaultValue,
   getWarehouseConfig,
   productOptions,
-}) => {
+}) => {  
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const [selectedLot, setSelectedLot] = useState<any>();
@@ -90,7 +90,28 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
       return;
     }
 
-    //2. ADD PRODUCT
+    //2. DUBPLICATE PRODUCT
+    const existedProduct = productList.filter(
+      (prod: any) =>
+        prod?.productId === selectedProduct?.productId ||
+        prod?.productId === selectedProduct?.id
+    )?.[0];
+
+    if (!!existedProduct) {
+      const { positionId, lotNumber } = existedProduct;
+
+      if (
+        positionId === selectedPosition?.positionId &&
+        lotNumber === selectedLot?.lotNumber
+      ) {
+        toast.error(
+          `Sản phẩm ${selectedProduct?.productCode} - số lot ${lotNumber} - vị trí ${selectedPosition?.positionName} đã tồn tại`
+        );
+        return;
+      }
+    }
+
+    //3. ADD PRODUCT
     const totalPrice = quantity * (selectedProduct?.price || 0);
 
     const product = {
@@ -109,7 +130,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
 
     setGlobalValue("productList", [...productList, { ...product }]);
 
-    //3. CLEAN UP
+    //4. CLEAN UP
     toast.success("Thêm sản phẩm thành công!");
 
     reset();
@@ -198,6 +219,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             getOptionLabel={(opt: any) =>
               !!opt ? `${opt?.productCode} - ${opt?.productName}` : ""
             }
+            disabled={type === "Update"}
           />
         ) : (
           <FormSelect
@@ -211,6 +233,7 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
             callback={(opt) => setSelectedProduct(opt)}
             valueKey="productId"
             labelKey="productCode"
+            disabled={type === "Update"}
           />
         )}
 

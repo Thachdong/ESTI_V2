@@ -268,7 +268,7 @@ export const ExportDetailProducts: React.FC<TProps> = ({
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
     const id = e.currentTarget.dataset.id;
 
-    const currentRow = productList.find((item: any) => item.id === id);
+    const currentRow = productList.find((item: any) => item.id?.toString() === id);
 
     defaultValue.current = currentRow;
   };

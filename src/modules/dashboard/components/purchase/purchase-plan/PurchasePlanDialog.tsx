@@ -51,9 +51,27 @@ export const PurchasePlanDialog: React.FC<TDialog> = ({
     if (type === "Add") {
       reset({});
     } else {
-      const {branchId, supplierId, productId, vat, price, quantity, note, id} = detailData?.needToBuy || {};
+      const {
+        branchId,
+        supplierId,
+        productId,
+        vat,
+        price,
+        quantity,
+        note,
+        id,
+      } = detailData?.needToBuy || {};
 
-      reset({branchId, supplierId, productId, vat, price, quantity, note, id})
+      reset({
+        branchId,
+        supplierId,
+        productId,
+        vat,
+        price,
+        quantity,
+        note,
+        id,
+      });
     }
   }, [detailData, defaultValue?.id, type]);
 
@@ -63,7 +81,11 @@ export const PurchasePlanDialog: React.FC<TDialog> = ({
         <Box component="form" onSubmit={(e: any) => e.preventDefault()}>
           <PurchasePlanGeneral disabled={disabled} />
 
-          <PurchasePlanCustomer disabled={disabled} />
+          <PurchasePlanCustomer
+            disabled={disabled}
+            type={type as string}
+            defaultSupplier={!!detailData?.needToBuy?.supplierId}
+          />
 
           <PurchasePlanProduct disabled={disabled} type={type as string} />
 

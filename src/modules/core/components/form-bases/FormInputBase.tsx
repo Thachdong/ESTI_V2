@@ -13,14 +13,14 @@ export const FormInputBase: React.FC<TProps> = ({
   ...props
 }) => {
   const defaultProps: TextFieldProps = {
+    ...props,
     fullWidth: true,
     variant: "outlined",
     size: "small",
     value: props.value || "",
-    ...props,
   };
 
-  const shrink = shrinkLabel ? {} : { shrink: false };
+  const shrink = shrinkLabel ? {shrink: !!props?.value} : { shrink: false };
 
   const defaultLabelProps = {
     className: clsx(

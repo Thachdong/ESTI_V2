@@ -10,7 +10,6 @@ import { preQuote, TPreQuoteMailConfirm } from "src/api";
 import * as animate from "~assets/json/expired-code.json";
 import { FormInput, SendButton } from "~modules-core/components";
 import { MailConfirmAttach } from "~modules-public/components";
-import styles from "~modules-public/styles/layout.module.css";
 
 const defaultOptions = {
   loop: true,
@@ -115,18 +114,24 @@ export const MailConfirmPage: React.FC = () => {
 
   const handleConfirm = useCallback(
     async (data: any) => {
-      await mutate.mutateAsync({ ...data, code });
+      const {attachFile, ...rest} = data || {};
+
+      let payload = {
+        ...rest,
+        code,
+      }
+
+      if (!!attachFile && attachFile?.length > 0) {
+        payload.attachFile = attachFile.join?.(",");
+      }
+      
+      await mutate.mutateAsync(payload);
     },
     [code]
   );
 
   return (
-    <Box
-      className={clsx(
-        "flex items-center justify-center w-screen h-screen",
-        styles["public-layout"]
-      )}
-    >
+    <Box className={clsx("flex items-center justify-center w-screen h-screen")}>
       <Box className="max-w-[600px] w-full bg-white rounded-lg p-[40px] h-[70vh] overflow-y-auto">
         <Box>
           <img src="/logo-full.png" width={100} alt="Esti" />
