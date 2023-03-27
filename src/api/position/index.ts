@@ -29,6 +29,8 @@ export const position = {
   create: (payload: TCreatePosition) =>
     request.post<TCreatePosition, any>(BASE_URL, payload),
 
+  createBarcode: (positionId: string) => request.post<any, any>(`${BASE_URL}/CreateBarCode`, {}, {positionId}),
+
   update: (payload: TUpdatePosition) =>
     request.put<TUpdatePosition, any>(BASE_URL, payload),
 

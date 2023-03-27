@@ -22,7 +22,9 @@ export const productLot = {
   update: (payload: TUpdateLot) =>
     request.put<TUpdateLot, any>(BASE_URL, payload),
 
-  getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
+  // api đổi từ api/ProductBatch/ => api/ProductBatch/GetListLot' và bỏ phân trang
+  getList: (params: any) =>
+    request.get<any>(`${BASE_URL}/GetListLot`, { ...params }),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 

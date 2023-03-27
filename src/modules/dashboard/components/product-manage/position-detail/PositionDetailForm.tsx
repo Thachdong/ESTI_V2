@@ -10,6 +10,7 @@ import {
   warehouseConfig,
 } from "src/api";
 import {
+  AddButton,
   BaseButton,
   FormInput,
   FormInputNumber,
@@ -118,6 +119,21 @@ export const PositionDetailForm: React.FC = () => {
     }
   }, [id, isUpdate, isDirty]);
 
+  const mutateCreateBarcode = useMutation(
+    (id: string) => position.createBarcode(id),
+    {
+      onSuccess: (data: any) => {
+        toast.success(data?.resultMessage);
+
+        refetch();
+      },
+    }
+  );
+
+  const handleCreateBarcode = useCallback(async () => {
+    await mutateCreateBarcode.mutateAsync(id as string);
+  }, [id]);
+
   // SIDE EFFECTS
   useEffect(() => {
     if (!!positionDetail) {
@@ -154,9 +170,21 @@ export const PositionDetailForm: React.FC = () => {
 
   return (
     <Box className="mb-4">
-      <Typography className="font-bold uppercase mb-3 text-sm">
-        Thông tin vị trí
-      </Typography>
+      <Box className="flex items-center justify-between mb-3">
+        <Typography className="font-bold uppercase text-sm">
+          Thông tin vị trí
+        </Typography>
+
+        {!!positionDetail?.positionBarcode ? (
+          <img
+            src={positionDetail?.positionBarcode}
+            alt={positionDetail?.positionName}
+            height={30}
+          />
+        ) : (
+          <AddButton onClick={handleCreateBarcode}>Tạo barcode</AddButton>
+        )}
+      </Box>
 
       <Box component="form" className="grid grid-cols-2 gap-4 bg-white p-4">
         <FormSelectAsync
