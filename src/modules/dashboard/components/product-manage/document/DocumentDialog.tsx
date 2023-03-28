@@ -84,7 +84,11 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleAddDocument = async (data: any) => {
-    await mutationAdd.mutateAsync(data);
+    const payload = {
+      ...data,
+      lotNumber: data?.lotNumber?.toUpperCase?.(),
+    };
+    await mutationAdd.mutateAsync(payload);
   };
 
   const mutationUpdate = useMutation(
