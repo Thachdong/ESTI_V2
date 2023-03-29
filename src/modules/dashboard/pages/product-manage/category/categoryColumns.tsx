@@ -7,14 +7,14 @@ export const categoryColumns: TGridColDef<TCategory>[] = [
     headerName: "Ảnh",
     isSort: false,
     isFilter: false,
-    width: 75,
+    minWidth: 75,
     renderCell: ({ row }) => (
       <img
         src={row.thumbnail?.split(",")?.[0]}
-        onError={({ currentTarget }) =>
-          (currentTarget.src =
-            process.env.NEXT_PUBLIC_API_URL + row.thumbnail?.split(",")?.[0])
-        }
+        // onError={({ currentTarget }) =>
+        //   (currentTarget.src =
+        //     process.env.NEXT_PUBLIC_API_URL + row.thumbnail?.split(",")?.[0])
+        // }
         alt={row.name}
         height={32}
       />
@@ -24,8 +24,9 @@ export const categoryColumns: TGridColDef<TCategory>[] = [
     field: "name",
     headerName: "Tên",
     isSort: false,
-    width: 250,
+    minWidth: 250,
     filterKey: "name",
+    flex: 1,
   },
   {
     field: "description",
@@ -33,6 +34,7 @@ export const categoryColumns: TGridColDef<TCategory>[] = [
     isSort: false,
     isFilter: false,
     flex: 1,
+    minWidth: 250,
     renderCell: ({ row }) => (
       <div dangerouslySetInnerHTML={{ __html: row.description }} />
     ),

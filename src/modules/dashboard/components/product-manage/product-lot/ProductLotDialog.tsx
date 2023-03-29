@@ -1,30 +1,21 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import {
-  category,
-  documentCareer,
-  documentType,
-  productDocument,
   productLot,
   products,
   TCreateLot,
-  TDocument,
   TUpdateLot,
 } from "src/api";
 import {
   BaseButton,
   Dialog,
   FormDatepicker,
-  FormImageGallery,
   FormInput,
   FormInputNumber,
-  FormSelect,
   FormSelectAsync,
-  FormUploadfiles,
 } from "~modules-core/components";
-import { parentCategoryId } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
@@ -77,7 +68,12 @@ export const ProductLotDialog: React.FC<TDialog> = (props) => {
   );
 
   const handleAddLot = async (data: any) => {
-    await mutationAdd.mutateAsync(data);
+    const payload = {
+      ...data,
+      lotNumber: data?.lotNumber?.toUpperCase?.(),
+    };
+
+    await mutationAdd.mutateAsync(payload);
   };
 
   const mutationUpdate = useMutation(

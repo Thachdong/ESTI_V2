@@ -36,8 +36,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      align: "left",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isFilter: false,
       isSort: false,
@@ -46,7 +45,6 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
     {
       field: "categoryName",
       headerName: "Tên danh mục",
-      align: "left",
       minWidth: 150,
       flex: 1,
       isFilter: false,
@@ -55,8 +53,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
     {
       field: "typeName",
       headerName: "Loại",
-      align: "left",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       isFilter: false,
       isSort: false,
@@ -64,8 +61,7 @@ export const TradingDirectoryTable: React.FC<TProps> = ({
     {
       field: "updated",
       headerName: "Ngày cập nhật",
-      align: "left",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isFilter: false,
       isSort: false,

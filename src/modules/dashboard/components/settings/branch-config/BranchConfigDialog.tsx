@@ -133,7 +133,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập mã chi nhánh" },
           }}
           label="Mã chi nhánh"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -145,7 +144,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập tên chi nhánh " },
           }}
           label="Tên chi nhánh"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -157,7 +155,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập mã số thuế " },
           }}
           label="Mã số thuế"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -169,7 +166,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập mã địa chỉ " },
           }}
           label="Địa chỉ"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -181,7 +177,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập email " },
           }}
           label="Email"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -193,7 +188,6 @@ export const BranchConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập số điện thoại " },
           }}
           label="Số điện thoại"
-          required
           disabled={type === "View" && !isUpdate}
         />
 

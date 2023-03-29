@@ -59,8 +59,17 @@ export const warehouseExportColumns: TGridColDef<TWarehouseExport>[] = [
     filterKey: "companyName",
   },
   {
+    field: "importTotalPrice",
+    headerName: "GIÁ TRỊ XUẤT KHO", // api đã xác nhận 
+    renderCell: ({ row }) => _format.getVND(row.importTotalPrice),
+    minWidth: 150,
+    sortAscValue: 17,
+    sortDescValue: 7,
+    filterKey: "importTotalPrice",
+  },
+  {
     field: "totalPrice",
-    headerName: "GIÁ TRỊ XUẤT KHO",
+    headerName: "Giá bán", // api đã xác nhận 
     renderCell: ({ row }) => _format.getVND(row.totalPrice),
     minWidth: 150,
     sortAscValue: 17,

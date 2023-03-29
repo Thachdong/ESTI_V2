@@ -89,7 +89,7 @@ export const ImportDetailGeneralInfo: React.FC<TProps> = ({
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 rounded p-3 bg-white">
+      <Box className="grid lg:grid-cols-2 gap-4 rounded p-3 bg-white">
         {renderTagsBaseOnInvoiceFlag()}
 
         <FormSelectAsync

@@ -31,6 +31,7 @@ export const SupplierQuotesProductType: React.FC<TProps> = ({ disabled }) => {
             labelKey="label"
             valueKey="value"
             disabled={disabled}
+            shrinkLabel
           />
         </Box>
       </Box>

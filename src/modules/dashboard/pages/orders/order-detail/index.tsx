@@ -117,7 +117,7 @@ export const OrderDetailPage: React.FC = () => {
 
   return (
     <FormProvider {...method}>
-      <Box className="container-center grid grid-cols-2 gap-4">
+      <Box className="container-center grid lg:grid-cols-2 gap-4">
         {!!id ? (
           <>
             <OrderDetailStatus
@@ -136,7 +136,7 @@ export const OrderDetailPage: React.FC = () => {
                 control: method.control,
               }}
             />
-            <Box className="col-span-2">
+            <Box className="lg:col-span-2">
               <OrderDetailGeneral />
             </Box>
           </>
@@ -146,8 +146,8 @@ export const OrderDetailPage: React.FC = () => {
 
         <OrderDetailCurator disabled={disabled} />
 
-        <Box className="col-span-2 grid grid-cols-3 gap-4">
-          <Box className="col-span-2">
+        <Box className="lg:col-span-2 grid lg:grid-cols-3 gap-4">
+          <Box className="lg:col-span-2">
             <OrderDetailReciever disabled={disabled} />
           </Box>
 
@@ -158,11 +158,11 @@ export const OrderDetailPage: React.FC = () => {
 
         <OrderDetailAddition disabled={disabled} />
 
-        <Box className="col-span-2">
+        <Box className="lg:col-span-2">
           <OrderDetailProducts disabled={disabled} />
         </Box>
 
-        <Box className="col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Box className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
           <OrderDetailNote
             disabled={true}
             controlName={"smgNote"}
@@ -190,32 +190,32 @@ export const OrderDetailPage: React.FC = () => {
 
         {!!id && (
           <>
-            <Box className="col-span-2">
+            <Box className="lg:col-span-2">
               <QuoteDetailDeliveryHistory
                 orderStatus={orderDetail?.mainOrder?.status}
                 orderCode={orderDetail?.mainOrder?.mainOrderCode}
               />
             </Box>
 
-            <Box className="col-span-2">
+            <Box className="lg:col-span-2">
               <QuoteDetailInvoiceHistory
                 orderStatus={orderDetail?.mainOrder?.status}
                 orderCode={orderDetail?.mainOrder?.mainOrderCode}
               />
             </Box>
 
-            <Box className="col-span-2">
+            <Box className="lg:col-span-2">
               <OrderDetailAdvancePayment
                 status={orderDetail?.mainOrder?.status}
               />
             </Box>
 
-            <Box className="col-span-2">
+            <Box className="lg:col-span-2">
               <OrderDetailCommission orderId={id as string} />
             </Box>
           </>
         )}
-        <Box className="col-span-2">
+        <Box className="lg:col-span-2">
           <OrderDetailButtons
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}

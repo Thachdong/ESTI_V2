@@ -57,7 +57,7 @@ export const OrderDetailGeneral: React.FC = () => {
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
+      <Box className="grid lg:grid-cols-2 gap-3 bg-white rounded p-3">
         {!notFromQuote && (
           <FormSelectAsync
             controlProps={{

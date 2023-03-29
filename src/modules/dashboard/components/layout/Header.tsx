@@ -81,7 +81,7 @@ export const Header: React.FC<TProps> = ({ data }) => {
         color="error"
         startIcon={<PowerSettingsNewRoundedIcon />}
         onClick={handleLogout}
-        className="shadow-none text-[#E53E3E] bg-[#fde9e9] font-bold text-sm p-4"
+        className="shadow-none text-[#E53E3E] bg-[#fde9e9] font-bold text-sm truncate p-4"
       >
         Đăng xuất
       </LoadingButton>

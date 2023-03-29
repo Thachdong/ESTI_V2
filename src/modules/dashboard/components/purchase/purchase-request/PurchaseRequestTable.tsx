@@ -148,8 +148,8 @@ export const PurchaseRequestTable: React.FC<TProps> = ({
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between mb-3">
-        <Box className="flex gap-3 items-center w-3/5">
+      <Box className="flex justify-between flex-wrap gap-3 mb-3">
+        <Box className="flex items-center gap-3">
           <AddButton
             onClick={() =>
               router.push("/dashboard/purchase/purchase-request-detail")
@@ -159,6 +159,7 @@ export const PurchaseRequestTable: React.FC<TProps> = ({
           </AddButton>
           <SearchBox />
         </Box>
+        
         <Box className="flex gap-2">
           <StatisticButton onClick={onViewReport} View={ViewReport} />
           <FilterButton listFilterKey={[]} />

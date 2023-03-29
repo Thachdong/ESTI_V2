@@ -10,7 +10,7 @@ export const ExportDetailCustomer: React.FC<TProps> = ({
 }) => {
   
   return (
-    <Box className="col-span-2 grid grid-cols-2 gap-4">
+    <Box className="lg:col-span-2 grid lg:grid-cols-2 gap-4">
       <Box className="">
         <Typography className="text-sm font-medium mb-3">
           THÔNG TIN KHÁCH HÀNG

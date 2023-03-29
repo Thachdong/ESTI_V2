@@ -15,7 +15,7 @@ import {
   ExportViewGeneralInfo,
 } from "~modules-dashboard/components";
 
-export const ExportDetailPage = () => {
+export const ExportDetailPage: React.FC = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const router = useRouter();
 
@@ -175,7 +175,7 @@ export const ExportDetailPage = () => {
         )}
 
         {!isForDelete && (
-          <Box className="grid grid-cols-2 gap-4 mb-4">
+          <Box className="grid lg:grid-cols-2 gap-4 mb-4">
             <ExportDetailCustomer
               customerData={
                 id ? transactionData?.productOrder : orderDetailData?.mainOrder

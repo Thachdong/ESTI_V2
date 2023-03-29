@@ -93,7 +93,7 @@ export const CustomerTypeConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex gap-3 items-center w-3/5 mb-3">
+      <Box className="flex items-center gap-3 mb-3">
         <AddButton variant="contained" onClick={() => onOpen("Add")}>
           Tạo loại khách hàng
         </AddButton>

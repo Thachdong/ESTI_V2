@@ -25,7 +25,7 @@ export const PurchaseBillDetailTitle: React.FC = () => {
         ĐƠN HÀNG / CHI TIẾT HÓA ĐƠN / {billNumber}{" "}
         {statusName && (
           <StatusChip
-            className="mb-4"
+            className="lg:mb-4"
             status={status}
             label={statusName}
             color={status === 4 ? "error" : undefined}

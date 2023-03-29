@@ -153,7 +153,7 @@ export const BillDetailPage: React.FC = () => {
         />
       )}
 
-      <Box className="grid grid-cols-2 gap-4 my-4">
+      <Box className="grid lg:grid-cols-2 gap-4 my-4">
         <BillDetailCustomer
           data={{
             customerCode: mainOrder.customerCode,
@@ -175,7 +175,7 @@ export const BillDetailPage: React.FC = () => {
 
       <BillDetailProducts productList={orderDetail?.mainOrderDetail || []} />
 
-      <Box className="grid grid-cols-2 gap-4 my-4">
+      <Box className="grid lg:grid-cols-2 gap-4 my-4">
         {!!id ? (
           <BillDetailRecieverView
             data={{

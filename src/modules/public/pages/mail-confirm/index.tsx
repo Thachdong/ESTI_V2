@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Lottie from "react-lottie";
 import { useMutation, useQuery } from "react-query";
@@ -10,6 +10,9 @@ import { preQuote, TPreQuoteMailConfirm } from "src/api";
 import * as animate from "~assets/json/expired-code.json";
 import { FormInput, SendButton } from "~modules-core/components";
 import { MailConfirmAttach } from "~modules-public/components";
+import send from "../../../../assets/json/send.json";
+import check from "../../../../assets/json/check.json";
+import thanks from "../../../../assets/json/thank-you.json";
 
 const defaultOptions = {
   loop: true,
@@ -20,7 +23,14 @@ const defaultOptions = {
   },
 };
 
+// trạng thái báo giá:
+// 2: yêu cầu báo giá lại
+// 3. xác nhận đặt hàng
+// 4. không đồng ý mua
+
 export const MailConfirmPage: React.FC = () => {
+  const [isResponse, setIsResponse] = useState<boolean>();
+
   const router = useRouter();
 
   const { code } = router.query;
@@ -29,9 +39,7 @@ export const MailConfirmPage: React.FC = () => {
 
   const { control, handleSubmit } = methods;
 
-  // status: 2: báo giá lại
-  //         3: chấp nhận
-  //         4: từ chối
+  // DATA FETCHING
   const { data } = useQuery(
     ["CheckIsValidCode", code],
     () => preQuote.checkMailCode(code as string).then((res) => res.data),
@@ -40,8 +48,38 @@ export const MailConfirmPage: React.FC = () => {
     }
   );
 
+  // METHODS
+  const mutate = useMutation(
+    (payload: TPreQuoteMailConfirm) => preQuote.mailConfirm(payload),
+    {
+      onSuccess: (submitData: any) => {
+        setIsResponse(true);
+
+        toast.success(submitData?.resultMessage);
+      },
+    }
+  );
+
+  const handleConfirm = useCallback(
+    async (data: any) => {
+      const { attachFile, ...rest } = data || {};
+
+      let payload = {
+        ...rest,
+        code,
+      };
+
+      if (!!attachFile && attachFile?.length > 0) {
+        payload.attachFile = attachFile.join?.(",");
+      }
+
+      await mutate.mutateAsync(payload);
+    },
+    [code]
+  );
+
   const renderContent = useCallback(() => {
-    const { status, result } = data || {};
+    const { result, status } = data || {};
 
     switch (true) {
       case !result:
@@ -54,7 +92,7 @@ export const MailConfirmPage: React.FC = () => {
             </Typography>
           </>
         );
-      case status === 1:
+      case status === 3:
         return (
           <>
             <Typography className="font-semibold mb-2">
@@ -68,7 +106,7 @@ export const MailConfirmPage: React.FC = () => {
             </Typography>
           </>
         );
-      case status === 2:
+      case status === 4:
         return (
           <>
             <Typography className="font-semibold mb-2">
@@ -85,7 +123,7 @@ export const MailConfirmPage: React.FC = () => {
             </Typography>
           </>
         );
-      case status === 3:
+      case status === 2:
         return (
           <>
             <Typography className="font-semibold mb-2">
@@ -103,33 +141,6 @@ export const MailConfirmPage: React.FC = () => {
     }
   }, [data]);
 
-  const mutate = useMutation(
-    (payload: TPreQuoteMailConfirm) => preQuote.mailConfirm(payload),
-    {
-      onSuccess: (data: any) => {
-        toast.success(data?.resultMessage);
-      },
-    }
-  );
-
-  const handleConfirm = useCallback(
-    async (data: any) => {
-      const {attachFile, ...rest} = data || {};
-
-      let payload = {
-        ...rest,
-        code,
-      }
-
-      if (!!attachFile && attachFile?.length > 0) {
-        payload.attachFile = attachFile.join?.(",");
-      }
-      
-      await mutate.mutateAsync(payload);
-    },
-    [code]
-  );
-
   return (
     <Box className={clsx("flex items-center justify-center w-screen h-screen")}>
       <Box className="max-w-[600px] w-full bg-white rounded-lg p-[40px] h-[70vh] overflow-y-auto">
@@ -139,7 +150,7 @@ export const MailConfirmPage: React.FC = () => {
 
         <Box>{renderContent()}</Box>
 
-        {!!data?.result && (
+        {!isResponse && !!data?.result && (
           <FormProvider {...methods}>
             <Box className="grid gap-4 mt-4">
               <FormInput
@@ -171,6 +182,29 @@ export const MailConfirmPage: React.FC = () => {
               </Box>
             </Box>
           </FormProvider>
+        )}
+
+        {!!isResponse && (
+          <Box>
+            {data?.status === 1 && (
+              <Lottie
+                options={{ loop: true, autoplay: true, animationData: send }}
+                height={150}
+              />
+            )}
+            {data?.status === 2 && (
+              <Lottie
+                options={{ loop: true, autoplay: true, animationData: check }}
+                height={150}
+              />
+            )}
+            {data?.status === 3 && (
+              <Lottie
+                options={{ loop: false, autoplay: true, animationData: thanks }}
+                height={150}
+              />
+            )}
+          </Box>
         )}
       </Box>
     </Box>

@@ -102,7 +102,7 @@ export const ExportDetailGeneralInfo: React.FC<TProps> = ({
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-3 rounded p-3 mb-4 bg-white">
+      <Box className="grid lg:grid-cols-2 gap-3 rounded p-3 mb-4 bg-white">
         {renderInputTag()}
 
         <FormInputBase

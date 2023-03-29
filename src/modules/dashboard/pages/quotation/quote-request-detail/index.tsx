@@ -113,7 +113,7 @@ export const QuoteRequestDetailPage = () => {
           </Box>
         )}
 
-        <Box className="grid grid-cols-2 gap-4">
+        <Box className="grid lg:grid-cols-2 gap-4">
           <QuoteRequestDetailCustomer disabled={disabled} />
 
           <QuoteRequestDetailContact disabled={disabled} />

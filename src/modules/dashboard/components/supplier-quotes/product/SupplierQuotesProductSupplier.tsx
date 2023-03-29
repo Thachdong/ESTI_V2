@@ -52,21 +52,24 @@ export const SupplierQuotesProductSupplier: React.FC<TProps> = ({ disabled }) =>
                 : ""
             }
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormInputBase
             value={convertProductSupply(supplier?.productSupply)}
             label="Nhóm sản phẩm cung cấp:"
             disabled
+            shrinkLabel
           />
 
           <FormInputBase
             value={supplier?.taxCode}
             label="Mã số thuế:"
             disabled
+            shrinkLabel
           />
 
-          <FormInputBase value={supplier?.address} label="Địa chỉ:" disabled />
+          <FormInputBase value={supplier?.address} label="Địa chỉ:" disabled shrinkLabel />
         </Box>
       </Box>
 
@@ -79,24 +82,28 @@ export const SupplierQuotesProductSupplier: React.FC<TProps> = ({ disabled }) =>
             value={supplier?.curatorName}
             label="Người phụ trách:"
             disabled
+            shrinkLabel
           />
 
           <FormInputBase
             value={supplier?.curatorPositionName}
             label="Chức vụ:"
             disabled
+            shrinkLabel
           />
 
           <FormInputBase
             value={supplier?.curatorPhone}
             label="Điện thoại:"
             disabled
+            shrinkLabel
           />
 
           <FormInputBase
             value={supplier?.curatorEmail}
             label="Email:"
             disabled
+            shrinkLabel
           />
         </Box>
       </Box>

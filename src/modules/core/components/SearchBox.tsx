@@ -4,19 +4,22 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { ChangeEvent, useState, KeyboardEvent } from "react";
 import { FormInputBase } from "./form-bases";
 import { useRouter } from "next/router";
+import clsx from "clsx";
 
 type TSearchBox = {
   isHotSearch?: boolean;
   label?: string;
   callback?: (val: string) => void;
   disabledRouterSearch?: boolean;
+  className?: string;
 };
 
 export const SearchBox: React.FC<TSearchBox> = ({
   isHotSearch = false,
   label = "Tìm kiếm",
   callback,
-  disabledRouterSearch = false
+  disabledRouterSearch = false,
+  className
 }) => {
   const router = useRouter();
 
@@ -63,7 +66,7 @@ export const SearchBox: React.FC<TSearchBox> = ({
       label={label}
       value={content}
       shrinkLabel
-      className="min-w-[300px]"
+      className={clsx("min-w-[250px] w-[250px] max-w-[300px] lg:min-w-[350px] lg:w-[350px] lg:max-w-[400px]", className)}
     />
   );
 };

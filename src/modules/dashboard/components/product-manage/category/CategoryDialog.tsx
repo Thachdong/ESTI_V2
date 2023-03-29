@@ -262,7 +262,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
 
           <FormSelectAsync
             fetcher={category.getList}
-            fetcherParams={{ parentId: parentCategoryId }}
+            // fetcherParams={{ parentId: parentCategoryId }}
             controlProps={{
               control,
               name: "parentId",

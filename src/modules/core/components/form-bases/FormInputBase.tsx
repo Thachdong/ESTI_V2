@@ -20,7 +20,9 @@ export const FormInputBase: React.FC<TProps> = ({
     value: props.value || "",
   };
 
-  const shrink = shrinkLabel ? {shrink: !!props?.value} : { shrink: false };
+  const shrink = shrinkLabel ? {} : { shrink: false };
+  
+  // const shrink = shrinkLabel ? {shrink: !!props?.value || props?.value === false || props?.value === 0} : { shrink: false };
 
   const defaultLabelProps = {
     className: clsx(

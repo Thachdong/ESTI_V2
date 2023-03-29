@@ -31,7 +31,7 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
   }, []);
 
   return (
-    <Box className="grid grid-cols-2 gap-4 mb-4">
+    <Box className="grid lg:grid-cols-2 gap-4 mb-4">
       <Box className="flex flex-col">
         <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN NHÀ CUNG CẤP

@@ -25,7 +25,7 @@ export const PurchaseBillDetailGeneral: React.FC<TProps> = ({
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
+      <Box className="grid lg:grid-cols-2 gap-4 bg-white rounded p-3">
         <FormSelectAsync
           controlProps={{
             name: "productOrderId",

@@ -22,11 +22,11 @@ export const UploadButton: React.FC<TProps> = (props) => {
       tooltipText="Tải lên file excel"
       {...restProps}
       className={clsx(
-        "px-0 bg-[#F3F6F9] h-[40px] min-w-[40px] w-[40px] active:bg-main cursor-pointer",
+        "px-0 bg-[#F3F6F9] h-[40px] min-w-[40px] w-[40px] active:bg-main cursor-pointer !shadow-none",
         className
       )}
     >
-      <InputLabel htmlFor="ImportFile" className="flex items-center justify-cetner text-main active:text-white" disabled={loading}>
+      <InputLabel htmlFor="ImportFile" className="flex items-center justify-cetner text-main active:text-white !shadow-none" disabled={loading}>
         <UploadIcon />
         {children}
       </InputLabel>

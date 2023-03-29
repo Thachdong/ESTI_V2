@@ -26,7 +26,7 @@ export const PurchaseRequestTitle: React.FC = () => {
         ĐƠN MUA HÀNG / CHI TIẾT ĐƠN MUA HÀNG / {code}{" "}
         {statusName && (
           <StatusChip
-            className="mb-4"
+            className="lg:mb-4"
             status={status}
             label={statusName}
             color={status === 4 ? "error" : undefined}

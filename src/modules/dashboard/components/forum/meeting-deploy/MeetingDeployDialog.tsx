@@ -46,8 +46,8 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
   );
 
   const handleAdd = async (data: any) => {
-    const newParticipant = data?.participant?.toString().replaceAll("[");
-    const newAttachFile = data?.attachFile.toString().replaceAll("[");
+    const newParticipant = data?.participant?.join(",");
+    const newAttachFile = data?.attachFile?.join(",");
     const dataPost = {
       ...data,
       participant: newParticipant,
@@ -148,6 +148,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               }}
               label="Phòng ban"
               options={department}
+              shrinkLabel
             />
             <FormInput
               controlProps={{
@@ -156,6 +157,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
                 rules: { required: "Phải nhập mô tả công việc" },
               }}
               label="Mô tả công việc"
+              shrinkLabel
             />
             <FormDatepicker
               controlProps={{
@@ -183,6 +185,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               fetcher={staff.getList}
               labelKey="fullName"
               multiple
+              shrinkLabel
             />
             <FormSelectAsync
               controlProps={{
@@ -193,6 +196,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               label="Thư ký"
               fetcher={staff.getList}
               labelKey="fullName"
+              shrinkLabel
             />
             <FormInput
               controlProps={{
@@ -204,6 +208,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               className="col-span-2"
               multiline
               rows={3}
+              shrinkLabel
             />
 
             <Box className="col-span-2">
@@ -231,6 +236,7 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
                 { id: 4, name: "Hủy" },
               ]}
               className="col-span-2"
+              shrinkLabel
             />
           </>
         )}

@@ -133,8 +133,8 @@ export const PurchasePlanPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between items-center mb-3">
-        <Box className="flex gap-3  w-3/5">
+      <Box className="flex justify-between items-center flex-wrap gap-2 mb-3">
+        <Box className="flex gap-3">
           <AddButton
             variant="contained"
             onClick={() => handleOpenDialog("Add")}
@@ -143,6 +143,7 @@ export const PurchasePlanPage = () => {
           </AddButton>
           <SearchBox />
         </Box>
+        
         <Box className="flex gap-2">
           <FilterButton listFilterKey={[]} />
           <RefreshButton onClick={() => refetch()} />

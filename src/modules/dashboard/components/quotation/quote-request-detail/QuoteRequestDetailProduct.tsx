@@ -80,7 +80,7 @@ export const QuoteRequestDetailProduct: React.FC = () => {
   };
 
   return (
-    <Box className="flex flex-col col-span-2">
+    <Box className="flex flex-col lg:col-span-2">
       <Box className="flex items-center mb-3 justify-between">
         <Typography className="font-bold uppercase mr-3 text-sm">
           Sản phẩm

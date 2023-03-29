@@ -23,6 +23,7 @@ export type TWarehouseExport = {
   totalBillPrice: number;
   paid: number;
   unPaid: number;
+  importTotalPrice: number;
 };
 
 export type TExportWarehouseStatusPayload = {

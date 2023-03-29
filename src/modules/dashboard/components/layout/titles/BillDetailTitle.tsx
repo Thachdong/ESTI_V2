@@ -22,7 +22,7 @@ export const BillDetailTitle: React.FC = () => {
 
     return <>ĐƠN HÀNG / CHI TIẾT HÓA ĐƠN / {billCode} {statusName && (
       <StatusChip
-        className="mb-4"
+        className="lg:mb-4"
         status={status}
         label={statusName}
         color={status === 4 ? "error" : undefined}

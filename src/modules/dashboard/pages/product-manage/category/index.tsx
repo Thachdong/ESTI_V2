@@ -123,16 +123,15 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="mb-3 flex items-center justify-between">
-        <Box className="flex gap-3 items-center w-3/5">
-          <Box className="flex items-center justify-end">
-            <AddButton
-              onClick={() => setDialog({ open: true, type: "Add" })}
-              variant="contained"
-            >
-              Thêm danh mục SP
-            </AddButton>
-          </Box>
+      <Box className="flex items-center justify-between flex-wrap gap-3 mb-3">
+        <Box className="flex items-center gap-3">
+          <AddButton
+            onClick={() => setDialog({ open: true, type: "Add" })}
+            variant="contained"
+          >
+            Thêm danh mục SP
+          </AddButton>
+
           <SearchBox label="Tìm kiếm" />
         </Box>
         <Box className="flex gap-3">

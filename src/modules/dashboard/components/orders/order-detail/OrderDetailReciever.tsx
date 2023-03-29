@@ -19,14 +19,14 @@ export const OrderDetailReciever: React.FC<TProps> = ({ disabled }) => {
         THÔNG TIN NHẬN HÀNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
+      <Box className="grid lg:grid-cols-2 gap-3 bg-white rounded p-3">
         <FormCheckbox
           controlProps={{
             name: "defaultReceiver",
             control,
           }}
           label="Thông tin nhận hàng giống thông tin tài khoản khách hàng đăng kí"
-          className="col-span-2 ml-[2px] w-full"
+          className="lg:col-span-2 ml-[2px] w-full"
           disabled={disabled}
         />
 

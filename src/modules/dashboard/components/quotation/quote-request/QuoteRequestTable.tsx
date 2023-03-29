@@ -288,14 +288,15 @@ export const QuoteRequestTable: React.FC<TProps> = ({
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between">
-        <Box className="flex items-center w-3/5 mb-3 gap-3">
+      <Box className="flex justify-between flex-wrap gap-2 mb-3">
+        <Box className="flex items-center gap-3">
           <AddButton onClick={() => router.push("quote-detail")}>
             Tạo báo giá
           </AddButton>
 
           <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
         </Box>
+
         <Box className="flex gap-2">
           <StatisticButton onClick={onViewReport} View={viewReport} />
 

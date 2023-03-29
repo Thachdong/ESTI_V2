@@ -132,7 +132,7 @@ export const QuoteDetailPage: React.FC = () => {
           </>
         )}
 
-        <Box className="grid grid-cols-2 gap-4 my-4">
+        <Box className="grid lg:grid-cols-2 gap-4 my-4">
           <QuoteDetailCustomer disabled={disabled} />
 
           <QuoteDetailContact disabled={disabled} />
@@ -141,7 +141,7 @@ export const QuoteDetailPage: React.FC = () => {
 
           <QuoteDetailAddition disabled={disabled} />
 
-          <Box className="col-span-2">
+          <Box className="lg:col-span-2">
             <QuoteDetailProduct
               data={quoteDetail?.preQuoteView}
               disabled={disabled}
@@ -149,7 +149,7 @@ export const QuoteDetailPage: React.FC = () => {
             />
           </Box>
 
-          <Box className="col-span-2">
+          <Box className="lg:col-span-2">
             <QuoteDetailTerms disabled={disabled} />
           </Box>
 

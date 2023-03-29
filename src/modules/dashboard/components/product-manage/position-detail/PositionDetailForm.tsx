@@ -186,7 +186,7 @@ export const PositionDetailForm: React.FC = () => {
         )}
       </Box>
 
-      <Box component="form" className="grid grid-cols-2 gap-4 bg-white p-4">
+      <Box component="form" className="grid lg:grid-cols-2 gap-4 bg-white p-4">
         <FormSelectAsync
           fetcher={warehouseConfig.getList}
           controlProps={{
@@ -293,7 +293,7 @@ export const PositionDetailForm: React.FC = () => {
           disabled={disabled}
         />
 
-        <Box className="flex justify-end col-span-2">{renderButtons()}</Box>
+        <Box className="flex justify-end lg:col-span-2">{renderButtons()}</Box>
       </Box>
     </Box>
   );

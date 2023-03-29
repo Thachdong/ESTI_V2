@@ -136,7 +136,6 @@ export const UnitConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập tên đơn vị" },
           }}
           label="Tên đơn vị"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />

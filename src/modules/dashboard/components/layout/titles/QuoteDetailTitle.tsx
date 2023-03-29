@@ -26,7 +26,7 @@ export const QuoteDetailTitle: React.FC = () => {
         BÁO GIÁ / CHI TIẾT BÁO GIÁ / {preQuoteCode}{" "}
         {statusName && (
           <StatusChip
-            className="mb-4"
+            className="lg:mb-4"
             status={status}
             label={statusName}
             color={status === 4 ? "error" : undefined}
