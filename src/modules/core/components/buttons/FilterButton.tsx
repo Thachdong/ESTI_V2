@@ -4,6 +4,7 @@ import {
   ButtonBase,
   ButtonProps,
   Popover,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import clsx from "clsx";
@@ -18,6 +19,7 @@ export const FilterButton: React.FC<
   ButtonProps & {
     listFilterKey: string[];
     renderFilterComponent?: () => ReactNode;
+    tooltipText?: string
   }
 > = (props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -34,6 +36,7 @@ export const FilterButton: React.FC<
 
   return (
     <>
+    <Tooltip title={props?.tooltipText || "Lọc"} placement="top">
       <ButtonBase
         {...props}
         className={clsx(
@@ -45,6 +48,8 @@ export const FilterButton: React.FC<
         <FilterAltOutlinedIcon />
         {props?.children}
       </ButtonBase>
+      </Tooltip>
+
       <FilterDialog
         Open={Open}
         OnClose={handleClose}
