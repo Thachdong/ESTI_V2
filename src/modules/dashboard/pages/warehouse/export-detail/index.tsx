@@ -15,7 +15,7 @@ import {
   ExportViewGeneralInfo,
 } from "~modules-dashboard/components";
 
-export const ExportDetailPage = () => {
+export const ExportDetailPage: React.FC = () => {
   // LOCAL STATE AND EXTRACT PROPS
   const router = useRouter();
 

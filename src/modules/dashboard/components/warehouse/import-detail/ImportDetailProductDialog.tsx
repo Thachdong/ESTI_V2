@@ -217,6 +217,16 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
     }
   }, [selectedLot]);
 
+  useEffect(() => {
+    setValue("dateManufacture", undefined);
+
+    setValue("dateExpiration", undefined);
+
+    setValue("lotNumber", "");
+
+    setSelectedLot(null);
+  }, [selectAvailableLot]);
+
   return (
     <Dialog
       open={open}
@@ -287,6 +297,7 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
             // rules: { required: "Phải nhập ngày SX" },
           }}
           label="Ngày SX"
+          disabled={!!selectedLot && !!selectAvailableLot}
         />
 
         <FormDatepicker
@@ -296,6 +307,7 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
             // rules: { required: "Phải nhập hạn SD" },
           }}
           label="Hạn SD"
+          disabled={!!selectedLot && !!selectAvailableLot}
         />
 
         <FormSelectAsync
