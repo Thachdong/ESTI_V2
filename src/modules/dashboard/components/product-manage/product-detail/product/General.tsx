@@ -220,7 +220,11 @@ export const General: React.FC<TProps> = ({ disabled, refetch }) => {
         {/* api yêu cầu chỉ hiển thị phụ lục hóa chất khi productGroup là Hóa chất
           productGroupId: dc039924-e248-4285-8d1a-786b3841d9b6
         */}
-        {productGroup === "dc039924-e248-4285-8d1a-786b3841d9b6" && (
+        {/* update1 theo yêu cầu của api:
+            chỉ hiển thị phụ lục hóa chất khi productGroup.name === "Hóa chất"
+         */}
+        {productGroups?.find((group: any) => group?.id === productGroup)
+          ?.name === "Hóa chất" && (
           <FormInput
             controlProps={{
               control,

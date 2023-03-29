@@ -11,10 +11,10 @@ export const categoryColumns: TGridColDef<TCategory>[] = [
     renderCell: ({ row }) => (
       <img
         src={row.thumbnail?.split(",")?.[0]}
-        onError={({ currentTarget }) =>
-          (currentTarget.src =
-            process.env.NEXT_PUBLIC_API_URL + row.thumbnail?.split(",")?.[0])
-        }
+        // onError={({ currentTarget }) =>
+        //   (currentTarget.src =
+        //     process.env.NEXT_PUBLIC_API_URL + row.thumbnail?.split(",")?.[0])
+        // }
         alt={row.name}
         height={32}
       />

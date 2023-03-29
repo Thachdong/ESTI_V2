@@ -177,7 +177,13 @@ export const ProductsPage: React.FC = () => {
     {
       isSort: false,
       field: "deletedProductWebsite",
-      headerName: "Website",
+      headerName: "Website", // không quan tâm đến trường websiteInfo
+      filterKey: "deleted",
+      type: "select",
+      options: [
+        {value: "false", label: "Hiện"},
+        {value: "true", label: "Ẩn"},
+      ],
       renderCell: ({ row }) => (
         <FormControlLabel
           control={<Checkbox size="small" />}
