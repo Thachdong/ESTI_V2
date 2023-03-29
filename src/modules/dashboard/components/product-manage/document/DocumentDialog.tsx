@@ -189,6 +189,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             label="Mã sản phẩm"
             disabled={disabled}
             labelKey="productCode"
+            shrinkLabel
           />
 
           <FormSelectAsync
@@ -201,6 +202,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             label="Tên sản phẩm"
             disabled={disabled}
             labelKey="productName"
+            shrinkLabel
           />
 
           <FormSelectAsync
@@ -213,6 +215,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Nhóm SP"
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormInput
@@ -223,6 +226,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="LOT#"
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormSelect
@@ -234,6 +238,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Tài liệu chuyên ngành"
             disabled={disabled}
+            shrinkLabel
           />
 
           <FormSelect
@@ -245,6 +250,7 @@ export const DocumentDialog: React.FC<TDialog> = (props) => {
             }}
             label="Kiểu tài liệu"
             disabled={disabled}
+            shrinkLabel
           />
 
           <Box

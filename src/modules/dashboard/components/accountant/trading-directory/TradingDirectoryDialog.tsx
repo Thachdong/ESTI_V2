@@ -133,6 +133,7 @@ export const TradingDirectoryDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập tên danh mục" },
           }}
           label="Tên danh mục"
+          shrinkLabel
         />
         <FormSelect
           options={TypeTransaction}
@@ -142,6 +143,7 @@ export const TradingDirectoryDialog: React.FC<TDialog> = ({
             control: control,
             rules: undefined,
           }}
+          shrinkLabel
         />
       </Box>
 

@@ -30,7 +30,7 @@ export const OrderDetailTitle: React.FC = () => {
             label={statusName}
             status={status}
             color={colors[status - 1] as any}
-            className="mb-4"
+            className="lg:mb-4"
           />
         )}
       </>

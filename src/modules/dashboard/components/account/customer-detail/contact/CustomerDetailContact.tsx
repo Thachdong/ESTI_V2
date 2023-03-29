@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { customer, TActivateCustomer } from "src/api";
-import { AutoCompleteBase, DeleteButton } from "~modules-core/components";
+import { AutoCompleteBase } from "~modules-core/components";
 import { accountStatus } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { CustomerDetailCurator } from "./CustomerDetailCurator";

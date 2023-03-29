@@ -28,7 +28,7 @@ export const CustomerDetailCompany: React.FC<TProps> = ({ isUpdate }) => {
         Thông tin doanh nghiệp
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded flex-grow p-3">
+      <Box className="grid lg:grid-cols-2 gap-4 bg-white rounded flex-grow p-3">
         <FormInput
           controlProps={{
             control,

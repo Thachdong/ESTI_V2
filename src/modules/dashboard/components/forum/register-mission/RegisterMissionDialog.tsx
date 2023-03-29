@@ -51,7 +51,14 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
   );
 
   const handleAdd = async (data: any) => {
-    mutateAdd.mutateAsync(data);
+    const {attachFile = [], ...rest} = data || {};
+
+    const payload = {
+      ...rest,
+      attachFile: attachFile?.join(",")
+    }
+
+    await mutateAdd.mutateAsync(payload);
   };
 
   //   UPDATE

@@ -67,7 +67,7 @@ export const ProductDetailWebsite: React.FC<TProps> = ({
           </Box>
         </Box>
 
-        <Box className="grid grid-cols-2 gap-4 bg-white shadow p-4">
+        <Box className="grid lg:grid-cols-2 gap-4 bg-white shadow p-4">
           <FormInput
             controlProps={{
               control,

@@ -55,8 +55,15 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
     }
   );
 
-  const handleAdd = async (data: TLeaveApplicationUpdate) => {
-    await mutateAdd.mutateAsync(data);
+  const handleAdd = async (data: any) => {
+    const {attachFile = [], ...rest} = data || {};
+
+    const payload = {
+      ...rest,
+      attachFile: attachFile?.join(",")
+    }
+
+    await mutateAdd.mutateAsync(payload);
   };
 
   //   UPDATE STATUS

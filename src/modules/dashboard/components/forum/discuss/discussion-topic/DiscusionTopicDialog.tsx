@@ -46,8 +46,8 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
   );
 
   const handleAdd = async (data: any) => {
-    const newParticipants = data?.participants.toString().replaceAll("[");
-    const newAttachFile = data?.attachFile.toString().replaceAll("[");
+    const newParticipants = data?.participants?.join(",");
+    const newAttachFile = data?.attachFile?.join(",")
     await mutateAdd.mutateAsync({
       ...data,
       participants: newParticipants,
@@ -72,6 +72,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           label="Nhóm đề tài"
           fetcher={topic.getList}
           labelKey="topicName"
+          shrinkLabel
         />
 
         <FormSelect
@@ -85,6 +86,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
             { id: 2, name: "WARM" },
           ]}
           label={"Cấp độ"}
+          shrinkLabel
         />
         <FormDatepicker
           controlProps={{
@@ -111,6 +113,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           label="Mô tả thảo luận"
           multiline
           minRows={2}
+          shrinkLabel
         />
         <FormInput
           controlProps={{
@@ -121,6 +124,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           label="Nội dung thảo luận"
           multiline
           minRows={2}
+          shrinkLabel
         />
         <FormSelectAsync
           controlProps={{
@@ -133,6 +137,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
           labelKey="fullName"
           multiple
           className="col-span-2"
+          shrinkLabel
         />
         <Box className="col-span-2">
           <FormUploadfiles
