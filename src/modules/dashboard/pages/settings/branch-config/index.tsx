@@ -93,7 +93,7 @@ export const BranchConfigPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex gap-3 items-center w-3/5 mb-3">
+      <Box className="flex gap-3 items-center mb-3">
         <AddButton variant="contained" onClick={onAdd}>
           Tạo chi nhánh
         </AddButton>

@@ -325,8 +325,8 @@ export const QuotationRequestsPage = () => {
       {ViewReport ? <QuoteRequestHeader /> : null}
 
       <Paper className="bgContainer">
-        <Box className="flex items-center w-full justify-between mb-3">
-          <Box className="flex gap-3 w-3/5">
+        <Box className="flex items-center flex-wrap gap-2 w-full justify-between mb-3">
+          <Box className="flex gap-3">
             <AddButton
               onClick={() => router.push("quote-request-detail")}
               className=""
@@ -336,6 +336,7 @@ export const QuotationRequestsPage = () => {
 
             <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
           </Box>
+
           <Box className="flex gap-2">
             <StatisticButton
               onClick={() => setViewReport(!ViewReport)}

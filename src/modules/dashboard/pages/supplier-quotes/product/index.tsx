@@ -125,14 +125,12 @@ export const SupplierQuotesProductPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between mb-3">
-        <Box className="w-1/2 xl:w-1/3">
-          <SearchBox />
-        </Box>
-
+      <Box className="flex gap-2 mb-3">
         <AddButton onClick={() => onOpen("Add")}>
           Tạo sản phẩm cần hỏi giá
         </AddButton>
+        
+        <SearchBox />
       </Box>
 
       <ContextMenuWrapper

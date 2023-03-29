@@ -151,16 +151,18 @@ export const WarehouseExportTable: React.FC<TProps> = ({
 
   return (
     <Paper className="bgContainer">
-      <Box className="text-left mb-3 flex justify-between items-center">
-        <Box>
-          {" "}
+      <Box className="flex justify-between items-center flex-wrap gap-3 mb-3">
+        <Box className="flex items-center gap-3">
           <AddButton
             variant="contained"
             onClick={() => router.push("/dashboard/warehouse/export-detail")}
           >
             Tạo phiếu xuất kho
           </AddButton>
+
+          <SearchBox />
         </Box>
+
         <Box className="flex gap-2">
           <StatisticButton onClick={onViewReport} View={ViewReport} />
 
@@ -168,10 +170,6 @@ export const WarehouseExportTable: React.FC<TProps> = ({
 
           <RefreshButton onClick={() => refetch()} />
         </Box>
-      </Box>
-
-      <Box className="mb-4 w-1/2">
-        <SearchBox />
       </Box>
 
       <ContextMenuWrapper

@@ -9,7 +9,7 @@ export const QuoteRequestHeader: React.FC = () => {
   );
 
   return (
-    <Box className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+    <Box className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       <Box
         className={style["card"]}
         sx={{ backgroundImage: "url(/images/quotation/quote-request-4.png)" }}

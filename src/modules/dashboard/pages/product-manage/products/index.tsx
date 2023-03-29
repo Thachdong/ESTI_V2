@@ -163,9 +163,7 @@ export const ProductsPage: React.FC = () => {
 
     if (
       confirm(
-        `${
-          isChecked ? "Hiển thị" : "Ẩn"
-        } sản phẩm ${productName} trên website?`
+        `${isChecked ? "Hiển thị" : "Ẩn"} sản phẩm ${productName} trên website?`
       )
     ) {
       await mutateStatus.mutateAsync(product?.id as string);
@@ -181,8 +179,8 @@ export const ProductsPage: React.FC = () => {
       filterKey: "deleted",
       type: "select",
       options: [
-        {value: "false", label: "Hiện"},
-        {value: "true", label: "Ẩn"},
+        { value: "false", label: "Hiện" },
+        { value: "true", label: "Ẩn" },
       ],
       renderCell: ({ row }) => (
         <FormControlLabel
@@ -235,12 +233,8 @@ export const ProductsPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer flex flex-col">
-      <Box className="grid xl:grid-cols-3 gap-4 mb-3">
-        <Box className="w-1/3 xl:w-1/2">
-          <SearchBox label="Tìm kiếm sale phụ trách" />
-        </Box>
-
-        <Box className="xl:col-span-2 flex items-center justify-end gap-3 ml-3">
+      <Box className="flex items-center justify-between gap-3 flex-wrap mb-3">
+        <Box className="flex items-center gap-2">
           <AddButton
             onClick={() =>
               router.push("/dashboard/product-manage/product-detail")
@@ -264,7 +258,9 @@ export const ProductsPage: React.FC = () => {
               />
             </InputLabel>
           </AddButton>
-
+          {/* <SearchBox label="Tìm kiếm sale phụ trách" /> */}
+        </Box>
+        <Box className="flex items-center justify-end gap-3">
           <FilterButton listFilterKey={[]} />
 
           <RefreshButton onClick={() => refetch()} />
