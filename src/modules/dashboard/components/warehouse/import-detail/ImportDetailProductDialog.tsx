@@ -66,7 +66,7 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
     ["ProductLots", selectedProduct],
     () =>
       productLot
-        .getList({ productId: selectedProduct?.productId })
+        .getAll({ productId: selectedProduct?.productId })
         .then((res) => res.data),
     {
       enabled: !!selectedProduct,
