@@ -99,9 +99,9 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
               <img
                 src={`${item}?w=164&fit=crop&auto=format`}
                 srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                onError={({ currentTarget }) =>
-                  (currentTarget.src = process.env.NEXT_PUBLIC_API_URL + item)
-                }
+                // onError={({ currentTarget }) =>
+                //   (currentTarget.src = process.env.NEXT_PUBLIC_API_URL + item)
+                // }
                 alt={item}
                 loading="lazy"
               />

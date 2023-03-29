@@ -145,7 +145,6 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập mã kho" },
           }}
           label="Mã kho"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />
@@ -171,7 +170,6 @@ export const WarehouseConfigDialog: React.FC<TDialog> = ({
           }}
           type="number"
           label="Số vị trí"
-          required
           className="mb-4"
           disabled={type === "View" && !isUpdate}
         />

@@ -16,7 +16,7 @@ export const Warranty: React.FC<TProps> = ({disabled}) => {
         Thông tin bảo hành
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white shadow p-4">
+      <Box className="grid lg:grid-cols-2 gap-4 bg-white shadow p-4">
         <FormInputNumber
           controlProps={{
             control,
@@ -47,7 +47,7 @@ export const Warranty: React.FC<TProps> = ({disabled}) => {
           disabled={disabled}
           multiline
           minRows={5}
-          className="col-span-2"
+          className="lg:col-span-2"
         />
       </Box>
     </Box>

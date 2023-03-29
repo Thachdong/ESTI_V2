@@ -71,19 +71,21 @@ export const StoragePage: React.FC = () => {
   // DOM RENDER
   return (
     <Box>
-      <Box className="flex items-center justify-between mb-3">
+      <Box className="flex items-center justify-between flex-wrap gap-2 mb-3">
         <StoragePositionStatus />
 
-        <Box className="">
-          <AddButton onClick={redirectToCreate} variant="contained">
-            Thêm vị trí
-          </AddButton>
-        </Box>
+        <AddButton onClick={redirectToCreate} variant="contained">
+          Thêm vị trí
+        </AddButton>
       </Box>
 
-      <Box className="grid grid-cols-2 gap-4">
+      <Box className="grid lg:grid-cols-2 gap-4">
         {data?.items.map((item: any) => (
-          <StoragePositionList handleDelete={handleDelete} warehouse={item} key={item?.warehouseConfigID} />
+          <StoragePositionList
+            handleDelete={handleDelete}
+            warehouse={item}
+            key={item?.warehouseConfigID}
+          />
         ))}
       </Box>
     </Box>

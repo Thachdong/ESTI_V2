@@ -38,7 +38,7 @@ export const AccountListTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isFilter: false,
       isSort: false,
@@ -55,7 +55,7 @@ export const AccountListTable: React.FC<TProps> = ({
     {
       field: "branchCode",
       headerName: "Chi nhánh",
-      minWidth: 50,
+      minWidth: 150,
       flex: 1,
       isFilter: false,
       isSort: false,

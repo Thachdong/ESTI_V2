@@ -61,7 +61,7 @@ export const MeetingDeployPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3 flex gap-3 w-3/5">
+      <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo cuộc họp mới" onClick={onCreateMeeting} />
         <SearchBox />
       </Box>

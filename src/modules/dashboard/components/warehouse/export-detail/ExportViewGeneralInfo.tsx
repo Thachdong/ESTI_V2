@@ -50,7 +50,7 @@ export const ExportViewGeneralInfo: React.FC<TProps> = ({ data, refetch }) => {
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 rounded p-3 mb-4 bg-white">
+      <Box className="grid lg:grid-cols-2 gap-4 rounded p-3 mb-4 bg-white">
         <FormInputBase disabled value={data?.code} label="Mã đơn xuất kho" />
 
         <FormInputBase

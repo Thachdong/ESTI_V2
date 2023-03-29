@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import {
   CustomerDetailBasic,
   CustomerDetailCharacteristics,
@@ -10,7 +11,7 @@ import {
 
 export const CustomerDetailPage: React.FC = () => {
   return (
-    <>
+    <Box className="container-center">
       <CustomerDetailBasic />
 
       <hr />
@@ -36,6 +37,6 @@ export const CustomerDetailPage: React.FC = () => {
       <hr />
 
       <CustomerDetailStatisticChart />
-    </>
+    </Box>
   );
 };

@@ -23,8 +23,13 @@ export const productLot = {
     request.put<TUpdateLot, any>(BASE_URL, payload),
 
   // api đổi từ api/ProductBatch/ => api/ProductBatch/GetListLot' và bỏ phân trang
-  getList: (params: any) =>
+  // update1:
+  // api/ProductBatch/ => dùng cho trang danh sách "quản lý lô"
+  // api/ProductBatch/GetListLot dùng cho lấy danh sách select trong màn nhập kho
+  getAll: (params: any) =>
     request.get<any>(`${BASE_URL}/GetListLot`, { ...params }),
+
+  getList: (params: any) => request.getPagination<any>(BASE_URL, { ...params }),
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 

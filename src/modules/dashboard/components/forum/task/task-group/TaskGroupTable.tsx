@@ -34,7 +34,7 @@ export const TaskGroupTable: React.FC<TProps> = ({
     {
       field: "created",
       headerName: "Ngày tạo",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.created),
@@ -42,21 +42,21 @@ export const TaskGroupTable: React.FC<TProps> = ({
     {
       field: "jobGroupName",
       headerName: "Nhóm task",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isSort: false,
     },
     {
       field: "totalItem",
       headerName: "Tổng số task",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isSort: false,
     },
     {
       field: "updated",
       headerName: "Ngày cập nhật",
-      minWidth: 50,
+      minWidth: 120,
       flex: 1,
       isSort: false,
       renderCell: ({ row }) => _format.converseDate(row?.updated),

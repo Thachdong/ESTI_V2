@@ -138,8 +138,8 @@ export const SuppliersPage = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3 flex items-center justify-between">
-        <Box className="flex items-center gap-3 w-3/5">
+      <Box className="mb-3 flex items-center justify-between flex-wrap gap-2">
+        <Box className="flex items-center gap-3">
           <AddButton
             variant="contained"
             onClick={() => setDialog({ open: true, type: "Add" })}

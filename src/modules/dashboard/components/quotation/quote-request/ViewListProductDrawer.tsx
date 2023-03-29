@@ -62,8 +62,14 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
       minWidth: 150,
     },
     {
+      field: "importProductPrice",
+      headerName: "Giá trị xuất kho",
+      minWidth: 200,
+      renderCell: ({ row }) => _format.getVND(row?.importProductPrice),
+    },
+    {
       field: "price",
-      headerName: "Giá",
+      headerName: "Giá bán",
       minWidth: 150,
       renderCell: ({ row }) => _format.getVND(row?.price),
     },
@@ -79,7 +85,7 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
     },
     {
       field: "totalPrice",
-      headerName: "Thành tiền",
+      headerName: "Tổng giá bán",
       minWidth: 120,
       renderCell: ({ row }) => {
         const { quantity, price, vat } = row || {};

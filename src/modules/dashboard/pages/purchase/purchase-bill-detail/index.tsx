@@ -87,7 +87,9 @@ export const PurchaseBillDetailPage: React.FC = () => {
           <PurchaseBillDetailSupplier />
         </Box>
 
-        <PurchaseBillDetailAttach />
+        <Box className="col-span-2 lg:col-span-1">
+          <PurchaseBillDetailAttach />
+        </Box>
 
         <Box className="col-span-2">
           <PurchaseBillDetailProducts

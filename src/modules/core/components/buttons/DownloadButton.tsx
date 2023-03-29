@@ -7,7 +7,7 @@ export const DownloadButton: React.FC<ButtonProps> = (props) => {
     <Button
       {...props}
       className={clsx(
-        "bg-main-2 hover:bg-[#3182ce] px-3 h-[40px] min-w-[260px]",
+        "bg-main-2 hover:bg-[#3182ce] px-3 h-[40px] min-w-[200px]",
         props?.className
       )}
     >

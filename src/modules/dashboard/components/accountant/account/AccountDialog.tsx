@@ -136,6 +136,7 @@ export const AccountDialog: React.FC<TDialog> = ({
             rules: { required: "Phải chọn chi nhánh" },
           }}
           fetcher={branchs.getList}
+          shrinkLabel
         />
         <FormInput
           controlProps={{
@@ -144,6 +145,7 @@ export const AccountDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập tên tài khoản" },
           }}
           label="Tên tài khoản"
+          shrinkLabel
         />
         <FormInputNumber
           controlProps={{
@@ -152,6 +154,7 @@ export const AccountDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập mục tiêu" },
           }}
           label="Mục tiêu"
+          shrinkLabel
         />
         <FormInputNumber
           controlProps={{
@@ -160,6 +163,7 @@ export const AccountDialog: React.FC<TDialog> = ({
             rules: { required: "Phải nhập phần trăm" },
           }}
           label="Phần trăm"
+          shrinkLabel
         />
       </Box>
 

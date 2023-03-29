@@ -138,7 +138,7 @@ export const feedbackColumns: TGridColDef[] = [
       } else {
         return (
           <List className="truncate">
-            {files.map((f: string, index: number) => (
+            {files?.map((f: string, index: number) => (
               <ListItem key={index} className="truncate">
                 <a
                   target="_blank"

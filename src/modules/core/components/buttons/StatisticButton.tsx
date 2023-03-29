@@ -6,7 +6,7 @@ export const StatisticButton: React.FC<ButtonProps & { View?: boolean }> = (
   props
 ) => {
   return (
-    <Tooltip title={props?.View ? "Ẩn thống kê" : "Hiện thống kê"}>
+    <Tooltip title={props?.View ? "Ẩn thống kê" : "Hiện thống kê"} placement="top">
       <ButtonBase
         {...props}
         className={clsx(

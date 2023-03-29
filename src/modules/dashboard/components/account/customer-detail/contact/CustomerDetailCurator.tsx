@@ -101,7 +101,7 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
     <>
       <Box
         component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-4"
+        className="grid lg:grid-cols-2 !border-grey-2 !rounded-[4px] gap-3 mb-4"
       >
         <legend>Thông tin tài khoản:</legend>
 
@@ -149,7 +149,7 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
           disabled={isDisable || !accountType}
         />
 
-        <Box className="col-span-2 flex items-center justify-end">
+        <Box className="lg:col-span-2 flex items-center justify-end">
           <BaseButton onClick={handleRessetPassword} className="mr-3">
             Cấp lại mật khẩu
           </BaseButton>
@@ -161,7 +161,7 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
 
       <Box
         component="fieldset"
-        className="grid grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
+        className="grid lg:grid-cols-2 !border-grey-2 !rounded-[4px] gap-4 mb-4"
       >
         <legend>Thông tin người liên hệ:</legend>
 
@@ -247,7 +247,7 @@ export const CustomerDetailCurator: React.FC<TProps> = ({
           multiline
           minRows={3}
           disabled={isDisable}
-          className="col-span-2"
+          className="lg:col-span-2"
         />
       </Box>
     </>

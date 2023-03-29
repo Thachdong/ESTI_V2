@@ -8,18 +8,20 @@ export const customerTypeColumns: TGridColDef<TCustomerType>[] = [
   {
     field: "created",
     headerName: "Ngày tạo",
-    flex: 1,
+    minWidth: 120,
     renderCell: ({ row }) => moment(row.created).format("DD/MM/YYYY"),
   },
   {
     field: "levelName",
     headerName: "Tên",
+    minWidth: 120,
     flex: 1,
   },
   {
     field: "accountType",
     headerName: "Nhóm",
     flex: 1,
+    minWidth: 120,
     renderCell: ({ row }) =>
       row.accountType
         ? accountTypeOptions[row.accountType - 1]?.name
@@ -28,11 +30,12 @@ export const customerTypeColumns: TGridColDef<TCustomerType>[] = [
   {
     field: "discount",
     headerName: "Giảm giá (%)",
+    minWidth: 120,
     flex: 1,
   },
   {
     field: "point",
     headerName: "Điểm",
-    flex: 1,
+    minWidth: 120,
   },
 ];

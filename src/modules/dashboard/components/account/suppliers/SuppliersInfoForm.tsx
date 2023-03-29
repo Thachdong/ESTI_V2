@@ -46,6 +46,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Tên công ty"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
@@ -56,6 +57,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Mã số thuế"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -64,12 +66,14 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Nhóm sản phẩm cung cấp"
           disabled={isDisable}
           multiple
+          shrinkLabel
         />
 
         <FormInput
           controlProps={{ control, name: "phone" }}
           label="Số điện thoại"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -82,6 +86,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Hình thức thanh toán"
           disabled={isDisable}
           labelKey="paymentTypeName"
+          shrinkLabel
         />
 
         <FormSelect
@@ -93,6 +98,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Thời hạn thanh toán"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
@@ -102,6 +108,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Địa chỉ"
           className="col-span-2"
           disabled={isDisable}
+          shrinkLabel
         />
       </Box>
 
@@ -119,6 +126,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Số tài khoản"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
@@ -129,6 +137,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           }}
           label="Tên tài khoản"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormInput
@@ -140,6 +149,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Tên ngân hàng"
           className="col-span-2"
           disabled={isDisable}
+          shrinkLabel
         />
       </Box>
 
@@ -159,6 +169,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Nhân viên phụ trách"
           labelKey="fullName"
           disabled={isDisable}
+          shrinkLabel
         />
 
         <FormSelect
@@ -171,6 +182,7 @@ export const SuppliersInfoForm: React.FC<TProps> = ({ isDisable }) => {
           label="Giao nhận phụ trách"
           labelKey="fullName"
           disabled={isDisable}
+          shrinkLabel
         />
       </Box>
     </Box>

@@ -236,6 +236,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           }}
           label={"Số lượng"}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInputNumber
@@ -246,6 +247,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           }}
           label={"Giá"}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInput
@@ -255,6 +257,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           }}
           label={"Tình trạng SP"}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormDatepicker
@@ -274,6 +277,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           label={"Thuế VAT"}
           options={VAT}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormSelect
@@ -286,6 +290,7 @@ export const ReferencePriceDialog: React.FC<TDialog> = ({
           valueKey="value"
           labelKey="label"
           disabled={disabled}
+          shrinkLabel
         />
       </Box>
 

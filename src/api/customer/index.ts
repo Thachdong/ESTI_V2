@@ -71,9 +71,10 @@ export const customer = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
-  getStatisticById: (customerId: string) =>
+  // api update: đổi customerId => curatorId, Ngày 29/03/2023
+  getStatisticById: (curatorId: string) =>
     request.get<any>(
-      `${BASE_URL}/GetValueMainOrderInYear?customerId=${customerId}`
+      `${BASE_URL}/GetValueMainOrderInYear?curatorId=${curatorId}`
     ),
 
   uploadImage: (file: FormData) =>

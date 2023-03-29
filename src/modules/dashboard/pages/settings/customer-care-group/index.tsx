@@ -108,9 +108,8 @@ export const CustomerCareGroupPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex items-center gap-3 w-full md:w-4/5 lg:w-3/5 mb-3">
+      <Box className="flex items-center gap-3 flex-wrap mb-3">
         <AddButton
-          className="min-w-[300px]"
           variant="contained"
           onClick={() => onOpen("Add")}
         >

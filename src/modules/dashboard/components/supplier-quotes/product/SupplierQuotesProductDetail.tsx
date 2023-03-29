@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
 import { products as productApi } from "src/api";
 import {
-  FormDatepicker,
   FormInput,
   FormInputBase,
   FormInputNumber,
@@ -72,12 +71,14 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           getOptionLabel={(opt: any) =>
             !!opt ? `${opt?.productCode} / ${opt?.productName}` : ""
           }
+          shrinkLabel
         />
 
         <FormInputBase
           label="Hãng sản xuất:"
           value={selectedProduct?.manufactor}
           disabled
+          shrinkLabel
         />
 
         <FormSelect
@@ -89,12 +90,14 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           options={VAT}
           label="Thuế GTGT:"
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInputBase
           label="Quy cách:"
           value={selectedProduct?.specs}
           disabled
+          shrinkLabel
         />
 
         <FormInputNumber
@@ -105,12 +108,14 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Đơn giá:"
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInputBase
           label="Đơn vị:"
           value={selectedProduct?.unitName}
           disabled
+          shrinkLabel
         />
 
         <FormInputNumber
@@ -121,6 +126,7 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Số lượng:"
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInputNumber
@@ -130,6 +136,7 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Thành tiền:"
           disabled={true}
+          shrinkLabel
         />
 
         <FormInput
@@ -141,6 +148,7 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           multiline
           minRows={3}
           disabled={disabled}
+          shrinkLabel
         />
 
         <FormInput
@@ -150,6 +158,7 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           }}
           label="Trạng thái SP:"
           disabled={disabled}
+          shrinkLabel
         />
       </Box>
     </Box>

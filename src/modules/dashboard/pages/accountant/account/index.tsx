@@ -58,7 +58,7 @@ export const AccountPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3 flex gap-3 w-3/5">
+      <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo tài khoản" onClick={onCreateAccount} />
         <SearchBox />
       </Box>

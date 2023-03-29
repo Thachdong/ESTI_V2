@@ -11,7 +11,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
   const { control } = useFormContext();
 
   return (
-    <Box className="grid grid-cols-2 gap-3 h-100">
+    <Box className="grid grid-cols-2 gap-3 h-100 mt-3">
       <FormInput
         controlProps={{
           control,
@@ -20,6 +20,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         }}
         label="Họ tên"
         disabled={isDisable}
+        shrinkLabel
       />
 
       <FormSelect
@@ -32,6 +33,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Giới tính"
         disabled={isDisable}
         labelKey="name"
+        shrinkLabel
       />
 
       <FormSelect
@@ -44,6 +46,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Chức vụ"
         disabled={isDisable}
         labelKey="name"
+        shrinkLabel
       />
 
       <FormInput
@@ -54,6 +57,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         }}
         label="Số điện thoại"
         disabled={isDisable}
+        shrinkLabel
       />
 
       <FormInput
@@ -66,6 +70,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         multiline
         minRows={3}
         disabled={isDisable}
+        shrinkLabel
       />
 
       <FormInput
@@ -76,6 +81,7 @@ export const SuppliersCuratorInfoForm: React.FC<TProps> = ({ isDisable }) => {
         label="Email"
         required={false}
         disabled={isDisable}
+        shrinkLabel
       />
     </Box>
   );

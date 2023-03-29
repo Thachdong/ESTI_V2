@@ -37,7 +37,7 @@ export const PurchaseDetailImplement: React.FC<TProps> = ({ disabled }) => {
         PHÂN CÔNG VIỆC
       </Typography>
 
-      <Box className="bg-white grid grid-cols-2 gap-4 rounded flex-grow p-3">
+      <Box className="bg-white grid lg:grid-cols-2 gap-4 rounded flex-grow p-3">
         <FormSelect
           options={selectOptions[0].data || []}
           controlProps={{

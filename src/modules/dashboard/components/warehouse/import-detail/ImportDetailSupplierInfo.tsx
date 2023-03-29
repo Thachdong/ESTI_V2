@@ -25,7 +25,7 @@ export const ImportDetailSupplierInfo: React.FC<TProps> = ({
 
   // DOM RENDERING
   return (
-    <Box className="grid grid-cols-2 gap-4 my-4">
+    <Box className="grid lg:grid-cols-2 gap-4 my-4">
       <Box className="">
         <Typography className="text-sm font-semibold mb-3 ">
           THÔNG TIN NHÀ CUNG CẤP

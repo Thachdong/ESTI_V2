@@ -113,18 +113,17 @@ export const SupplierQuotesPage: React.FC = () => {
 
   return (
     <Paper className="bgContainer">
-      <Box className="flex justify-between mb-3">
-        <Box className="flex w-1/2">
-          <AddButton
-            onClick={() =>
-              router.push("/dashboard/supplier-quotes/quote-detail/")
-            }
-            className="!min-w-[200px] mr-4"
-          >
-            Tạo đơn hỏi giá
-          </AddButton>
-          <SearchBox />
-        </Box>
+      <Box className="flex items-center gap-2 mb-3">
+        <AddButton
+          onClick={() =>
+            router.push("/dashboard/supplier-quotes/quote-detail/")
+          }
+          className="!min-w-[200px] mr-4"
+        >
+          Tạo đơn hỏi giá
+        </AddButton>
+
+        <SearchBox />
       </Box>
 
       <ContextMenuWrapper

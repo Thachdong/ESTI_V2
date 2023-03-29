@@ -1,4 +1,3 @@
-import moment from "moment";
 import { StatusChip } from "~modules-core/components";
 import { lotStatus } from "~modules-core/constance";
 import { _format } from "~modules-core/utility/fomat";

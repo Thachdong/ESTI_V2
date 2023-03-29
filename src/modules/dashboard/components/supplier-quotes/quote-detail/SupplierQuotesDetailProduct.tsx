@@ -183,7 +183,7 @@ export const SupplierQuotesDetailProduct: React.FC<TProps> = ({ disabled }) => {
             />
 
             <BaseButton
-              className="truncate bg-main"
+              className="truncate bg-main px-2"
               onClick={getSupplierQuotePlan}
             >
               Lọc SP cần hỏi giá

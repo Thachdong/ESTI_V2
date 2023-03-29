@@ -34,7 +34,7 @@ export const SupplierQuotesDetailSupplier: React.FC = () => {
   }, [supplierDetail]);
 
   return (
-    <Box className="grid grid-cols-2 gap-4">
+    <Box className="grid lg:grid-cols-2 gap-4">
       <Box>
         <Typography className="font-bold uppercase mb-3 text-sm">
           THÔNG TIN NHÀ CUNG CẤP
