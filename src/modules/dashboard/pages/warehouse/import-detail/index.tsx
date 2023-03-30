@@ -190,6 +190,7 @@ export const ImportDetailPage: React.FC = () => {
         <ImportDetailTable
           transactionData={transactionData?.warehouseSession}
           warehouseConfigId={warehouseConfigId}
+          refetch={refetchTransaction}
         />
 
         <ImportDetailButtonsBox

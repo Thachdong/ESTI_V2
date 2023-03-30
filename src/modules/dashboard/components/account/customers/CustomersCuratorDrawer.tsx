@@ -35,11 +35,13 @@ export const CustomersCuratorDrawer: React.FC<TProps> = ({
       field: "accountCode",
       headerName: "Mã tài khoản",
       minWidth: 150,
+      flex: 1
     },
     {
-      field: "accountTypeName",
+      field: "typeAccountName", // api yêu cầu typeAccountName thay accountTypeName
       headerName: "Loại tài khoản",
       minWidth: 150,
+      flex: 1
     },
     {
       field: "curatorDepartmentName",
@@ -50,16 +52,25 @@ export const CustomersCuratorDrawer: React.FC<TProps> = ({
       field: "curatorPhone",
       headerName: "SDT",
       minWidth: 150,
+      flex: 1
+    },
+    {
+      field: "zaloNumber",
+      headerName: "Số zalo",
+      minWidth: 150,
+      flex: 1
     },
     {
       field: "curatorEmail",
       headerName: "Email",
-      minWidth: 150,
+      minWidth: 175,
+      flex: 1
     },
     {
       field: "curatorGenderName",
       headerName: "Giới tính",
       minWidth: 150,
+      flex: 1
     },
   ];
 

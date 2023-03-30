@@ -4,6 +4,7 @@ import "@fontsource/roboto/700.css";
 import "react-toastify/dist/ReactToastify.css";
 import "nprogress/nprogress.css";
 import "react-contexify/ReactContexify.css";
+import 'rc-tree-select/assets/index.css';
 import "~styles/globals.css";
 
 import Head from "next/head";
@@ -20,10 +21,7 @@ import { CoreLayout } from "~modules-core/components/CoreLayout";
 
 const clientEmotionCache = createEmotionCache();
 
-function MyApp({
-  Component,
-  emotionCache = clientEmotionCache,
-}: IMyAppProps) {
+function MyApp({ Component, emotionCache = clientEmotionCache }: IMyAppProps) {
   const [loading, setLoading] = useState(false);
 
   useNprogress(setLoading);

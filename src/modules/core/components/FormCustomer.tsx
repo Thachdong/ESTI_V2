@@ -17,6 +17,7 @@ type TProps = {
   defaultValue?: any;
   onAddCallback?: (opt: any) => void;
   shrinkLabel?: boolean;
+  fetcherParams?: object;
 };
 
 export const FormCustomer: React.FC<TProps> = ({
@@ -27,7 +28,8 @@ export const FormCustomer: React.FC<TProps> = ({
   callback,
   onAddCallback,
   defaultValue,
-  shrinkLabel = false
+  shrinkLabel = false,
+  fetcherParams
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();
 
@@ -52,6 +54,7 @@ export const FormCustomer: React.FC<TProps> = ({
               ? customer?.customerCode + " - " + customer?.companyName
               : ""
           }
+          fetcherParams={fetcherParams}
           className="w-full"
           disabled={disabled}
           callback={callback}

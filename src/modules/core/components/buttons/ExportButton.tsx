@@ -45,7 +45,7 @@ export const ExportButton: React.FC<TProps> = (props) => {
       tooltipText="Tải file excel"
       {...restProps}
       className={clsx(
-        "px-3 text-main bg-[#F3F6F9] h-[40px] min-w-[40px] w-[40px] border-[#edf0f2] active:bg-main active:text-white",
+        "px-3 text-main bg-[#F3F6F9] h-[40px] min-w-[40px] w-[40px] border-[#edf0f2] active:bg-main active:text-white shadow-none",
         className
       )}
       onClick={handleExport}
