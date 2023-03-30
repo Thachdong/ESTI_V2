@@ -17,7 +17,7 @@ export const DocumentsTable: React.FC = () => {
   const { data: documentList } = useQuery(
     ["DocumentList", productCode, productId, lotNumber, { ...pagination }],
     () =>
-      productDocument.getList({
+      productDocument.getPublicList({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
         productCode,

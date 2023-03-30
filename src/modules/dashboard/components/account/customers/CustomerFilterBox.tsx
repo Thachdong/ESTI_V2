@@ -17,8 +17,8 @@ export const CustomerFilterBox: React.FC = () => {
     router.push({
       query: {
         ...query,
-        toDayBD: moment(toDayBD).date(),
-        fromDayBD: moment(fromDayBD).date(),
+        toDayBD: moment(toDayBD).endOf("day").valueOf(),
+        fromDayBD: moment(fromDayBD).startOf("day").valueOf(),
       },
     });
   }, [fromDayBD, toDayBD]);
@@ -43,7 +43,7 @@ export const CustomerFilterBox: React.FC = () => {
           }}
           label="Từ ngày sinh"
           shrinkLabel
-          inputFormat="DD"
+          inputFormat="DD/MM"
           views={["day"]}
         />
         <FormDatepicker
@@ -53,7 +53,7 @@ export const CustomerFilterBox: React.FC = () => {
           }}
           label="Đến ngày sinh"
           shrinkLabel
-          inputFormat="DD"
+          inputFormat="DD/MM"
           views={["day"]}
         />
       </Box>

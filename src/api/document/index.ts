@@ -19,12 +19,20 @@ const BASE_URL = "Document";
 export const productDocument = {
   getList: (params?: any) =>
     request.getPagination<TDocument>(BASE_URL, { ...params }),
+
+  getPublicList: (params?: any) =>
+    request.getPagination<TDocument>(`${BASE_URL}/GetPublish`, { ...params }),
+
   getById: (id: string) => request.get<TDocument>(`${BASE_URL}/${id}`),
+
   create: (payload: TCreateDocument) =>
     request.post<TCreateDocument, any>(BASE_URL, payload),
+
   update: (payload: TDocument) =>
     request.put<TDocument, any>(BASE_URL, payload),
+
   delete: (id: string) => request.delete(`${BASE_URL}/${id}`),
+
   uploadFile: (file: FormData) =>
     request.post<FormData, string>(`${BASE_URL}/upload-file`, file),
 };

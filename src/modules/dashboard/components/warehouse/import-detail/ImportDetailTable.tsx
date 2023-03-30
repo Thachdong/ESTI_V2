@@ -24,11 +24,13 @@ import { ImportDetailProductDialog } from "./ImportDetailProductDialog";
 type TProps = {
   transactionData: any;
   warehouseConfigId: string;
+  refetch?: () => void;
 };
 
 export const ImportDetailTable: React.FC<TProps> = ({
   transactionData,
   warehouseConfigId,
+  refetch
 }) => {
   // LOCAL STATE AND EXTRACT PROPS
   const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false });
@@ -383,6 +385,7 @@ export const ImportDetailTable: React.FC<TProps> = ({
           type={"CreateLabel"}
           defaultValue={{ id: productLabelId } as any}
           historyPayload={historyPayload}
+          refetch={refetch}
         />
       );
     }

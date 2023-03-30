@@ -126,7 +126,7 @@ export const ImportDetailViewGeneralInfo: React.FC<TProps> = ({
           disabled={data?.importStatus > 0}
         />
 
-        <Box className="col-span-2 flex justify-end">
+        <Box className="lg:col-span-2 flex justify-end">
           <BaseButton
             disabled={data?.importStatus > 0}
             onClick={handleSubmit(_onSubmit)}
