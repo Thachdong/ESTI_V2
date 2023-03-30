@@ -1,9 +1,9 @@
 // NOTE:
 // SP NỔI BẬT VÀ SP ĐẠI DIỆN LẤY TỪ API PRODUCTWEBSITE
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { category, productsWebsite, TCategory } from "src/api";
 import {
   BaseButton,
@@ -18,6 +18,27 @@ import { parentCategoryId, productTemplates } from "~modules-core/constance";
 import { toast } from "~modules-core/toast";
 import { TDialog } from "~types/dialog";
 
+// @ts-ignore
+import TreeSelect from "rc-tree-select";
+
+function groupItemsByParentId(items: any[], parentId: string | null) {
+  const result: any[] = [];
+
+  items.forEach((item) => {
+    if (item.parentId === parentId) {
+      const children = groupItemsByParentId(items, item.value);
+
+      if (children.length) {
+        item.children = children;
+      }
+
+      result.push(item);
+    }
+  });
+
+  return result;
+}
+
 export const CategoryDialog: React.FC<TDialog> = ({
   onClose,
   open,
@@ -26,6 +47,8 @@ export const CategoryDialog: React.FC<TDialog> = ({
   defaultValue,
 }) => {
   const [isUpdate, setIsUpdate] = useState(false);
+
+  const [parentId, setParentId] = useState("");
 
   const {
     handleSubmit,
@@ -40,6 +63,27 @@ export const CategoryDialog: React.FC<TDialog> = ({
   const template = watch("template");
 
   const disabled = type === "View" && !isUpdate;
+
+  // DATA FETCHING
+  const { data: categoryList } = useQuery(["CategoryList"], () =>
+    category
+      .getList({
+        pageIndex: 1,
+        pageSize: 9999,
+      })
+      .then((res) =>
+        res.data.items?.map?.((item: any) => ({
+          label: item?.name,
+          value: item?.id,
+          parentId: item?.parentId,
+        }))
+      )
+  );
+
+  const categoryTree = groupItemsByParentId(
+    categoryList || [],
+    parentCategoryId
+  );
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -57,10 +101,11 @@ export const CategoryDialog: React.FC<TDialog> = ({
         thumbnail: defaultValue.thumbnail?.split(","),
         template: defaultValue.template,
         templateBanner: [defaultValue.templateBanner],
-        parentId: defaultValue.parentId,
         templateProductId: defaultValue.templateProductId,
         productIds: JSON.parse(productIds)?.map((product: any) => product?.id),
       };
+
+      setParentId(defaultValue.parentId);
 
       reset(defaultCategory);
     }
@@ -110,7 +155,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
   const handleAddCategory = async (payload: any) => {
     handleValidation(payload);
 
-    await mutationAddCategory.mutateAsync(payload);
+    await mutationAddCategory.mutateAsync({ ...payload, parentId });
   };
 
   const mutationUpdateCategory = useMutation(
@@ -131,8 +176,8 @@ export const CategoryDialog: React.FC<TDialog> = ({
 
   const handleUpdateCategory = async (payload: any) => {
     handleValidation(payload);
-    
-    await mutationUpdateCategory.mutateAsync(payload);
+
+    await mutationUpdateCategory.mutateAsync({ ...payload, parentId });
   };
 
   // RENDER BUTTONS BASE ON DIALOG TYPE
@@ -260,17 +305,14 @@ export const CategoryDialog: React.FC<TDialog> = ({
             disabled={disabled}
           />
 
-          <FormSelectAsync
-            fetcher={category.getList}
-            // fetcherParams={{ parentId: parentCategoryId }}
-            controlProps={{
-              control,
-              name: "parentId",
-              rules: { required: "Phải chọn nhóm cha" },
-            }}
-            label="Nhóm cha"
-            disabled={disabled}
-          />
+          <Box className="relative">
+            <Typography className="absolute z-[99999] top-[9px] left-[12px] font-semibold text-[#504e4e]">Nhóm cha</Typography>
+            <TreeSelect
+              dropdownStyle={{ maxHeight: 400, overflow: "auto", zIndex: 9999 }}
+              treeData={categoryTree}
+              onChange={(id: string) => setParentId(id)}
+            />
+          </Box>
 
           {type !== "Add" && (
             <FormSelectAsync

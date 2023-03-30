@@ -167,7 +167,7 @@ export const QuotationRequestsPage = () => {
       options: [
         {
           label: "Khách hàng mới",
-          value: null,
+          value: 3,
         },
         {
           label: "Đã kích hoạt",

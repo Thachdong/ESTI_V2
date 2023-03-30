@@ -140,6 +140,8 @@ export const CategoryPage: React.FC = () => {
         </Box>
       </Box>
 
+      
+
       <ContextMenuWrapper
         menuId="product_table_menu"
         menuComponent={

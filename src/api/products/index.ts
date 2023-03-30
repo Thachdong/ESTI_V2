@@ -92,6 +92,8 @@ export const products = {
 
   getById: (id: string) => request.get<any>(`${BASE_URL}/${id}`),
 
+  getPublicById: (id: string) => request.get<any>(`${BASE_URL}/GetByIdPublish/${id}`),
+
   getBySupplierId: (id: string) =>
     request.get<TProduct[]>(`${BASE_URL}/ProductInSupplier?supplierId=${id}`),
 

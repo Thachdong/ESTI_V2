@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQuery } from "react-query";
-import { customer as customerApi } from "src/api";
+import { customer as customerApi, staff } from "src/api";
 import {
   FormCustomer,
   FormInputBase,
@@ -19,8 +19,9 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled, type }) => {
 
   const { control, watch, setValue } = useFormContext();
 
-  const { curatorId, customerId } = watch();
+  const { curatorId, customerId, salesId } = watch();
 
+  // DATA FETCHING
   const { data: customerDetail } = useQuery(
     ["CustomerDetail", customerId],
     () => customerApi.getById(customerId).then((res) => res.data),
@@ -31,6 +32,13 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled, type }) => {
 
   const { companyInfo, curatorInfo } = customerDetail || {};
 
+  const { data: saleList } = useQuery(["SaleList"], () =>
+    staff.getListSale().then((res) => res.data)
+  );
+
+  const selectedSale = saleList?.find((sale: any) => sale?.id === salesId);
+
+  // SIDE EFFECTS
   useEffect(() => {
     type !== "Add" && setValue("curatorId", "");
   }, [customerId, type]);
@@ -55,6 +63,7 @@ export const CustomerCareInfo: React.FC<TProps> = ({ disabled, type }) => {
               control: control,
               rules: { required: "Phải chọn mã khách hàng" },
             }}
+            fetcherParams={{ salesCode: selectedSale?.code }}
             disabled={type === "View"}
             shrinkLabel
             label="Khách hàng"
