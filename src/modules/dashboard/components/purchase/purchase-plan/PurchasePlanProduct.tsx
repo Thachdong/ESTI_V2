@@ -56,10 +56,18 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
 
   useEffect(() => {
     if (!!selectedReferencePrice) {
-      setValue("supplierId", selectedReferencePrice?.supplierId)
+      const { supplierId, quantity, vat, price } = selectedReferencePrice || {};
+
+      setValue("supplierId", supplierId);
+
+      setValue("quantity", quantity);
+
+      setValue("vat", vat);
+
+      setValue("price", price);
     }
-  }, [selectedReferencePrice])
-  
+  }, [selectedReferencePrice]);
+
   return (
     <Box className="mb-4">
       <Typography className="font-semibold text-sm mb-2">
@@ -125,7 +133,7 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
             shrinkLabel
           />
         )}
-
+        {/* label đổi từ productStatus => expireDateStatusName */}
         <FormSelectAsync
           controlProps={{
             control,
@@ -133,8 +141,13 @@ export const PurchasePlanProduct: React.FC<TProps> = ({ disabled, type }) => {
           }}
           label="DS giá tham khảo: "
           getOptionLabel={(opt: any) =>
-            !!opt ? `${opt.supplierName} - đơn giá: ${_format.getVND(opt.price)} - ${opt.productStatus}` : ""
+            !!opt
+              ? `${opt.supplierName} - đơn giá: ${_format.getVND(
+                  opt.price
+                )} - ${opt.expireDateStatusName}`
+              : ""
           }
+          callback={(opt: any) => setSelectedReferencePrice(opt)}
           fetcher={referencePrice.getList}
           fetcherParams={{ productId }}
           disabled={!productId}

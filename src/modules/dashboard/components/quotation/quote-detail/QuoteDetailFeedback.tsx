@@ -13,7 +13,7 @@ export const QuoteDetailFeedback: React.FC = () => {
   );
 
   return (
-    <Box className="flex flex-col col-span-2">
+    <Box className="flex flex-col lg:col-span-2">
       <Typography className="font-bold uppercase mb-3 text-sm">
         PHẢN HỒI KHÁCH HÀNG
       </Typography>

@@ -19,12 +19,12 @@ export const productColumns: TGridColDef[] = [
     flex: 1,
   },
   {
-    field: "productManufactor",
+    field: "manufactor",
     headerName: "Hãng SX",
     minWidth: 100,
   },
   {
-    field: "productSpecs",
+    field: "specs",
     headerName: "Quy cách",
     minWidth: 100,
   },
@@ -49,8 +49,8 @@ export const productColumns: TGridColDef[] = [
   },
   {
     field: "vat",
-    headerName: "Thuế GTGT",
-    minWidth: 100,
+    headerName: "Thuế GTGT(%)",
+    minWidth: 120,
     flex: 1,
   },
   {

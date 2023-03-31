@@ -42,7 +42,9 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn sale admin" },
           }}
           label="Sale admin:"
-          labelKey="fullName"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+          }
           disabled={disabled}
         />
 
@@ -54,7 +56,9 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn sale" },
           }}
           label="Sale:"
-          labelKey="fullName"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+          }
           disabled={disabled}
         />
 
@@ -66,7 +70,9 @@ export const OrderDetailImplement: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn giao nhận" },
           }}
           label="Giao nhận:"
-          labelKey="fullName"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+          }
           disabled={disabled}
         />
       </Box>
