@@ -123,6 +123,7 @@ export const BillDetailPage: React.FC = () => {
       setValue("products", orderProducts);
     }
   }, [BillDetailView]);
+console.log(mainOrder);
 
   return (
     <FormProvider {...method}>
@@ -165,7 +166,7 @@ export const BillDetailPage: React.FC = () => {
 
         <BillDetailCurator
           data={{
-            curatorName: mainOrder.curatorName,
+            curatorName: `${mainOrder.curatorName} - ${mainOrder?.accountCode} - ${mainOrder?.paymentLimit}`,
             curatorDepartmentName: mainOrder.curatorDepartmentName,
             curatorPhone: mainOrder.curatorPhone,
             curatorEmail: mainOrder.curatorEmail,

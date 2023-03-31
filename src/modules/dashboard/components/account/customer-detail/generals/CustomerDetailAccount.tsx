@@ -42,7 +42,9 @@ export const CustomerDetailAccount: React.FC<TProps> = ({ isUpdate }) => {
               rules: { required: "Phải chọn sale phụ trách" },
             }}
             label="Sale Phụ trách"
-            labelKey="fullName"
+            getOptionLabel={(opt: any) =>
+              !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+            }
             disabled={!isUpdate}
           />
 
@@ -54,7 +56,9 @@ export const CustomerDetailAccount: React.FC<TProps> = ({ isUpdate }) => {
               rules: { required: "Phải chọn sale admin phụ trách" },
             }}
             label="Sales Admin phụ trách"
-            labelKey="fullName"
+            getOptionLabel={(opt: any) =>
+              !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+            }
             disabled={!isUpdate}
           />
 

@@ -8,12 +8,12 @@ type TProps = {
 
 export const OrderDetailGeneralView: React.FC<TProps> = ({ data }) => {
   return (
-    <Box className="flex flex-col col-span-2">
+    <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3 text-sm">
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-3 bg-white rounded p-3">
+      <Box className="grid lg:grid-cols-2 gap-3 bg-white rounded p-3">
         <FormInputBase label="Mã BG" value={data?.preQuoteCode} disabled />
 
         <FormInputBase label="Mã ĐH" value={data?.mainOrderCode} disabled />

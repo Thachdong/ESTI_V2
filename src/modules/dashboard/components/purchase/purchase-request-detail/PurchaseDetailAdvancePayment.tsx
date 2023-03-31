@@ -80,9 +80,9 @@ export const PurchaseDetailAdvancePayment: React.FC<TProps> = ({
 
       <Box className="bg-white grid gap-4 rounded">
         <ContextMenuWrapper
-          menuId="product_table_menu"
+          menuId="payment_table_menu"
           menuComponent={
-            <Menu className="p-0" id="product_table_menu">
+            <Menu className="p-0" id="payment_table_menu">
               <Item
                 disabled={status > 2}
                 id="view-product"

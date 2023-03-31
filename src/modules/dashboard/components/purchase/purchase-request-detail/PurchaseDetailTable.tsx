@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useFormContext } from "react-hook-form";
-import { toast } from "react-toastify";
 import { purchasePlan } from "src/api";
 import {
   AddButton,
@@ -14,6 +13,7 @@ import {
   DropdownButton,
   FormDatepickerBase,
 } from "~modules-core/components";
+import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import { dialogColumns } from "~modules-dashboard/pages/purchase/purchase-plan/data";
 import { TGridColDef } from "~types/data-grid";
@@ -21,7 +21,7 @@ import { TDefaultDialogState } from "~types/dialog";
 import { PurchaseDetailDialog } from "./PurchaseDetailDialog";
 
 export const PurchaseDetailTable: React.FC = () => {
-  const [dialog, setDialog] = useState<TDefaultDialogState>();
+  const [dialog, setDialog] = useState<TDefaultDialogState>({open: false});
 
   const [planDate, setPlanDate] = useState({
     formDate: moment().startOf("day").valueOf(),

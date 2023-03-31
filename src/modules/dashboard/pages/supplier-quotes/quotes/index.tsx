@@ -46,6 +46,7 @@ export const SupplierQuotesPage: React.FC = () => {
     data: purchaseList,
     isLoading,
     isFetching,
+    refetch
   } = useQuery(
     [
       "PurchaseList",
@@ -168,6 +169,7 @@ export const SupplierQuotesPage: React.FC = () => {
         onClose={handleCloseDialog}
         open={dialog?.open}
         defaultValue={defaultValue?.current}
+        refetch={refetch}
       />
     </Paper>
   );

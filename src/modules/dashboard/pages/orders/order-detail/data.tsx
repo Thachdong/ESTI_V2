@@ -53,8 +53,8 @@ export const detailColumns: TGridColDef[] = [
   },
   {
     field: "vat",
-    headerName: "Thuế GTGT",
-    minWidth: 100,
+    headerName: "Thuế GTGT(%)",
+    minWidth: 120,
   },
   {
     field: "totalPrice",
@@ -125,12 +125,13 @@ export const deliveryColumns: TGridColDef[] = [
       </Link>
     ),
   },
+  // api yêu cầu đổi importTotalPrice => totalprice
   {
-    field: "importTotalPrice",
+    field: "totalprice",
     headerName: "Giá trị hàng bán",
     minWidth: 150,
     flex: 1,
-    renderCell: ({ row }) => _format.getVND(row?.importTotalPrice),
+    renderCell: ({ row }) => _format.getVND(row?.totalprice),
   },
   {
     field: "deliveryCode",

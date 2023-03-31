@@ -117,105 +117,97 @@ export const OrderDetailPage: React.FC = () => {
 
   return (
     <FormProvider {...method}>
-      <Box className="container-center grid lg:grid-cols-2 gap-4">
-        {!!id ? (
-          <>
-            <OrderDetailStatus
-              currentStatus={orderDetail?.mainOrder?.status}
-              refetch={refetch}
-            />
+      <Box className="container-center">
+        <Box className="grid gap-4">
+          {!!id ? (
+            <>
+              <OrderDetailStatus
+                currentStatus={orderDetail?.mainOrder?.status}
+                refetch={refetch}
+              />
 
-            <OrderDetailGeneralView data={orderDetail?.mainOrder} />
-          </>
-        ) : (
-          <>
-            <FormCheckbox
-              label="Đặt hàng không thông qua đơn mua"
-              controlProps={{
-                name: "notFromQuote",
-                control: method.control,
-              }}
-            />
-            <Box className="lg:col-span-2">
+              <OrderDetailGeneralView data={orderDetail?.mainOrder} />
+            </>
+          ) : (
+            <>
+              <FormCheckbox
+                label="Đặt hàng không thông qua đơn mua"
+                controlProps={{
+                  name: "notFromQuote",
+                  control: method.control,
+                }}
+              />
+
               <OrderDetailGeneral />
-            </Box>
-          </>
-        )}
+            </>
+          )}
 
-        <OrderDetailCustomer />
+          <Box className="grid lg:grid-cols-2 gap-4">
+            <OrderDetailCustomer />
 
-        <OrderDetailCurator disabled={disabled} />
-
-        <Box className="lg:col-span-2 grid lg:grid-cols-3 gap-4">
-          <Box className="lg:col-span-2">
-            <OrderDetailReciever disabled={disabled} />
+            <OrderDetailCurator disabled={disabled} />
           </Box>
 
-          <OrderDetailImplement disabled={disabled} />
-        </Box>
+          <Box className="grid lg:grid-cols-2 gap-4">
+            <OrderDetailReciever disabled={disabled} />
 
-        <OrderDetailAttach disabled={disabled} />
+            <OrderDetailImplement disabled={disabled} />
+          </Box>
 
-        <OrderDetailAddition disabled={disabled} />
+          <Box className="grid lg:grid-cols-2 gap-4">
+            <OrderDetailAttach disabled={disabled} />
 
-        <Box className="lg:col-span-2">
+            <OrderDetailAddition disabled={disabled} />
+          </Box>
+
           <OrderDetailProducts disabled={disabled} />
-        </Box>
 
-        <Box className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <OrderDetailNote
-            disabled={true}
-            controlName={"smgNote"}
-            title={"SHOP MANAGER NOTE"}
-          />
+          <Box className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <OrderDetailNote
+              disabled={true}
+              controlName={"smgNote"}
+              title={"SHOP MANAGER NOTE"}
+            />
 
-          <OrderDetailNote
-            disabled={true}
-            controlName={"saleAdminNote"}
-            title={"SALES ADMIN NOTE"}
-          />
+            <OrderDetailNote
+              disabled={true}
+              controlName={"saleAdminNote"}
+              title={"SALES ADMIN NOTE"}
+            />
 
-          <OrderDetailNote
-            disabled={true}
-            controlName={"salesNote"}
-            title={"SALES NOTE"}
-          />
+            <OrderDetailNote
+              disabled={true}
+              controlName={"salesNote"}
+              title={"SALES NOTE"}
+            />
 
-          <OrderDetailNote
-            disabled={true}
-            controlName={"deliveryNote"}
-            title={"GIAO NHẬN NOTE"}
-          />
-        </Box>
+            <OrderDetailNote
+              disabled={true}
+              controlName={"deliveryNote"}
+              title={"GIAO NHẬN NOTE"}
+            />
+          </Box>
 
-        {!!id && (
-          <>
-            <Box className="lg:col-span-2">
+          {!!id && (
+            <>
               <QuoteDetailDeliveryHistory
                 orderStatus={orderDetail?.mainOrder?.status}
                 orderCode={orderDetail?.mainOrder?.mainOrderCode}
               />
-            </Box>
 
-            <Box className="lg:col-span-2">
               <QuoteDetailInvoiceHistory
                 orderStatus={orderDetail?.mainOrder?.status}
                 orderCode={orderDetail?.mainOrder?.mainOrderCode}
               />
-            </Box>
 
-            <Box className="lg:col-span-2">
               <OrderDetailAdvancePayment
                 status={orderDetail?.mainOrder?.status}
               />
-            </Box>
 
-            <Box className="lg:col-span-2">
               <OrderDetailCommission orderId={id as string} />
-            </Box>
-          </>
-        )}
-        <Box className="lg:col-span-2">
+            </>
+          )}
+
           <OrderDetailButtons
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}

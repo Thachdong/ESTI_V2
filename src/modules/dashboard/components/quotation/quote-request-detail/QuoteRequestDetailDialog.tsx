@@ -95,6 +95,7 @@ export const QuoteRequestDetailDialog: React.FC<TDialog> = ({
           callback={callback}
           labelKey="productCode"
           label="Mã SP"
+          disabled={type !== "Add"}
         />
 
         <FormSelectAsync
@@ -107,6 +108,7 @@ export const QuoteRequestDetailDialog: React.FC<TDialog> = ({
           callback={callback}
           labelKey="productName"
           label="Tên SP"
+          disabled={type !== "Add"}
         />
 
         <FormInputBase

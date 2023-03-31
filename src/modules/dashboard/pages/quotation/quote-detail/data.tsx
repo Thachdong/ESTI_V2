@@ -51,7 +51,7 @@ export const productColumns: TGridColDef[] = [
   },
   {
     field: "vat",
-    headerName: "Thuế GTGT",
+    headerName: "Thuế GTGT(%)",
     minWidth: 100,
     flex: 1,
   },

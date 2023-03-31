@@ -27,7 +27,7 @@ export const QuoteDetailGeneralView: React.FC<TProps> = ({
         THÔNG TIN CHUNG
       </Typography>
 
-      <Box className="grid grid-cols-2 gap-4 bg-white rounded p-3">
+      <Box className="grid lg:grid-cols-2 gap-4 bg-white rounded p-3">
         <FormInputBase
           label="Mã YCBG"
           value={data?.preOrderCode || "__"}
@@ -60,32 +60,15 @@ export const QuoteDetailGeneralView: React.FC<TProps> = ({
             control,
             rules: { required: "Phải chọn sale phụ trách" },
           }}
-          labelKey="code"
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt?.code} - ${opt?.fullName}` : ""
+          }
           disabled={disabled}
         />
 
         <FormInputBase
           label="CN thực hiện"
           value={data?.performBanchCode}
-          disabled
-        />
-
-        {/* Api yêu cầu hardcode 3 trường này */}
-        <FormInputBase
-          label="Đơn vị thụ hưởng"
-          value={"CONG TY TNHH NAVIS VIET NAM"}
-          disabled
-        />
-
-        <FormInputBase
-          label="Số tài khoản (VND)"
-          value={"007.1000.802.734"}
-          disabled
-        />
-
-        <FormInputBase
-          label="Tên ngân hàng"
-          value={"VIETCOMBANK HCM, CN. TÂY SÀI GÒN"}
           disabled
         />
       </Box>

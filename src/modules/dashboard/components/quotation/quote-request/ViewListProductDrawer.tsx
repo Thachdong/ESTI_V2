@@ -80,7 +80,7 @@ export const ViewListProductDrawer: React.FC<TProps> = ({
     },
     {
       field: "vat",
-      headerName: "Thuế GTGT",
+      headerName: "Thuế GTGT(%)",
       minWidth: 150,
     },
     {
