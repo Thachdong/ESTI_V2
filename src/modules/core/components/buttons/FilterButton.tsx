@@ -19,7 +19,7 @@ export const FilterButton: React.FC<
   ButtonProps & {
     listFilterKey: string[];
     renderFilterComponent?: () => ReactNode;
-    tooltipText?: string
+    tooltipText?: string;
   }
 > = (props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -36,18 +36,18 @@ export const FilterButton: React.FC<
 
   return (
     <>
-    <Tooltip title={props?.tooltipText || "Lọc"} placement="top">
-      <ButtonBase
-        {...props}
-        className={clsx(
-          "px-3 text-main bg-[#F3F6F9] h-[40px] w-[40px] rounded border border-solid border-[#edf0f2] active:bg-main active:text-white",
-          props?.className
-        )}
-        onClick={handleClick}
-      >
-        <FilterAltOutlinedIcon />
-        {props?.children}
-      </ButtonBase>
+      <Tooltip title={props?.tooltipText || "Lọc"} placement="top">
+        <ButtonBase
+          {...props}
+          className={clsx(
+            "px-3 text-main bg-[#F3F6F9] h-[40px] w-[40px] rounded border border-solid border-[#edf0f2] active:bg-main active:text-white",
+            props?.className
+          )}
+          onClick={handleClick}
+        >
+          <FilterAltOutlinedIcon />
+          {props?.children}
+        </ButtonBase>
       </Tooltip>
 
       <FilterDialog
@@ -250,6 +250,8 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
                 }}
                 label="Từ ngày"
                 shrinkLabel
+                inputFormat="DD/MM/YYYY HH:mm"
+                views={["year", "month", "day", "hours", "minutes"]}
               />
               <FormDatepicker
                 controlProps={{
@@ -259,6 +261,8 @@ export const FilterDialog: React.FC<TDialogFilter> = ({
                 }}
                 label="Đến ngày"
                 shrinkLabel
+                inputFormat="DD/MM/YYYY HH:mm"
+                views={["year", "month", "day", "hours", "minutes"]}
               />
             </Box>
             <ButtonBase

@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { discussion } from "src/api";
 import {
@@ -20,7 +20,11 @@ import {
 export const DiscussionTopicPage: React.FC = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const { query } = useRouter();
+  const router = useRouter();
+
+  const { query } = router;
+
+  const { discussionId } = query;
 
   usePathBaseFilter(pagination);
 
@@ -62,6 +66,19 @@ export const DiscussionTopicPage: React.FC = () => {
     setOpen(false);
   };
 
+  const handleRemoveDiscussionId = useCallback(() => {        
+    if (!!discussionId) {
+      delete query["discussionId"];
+
+      router.push({
+        pathname: router.pathname,
+        query: query,
+      });
+    } else {
+      refetch();
+    }
+  }, [discussionId]);
+
   return (
     <Paper className="bgContainer">
       <Box className="flex justify-between items-center flex-wrap gap-2 mb-3">
@@ -74,7 +91,7 @@ export const DiscussionTopicPage: React.FC = () => {
         <Box className="flex gap-2">
           <FilterButton listFilterKey={[]} />
 
-          <RefreshButton onClick={() => refetch()} />
+          <RefreshButton onClick={handleRemoveDiscussionId} />
         </Box>
       </Box>
       <DiscussionTopicTable

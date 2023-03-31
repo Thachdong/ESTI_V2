@@ -63,7 +63,7 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
                     key={index}
                     className="flex gap-3 items-start border border-solid border-[#f2f2f2] rounded w-full shadow min-h-[76px]"
                   >
-                    <Box className="text-center">
+                    <Box className="text-center max-w-[70px]">
                       <Tooltip title={item?.fullName || "Anonymus"}>
                         {item?.avatar ? (
                           <img
@@ -76,6 +76,7 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
                           <Avatar className="m-auto" />
                         )}
                       </Tooltip>
+                      <Typography className="truncate text-xs">{item?.fullName}</Typography>
                     </Box>
 
                     <Box className="w-full">

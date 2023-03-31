@@ -66,7 +66,7 @@ export const SupplierQuotesProductDialog: React.FC<TDialog> = ({
           
           <SupplierQuotesProductSupplier disabled={disabled} />
 
-          <SupplierQuotesProductDetail disabled={disabled} />
+          <SupplierQuotesProductDetail disabled={disabled} type={type as string} />
 
           <Box className="flex items-center justify-end mt-6">
             <SupplierQuotesProductButtons

@@ -96,7 +96,7 @@ export const PurchasePlanCustomer: React.FC<TProps> = ({
         shrinkLabel
       />
     );
-  }, [type, defaultSupplier, supplierList]);
+  }, [type, defaultSupplier, supplierList, disabled]);
 
   return (
     <Box className="grid grid-cols-2 gap-3">

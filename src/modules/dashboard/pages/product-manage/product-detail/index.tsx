@@ -227,36 +227,39 @@ export const ProductDetailPage: React.FC = () => {
         warrantyAddress,
         warrantyContent,
         productBarcode,
-        id
+        id,
       } = product || {};
 
       let updatedCategory: string[] = [];
 
       if (typeof categorys === "string") {
         try {
-          updatedCategory = JSON.parse(categorys || "[]")?.map?.((c: any) => c?.id)
-        } catch {
-        }
+          updatedCategory = JSON.parse(categorys || "[]")?.map?.(
+            (c: any) => c?.id
+          );
+        } catch {}
       }
 
       let updatedSupplier: string[] = [];
 
       if (typeof suppliers === "string") {
         try {
-          updatedSupplier = JSON.parse(suppliers || "[]")?.map?.((c: any) => c?.id)
-        } catch {
-        }
+          updatedSupplier = JSON.parse(suppliers || "[]")?.map?.(
+            (c: any) => c?.id
+          );
+        } catch {}
       }
 
       let updatedAttributes: string[] = [];
 
       if (typeof productAttributes === "string") {
         try {
-          updatedAttributes = JSON.parse(productAttributes || "[]")?.map?.((c: any) => c?.id)
-        } catch {
-        }
+          updatedAttributes = JSON.parse(productAttributes || "[]")?.map?.(
+            (c: any) => c?.id
+          );
+        } catch {}
       }
-      
+
       const {
         videoUrl,
         metaTitle,
@@ -265,7 +268,7 @@ export const ProductDetailPage: React.FC = () => {
         description,
         summary,
         specifications,
-        gallery
+        gallery,
       } = productWebsite || {};
 
       methods.reset({
@@ -299,8 +302,8 @@ export const ProductDetailPage: React.FC = () => {
         summary,
         specifications,
         productBarcode,
-        gallery: gallery?.split(",")
-      })
+        gallery: gallery?.split(","),
+      });
     }
   }, [productDetail]);
 
@@ -340,7 +343,11 @@ export const ProductDetailPage: React.FC = () => {
             </TabPanelContainForm>
 
             <TabPanelContainForm value="website" index={"website"}>
-              <ProductDetailWebsite disabled={disabled} refetch={refetch} />
+              <ProductDetailWebsite
+                disabled={disabled}
+                refetch={refetch}
+                isDelete={productDetail?.productWebsite?.deleted}
+              />
             </TabPanelContainForm>
 
             <TabPanelContainForm value="feedback" index={"feedback"}>

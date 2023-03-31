@@ -14,11 +14,13 @@ import { toast } from "~modules-core/toast";
 type TProps = {
   disabled: boolean;
   refetch: () => void;
+  isDelete: boolean;
 };
 
 export const ProductDetailWebsite: React.FC<TProps> = ({
   disabled,
   refetch,
+  isDelete
 }) => {
   const { id } = useRouter().query;
 
@@ -61,7 +63,7 @@ export const ProductDetailWebsite: React.FC<TProps> = ({
           <Box className="flex items-center">
             <FormControlLabel
               onChange={(e) => handleChangeStatus(e)}
-              control={<Checkbox defaultChecked />}
+              control={<Checkbox checked={!isDelete} />}
               label="Hiển thị SP trên website"
             />
           </Box>

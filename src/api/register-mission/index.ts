@@ -21,7 +21,7 @@ export type TRegisterMission = {
 };
 
 export type TRegisterMissionUpdate = {
-  applicantId: string;
+  // applicantId: string; api yêu cầu bỏ (ds bugs 31/003/2023)
   startTime: number;
   endTime: number;
   numberOfDay: number;

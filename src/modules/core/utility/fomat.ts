@@ -6,7 +6,7 @@ class Format {
   getVNDate = (date: Date, format: string = "DD/MM/YYYY h:mm:ss A") =>
     moment(date).format(format);
 
-  getShortVNDate = (date: Date) => moment(date).format("DD/MM/YYYY");
+  getShortVNDate = (date: Date) => !!date ? moment(date).format("DD/MM/YYYY") : "__";
 
   // kiểm tra có phải là số hay không
   isNumber = (val: string) => {

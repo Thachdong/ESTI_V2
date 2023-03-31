@@ -33,7 +33,7 @@ export const TaskListDialog: React.FC<TDialog> = ({
     if (type == "Update") {
       reset({ status: defaultValue?.status });
     } else {
-      reset({})
+      reset({});
     }
   }, [defaultValue, type]);
 
@@ -166,7 +166,11 @@ export const TaskListDialog: React.FC<TDialog> = ({
               }}
               label="Người tham gia"
               fetcher={staff.getList}
-              labelKey="fullName"
+              getOptionLabel={(opt: any) =>
+                !!opt
+                  ? `${opt?.fullName} - ${opt?.roleCode} - ${opt?.code}`
+                  : ""
+              }
               multiple
               className="col-span-2"
             />
@@ -197,9 +201,7 @@ export const TaskListDialog: React.FC<TDialog> = ({
               labelKey="fullName"
             />
             <Box className="flex gap-3 items-center">
-              <Typography className="text-sm font-semibold">
-                Đánh giá
-              </Typography>
+              <Typography className="text-sm font-semibold">Mức độ</Typography>
               <Rating
                 name="level"
                 className="text-xl"

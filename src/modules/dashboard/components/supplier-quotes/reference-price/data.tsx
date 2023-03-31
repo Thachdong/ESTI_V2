@@ -7,7 +7,7 @@ export const referencePriceColumns: TGridColDef[] = [
   {
     field: "created",
     headerName: "Ngày tạo",
-    minWidth: 75,
+    minWidth: 100,
     renderCell: ({ row }) =>
       row?.created ? moment(row?.created).format("DD/MM/YYYY") : "",
     filterKey: "createdDate",
@@ -110,11 +110,23 @@ export const referencePriceColumns: TGridColDef[] = [
   {
     field: "productStatusTypeName",
     headerName: "Trạng thái HH",
-    minWidth: 140,
+    minWidth: 150,
     filterKey: "productStatusType",
     type: "select",
     sortAscValue: 20,
     sortDescValue: 9,
     options: referencePriceProductStatus
+  },
+  {
+    field: "expireDateStatusName",
+    headerName: "Trạng thái hỏi giá",
+    minWidth: 150,
+    filterKey: "expireDateStatus",
+    type: "select",
+    isSort: false,
+    options: [
+      {label: "Còn hiệu lực", value: 0},
+      {label: "Hết hiệu lực", value: 1},
+    ]
   },
 ];

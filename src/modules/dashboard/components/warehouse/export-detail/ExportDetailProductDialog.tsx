@@ -241,7 +241,6 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           controlProps={{
             control,
             name: "lotNumber",
-            rules: { required: "Phải chọn lot" },
           }}
           options={lotOptions || []}
           label="Chọn LOT"
@@ -256,7 +255,6 @@ export const ExportDetailProductDialog: React.FC<TDialog & TProps> = ({
           controlProps={{
             control,
             name: "positionId",
-            rules: { required: "Phải chọn vị trí" },
           }}
           fetcher={position.getPositionByProduct}
           fetcherParams={{

@@ -98,7 +98,7 @@ export const ReferencePriceTable: React.FC<TProps> = ({
               label: "Nội dung chi tiết",
             },
             {
-              action: () => handleDelete,
+              action: () => handleDelete(),
               label: "Xóa",
             },
           ]}

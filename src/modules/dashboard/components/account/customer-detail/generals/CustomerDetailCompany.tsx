@@ -54,7 +54,6 @@ export const CustomerDetailCompany: React.FC<TProps> = ({ isUpdate }) => {
           controlProps={{
             control,
             name: "taxCode",
-            rules: { required: "Phải nhập mã số thuế" },
           }}
           label="Mã số thuế"
           disabled={!isUpdate}

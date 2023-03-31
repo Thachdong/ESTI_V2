@@ -21,7 +21,7 @@ export type TLeaveApplication = {
 };
 
 export type TLeaveApplicationUpdate = {
-  applicantId: string;
+  // applicantId: string; api yêu cầu bỏ (danh sách bugs 31/03/2023)
   startTime: number;
   endTime: number;
   numberOfDay: number;
