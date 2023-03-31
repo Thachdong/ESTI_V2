@@ -102,7 +102,7 @@ export const FormImageGallery: React.FC<TFormImageGallery> = (props) => {
                 // onError={({ currentTarget }) =>
                 //   (currentTarget.src = process.env.NEXT_PUBLIC_API_URL + item)
                 // }
-                alt={item}
+                alt="Không tải được ảnh"
                 loading="lazy"
               />
             </ImageListItem>

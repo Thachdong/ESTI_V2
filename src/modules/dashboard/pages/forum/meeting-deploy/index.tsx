@@ -1,11 +1,12 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { meetingDeploy } from "src/api";
 import {
   AddButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -18,7 +19,11 @@ import {
 export const MeetingDeployPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const { query } = useRouter();
+  const router = useRouter();
+
+  const { query } = router;
+
+  const { meetingDeployId } = query;
 
   usePathBaseFilter(pagination);
 
@@ -59,11 +64,21 @@ export const MeetingDeployPage = () => {
     setOpen(false);
   };
 
+  const handleRemoveMeetingDeployId = useCallback(() => {
+    delete query["meetingDeployId"];
+
+    router.push({
+      pathname: router.pathname,
+      query: query,
+    });
+  }, []);
+
   return (
     <Paper className="bgContainer">
       <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo cuộc họp mới" onClick={onCreateMeeting} />
         <SearchBox />
+        {!!meetingDeployId && <RefreshButton onClick={handleRemoveMeetingDeployId} />}
       </Box>
 
       <MeetingDeloyTable

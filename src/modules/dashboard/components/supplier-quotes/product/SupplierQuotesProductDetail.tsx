@@ -14,9 +14,10 @@ import { VAT } from "~modules-core/constance";
 
 type TProps = {
   disabled: boolean;
+  type: string
 };
 
-export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
+export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled, type }) => {
   const [selectedProduct, setSelectedProduct] = useState<any>();
 
   const { control, watch, setValue } = useFormContext();
@@ -67,7 +68,7 @@ export const SupplierQuotesProductDetail: React.FC<TProps> = ({ disabled }) => {
           valueKey="productId"
           options={productBySupplier || []}
           callback={callback}
-          disabled={disabled}
+          disabled={disabled || type !== "Add"}
           getOptionLabel={(opt: any) =>
             !!opt ? `${opt?.productCode} / ${opt?.productName}` : ""
           }

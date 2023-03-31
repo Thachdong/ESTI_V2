@@ -1,11 +1,12 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { taskList } from "src/api";
 import {
   AddButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -15,7 +16,11 @@ import { TaskListDialog, TaskListTable } from "~modules-dashboard/components";
 export const TaskListPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const { query } = useRouter();
+  const router = useRouter();
+
+  const { query } = router;
+
+  const { taskListId } = query;
 
   usePathBaseFilter(pagination);
 
@@ -52,11 +57,22 @@ export const TaskListPage = () => {
     setOpen(true);
   };
 
+  // METHODS
+  const handleRemoveTaskListId = useCallback(() => {
+    delete query["taskListId"];
+
+    router.push({
+      pathname: router.pathname,
+      query: query,
+    });
+  }, []);
+
   return (
     <Paper className="bgContainer">
-      <Box className="mb-3 flex gap-3 w-3/5">
+      <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo task" onClick={onAddTaskList} />
         <SearchBox />
+        {!!taskListId && <RefreshButton onClick={handleRemoveTaskListId} />}
       </Box>
 
       <TaskListTable

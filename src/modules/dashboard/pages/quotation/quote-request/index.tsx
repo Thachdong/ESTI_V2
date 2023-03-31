@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { useCallback, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation, useQuery } from "react-query";
-import { staff } from "src/api";
 import { customerType } from "src/api/customer-type";
 import { quoteRequest } from "src/api/quote-request";
 import {
@@ -35,7 +34,7 @@ export const QuotationRequestsPage = () => {
 
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const defaultValue = useRef<any>();
+  const [defaultValue, setDefaultValue] = useState<any>();
 
   usePathBaseFilter(pagination);
 
@@ -62,14 +61,6 @@ export const QuotationRequestsPage = () => {
         setPagination({ ...pagination, total: data.totalItem });
       },
     }
-  );
-
-  const { data: saleStaffs } = useQuery(["SaleStaffs"], () =>
-    staff
-      .getListSale()
-      .then((res) =>
-        res.data.map((d: any) => ({ label: d?.code, value: d?.id }))
-      )
   );
 
   const { data: customerTypes } = useQuery(["CustomerTypesList"], () =>
@@ -101,7 +92,7 @@ export const QuotationRequestsPage = () => {
   });
 
   const handleCancel = useCallback(async () => {
-    const { id, preOrderCode } = defaultValue.current || {};
+    const { id, preOrderCode } = defaultValue || {};
 
     if (!id) {
       toast.error("Có lỗi xãy ra, vui lòng thử lại!");
@@ -115,7 +106,7 @@ export const QuotationRequestsPage = () => {
   }, [defaultValue]);
 
   const handleDelete = useCallback(async () => {
-    const { id, preOrderCode } = defaultValue.current || {};
+    const { id, preOrderCode } = defaultValue || {};
 
     if (!id) {
       toast.error("Có lỗi xãy ra, vui lòng thử lại!");
@@ -130,7 +121,7 @@ export const QuotationRequestsPage = () => {
 
   const handleRedirect = useCallback(
     (url: string) => {
-      const status = defaultValue.current?.preOrderStatus;
+      const status = defaultValue?.preOrderStatus;
 
       if (status > 0) {
         toast.error("Yêu cầu đã được xử lý!");
@@ -139,7 +130,7 @@ export const QuotationRequestsPage = () => {
       }
       router.push(url);
     },
-    [defaultValue.current]
+    [defaultValue]
   );
 
   // DATA TABLE
@@ -202,17 +193,15 @@ export const QuotationRequestsPage = () => {
       field: "salesCode",
       headerName: "Mã NVKD",
       minWidth: 150,
-      filterKey: "salesId",
+      filterKey: "salesCode",
       sortAscValue: 14,
       sortDescValue: 6,
-      type: "select",
-      options: saleStaffs,
     },
     {
       field: "preOrderStatusName",
       headerName: "Trạng thái YC",
       minWidth: 150,
-      filterKey: "status",
+      filterKey: "statusPreOrder",
       sortAscValue: 15,
       sortDescValue: 7,
       type: "select",
@@ -236,14 +225,14 @@ export const QuotationRequestsPage = () => {
             {
               action: () =>
                 router.push(
-                  `quote-request-detail?id=${defaultValue.current?.id}`
+                  `quote-request-detail?id=${defaultValue?.id}`
                 ),
               label: "Nội dung chi tiết",
             },
             {
               action: () =>
                 handleRedirect(
-                  `quote-detail?fromRequestId=${defaultValue.current?.id}`
+                  `quote-detail?fromRequestId=${defaultValue?.id}`
                 ),
               label: "Tạo báo giá",
               disabled: row?.preOrderStatus > 0,
@@ -267,17 +256,17 @@ export const QuotationRequestsPage = () => {
       <Item
         id="view"
         onClick={() =>
-          router.push(`quote-request-detail?id=${defaultValue.current?.id}`)
+          router.push(`quote-request-detail?id=${defaultValue?.id}`)
         }
       >
         Nội dung chi tiết
       </Item>
       <Item
         id="note"
-        disabled={defaultValue.current?.preOrderStatus > 0}
+        disabled={defaultValue?.preOrderStatus > 0}
         onClick={() =>
           handleRedirect(
-            `quote-detail?fromRequestId=${defaultValue.current?.id}`
+            `quote-detail?fromRequestId=${defaultValue?.id}`
           )
         }
       >
@@ -299,7 +288,7 @@ export const QuotationRequestsPage = () => {
 
     const currentRow = data?.items.find((item) => item.id === id);
 
-    defaultValue.current = currentRow;
+    setDefaultValue(currentRow);
   };
 
   const [Open, setOpen] = useState<boolean>(false);

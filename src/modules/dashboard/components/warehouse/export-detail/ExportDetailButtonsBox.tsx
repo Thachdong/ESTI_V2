@@ -57,36 +57,10 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
     }
   );
 
-  const handleValidateProduct = (product: any) => {
-    const { lotNumber, positionId } = product;
-
-    let messages: string[] = [];
-
-    switch (true) {
-      case !lotNumber:
-        messages.push("chưa nhập số LOT!");
-      case !positionId:
-        messages.push("chưa nhập vị trí!");
-    }
-
-    return messages.length > 0 ? messages : null;
-  };
-
   const handleCreate = async (data: any) => {
-    // 1. CATCH INVALID PRODUCTS
-    let error: any[] = [];
 
     const productList: TCreateExportWarehouseProduct[] = data.productList?.map(
       (prod: any) => {
-        const errorMessage = handleValidateProduct(prod);
-
-        if (!!errorMessage) {
-          error.push({
-            productName: prod?.productName,
-            message: errorMessage?.join(", "),
-          });
-        }
-
         return {
           productId: prod?.productId,
           lotNumber: prod?.lotNumber,
@@ -100,16 +74,8 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
       }
     );
 
-    if (error.length > 0) {
-      error.map((err: any) => {
-        toast.error(`Sản phẩm: ${err.productName} lỗi: ${err.message}`);
-      });
-
-      return;
-    }
-
     // 2. CALL API
-    const { paymentDocument, isForDelete } = data;
+    const { paymentDocument, isForDelete, isDefaultReceiver, productList: _, ...restData } = data;
 
     let payload: any;
 
@@ -121,7 +87,7 @@ export const ExportDetailButtonsBox: React.FC<TProps> = ({
       };
     } else {
       payload = {
-        ...data,
+        ...restData,
         paymentDocument: paymentDocument.join(","),
         exportWarehouseCreate: productList,
         branchId: orderData.branchId,

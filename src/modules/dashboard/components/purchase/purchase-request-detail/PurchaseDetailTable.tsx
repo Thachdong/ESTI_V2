@@ -59,6 +59,7 @@ export const PurchaseDetailTable: React.FC = () => {
         branchId,
         fromdate: planDate?.formDate,
         todate: planDate?.toDate,
+        status: 0 // api yêu cầu thêm (danh sách bugs 31/03/2023)
       })
       .then((res) => res.data.items)
       .then((res) =>

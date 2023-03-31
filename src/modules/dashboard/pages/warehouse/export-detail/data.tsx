@@ -24,46 +24,46 @@ export const productColumns: TGridColDef[] = [
   {
     field: "lotNumber",
     headerName: "Số LOT",
-    minWidth: 100,
-    renderCell: ({ row }) =>
-      row?.lotNumber ? (
-        row.lotNumber
-      ) : (
-        <span className="text-error">Chưa nhập</span>
-      ),
+    minWidth: 100, // api yêu cầu bỏ ràng buộc
+    // renderCell: ({ row }) =>
+    //   row?.lotNumber ? (
+    //     row.lotNumber
+    //   ) : (
+    //     <span className="text-error">Chưa nhập</span>
+    //   ),
   },
   {
     field: "dateManufacture",
     headerName: "Ngày SX",
-    minWidth: 100,
-    renderCell: ({ row }) =>
-      row?.dateManufacture ? (
-        moment(row?.dateManufacture).format("DD/MM/YYYY")
-      ) : (
-        <span className="text-error">Chưa nhập</span>
-      ),
+    minWidth: 100, // api yêu cầu bỏ ràng buộc
+    // renderCell: ({ row }) =>
+    //   row?.dateManufacture ? (
+    //     moment(row?.dateManufacture).format("DD/MM/YYYY")
+    //   ) : (
+    //     <span className="text-error">Chưa nhập</span>
+    //   ),
   },
   {
     field: "dateExpiration",
     headerName: "Hạn SD",
-    minWidth: 100,
-    renderCell: ({ row }) =>
-      row?.dateExpiration ? (
-        moment(row?.dateExpiration).format("DD/MM/YYYY")
-      ) : (
-        <span className="text-error">Chưa nhập</span>
-      ),
+    minWidth: 100, // api yêu cầu bỏ ràng buộc
+    // renderCell: ({ row }) =>
+    //   row?.dateExpiration ? (
+    //     moment(row?.dateExpiration).format("DD/MM/YYYY")
+    //   ) : (
+    //     <span className="text-error">Chưa nhập</span>
+    //   ),
   },
   {
     field: "positionName",
     headerName: "Vị trí",
-    minWidth: 100,
-    renderCell: ({ row }) =>
-      row?.positionName ? (
-        row.positionName
-      ) : (
-        <span className="text-error">Chưa nhập</span>
-      ),
+    minWidth: 100, // api yêu cầu bỏ ràng buộc
+    // renderCell: ({ row }) =>
+    //   row?.positionName ? (
+    //     row.positionName
+    //   ) : (
+    //     <span className="text-error">Chưa nhập</span>
+    //   ),
   },
   {
     field: "quantity",

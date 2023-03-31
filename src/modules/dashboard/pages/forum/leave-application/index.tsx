@@ -1,11 +1,12 @@
 import { Box, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useQuery } from "react-query";
 import { leaveApplication } from "src/api";
 import {
   AddButton,
   generatePaginationProps,
+  RefreshButton,
   SearchBox,
 } from "~modules-core/components";
 import { defaultPagination } from "~modules-core/constance";
@@ -18,7 +19,11 @@ import {
 export const LeaveApplycationPage = () => {
   const [pagination, setPagination] = useState(defaultPagination);
 
-  const { query } = useRouter();
+  const router = useRouter();
+
+  const { query } = router;
+
+  const { leaveApplicationId } = query;
 
   usePathBaseFilter(pagination);
 
@@ -59,11 +64,21 @@ export const LeaveApplycationPage = () => {
     setOpen(false);
   };
 
+  const handleRemoveLeaveId = useCallback(() => {
+    delete query["leaveApplicationId"];
+
+    router.push({
+      pathname: router.pathname,
+      query: query,
+    });
+  }, []);
+
   return (
     <Paper className="bgContainer">
       <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo nghỉ phép" onClick={onCreateMeeting} />
         <SearchBox />
+        {!!leaveApplicationId && <RefreshButton onClick={handleRemoveLeaveId} />}
       </Box>
 
       <LeaveApplycationTable

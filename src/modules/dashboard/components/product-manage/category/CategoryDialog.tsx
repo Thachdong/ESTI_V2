@@ -65,7 +65,7 @@ export const CategoryDialog: React.FC<TDialog> = ({
   const disabled = type === "View" && !isUpdate;
 
   // DATA FETCHING
-  const { data: categoryList } = useQuery(["CategoryList"], () =>
+  const { data: categoryList } = useQuery(["CategoryList", type], () =>
     category
       .getList({
         pageIndex: 1,

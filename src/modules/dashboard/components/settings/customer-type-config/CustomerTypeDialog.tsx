@@ -88,7 +88,7 @@ export const CustomerTypeDialog: React.FC<TDialog> = ({
 
   const handleUpdate = useCallback(async (data: any) => {
     await mutationUpdate.mutateAsync({ ...data, id: defaultValue?.id });
-  }, []);
+  }, [defaultValue]);
 
   const renderButtons = () => {
     switch (true) {

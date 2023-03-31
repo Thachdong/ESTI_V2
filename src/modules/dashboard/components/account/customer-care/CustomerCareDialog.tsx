@@ -1,3 +1,7 @@
+// NGHIỆP VỤ:
+// Nếu user đang đăng nhập là sale thì mặc định sale phụ trách là user đang đăng nhập
+// Ngược lại cho chọn sale
+
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -21,7 +25,7 @@ export const CustomerCareDialog: React.FC<TDialog> = ({
   refetch,
   defaultValue,
 }) => {
-  const [isUpdate, setIsUpdate] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false); 
 
   const { id } = useRouter().query;
 

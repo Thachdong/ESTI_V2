@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { useQueries } from "react-query";
 import { customerCareGroup, staff } from "src/api";
@@ -8,13 +9,18 @@ import {
   FormSelect,
 } from "~modules-core/components";
 import { customerCareStatus } from "~modules-core/constance";
+import { useSession } from "~modules-core/customHooks/useSession";
 
 type TProps = {
-    disabled: boolean;
-}
+  disabled: boolean;
+};
 
-export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
-  const { control } = useFormContext();
+export const CustomerCareContent: React.FC<TProps> = ({ disabled }) => {
+  const { control, setValue } = useFormContext();
+
+  const { userInfo } = useSession().userInfo || {};
+
+  const { roleCode, userId } = userInfo || {};
 
   const options = useQueries([
     {
@@ -26,6 +32,12 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
       queryFn: () => customerCareGroup.getAll().then((res) => res.data),
     },
   ]);
+
+  useEffect(() => {
+    if (roleCode === "NV") {
+      setValue("salesId", userId);
+    }
+  }, []);
 
   return (
     <Box>
@@ -40,8 +52,10 @@ export const CustomerCareContent: React.FC<TProps> = ({disabled}) => {
           }}
           options={options[0]?.data || []}
           label={"Sale phụ trách"}
-          disabled={disabled}
-          getOptionLabel={(opt: any) => !!opt ? `${opt.fullName} - ${opt.code}` : ""}
+          disabled={disabled || roleCode === "NV"}
+          getOptionLabel={(opt: any) =>
+            !!opt ? `${opt.fullName} - ${opt.code}` : ""
+          }
           shrinkLabel
         />
 

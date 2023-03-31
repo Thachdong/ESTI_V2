@@ -8,7 +8,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { taskList } from "src/api";
@@ -34,6 +35,10 @@ type TProps = {
   refetch: () => void;
 };
 
+// Nghiệp vụ:
+// Nếu có taskListId: đc trả về từ trong link mà user nhận đc từ mail hệ thống => mở tab bình luận
+// Đồng thời thêm nút "tải lại" => cho phép xem toàn bộ danh sách
+
 export const TaskListTable: React.FC<TProps> = ({
   data,
   paginationProps,
@@ -41,6 +46,8 @@ export const TaskListTable: React.FC<TProps> = ({
   isFetching,
   refetch,
 }) => {
+  const { taskListId } = useRouter().query;
+
   const defaultValue = useRef<any>();
 
   const [repply, setReply] = useState(false);
@@ -263,6 +270,17 @@ export const TaskListTable: React.FC<TProps> = ({
       mutateDelete.mutateAsync(defaultValue?.current);
     }
   };
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    if (!!taskListId) {
+      const currentRow = data?.find((item: any) => item.id === taskListId);
+
+      defaultValue.current = currentRow;
+
+      setReply(true);
+    }
+  }, [taskListId, data]);
 
   return (
     <>

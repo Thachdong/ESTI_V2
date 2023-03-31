@@ -44,15 +44,6 @@ export const ExportDetailProducts: React.FC<TProps> = ({
 
   const { productList = [] } = watch();
 
-  const totalPrice = useMemo(
-    () =>
-      productList.reduce(
-        (total: number, product: any) => total + product?.totalPrice,
-        0
-      ),
-    [productList]
-  );
-
   // DIALOG METHODS
   const handleOpen = useCallback((type: string) => {
     setDialog({ open: true, type });
