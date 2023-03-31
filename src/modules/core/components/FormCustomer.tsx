@@ -28,7 +28,6 @@ export const FormCustomer: React.FC<TProps> = ({
   callback,
   onAddCallback,
   defaultValue,
-  shrinkLabel = false,
   fetcherParams
 }) => {
   const [dialog, setDialog] = useState<TDefaultDialogState>();

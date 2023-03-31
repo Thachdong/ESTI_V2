@@ -32,10 +32,10 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
     } = watch();
 
     initCustomerInfo = {
-      companyName: companyName,
+      name: companyName,
       taxCode: companyTaxCode,
       address: companyAddress,
-      curatorCreate: [
+      contacts: [
         {
           curatorName: curatorName,
           curatorDepartment: curatorDepartmentId,
@@ -89,19 +89,20 @@ export const QuoteRequestDetailCustomer: React.FC<TProps> = ({ disabled }) => {
       );
     }
 
-    if (!id && !customerId) {
-      return (
-        <FormInput
-          controlProps={{
-            name: "customerCode",
-            control: control,
-          }}
-          label="Mã khách hàng:"
-          className=""
-          disabled={disabled}
-        />
-      );
-    }
+    // API TẠO KHÁCH HÀNG KHÔNG CÓ TRƯỜNG NÀY NỮA
+    // if (!id && !customerId) {
+    //   return (
+    //     <FormInput
+    //       controlProps={{
+    //         name: "customerCode",
+    //         control: control,
+    //       }}
+    //       label="Mã khách hàng:"
+    //       className=""
+    //       disabled={disabled}
+    //     />
+    //   );
+    // }
   }, [customerAvailable, id, disabled]);
 
   return (

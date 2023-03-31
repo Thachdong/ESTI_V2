@@ -66,6 +66,12 @@ export const QuoteDetailButtons: React.FC<TProps> = ({
       ...rest
     } = data || {};
 
+    if (!data?.customerId) {
+      toast.error("Chọn khách hàng trong hệ thống trước khi báo giá");
+
+      return;
+    }
+
     if (products.length === 0) {
       toast.error("Phải chọn sản phẩm để báo giá");
 

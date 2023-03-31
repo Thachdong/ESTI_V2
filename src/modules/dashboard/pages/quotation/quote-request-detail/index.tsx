@@ -63,7 +63,6 @@ export const QuoteRequestDetailPage = () => {
       curatorId,
       salesId,
       preOrderStatus,
-      id,
     } = preOrderView;
 
     const arrayFiles = attachFile ? attachFile?.split?.(",") : [];

@@ -32,7 +32,7 @@ export const ExportDetailPage: React.FC = () => {
   const { watch, reset, setValue } = methods;
 
   const { isForDelete, mainOrderId, isDefaultReceiver } = watch();
-  
+
   // DATA FETCHING
   const { data: orderDetailData } = useQuery(
     ["orderDetail", { mainOrderId }],
@@ -45,7 +45,16 @@ export const ExportDetailPage: React.FC = () => {
           (product: any) => product?.tProductStatus !== 2
         );
 
-        setValue("productList", products);
+        // số lượng = số lượng đơn hàng(quantity) - số lượng đã xuất(delivered) (công thức của api)
+        const updatedProductQuantity = products?.map((prod: any) => {
+          const {quantity = 0, delivered = 0} = prod || {};
+          
+          const currentQuantity = quantity - delivered;
+
+          return {...prod, quantity: currentQuantity}
+        })
+
+        setValue("productList", updatedProductQuantity);
 
         setValue("deliveryId", mainOrder?.deliveryId);
 
@@ -109,7 +118,7 @@ export const ExportDetailPage: React.FC = () => {
       receiverPhone,
       receiverAddress,
       deliveryDate,
-      paymentDocument
+      paymentDocument,
     } = productOrder;
 
     reset({

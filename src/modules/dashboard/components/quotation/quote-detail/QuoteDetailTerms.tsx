@@ -120,6 +120,18 @@ export const QuoteDetailTerms: React.FC<TProps> = ({ disabled }) => {
             - Quý khách hàng xem điều khoản bảo hành tại website:
             www.navis.com.vn.
           </ListItem>
+          {/* Api yêu cầu hardcode 3 trường này */}
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Đơn vị thụ hưởng: CONG TY TNHH NAVIS VIET NAM
+          </ListItem>
+
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Số tài khoản (VND): 007.1000.802.734
+          </ListItem>
+
+          <ListItem disableGutters className="pb-0 text-sm">
+            - Tên ngân hàng: VIETCOMBANK HCM, CN. TÂY SÀI GÒN
+          </ListItem>
         </List>
       </Box>
     </Box>

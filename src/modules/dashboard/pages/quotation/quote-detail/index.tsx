@@ -1,10 +1,11 @@
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
-import { preQuote } from "src/api";
+import { preQuote, quoteRequest } from "src/api";
 import { FormCheckbox } from "~modules-core/components";
 import {
   QuoteDetailAddition,
@@ -19,12 +20,14 @@ import {
   QuoteDetailSaleNote,
   QuoteDetailShopManagerNote,
   QuoteDetailTerms,
+  QuoteDetailViewContact,
+  QuoteDetailViewCustomer,
 } from "~modules-dashboard/components";
 
 export const QuoteDetailPage: React.FC = () => {
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const { id, cloneId } = useRouter().query;
+  const { id, cloneId, fromRequestId } = useRouter().query;
 
   const method = useForm<any>({
     defaultValues: {
@@ -32,6 +35,8 @@ export const QuoteDetailPage: React.FC = () => {
       isQuoteRequest: true,
     },
   });
+
+  const { preOrderId, isQuoteRequest } = method.watch();
 
   const disabled = Boolean(!!id && !isUpdate);
 
@@ -47,6 +52,17 @@ export const QuoteDetailPage: React.FC = () => {
       enabled: !!id || !!cloneId,
     }
   );
+
+  const { data: quoteRequestDetail } = useQuery(
+    ["quoteRequestDetail", preOrderId, fromRequestId],
+    () =>
+      quoteRequest.getById(preOrderId || fromRequestId).then((res) => res.data),
+    {
+      enabled: !!preOrderId || !!fromRequestId,
+    }
+  );
+
+  const {customerId} = quoteRequestDetail?.preOrderView || {}
 
   // SIDE EFFECTS
   useEffect(() => {
@@ -71,7 +87,7 @@ export const QuoteDetailPage: React.FC = () => {
       curatorEmail,
       curatorDepartmentId,
       performBranchId,
-      preOrderId
+      preOrderId,
     } = preQuoteView;
 
     let documents = [];
@@ -105,9 +121,46 @@ export const QuoteDetailPage: React.FC = () => {
       attachFile: !attachFile ? [] : attachFile.split(","),
       paymentDocument: documents,
       preOrderId,
-      isQuoteRequest: !!preOrderId
+      isQuoteRequest: !!preOrderId,
     });
   }, [quoteDetail, id, cloneId]);
+
+  useEffect(() => {
+    if (!!quoteRequestDetail) {
+      const { preOrderView, preOrderDetailView } = quoteRequestDetail || {};
+
+      const { salesId, curatorId, customerId, attachFile, requirements } =
+        preOrderView || {};
+
+      method.setValue("salesId", salesId);
+
+      method.setValue("curatorId", curatorId);
+
+      method.setValue("customerId", customerId);
+
+      method.setValue("requirements", requirements);
+
+      method.setValue("products", [...preOrderDetailView]);
+
+      method.setValue("attachFile", !attachFile ? [] : attachFile.split(","));
+    }
+  }, [quoteRequestDetail]);
+
+  useEffect(() => {
+    if (!!fromRequestId) {
+      method.setValue("isQuoteRequest", true);
+
+      method.setValue("preOrderId", fromRequestId);
+    }
+  }, [fromRequestId]);
+
+  useEffect(() => {
+    if (!!cloneId) {
+      method.setValue("preOrderId", null);
+
+      method.setValue("isQuoteRequest", false);
+    }
+  }, [cloneId, quoteDetail]);
 
   return (
     <Box className="container-center">
@@ -119,6 +172,20 @@ export const QuoteDetailPage: React.FC = () => {
           />
         ) : (
           <>
+            {(!!preOrderId && !customerId && isQuoteRequest) && (
+              <Alert severity="error" className="mb-4">
+                <strong>Khách hàng chưa có sẳn trong hệ thống! </strong>
+                Vui lòng cập nhật tài khoản trước khi tiến hành tạo báo giá!{" "}
+                <Link
+                  href={
+                    "/dashboard/quotation/quote-request-detail/?id=" +
+                    preOrderId
+                  }
+                >
+                  Cập nhật
+                </Link>
+              </Alert>
+            )}
             <Box className="mb-3">
               <FormCheckbox
                 label="Tạo nhanh từ yêu cầu báo giá"
@@ -128,14 +195,28 @@ export const QuoteDetailPage: React.FC = () => {
                 }}
               />
             </Box>
-            <QuoteDetailGeneral />
+            <QuoteDetailGeneral
+              createdRequestDate={quoteRequestDetail?.created}
+            />
           </>
         )}
 
         <Box className="grid lg:grid-cols-2 gap-4 my-4">
-          <QuoteDetailCustomer disabled={disabled} />
+          {!customerId && !!preOrderId && isQuoteRequest ? (
+            <QuoteDetailViewCustomer
+              customerData={quoteRequestDetail?.preOrderView}
+            />
+          ) : (
+            <QuoteDetailCustomer disabled={disabled} />
+          )}
 
-          <QuoteDetailContact disabled={disabled} />
+          {!customerId && !!preOrderId && isQuoteRequest ? (
+            <QuoteDetailViewContact
+              contactData={quoteRequestDetail?.preOrderView}
+            />
+          ) : (
+            <QuoteDetailContact disabled={disabled} />
+          )}
 
           <QuoteDetailAttach disabled={disabled} />
 

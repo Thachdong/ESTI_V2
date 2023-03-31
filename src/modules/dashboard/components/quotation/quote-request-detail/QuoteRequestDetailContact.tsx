@@ -32,6 +32,8 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
     const { curatorInfo = [] } = data || {};
 
     setCurators([...curatorInfo]);
+
+    setValue("curatorId", "");
   }, [data]);
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export const QuoteRequestDetailContact: React.FC<TProps> = ({ disabled }) => {
   }, [curatorId, curators]);
 
   const renderCuratorTag = useCallback(() => {
-    if (!!customerAvailable) {
+    if (!!customerAvailable || !!customerId) {
       return (
         <FormSelect
           controlProps={{

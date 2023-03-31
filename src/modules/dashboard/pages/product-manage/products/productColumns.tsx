@@ -83,7 +83,7 @@ export const productColumns: TGridColDef[] = [
   },
   {
     field: "vat",
-    headerName: "Thuế GTGT",
+    headerName: "Thuế GTGT(%)",
     sortAscValue: 26,
     sortDescValue: 24,
     filterKey: "vat",

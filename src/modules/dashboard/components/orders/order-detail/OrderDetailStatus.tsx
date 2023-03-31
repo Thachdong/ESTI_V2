@@ -42,7 +42,7 @@ export const OrderDetailStatus: React.FC<TProps> = ({
   }, [status, id]);
 
   return (
-    <Box className="flex flex-col col-span-2">
+    <Box className="flex flex-col">
       <Typography className="font-bold uppercase mb-3 text-sm">
         Trạng thái đơn hàng
       </Typography>

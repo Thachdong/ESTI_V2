@@ -41,7 +41,11 @@ export const OrderDetailCurator: React.FC<TProps> = ({ disabled }) => {
             rules: { required: "Phải chọn người phụ trách" },
           }}
           label="Người phụ trách:"
-          labelKey="curatorName"
+          getOptionLabel={(opt) =>
+            !!opt
+              ? `${opt?.curatorName} - ${opt?.accountCode} - ${opt?.paymentLimit} - ${opt?.accountTypeName}`
+              : ""
+          }
           disabled={!!id}
         />
 
