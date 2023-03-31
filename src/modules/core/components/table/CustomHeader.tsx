@@ -137,12 +137,6 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
   // IMPLEMENT FILTER OPERATIONS
   const [filterData, setFilterData] = useState<any>({ isCheck: false });
 
-  // useEffect(() => {
-  //   if (type === "select" && !!options && !!filterKey) {
-  //     setFilterData({...filterData, searchTerm: options?.[0]?.value})
-  //   }
-  // }, [options, type, filterKey])
-
   const handleFilter = (value: string | number) => {
     const updateQuery = {
       ...query,
@@ -190,9 +184,9 @@ export const CustomHeader: React.FC<TProps> = ({ params }) => {
     const value = type === "date" ? e : e.target.value;
 
     //1. update search term state
-    setFilterData({ ...filterData, searchTerm: value });
+    setFilterData({ ...filterData, searchTerm: value, isCheck: !!value });
     //2. isCheck => handle filter
-    if (filterData.isCheck) {
+    if (filterData.isCheck || !!value) {
       debounceFilter(value as string);
     }
   };
