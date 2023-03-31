@@ -150,23 +150,13 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
       <Box className="grid grid-cols-2 gap-3">
         {type !== "Update" ? (
           <>
-            <FormSelectAsync
-              controlProps={{
-                control: control,
-                name: "applicantId",
-                rules: { required: "Phải chọn người nghỉ phép" },
-              }}
-              label="Nhân viên nghỉ phép"
-              fetcher={staff.getList}
-              labelKey="fullName"
-            />
             <FormSelect
               controlProps={{
                 control: control,
                 name: "headOfDepartment",
                 rules: undefined,
               }}
-              label="Trường phòng"
+              label="Trường phòng duyệt"
               labelKey="fullName"
               options={saleAdmins || []}
             />
@@ -211,7 +201,6 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
               label="Nội dung lý do nghỉ phép"
               multiline
               rows={3}
-              className="col-span-2"
             />
             <Box className="col-span-2">
               <FormUploadfiles

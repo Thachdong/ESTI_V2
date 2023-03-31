@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import {
   meetingDeploy,
   registerMission,
@@ -29,13 +29,18 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
   defaultValue,
   type,
 }) => {
-  const { control, handleSubmit, reset, setValue } = useForm<any>({});
+  const { control, handleSubmit, reset } = useForm<any>({});
 
   useEffect(() => {
     if (type == "Update") {
       reset({ status: defaultValue?.status });
     }
   }, [defaultValue]);
+
+  // DATA FETCHING
+  const { data: saleAdmins } = useQuery(["SaleAdminList"], () =>
+    staff.getListSaleAdmin().then((res) => res.data)
+  );
 
   //   ADD
   const mutateAdd = useMutation(
@@ -144,16 +149,6 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
       <Box className="grid grid-cols-2 gap-4">
         {type !== "Update" ? (
           <>
-            <FormSelectAsync
-              controlProps={{
-                control: control,
-                name: "applicantId",
-                rules: undefined,
-              }}
-              label="Người đăng ký"
-              fetcher={staff.getList}
-              labelKey="fullName"
-            />
             <FormInput
               controlProps={{
                 control: control,
@@ -170,15 +165,15 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
               }}
               label="Số ngày"
             />
-            <FormSelectAsync
+            <FormSelect
               controlProps={{
                 control: control,
                 name: "headOfDepartment",
-                rules: { required: "Phải chọn thư ký" },
+                rules: undefined,
               }}
-              label="Trưởng phòng"
-              fetcher={staff.getList}
+              label="Trường phòng duyệt"
               labelKey="fullName"
+              options={saleAdmins || []}
             />
             <FormDatepicker
               controlProps={{
@@ -204,7 +199,6 @@ export const RegisterMissionDialog: React.FC<TDialog> = ({
                 rules: { required: "Phải nhập nội dung đăng ký công tác" },
               }}
               label="Nội dung đăng ký công tác"
-              className="col-span-2"
               multiline
               rows={3}
             />

@@ -287,7 +287,7 @@ export const ImportDetailProductDialog: React.FC<TProps> = ({
             name: "price",
             rules: { required: "Phải nhập giá" },
           }}
-          label="Thành tiền"
+          label="Đơn giá"
         />
 
         <FormDatepicker

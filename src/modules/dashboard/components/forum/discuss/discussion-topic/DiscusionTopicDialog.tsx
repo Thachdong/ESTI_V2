@@ -102,7 +102,7 @@ export const DiscusionTopicDialog: React.FC<TDialog> = ({
             name: "endTime",
             rules: { required: "Phải chọn thời gian kết thúc" },
           }}
-          label="Thời gian trao đổi"
+          label="Thời gian kết thúc"
         />
         <FormInput
           controlProps={{

@@ -1,3 +1,7 @@
+//LOGIC BẢNG SẢN PHẨM:
+// 1. SP đc lấy từ đơn mua hàng
+// 2. Chỉ hiển thị sp có billQuantity > 0
+
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -51,7 +55,12 @@ export const PurchaseBillDetailPage: React.FC = () => {
 
     method.setValue("supplierId", supplierId);
 
-    method.setValue("products", purchaseDetail?.productOrderDetail || []);
+    const products =
+      purchaseDetail?.productOrderDetail?.filter?.(
+        (prod: any) => prod?.billQuantity !== 0
+      ) || [];
+
+    method.setValue("products", products);
   }, [purchaseDetail]);
 
   useEffect(() => {

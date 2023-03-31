@@ -34,6 +34,13 @@ export const purchasePlanColumns: TGridColDef[] = [
     filterKey: "mainOrderCode",
   },
   {
+    field: "referencePriceCode",
+    headerName: "Mã hỏi giá",
+    minWidth: 150,
+    isSort: false, // Không sort
+    isFilter: false, // không search
+  },
+  {
     field: "productCode",
     headerName: "Mã SP",
     minWidth: 120,
@@ -75,6 +82,14 @@ export const purchasePlanColumns: TGridColDef[] = [
     filterKey: "supplierName",
   },
   {
+    field: "expireDate",
+    headerName: "Hiệu lực báo giá",
+    minWidth: 150,
+    isSort: false,
+    isFilter: false,
+    renderCell: ({ row }) => _format.getShortVNDate(row?.expireDate),
+  },
+  {
     field: "statusName",
     headerName: "Trạng thái",
     minWidth: 150,
@@ -83,7 +98,9 @@ export const purchasePlanColumns: TGridColDef[] = [
     filterKey: "status",
     type: "select",
     options: purchasePlanStatus,
-    renderCell: ({row}) => <StatusChip status={row?.status} label={row?.statusName} />
+    renderCell: ({ row }) => (
+      <StatusChip status={row?.status} label={row?.statusName} />
+    ),
   },
 ];
 
@@ -112,17 +129,17 @@ export const dialogColumns: TGridColDef[] = [
     headerName: "THÀNH TIỀN",
     minWidth: 120,
     renderCell: ({ row }) => {
-      const {quantity, price, vat} = row || {};
+      const { quantity, price, vat } = row || {};
 
       const total = quantity * price;
 
-      const tax = total * (+vat) / 100;
+      const tax = (total * +vat) / 100;
       return (
-        <Tooltip title={ "Sau thuế: " + _format.getVND(total + tax)}>
+        <Tooltip title={"Sau thuế: " + _format.getVND(total + tax)}>
           <Box>{_format.getVND(row.totalPrice)}</Box>
         </Tooltip>
       );
-    }
+    },
   },
   { field: "note", headerName: "GHI CHÚ", minWidth: 120 },
 ];

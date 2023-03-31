@@ -66,6 +66,5 @@ export const toastOptions: ToastOptions = {
   closeOnClick: true,
   pauseOnFocusLoss: true,
   draggable: true,
-  progress: 0.2,
   position: "bottom-right",
 };

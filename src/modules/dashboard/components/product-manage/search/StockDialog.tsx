@@ -2,7 +2,13 @@ import { Box, ButtonBase, List, ListItem, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
-import { customer, staff, stockPlan, TCreateStockPlan, TUpdateStockPlan } from "src/api";
+import {
+  customer,
+  staff,
+  stockPlan,
+  TCreateStockPlan,
+  TUpdateStockPlan,
+} from "src/api";
 import {
   AddButton,
   BaseButton,
@@ -44,6 +50,7 @@ export const StockDialog: React.FC<TProps> = ({
     formState: { isDirty },
     watch,
     reset,
+    setValue,
   } = useForm();
 
   // roleCodeL:
@@ -145,7 +152,7 @@ export const StockDialog: React.FC<TProps> = ({
   // SIDE EFFECTS
   useEffect(() => {
     if (type === "Add") {
-      append({ time: "", estimatedQuantity: "" });
+      append({ time: undefined, estimatedQuantity: "" });
     }
   }, [type]);
 
@@ -160,8 +167,6 @@ export const StockDialog: React.FC<TProps> = ({
       } catch (error) {
         console.log(error);
       }
-
-      console.log(estimatedQuantity, planList);
 
       reset({
         id,
@@ -279,7 +284,9 @@ export const StockDialog: React.FC<TProps> = ({
               Tạo
             </BaseButton>
           ) : (
-            <BaseButton onClick={handleSubmit(handleUpdate)}>Cập nhật</BaseButton>
+            <BaseButton onClick={handleSubmit(handleUpdate)}>
+              Cập nhật
+            </BaseButton>
           )}
         </Box>
       </Box>

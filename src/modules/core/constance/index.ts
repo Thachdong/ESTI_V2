@@ -38,7 +38,7 @@ export const paymentTypes = [
 ];
 
 export const paymentExpiredIn = [
-  { id: 1, name: "trả trước" },
+  { id: 1, name: "Trả trước" },
   { id: 2, name: "Net 7(7 ngày)" },
   { id: 3, name: "Net 15(15 ngày)" },
   { id: 4, name: "Net 30(30 ngày)" },

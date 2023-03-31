@@ -192,6 +192,7 @@ export const CustomersInfoForm: React.FC = () => {
           controlProps={{
             control,
             name: "address",
+            rules: {required: "Phải nhập địa chỉ"}
           }}
           label="Địa chỉ"
           shrinkLabel

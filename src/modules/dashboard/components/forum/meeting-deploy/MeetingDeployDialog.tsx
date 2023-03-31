@@ -163,17 +163,21 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               controlProps={{
                 control: control,
                 name: "startTime",
-                rules: { required: "Phải chọn ngày thực hiện" },
+                rules: { required: "Phải chọn thời gian bắt đầu" },
               }}
-              label="Ngày thực hiện"
+              label="Thời gian bắt đầu" // api yêu cầu cập nhật: Ngày thực hiện => thời gian bắt đầu
+              inputFormat="DD/MM/YYYY HH:mm"
+              views={["year", "month", "day", "hours", "minutes"]}
             />
             <FormDatepicker
               controlProps={{
                 control: control,
                 name: "endTime",
-                rules: { required: "Phải chọn ngày hoàn thành" },
+                rules: { required: "Phải chọn thời gian kết thúc" },
               }}
-              label="Ngày hoàn thành"
+              label="Thời gian kết thúc" // api yêu cầu cập nhật: Ngày hoàn thành => thời gian kết thúc
+              inputFormat="DD/MM/YYYY HH:mm"
+              views={["year", "month", "day", "hours", "minutes"]}
             />
             <FormSelectAsync
               controlProps={{
@@ -183,7 +187,11 @@ export const MeetingDeployDialog: React.FC<TDialog> = ({
               }}
               label="Người tham gia"
               fetcher={staff.getList}
-              labelKey="fullName"
+              getOptionLabel={(opt: any) =>
+                !!opt
+                  ? `${opt?.fullName} - ${opt?.roleCode} - ${opt?.code}`
+                  : ""
+              }
               multiple
               shrinkLabel
             />

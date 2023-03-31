@@ -114,8 +114,8 @@ export const importColumns: TGridColDef[] = [
     width: 150,
     sortKey: "import_orderBy",
     renderCell: ({ row }) =>
-      row?.dateManufacture
-        ? moment(row?.dateManufacture).format("DD/MM/YYYY")
+      row?.created
+        ? moment(row?.created).format("DD/MM/YYYY")
         : "__",
   },
   {

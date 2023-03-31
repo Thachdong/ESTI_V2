@@ -153,14 +153,13 @@ export const TaskListMailReponse: React.FC<TProps> = ({ data }) => {
         </Box>
       )}
 
-      {data?.status === 1 ||
-        (data?.status === 2 && (
-          <ForumCommentBox
-            fileLoader={taskList.uploadFile}
-            mutateAdd={mutateRepply}
-            idObject={{ taskListId: data?.id }}
-          />
-        ))}
+      {(data?.status === 1 || data?.status === 2) && (
+        <ForumCommentBox
+          fileLoader={taskList.uploadFile}
+          mutateAdd={mutateRepply}
+          idObject={{ taskListId: data?.id }}
+        />
+      )}
     </Box>
   );
 };

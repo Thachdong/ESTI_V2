@@ -1,14 +1,9 @@
-import { Box, ButtonBase, Drawer, Tooltip, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { ButtonBase, Drawer, Tooltip, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
-import {
-  meetingDeploy,
-  registerMission,
-  taskGroup,
-  taskList,
-  TJobGroup,
-} from "src/api";
+import { registerMission } from "src/api";
 import {
   ContextMenuWrapper,
   DataTable,
@@ -16,12 +11,9 @@ import {
   StatusChip,
 } from "~modules-core/components";
 import { ConfirmRegisterMission } from "~modules-core/constance";
-import { useSession } from "~modules-core/customHooks/useSession";
 import { toast } from "~modules-core/toast";
 import { _format } from "~modules-core/utility/fomat";
 import {
-  MeetingDeployDialog,
-  MeetingDeployMailReponse,
   RegisterMissionDialog,
   RegisterMissionMailReponse,
 } from "~modules-dashboard/components";
@@ -35,6 +27,10 @@ type TProps = {
   refetch: () => void;
 };
 
+// Nghiệp vụ:
+// Nếu có registerMissionId: đc trả về từ trong link mà user nhận đc từ mail hệ thống => mở tab bình luận
+// Đồng thời thêm nút "tải lại" => cho phép xem toàn bộ danh sách
+
 export const RegisterMissionTable: React.FC<TProps> = ({
   data,
   paginationProps,
@@ -42,6 +38,8 @@ export const RegisterMissionTable: React.FC<TProps> = ({
   isFetching,
   refetch,
 }) => {
+  const { registerMissionId } = useRouter().query;
+
   const defaultValue = useRef<any>();
 
   const [repply, setReply] = useState(false);
@@ -178,6 +176,19 @@ export const RegisterMissionTable: React.FC<TProps> = ({
       ),
     },
   ];
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    if (!!registerMissionId) {
+      const currentRow = data?.find(
+        (item: any) => item.id === registerMissionId
+      );
+
+      defaultValue.current = currentRow;
+
+      setReply(true);
+    }
+  }, [registerMissionId, data]);
 
   // HANDLE GET VALUE ROW
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {

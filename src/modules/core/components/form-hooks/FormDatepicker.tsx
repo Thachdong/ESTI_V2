@@ -20,6 +20,8 @@ export const FormDatepicker: React.FC<TFormDatepicker> = (props) => {
 
     if (drawValue.isValid()) {
       safetyValue.value = !!value ? drawValue : null;
+    } else {
+      safetyValue.value = undefined;
     }
 
     const defaultProps: DateTimePickerProps<any, any> = {

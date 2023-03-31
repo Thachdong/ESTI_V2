@@ -9,7 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import clsx from "clsx";
-import React, { useCallback, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { meetingDeploy } from "src/api";
@@ -36,6 +37,10 @@ type TProps = {
   refetch: () => void;
 };
 
+// Nghiệp vụ:
+// Nếu có meetingDeployId: đc trả về từ trong link mà user nhận đc từ mail hệ thống => mở tab bình luận
+// Đồng thời thêm nút "tải lại" => cho phép xem toàn bộ danh sách
+
 export const MeetingDeloyTable: React.FC<TProps> = ({
   data,
   paginationProps,
@@ -43,6 +48,8 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   isFetching,
   refetch,
 }) => {
+  const { meetingDeployId } = useRouter().query;
+
   const defaultValue = useRef<any>();
 
   const [repply, setReply] = useState(false);
@@ -289,6 +296,17 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
       ),
     },
   ];
+
+  // SIDE EFFECTS
+  useEffect(() => {
+    if (!!meetingDeployId) {
+      const currentRow = data?.find((item: any) => item.id === meetingDeployId);
+
+      defaultValue.current = currentRow;
+
+      setReply(true);
+    }
+  }, [meetingDeployId, data]);
 
   // HANDLE GET VALUE ROW
   const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
