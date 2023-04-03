@@ -56,12 +56,12 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
   );
 
   const handleAdd = async (data: any) => {
-    const {attachFile = [], ...rest} = data || {};
+    const { attachFile = [], ...rest } = data || {};
 
     const payload = {
       ...rest,
-      attachFile: attachFile?.join(",")
-    }
+      attachFile: attachFile?.join(","),
+    };
 
     await mutateAdd.mutateAsync(payload);
   };
@@ -130,7 +130,7 @@ export const LeaveApplycationDialog: React.FC<TDialog> = ({
               className="!bg-main-1 ml-3"
               onClick={onClose}
             >
-              Hủy
+              Đóng
             </BaseButton>
           </>
         );

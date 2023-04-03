@@ -17,18 +17,21 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { ForumCommentBox } from "../../task/task-list";
 
 type TProps = {
-  data: any;
+  data?: any;
 };
 
 export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
   const { data: dataRepList, refetch } = useQuery(
-    ["taskListMail", "loading"],
+    ["taskListMail", "loading", data?.id],
     () =>
       discussion
         .getListMailReponse({
           discussionId: data?.id,
         })
-        .then((res) => res.data)
+        .then((res) => res.data),
+    {
+      enabled: !!data?.id,
+    }
   );
 
   const mutateRepply = useMutation(
@@ -76,7 +79,9 @@ export const DiscussionMailReponse: React.FC<TProps> = ({ data }) => {
                           <Avatar className="m-auto" />
                         )}
                       </Tooltip>
-                      <Typography className="truncate text-xs">{item?.fullName}</Typography>
+                      <Typography className="truncate text-xs">
+                        {item?.fullName}
+                      </Typography>
                     </Box>
 
                     <Box className="w-full">

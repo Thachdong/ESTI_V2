@@ -53,9 +53,13 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   const defaultValue = useRef<any>();
 
   const [repply, setReply] = useState(false);
-
   const { userInfo } = useSession()?.userInfo || {};
+  const [selectedData, setSelectedData] = useState<any | undefined>();
 
+  const onSelectDetail = useCallback((data: any) => {
+    setReply(true);
+    setSelectedData(data);
+  }, []);
   const columns: TGridColDef[] = [
     {
       field: "created",
@@ -106,7 +110,11 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
         return (
           <>
             <Tooltip title="Xem phản hồi">
-              <ButtonBase onClick={() => setReply(true)}>
+              <ButtonBase
+                onClick={() => {
+                  onSelectDetail(row);
+                }}
+              >
                 <Typography className="text-main text-sm text-left">
                   {`${row?.descriptionJob} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
@@ -150,8 +158,8 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
 
         return (
           <List className="p-0 grid grid-cols-5 gap-2">
-            {listParticipant?.map((item: any) => (
-              <ListItem className="p-0">
+            {listParticipant?.map((item: any, idx: number) => (
+              <ListItem className="p-0" key={`participant-${row?.id}-${idx}`}>
                 <Tooltip title={item?.paticipantName}>
                   <Avatar
                     className={clsx(
@@ -301,9 +309,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
   useEffect(() => {
     if (!!meetingDeployId) {
       const currentRow = data?.find((item: any) => item.id === meetingDeployId);
-
-      defaultValue.current = currentRow;
-
+      setSelectedData(currentRow);
       setReply(true);
     }
   }, [meetingDeployId, data]);
@@ -369,10 +375,18 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
         menuId="taskGroup_table_menu"
         menuComponent={
           <Menu className="p-0" id="taskGroup_table_menu">
-            <Item id="update-product" onClick={handleOpenUpdate}>
+            <Item
+              key="update-product"
+              id="update-product"
+              onClick={handleOpenUpdate}
+            >
               Cập nhật trạng thái
             </Item>
-            <Item id="delete-product" onClick={handleDeleteTaskGroup}>
+            <Item
+              key="delete-product"
+              id="delete-product"
+              onClick={handleDeleteTaskGroup}
+            >
               Xóa
             </Item>
           </Menu>
@@ -400,7 +414,7 @@ export const MeetingDeloyTable: React.FC<TProps> = ({
         defaultValue={defaultValue.current}
       />
       <Drawer anchor={"right"} open={repply} onClose={() => setReply(false)}>
-        <MeetingDeployMailReponse data={defaultValue.current} />
+        <MeetingDeployMailReponse data={selectedData} />
       </Drawer>
     </>
   );

@@ -43,6 +43,7 @@ export const MeetingDeployPage = () => {
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           ...query,
+          // meetingDeployId: null,
         })
         .then((res) => res.data),
     {
@@ -78,7 +79,9 @@ export const MeetingDeployPage = () => {
       <Box className="mb-3 flex gap-3">
         <AddButton children="Tạo cuộc họp mới" onClick={onCreateMeeting} />
         <SearchBox />
-        {!!meetingDeployId && <RefreshButton onClick={handleRemoveMeetingDeployId} />}
+        {!!meetingDeployId && (
+          <RefreshButton onClick={handleRemoveMeetingDeployId} />
+        )}
       </Box>
 
       <MeetingDeloyTable
