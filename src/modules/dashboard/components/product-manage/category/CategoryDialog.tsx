@@ -306,7 +306,9 @@ export const CategoryDialog: React.FC<TDialog> = ({
           />
 
           <Box className="relative">
-            <Typography className="absolute z-[99999] top-[9px] left-[12px] font-semibold text-[#504e4e]">Nhóm cha</Typography>
+            <Typography className="absolute z-[99999] top-[9px] left-[12px] font-semibold text-[#504e4e]">
+              Nhóm cha
+            </Typography>
             <TreeSelect
               dropdownStyle={{ maxHeight: 400, overflow: "auto", zIndex: 9999 }}
               treeData={categoryTree}

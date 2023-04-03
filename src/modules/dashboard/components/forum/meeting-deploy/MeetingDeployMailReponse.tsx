@@ -24,7 +24,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { ForumCommentBox } from "../task/task-list";
 
 type TProps = {
-  data: any;
+  data?: any;
 };
 
 export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
@@ -32,12 +32,17 @@ export const MeetingDeployMailReponse: React.FC<TProps> = ({ data }) => {
     data: dataRepList,
     isLoading,
     refetch,
-  } = useQuery(["meetingDeployMail", "loading"], () =>
-    meetingDeploy
-      .getListMailReponse({
-        meetingDeployId: data?.id,
-      })
-      .then((res) => res.data)
+  } = useQuery(
+    ["meetingDeployMail", "loading", data?.id],
+    () =>
+      meetingDeploy
+        .getListMailReponse({
+          meetingDeployId: data?.id,
+        })
+        .then((res) => res.data),
+    {
+      enabled: !!data?.id,
+    }
   );
 
   const mutateRepply = useMutation(

@@ -1,6 +1,6 @@
 import { ButtonBase, Drawer, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { registerMission } from "src/api";
@@ -43,6 +43,12 @@ export const RegisterMissionTable: React.FC<TProps> = ({
   const defaultValue = useRef<any>();
 
   const [repply, setReply] = useState(false);
+  const [selectedData, setSelectedData] = useState<any | undefined>();
+
+  const onSelectDetail = useCallback((data: any) => {
+    setReply(true);
+    setSelectedData(data);
+  }, []);
 
   const columns: TGridColDef[] = [
     {
@@ -115,7 +121,7 @@ export const RegisterMissionTable: React.FC<TProps> = ({
         return (
           <>
             <Tooltip title="Xem phản hồi">
-              <ButtonBase onClick={() => setReply(true)}>
+              <ButtonBase onClick={() => onSelectDetail(row)}>
                 <Typography className="text-main text-sm text-left">
                   {`${row?.seasonMission} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
@@ -184,7 +190,7 @@ export const RegisterMissionTable: React.FC<TProps> = ({
         (item: any) => item.id === registerMissionId
       );
 
-      defaultValue.current = currentRow;
+      setSelectedData(currentRow);
 
       setReply(true);
     }
@@ -266,7 +272,7 @@ export const RegisterMissionTable: React.FC<TProps> = ({
       />
 
       <Drawer anchor={"right"} open={repply} onClose={() => setReply(false)}>
-        <RegisterMissionMailReponse data={defaultValue.current} />
+        <RegisterMissionMailReponse data={selectedData} />
       </Drawer>
     </>
   );

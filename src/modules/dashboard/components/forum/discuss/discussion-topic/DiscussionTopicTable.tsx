@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { discussion } from "src/api";
@@ -37,7 +37,6 @@ type TProps = {
 // Nếu có taskListId: đc trả về từ trong link mà user nhận đc từ mail hệ thống => mở tab bình luận
 // Đồng thời thêm nút "tải lại" => cho phép tải lại danh sách
 
-
 export const DiscussionTopicTable: React.FC<TProps> = ({
   data,
   paginationProps,
@@ -46,9 +45,15 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
   refetch,
 }) => {
   const { discussionId } = useRouter().query;
-  
+
   const defaultValue = useRef<any>();
   const [repply, setReply] = useState(false);
+  const [selectedData, setSelectedData] = useState<any | undefined>();
+
+  const onSelectDetail = useCallback((data: any) => {
+    setReply(true);
+    setSelectedData(data);
+  }, []);
   const columns: TGridColDef[] = [
     {
       field: "created",
@@ -102,7 +107,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
         return (
           <>
             <Tooltip title="Xem phản hồi">
-              <ButtonBase onClick={() => setReply(true)}>
+              <ButtonBase onClick={() => onSelectDetail(row)}>
                 <Typography className="text-main text-sm text-left">
                   {`${row?.descriptionJob} (${row?.reponseNumber} phản hồi)`}
                 </Typography>
@@ -208,9 +213,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
   useEffect(() => {
     if (!!discussionId) {
       const currentRow = data?.find((item: any) => item.id === discussionId);
-
-      defaultValue.current = currentRow;
-
+      setSelectedData(currentRow);
       setReply(true);
     }
   }, [discussionId, data]);
@@ -291,7 +294,7 @@ export const DiscussionTopicTable: React.FC<TProps> = ({
       </ContextMenuWrapper>
 
       <Drawer anchor={"right"} open={repply} onClose={() => setReply(false)}>
-        <DiscussionMailReponse data={defaultValue.current} />
+        <DiscussionMailReponse data={selectedData} />
       </Drawer>
     </>
   );

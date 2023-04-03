@@ -1,6 +1,6 @@
 import { ButtonBase, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Item, Menu } from "react-contexify";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
@@ -35,6 +35,7 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
   isFetching,
   refetch,
 }) => {
+  const { leaveApplicationId } = useRouter().query;
   const defaultValue = useRef<any>();
 
   const columns: TGridColDef[] = [
@@ -94,7 +95,7 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
         return (
           <>
             <Tooltip title="Xem phản hồi">
-              <ButtonBase onClick={handleOpenUpdate}>
+              <ButtonBase onClick={() => onSelectDetail(row)}>
                 <Typography className="text-main text-sm text-left">
                   {row?.season}
                 </Typography>
@@ -167,14 +168,24 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
   // HANDLE UPDATE GROUP TASK IN DIALOG
   const [Open, setOpen] = useState(false);
 
-  const handleOpenUpdate = () => {
-    setOpen(true);
-  };
-
   const handleCloseUpdate = () => {
     setOpen(false);
   };
-
+  const [selectedData, setSelectedData] = useState<any | undefined>();
+  const onSelectDetail = useCallback((data: any) => {
+    setOpen(true);
+    setSelectedData(data);
+  }, []);
+  // SIDE EFFECTS
+  useEffect(() => {
+    if (!!leaveApplicationId) {
+      const currentRow = data?.find(
+        (item: any) => item.id === leaveApplicationId
+      );
+      setSelectedData(currentRow);
+      setOpen(true);
+    }
+  }, [leaveApplicationId, data]);
   //   HANDLE CANCEL
   const mutateCancel = useMutation(
     (payload: { leaveApplicationId: string; status: number }) =>
@@ -249,7 +260,7 @@ export const LeaveApplycationTable: React.FC<TProps> = ({
         open={Open}
         type="Update"
         refetch={refetch}
-        defaultValue={defaultValue?.current}
+        defaultValue={selectedData}
       />
     </>
   );

@@ -34,12 +34,17 @@ export const RegisterMissionMailReponse: React.FC<TProps> = ({ data }) => {
     data: dataRepList,
     isLoading,
     refetch,
-  } = useQuery(["registerMission", "loading"], () =>
-    registerMission
-      .getListMailReponse({
-        registerMissionId: data?.id,
-      })
-      .then((res) => res.data)
+  } = useQuery(
+    ["registerMission", "loading", data?.id],
+    () =>
+      registerMission
+        .getListMailReponse({
+          registerMissionId: data?.id,
+        })
+        .then((res) => res.data),
+    {
+      enabled: !!data?.id,
+    }
   );
 
   const mutateRepply = useMutation(
