@@ -2,120 +2,127 @@
 // 1. SP đc lấy từ đơn mua hàng
 // 2. Chỉ hiển thị sp có billQuantity > 0
 
-import { Box } from "@mui/material";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
-import { purchaseOrder } from "src/api";
-import { purchaseOrderBill } from "src/api/purchase-order-bill";
-import { _format } from "~modules-core/utility/fomat";
+import { Box } from '@mui/material'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useQuery } from 'react-query'
+import { purchaseOrder } from 'src/api'
+import { purchaseOrderBill } from 'src/api/purchase-order-bill'
+import { _format } from '~modules-core/utility/fomat'
 import {
-  PurchaseBillDetailAttach,
-  PurchaseBillDetailButtons,
-  PurchaseBillDetailGeneral,
-  PurchaseBillDetailProducts,
-  PurchaseBillDetailSupplier,
-} from "~modules-dashboard/components";
+	PurchaseBillDetailAttach,
+	PurchaseBillDetailButtons,
+	PurchaseBillDetailGeneral,
+	PurchaseBillDetailPaymentHistory,
+	PurchaseBillDetailProducts,
+	PurchaseBillDetailSupplier
+} from '~modules-dashboard/components'
 
 export const PurchaseBillDetailPage: React.FC = () => {
-  const { id, fromPurchaseOrderId } = useRouter().query;
+	const { id, fromPurchaseOrderId } = useRouter().query
 
-  const method = useForm<any>({
-    mode: "onBlur",
-    defaultValues: {
-      products: [],
-    },
-  });
+	const method = useForm<any>({
+		mode: 'onBlur',
+		defaultValues: {
+			products: []
+		}
+	})
 
-  const { productOrderId } = method.watch();
+	const { productOrderId } = method.watch()
 
-  // DATA FETCHING
-  const { data: purchaseDetail } = useQuery(
-    ["PurchaseDetail", productOrderId],
-    () => purchaseOrder.getById(productOrderId).then((res) => res.data),
-    {
-      enabled: !!productOrderId,
-    }
-  );
+	// DATA FETCHING
+	const { data: purchaseDetail } = useQuery(
+		['PurchaseDetail', productOrderId],
+		() => purchaseOrder.getById(productOrderId).then((res) => res.data),
+		{
+			enabled: !!productOrderId
+		}
+	)
 
-  const purchaseData = purchaseDetail?.productOrder?.productOrder || {};
+	const purchaseData = purchaseDetail?.productOrder?.productOrder || {}
 
-  const { data: billDetail, refetch } = useQuery(
-    ["PurchaseOrderBillDetail", id],
-    () => purchaseOrderBill.getById(id as string).then((res) => res.data),
-    {
-      enabled: !!id,
-    }
-  );
+	const { data: billDetail, refetch } = useQuery(
+		['PurchaseOrderBillDetail', id],
+		() => purchaseOrderBill.getById(id as string).then((res) => res.data),
+		{
+			enabled: !!id,
+			onSuccess: (res) => console.log('res', res)
+		}
+	)
 
-  // SIDE EFFECTS
-  useEffect(() => {
-    const supplierId = purchaseData?.supplierId;
+	// SIDE EFFECTS
+	useEffect(() => {
+		const supplierId = purchaseData?.supplierId
 
-    method.setValue("supplierId", supplierId);
+		method.setValue('supplierId', supplierId)
 
-    const products =
-      purchaseDetail?.productOrderDetail?.filter?.(
-        (prod: any) => prod?.billQuantity !== 0
-      ) || [];
+		const products = purchaseDetail?.productOrderDetail?.filter?.((prod: any) => prod?.billQuantity !== 0) || []
 
-    method.setValue("products", products);
-  }, [purchaseDetail]);
+		method.setValue('products', products)
+	}, [purchaseDetail])
 
-  useEffect(() => {
-    const { productOrderId, billNumber, supplierId, attachFile } =
-      billDetail?.productOrderBillById || {};
+	useEffect(() => {
+		const { productOrderId, billNumber, supplierId, attachFile } = billDetail?.productOrderBillById || {}
 
-    const files = !attachFile ? [] : attachFile.split?.(",");
+		const files = !attachFile ? [] : attachFile.split?.(',')
 
-    const products = billDetail?.productOrderBillDetailList || [];
+		const products = billDetail?.productOrderBillDetailList || []
 
-    method.reset({
-      productOrderId,
-      billNumber,
-      supplierId,
-      attachFile: files,
-      products,
-    });
-  }, [billDetail]);
+		method.reset({
+			productOrderId,
+			billNumber,
+			supplierId,
+			attachFile: files,
+			products
+		})
+	}, [billDetail])
 
-  useEffect(() => {
-    !!fromPurchaseOrderId &&
-      method.setValue("productOrderId", fromPurchaseOrderId);
-  }, [fromPurchaseOrderId]);
+	useEffect(() => {
+		!!fromPurchaseOrderId && method.setValue('productOrderId', fromPurchaseOrderId)
+	}, [fromPurchaseOrderId])
 
-  return (
-    <FormProvider {...method}>
-      <Box className="container-center grid grid-cols-2 gap-4">
-        <Box className="col-span-2">
-          <PurchaseBillDetailGeneral purchaseData={purchaseData} />
-        </Box>
+	const renderPrintDetailBtn = () => {
+		// phải thêm cái này vì lỗi https://nextjs.org/docs/messages/react-hydration-error
+		if (!!billDetail) {
+			return (
+				<PurchaseBillDetailButtons
+					refetch={refetch}
+					sendMailData={{
+						to: billDetail?.productOrderBillById?.curatorEmail,
+						status: billDetail?.productOrderBillById?.status,
+						cc: [billDetail?.productOrderBillById?.salesAdminEmail]
+					}}
+				/>
+			)
+		} else return null
+	}
+	return (
+		<FormProvider {...method}>
+			<Box className="container-center grid grid-cols-2 gap-8">
+				<Box className="col-span-2">
+					<PurchaseBillDetailGeneral purchaseData={purchaseData} />
+				</Box>
 
-        <Box className="col-span-2">
-          <PurchaseBillDetailSupplier />
-        </Box>
+				<Box className="col-span-2">
+					<PurchaseBillDetailSupplier />
+				</Box>
 
-        <Box className="col-span-2 lg:col-span-1">
-          <PurchaseBillDetailAttach />
-        </Box>
+				<Box className="col-span-2 lg:col-span-1">
+					<PurchaseBillDetailAttach />
+				</Box>
 
-        <Box className="col-span-2">
-          <PurchaseBillDetailProducts
-            productList={purchaseDetail?.productOrderDetail || []}
-          />
-        </Box>
-        <Box className="col-span-2">
-          <PurchaseBillDetailButtons
-            refetch={refetch}
-            sendMailData={{
-              to: billDetail?.productOrderBillById?.curatorEmail,
-              status: billDetail?.productOrderBillById?.status,
-              cc: [billDetail?.productOrderBillById?.salesAdminEmail],
-            }}
-          />
-        </Box>
-      </Box>
-    </FormProvider>
-  );
-};
+				<Box className="col-span-2">
+					<PurchaseBillDetailProducts productList={purchaseDetail?.productOrderDetail || []} />
+				</Box>
+				<Box className="col-span-2">
+					<PurchaseBillDetailPaymentHistory
+						dataPayment={billDetail?.productOrderPayment || []}
+						productOrderBillId={id as string | undefined}
+					/>
+				</Box>
+				<Box className="col-span-2">{renderPrintDetailBtn()}</Box>
+			</Box>
+		</FormProvider>
+	)
+}

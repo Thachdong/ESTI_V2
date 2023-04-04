@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .container-center {
   max-width: 1200px;
   margin-left: auto;
