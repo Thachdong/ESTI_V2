@@ -3,6 +3,13 @@ import { ComponentsProps } from '@mui/material'
 import { ComponentsOverrides } from '@mui/material'
 import { ComponentsVariants } from '@mui/material'
 const componentStyleOverrides = (): Components => ({
+	MuiCssBaseline: {
+		styleOverrides: {
+			p: {
+				letterSpacing: '0.04em'
+			}
+		}
+	},
 	MuiButton: {
 		defaultProps: {
 			disableElevation: true,
