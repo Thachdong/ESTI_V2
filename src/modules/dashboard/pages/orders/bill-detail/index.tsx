@@ -1,229 +1,219 @@
-import { Box } from "@mui/material";
-import { useRouter } from "next/router";
-import React, { useCallback, useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { useQuery } from "react-query";
-import { bill, mainOrder as orderApi } from "src/api";
-import { _format } from "~modules-core/utility/fomat";
+import { Box } from '@mui/material'
+import { useRouter } from 'next/router'
+import React, { useCallback, useEffect } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useQuery } from 'react-query'
+import { bill, mainOrder as orderApi } from 'src/api'
+import { _format } from '~modules-core/utility/fomat'
 import {
-  BillDetailAttach,
-  BillDetailButtons,
-  BillDetailCurator,
-  BillDetailCustomer,
-  BillDetailGeneral,
-  BillDetailGeneralView,
-  BillDetailPaymentHistory,
-  BillDetailPaymentStatus,
-  BillDetailProducts,
-  BillDetailReciever,
-  BillDetailRecieverView,
-  BillDetailStatus,
-} from "~modules-dashboard/components";
+	BillDetailAttach,
+	BillDetailButtons,
+	BillDetailCurator,
+	BillDetailCustomer,
+	BillDetailGeneral,
+	BillDetailGeneralView,
+	BillDetailPaymentHistory,
+	BillDetailPaymentStatus,
+	BillDetailProducts,
+	BillDetailReciever,
+	BillDetailRecieverView,
+	BillDetailStatus
+} from '~modules-dashboard/components'
 
 export const BillDetailPage: React.FC = () => {
-  const { id, fromOrderId } = useRouter().query;
+	const { id, fromOrderId } = useRouter().query
 
-  const method = useForm<any>({
-    mode: "onBlur",
-    defaultValues: {
-      products: [],
-      defaultReceiver: true,
-    },
-  });
+	const method = useForm<any>({
+		mode: 'onBlur',
+		defaultValues: {
+			products: [],
+			defaultReceiver: true
+		}
+	})
 
-  const { watch, setValue } = method;
+	const { watch, setValue } = method
 
-  const { mainOrderId, defaultReceiver } = watch();
+	const { mainOrderId, defaultReceiver } = watch()
 
-  // DATA FETCHING
-  // FETCH BILL DETAIL
-  const { data: billDetail, refetch } = useQuery(
-    ["billDetail", id],
-    () => bill.getById(id as string).then((res) => res.data),
-    {
-      enabled: !!id,
-    }
-  );
+	// DATA FETCHING
+	// FETCH BILL DETAIL
+	const { data: billDetail, refetch } = useQuery(['billDetail', id], () => bill.getById(id as string).then((res) => res.data), {
+		enabled: !!id,
+		onSuccess: (res) => {
+			console.log('bilorderDetail', res)
+		}
+	})
 
-  const { BillView = {}, BillDetailView = [] } = billDetail || {};
+	const { BillView = {}, BillDetailView = [] } = billDetail || {}
 
-  // FETCH ORDER DETAIL
-  const { data: orderDetail } = useQuery(
-    ["orderDetail", mainOrderId, billDetail],
-    () => {
-      if (!!id) {
-        return orderApi
-          .getById(billDetail?.BillView?.bill?.mainOrderId)
-          .then((res) => res.data);
-      } else {
-        return orderApi.getById(mainOrderId).then((res) => res.data);
-      }
-    },
-    {
-      enabled: !!mainOrderId || !!billDetail?.BillView?.bill?.mainOrderId,
-    }
-  );
+	// FETCH ORDER DETAIL
+	const { data: orderDetail } = useQuery(
+		['orderDetail', mainOrderId, billDetail],
+		() => {
+			if (!!id) {
+				return orderApi.getById(billDetail?.BillView?.bill?.mainOrderId).then((res) => res.data)
+			} else {
+				return orderApi.getById(mainOrderId).then((res) => res.data)
+			}
+		},
+		{
+			enabled: !!mainOrderId || !!billDetail?.BillView?.bill?.mainOrderId
+		}
+	)
 
-  const { mainOrder = {} } = orderDetail || {};
+	const { mainOrder = {} } = orderDetail || {}
 
-  // METHODS
-  const handleCoppyReceiver = useCallback(() => {
-    const { receiverFullName, receiverPhone, receiverEmail, receiverAddress } =
-      mainOrder;
+	// METHODS
+	const handleCoppyReceiver = useCallback(() => {
+		const { receiverFullName, receiverPhone, receiverEmail, receiverAddress } = mainOrder
 
-    setValue("billRecipientName", receiverFullName);
+		setValue('billRecipientName', receiverFullName)
 
-    setValue("billRecipientPhone", receiverPhone);
+		setValue('billRecipientPhone', receiverPhone)
 
-    setValue("billRecipientEmail", receiverEmail);
+		setValue('billRecipientEmail', receiverEmail)
 
-    setValue("billRecipientAddress", receiverAddress);
-  }, [mainOrder]);
+		setValue('billRecipientAddress', receiverAddress)
+	}, [mainOrder])
 
-  // SIDE EFFECTS
-  useEffect(() => {
-    if (!!orderDetail && !id) {
-      const { mainOrder = {}, mainOrderDetail = [] } = orderDetail;
+	// SIDE EFFECTS
+	useEffect(() => {
+		if (!!orderDetail && !id) {
+			const { mainOrder = {}, mainOrderDetail = [] } = orderDetail
 
-      const { attachFile } = mainOrder;
+			const { attachFile } = mainOrder
 
-      defaultReceiver && handleCoppyReceiver();
+			defaultReceiver && handleCoppyReceiver()
 
-      setValue("attachFile", !attachFile ? [] : attachFile.split?.(","));
+			setValue('attachFile', !attachFile ? [] : attachFile.split?.(','))
 
-      // REMOVE PRODUCT billQuantity = 0
-      const rawProducts = mainOrderDetail.filter(
-        (prod: any) => prod?.billQuantity > 0
-      );
+			// REMOVE PRODUCT billQuantity = 0
+			const rawProducts = mainOrderDetail.filter((prod: any) => prod?.billQuantity > 0)
 
-      const orderProducts = rawProducts.map((prod: any, index: number) => ({
-        ...prod,
-        no: index + 1,
-      }));
+			const orderProducts = rawProducts.map((prod: any, index: number) => ({
+				...prod,
+				no: index + 1
+			}))
 
-      setValue("products", orderProducts);
-    }
-  }, [orderDetail]);
+			setValue('products', orderProducts)
+		}
+	}, [orderDetail])
 
-  useEffect(() => {
-    defaultReceiver && handleCoppyReceiver();
-  }, [defaultReceiver]);
+	useEffect(() => {
+		defaultReceiver && handleCoppyReceiver()
+	}, [defaultReceiver])
 
-  useEffect(() => {
-    !!fromOrderId && setValue("mainOrderId", fromOrderId);
-  }, [fromOrderId]);
+	useEffect(() => {
+		!!fromOrderId && setValue('mainOrderId', fromOrderId)
+	}, [fromOrderId])
 
-  useEffect(() => {
-    if (!!id) {
-      const orderProducts = BillDetailView.map((prod: any, index: number) => ({
-        ...prod,
-        no: index + 1,
-      }));
+	useEffect(() => {
+		if (!!id) {
+			const orderProducts = BillDetailView.map((prod: any, index: number) => ({
+				...prod,
+				no: index + 1
+			}))
 
-      setValue("products", orderProducts);
-    }
-  }, [BillDetailView]);
-console.log(mainOrder);
+			setValue('products', orderProducts)
+		}
+	}, [BillDetailView])
 
-  return (
-    <FormProvider {...method}>
-      {!!id ? (
-        <Box className="grid grid-cols-1 gap-y-3 mb-4">
-          <BillDetailStatus
-            currentStatus={BillView.bill?.status}
-            refetch={refetch}
-          />
+	return (
+		<FormProvider {...method}>
+			{!!id ? (
+				<Box className="grid grid-cols-1 gap-y-3 mb-4">
+					<BillDetailStatus currentStatus={BillView.bill?.status} refetch={refetch} />
 
-          <BillDetailGeneralView
-            data={{
-              orderCode: BillView?.mainOrder?.mainOrderCode,
-              salesAdminName: BillView?.mainOrder?.salesAdminName,
-              branchCode: BillView?.mainOrder?.branchCode,
-              billCode: BillView?.bill?.billCode,
-              billNumber: BillView?.bill?.billNumber,
-              billCreatedAt: BillView?.bill?.created,
-            }}
-          />
-        </Box>
-      ) : (
-        <BillDetailGeneral
-          data={{
-            saleAdmin: mainOrder.salesAdminCode,
-            branchCode: mainOrder.branchCode,
-          }}
-        />
-      )}
+					<BillDetailGeneralView
+						data={{
+							orderCode: BillView?.mainOrder?.mainOrderCode,
+							salesAdminName: BillView?.mainOrder?.salesAdminName,
+							branchCode: BillView?.mainOrder?.branchCode,
+							billCode: BillView?.bill?.billCode,
+							billNumber: BillView?.bill?.billNumber,
+							billCreatedAt: BillView?.bill?.created
+						}}
+					/>
+				</Box>
+			) : (
+				<BillDetailGeneral
+					data={{
+						saleAdmin: mainOrder.salesAdminCode,
+						branchCode: mainOrder.branchCode
+					}}
+				/>
+			)}
 
-      <Box className="grid lg:grid-cols-2 gap-4 my-4">
-        <BillDetailCustomer
-          data={{
-            customerCode: mainOrder.customerCode,
-            customerName: mainOrder.companyName,
-            address: mainOrder.companyAddress,
-            taxCode: mainOrder.companyTaxCode,
-          }}
-        />
+			<Box className="grid lg:grid-cols-2 gap-4 my-4">
+				<BillDetailCustomer
+					data={{
+						customerCode: mainOrder.customerCode,
+						customerName: mainOrder.companyName,
+						address: mainOrder.companyAddress,
+						taxCode: mainOrder.companyTaxCode
+					}}
+				/>
 
-        <BillDetailCurator
-          data={{
-            curatorName: `${mainOrder.curatorName} - ${mainOrder?.accountCode} - ${mainOrder?.paymentLimit}`,
-            curatorDepartmentName: mainOrder.curatorDepartmentName,
-            curatorPhone: mainOrder.curatorPhone,
-            curatorEmail: mainOrder.curatorEmail,
-          }}
-        />
-      </Box>
+				<BillDetailCurator
+					data={{
+						curatorName: `${mainOrder.curatorName} - ${mainOrder?.accountCode} - ${mainOrder?.paymentLimit}`,
+						curatorDepartmentName: mainOrder.curatorDepartmentName,
+						curatorPhone: mainOrder.curatorPhone,
+						curatorEmail: mainOrder.curatorEmail
+					}}
+				/>
+			</Box>
 
-      <BillDetailProducts productList={orderDetail?.mainOrderDetail || []} />
+			<BillDetailProducts productList={orderDetail?.mainOrderDetail || []} />
 
-      <Box className="grid lg:grid-cols-2 gap-4 my-4">
-        {!!id ? (
-          <BillDetailRecieverView
-            data={{
-              name: BillView?.bill?.billRecipientName,
-              phone: BillView?.bill?.billRecipientPhone,
-              email: BillView?.bill?.billRecipientEmail,
-              address: BillView?.bill?.billRecipientAddress,
-            }}
-          />
-        ) : (
-          <BillDetailReciever />
-        )}
+			<Box className="grid lg:grid-cols-2 gap-4 my-4">
+				{!!id ? (
+					<BillDetailRecieverView
+						data={{
+							name: BillView?.bill?.billRecipientName,
+							phone: BillView?.bill?.billRecipientPhone,
+							email: BillView?.bill?.billRecipientEmail,
+							address: BillView?.bill?.billRecipientAddress
+						}}
+					/>
+				) : (
+					<BillDetailReciever />
+				)}
 
-        <Box>
-          <BillDetailAttach />
-          {!!id && (
-            <BillDetailPaymentStatus
-              data={{
-                paid: BillView?.paid,
-                unPaid: BillView?.collectedPaid,
-              }}
-            />
-          )}
-        </Box>
-      </Box>
+				<Box>
+					<BillDetailAttach />
+					{!!id && (
+						<BillDetailPaymentStatus
+							data={{
+								paid: BillView?.paid,
+								unPaid: BillView?.collectedPaid
+							}}
+						/>
+					)}
+				</Box>
+			</Box>
 
-      {!!id && (
-        <BillDetailPaymentHistory
-          refetch={refetch}
-          data={BillView?.paymentHistory || []}
-          paidData={{
-            id,
-            nextPaymentDate: 0,
-            unPaid: BillView?.collectedPaid,
-          }}
-        />
-      )}
+			{!!id && (
+				<BillDetailPaymentHistory
+					refetch={refetch}
+					data={BillView?.paymentHistory || []}
+					paidData={{
+						id,
+						nextPaymentDate: 0,
+						unPaid: BillView?.collectedPaid
+					}}
+				/>
+			)}
 
-      <BillDetailButtons
-        refetch={refetch}
-        sendMailData={{
-          to: BillView?.bill?.billRecipientEmail,
-          status: BillView?.bill?.status,
-          cc: ["ketoan@esti.vn", BillView?.mainOrder?.curatorEmail],
-        }}
-        billDetail={billDetail}
-      />
-    </FormProvider>
-  );
-};
+			<BillDetailButtons
+				refetch={refetch}
+				sendMailData={{
+					to: BillView?.bill?.billRecipientEmail,
+					status: BillView?.bill?.status,
+					cc: ['ketoan@esti.vn', BillView?.mainOrder?.curatorEmail]
+				}}
+				billDetail={billDetail}
+			/>
+		</FormProvider>
+	)
+}
