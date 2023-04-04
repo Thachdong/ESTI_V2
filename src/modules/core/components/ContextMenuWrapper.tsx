@@ -8,7 +8,7 @@ import { TContextMenuWrapper } from '~types/context-menu-wrapper'
 // 1. COLLECT ROW DATA (EX: BY GET DATA FROM componentsProps => ROW => onMouseEnter)
 // 2. PASS CHILDREN AND MENU COMPONENT TO ContextMenuWrapper
 
-export const ContextMenuWrapper: React.FC<TContextMenuWrapper> = ({ menuId, children, menuComponent }) => {
+export const ContextMenuWrapper: React.FC<TContextMenuWrapper> = ({ menuId, children, menuComponent, onRightClick }) => {
 	const { show } = useContextMenu({
 		id: menuId
 	})
@@ -19,6 +19,7 @@ export const ContextMenuWrapper: React.FC<TContextMenuWrapper> = ({ menuId, chil
 		const classList = Array.from(node.classList)?.join('')
 
 		if (classList.includes('MuiDataGrid-cell')) {
+			onRightClick?.()
 			show({
 				event
 			})

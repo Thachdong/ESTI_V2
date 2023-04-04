@@ -64,11 +64,8 @@ export const PurchaseBillDetailPage: React.FC = () => {
 
 	useEffect(() => {
 		const { productOrderId, billNumber, supplierId, attachFile } = billDetail?.productOrderBillById || {}
-
 		const files = !attachFile ? [] : attachFile.split?.(',')
-
 		const products = billDetail?.productOrderBillDetailList || []
-
 		method.reset({
 			productOrderId,
 			billNumber,
@@ -82,21 +79,6 @@ export const PurchaseBillDetailPage: React.FC = () => {
 		!!fromPurchaseOrderId && method.setValue('productOrderId', fromPurchaseOrderId)
 	}, [fromPurchaseOrderId])
 
-	const renderPrintDetailBtn = () => {
-		// phải thêm cái này vì lỗi https://nextjs.org/docs/messages/react-hydration-error
-		if (!!billDetail) {
-			return (
-				<PurchaseBillDetailButtons
-					refetch={refetch}
-					sendMailData={{
-						to: billDetail?.productOrderBillById?.curatorEmail,
-						status: billDetail?.productOrderBillById?.status,
-						cc: [billDetail?.productOrderBillById?.salesAdminEmail]
-					}}
-				/>
-			)
-		} else return null
-	}
 	return (
 		<FormProvider {...method}>
 			<Box className="container-center grid grid-cols-2 gap-8">
@@ -111,17 +93,27 @@ export const PurchaseBillDetailPage: React.FC = () => {
 				<Box className="col-span-2 lg:col-span-1">
 					<PurchaseBillDetailAttach />
 				</Box>
-
+				{!!id && (
+					<Box className="col-span-2">
+						<PurchaseBillDetailPaymentHistory
+							dataPayment={billDetail?.productOrderPayment || []}
+							productOrderBillId={id as string | undefined}
+						/>
+					</Box>
+				)}
 				<Box className="col-span-2">
 					<PurchaseBillDetailProducts productList={purchaseDetail?.productOrderDetail || []} />
 				</Box>
 				<Box className="col-span-2">
-					<PurchaseBillDetailPaymentHistory
-						dataPayment={billDetail?.productOrderPayment || []}
-						productOrderBillId={id as string | undefined}
+					<PurchaseBillDetailButtons
+						refetch={refetch}
+						sendMailData={{
+							to: billDetail?.productOrderBillById?.curatorEmail,
+							status: billDetail?.productOrderBillById?.status,
+							cc: [billDetail?.productOrderBillById?.salesAdminEmail]
+						}}
 					/>
 				</Box>
-				<Box className="col-span-2">{renderPrintDetailBtn()}</Box>
 			</Box>
 		</FormProvider>
 	)
