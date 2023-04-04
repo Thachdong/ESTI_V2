@@ -1,4 +1,4 @@
-import { Box, Drawer, Paper } from '@mui/material'
+import { Box, Paper } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useCallback, useRef, useState } from 'react'
 import { Item, Menu } from 'react-contexify'
@@ -12,14 +12,13 @@ import {
 	DropdownButton,
 	ExportButton,
 	FilterButton,
-	generatePaginationProps,
 	RefreshButton,
 	StatisticButton,
-	StatusChip
+	StatusChip,
+	generatePaginationProps
 } from '~modules-core/components'
 import { defaultPagination, orderStatus } from '~modules-core/constance'
 import { usePathBaseFilter } from '~modules-core/customHooks'
-import { useDisclosure } from '~modules-core/utility'
 import { _format } from '~modules-core/utility/fomat'
 import { BookingOrderNoteDialog, BookingOrderStatusDialog, ViewListProductDrawer } from '~modules-dashboard/components'
 import { orderColumns } from '~modules-dashboard/pages/orders/booking-order/orderColumns'
@@ -32,13 +31,14 @@ type TProps = {
 }
 
 export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }) => {
-	const canViewSubMenuController = useDisclosure()
 	const [defaultValue, setDefaultValue] = useState<any>()
 
 	const [dialog, setDialog] = useState<TDefaultDialogState>({ open: false })
 
 	const [pagination, setPagination] = useState(defaultPagination)
-
+	const [Open, setOpen] = useState<boolean>(false)
+	const dataViewDetail = useRef<any>()
+	const idEnterRow = useRef<any>()
 	const router = useRouter()
 
 	const { query } = router
@@ -74,6 +74,7 @@ export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }
 				.then((res) => res.data),
 		{
 			onSuccess: (data) => {
+				console.log(data)
 				setPagination({ ...pagination, total: data.totalItem })
 			}
 		}
@@ -207,13 +208,16 @@ export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }
 	const paginationProps = generatePaginationProps(pagination, setPagination)
 
 	const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
-		if (canViewSubMenuController.isOpen) {
-			const id = e.currentTarget.dataset.id
-			const currentRow = data?.items.find((item: any) => item.id === id)
-			setDefaultValue(currentRow)
-		}
+		const id = e.currentTarget.dataset.id // STRING
+		idEnterRow.current = id
 	}
-
+	const onSetRowDataToState = useCallback(
+		(id: string) => {
+			const currentRow = data?.items.find((item: any) => item.id == id)
+			setDefaultValue(currentRow)
+		},
+		[data]
+	)
 	// METHODS
 	const onClose = useCallback(() => {
 		setDialog({ open: false })
@@ -223,8 +227,6 @@ export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }
 		setDialog({ open: true, type })
 	}, [])
 
-	const [Open, setOpen] = useState<boolean>(false)
-	const dataViewDetail = useRef<any>()
 	const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
 		const id: any = e.currentTarget.dataset.id
 		const currentRow = await mainOrder.getMainOrderDetail(id).then((res) => {
@@ -252,18 +254,9 @@ export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }
 			</Box>
 			<ContextMenuWrapper
 				menuId="order_request_table_menu"
+				onRightClick={() => onSetRowDataToState(idEnterRow.current)}
 				menuComponent={
-					<Menu
-						onVisibilityChange={(isShow) => {
-							if (isShow) {
-								canViewSubMenuController.onClose()
-							} else {
-								canViewSubMenuController.onOpen()
-							}
-						}}
-						className="p-0"
-						id="order_request_table_menu"
-					>
+					<Menu className="p-0" id="order_request_table_menu">
 						<Item
 							id="view-order"
 							onClick={() =>

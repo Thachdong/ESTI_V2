@@ -1,7 +1,8 @@
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 
 type TContextMenuWrapper = {
-    children: ReactJSXElement;
-    menuId: string;
-    menuComponent: React;
+	children: ReactJSXElement
+	menuId: string
+	menuComponent: React
+	onRightClick?: () => void
 }
