@@ -57,7 +57,10 @@ export const BillDetailPage: React.FC = () => {
 			}
 		},
 		{
-			enabled: !!mainOrderId || !!billDetail?.BillView?.bill?.mainOrderId
+			enabled: !!mainOrderId || !!billDetail?.BillView?.bill?.mainOrderId,
+			onSuccess: (res) => {
+				console.log('orderDetail', res)
+			}
 		}
 	)
 

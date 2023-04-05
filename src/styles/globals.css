@@ -44,10 +44,12 @@ input[type="checkbox"] {
   border: 1px solid #fff !important;
 }
 
-/* CUSTOM MUI COMPONENT STYLE NEED TO LOAD FIRST AT ALL */
+CUSTOM MUI COMPONENT STYLE NEED TO LOAD FIRST AT ALL
 /* GROUPING COLUMN STYLES */
+ 
 .grouping-column .MuiDataGrid-columnHeaderTitleContainerContent {
   @apply flex justify-center;
+
 }
 
 .grouping-column .css-f3jnds-MuiDataGrid-columnHeaders {
@@ -76,10 +78,13 @@ input[type="checkbox"] {
 .grouping-column .MuiDataGrid-virtualScroller {
   transform: translateY(-32px);
 }
-
-/* CUSTOM HEADER HEIGHT */
-.data-table-container .MuiDataGrid-columnHeaderTitleContainerContent {
+.bgContainer .data-table-container .MuiDataGrid-columnHeaderTitleContainerContent {
   width: 100%;
+}
+/* CUSTOM HEADER HEIGHT */
+.data-table-container .MuiDataGrid-columnHeaderTitleContainerContent .MuiDataGrid-columnHeaderTitle {
+  width: 100%;
+  font-weight: bold;
 }
 
 .bgContainer .data-table-container {

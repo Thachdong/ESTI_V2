@@ -65,7 +65,7 @@ export const PurchaseBillDetailAttach: React.FC = () => {
 
 	return (
 		<Box className="flex flex-col">
-			<Typography className="font-bold uppercase mb-3 text-sm">File đính kèm</Typography>
+			<Typography className="font-bold uppercase mb-4 text-sm">File đính kèm</Typography>
 
 			<Box className="bg-white rounded flex-grow p-3">
 				{renderAttachFile()}

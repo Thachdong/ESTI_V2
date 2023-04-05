@@ -15,7 +15,7 @@ export const PurchaseBillDetailGeneral: React.FC<TProps> = ({ purchaseData }) =>
 
 	return (
 		<Box>
-			<Typography className="font-bold uppercase mb-3 text-sm">THÔNG TIN CHUNG</Typography>
+			<Typography className="font-bold uppercase mb-4 text-sm">THÔNG TIN CHUNG</Typography>
 
 			<Box className="grid lg:grid-cols-2 gap-4 bg-white rounded p-3">
 				<FormSelectAsync

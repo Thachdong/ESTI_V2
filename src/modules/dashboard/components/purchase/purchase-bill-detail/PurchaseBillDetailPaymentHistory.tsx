@@ -20,19 +20,18 @@ export const PurchaseBillDetailPaymentHistory: React.FC<TProps> = ({ productOrde
 	// METHODS
 	const addController = useDisclosure()
 
-	// const historyLength = data.length
-
-	// const { nextPaymentDate } = data?.[historyLength - 1] || {}
+	const historyLength = dataPayment.length
+	const { nextPaymentDate } = dataPayment?.[historyLength - 1] || {}
 
 	return (
 		<Box>
-			<Box className="flex justify-between items-center mb-[10px]">
+			<Box className="flex justify-between items-center mb-4">
 				<Typography className="font-bold uppercase text-sm">THÔNG TIN THANH TOÁN</Typography>
-				<Box className="flex justify-end">
-					<AddButton onClick={addController.onOpen} className="max-w-[250px] !ml-auto">
-						Thêm phiếu thanh toán
-					</AddButton>
-				</Box>
+
+				<Typography>
+					<span className="font-semibold">Ngày thanh toán tiếp theo: </span>
+					{nextPaymentDate ? moment(nextPaymentDate).format('DD/MM/YYYY') : '__'}
+				</Typography>
 			</Box>
 
 			<Box className="bg-white rounded pb-3">
@@ -52,13 +51,12 @@ export const PurchaseBillDetailPaymentHistory: React.FC<TProps> = ({ productOrde
 				onClose={addController.onClose}
 				isOpen={addController.isOpen}
 			/>
-			{/* {paidData?.unPaid > 0 && ( // api yêu cầu luôn mở nút thêm phiếu thanh toán
-        <Box className="flex justify-end">
-          <AddButton onClick={onOpen} className="max-w-[250px] !ml-auto my-3">
-            Thêm phiếu thanh toán
-          </AddButton>
-        </Box>
-      )} */}
+
+			<Box className="flex justify-end mt-4">
+				<AddButton onClick={addController.onOpen} className="max-w-[250px] !ml-auto">
+					Thêm phiếu thanh toán
+				</AddButton>
+			</Box>
 		</Box>
 	)
 }

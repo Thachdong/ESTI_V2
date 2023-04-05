@@ -21,7 +21,7 @@ import {
 
 export const PurchaseBillDetailPage: React.FC = () => {
 	const { id, fromPurchaseOrderId } = useRouter().query
-
+	//fromPurchaseOrderId id of ProductOrder
 	const method = useForm<any>({
 		mode: 'onBlur',
 		defaultValues: {
@@ -29,14 +29,30 @@ export const PurchaseBillDetailPage: React.FC = () => {
 		}
 	})
 
-	const { productOrderId } = method.watch()
+	const { productOrderId, products } = method.watch()
 
 	// DATA FETCHING
 	const { data: purchaseDetail } = useQuery(
 		['PurchaseDetail', productOrderId],
 		() => purchaseOrder.getById(productOrderId).then((res) => res.data),
 		{
-			enabled: !!productOrderId
+			enabled: !!productOrderId && !id,
+			onSuccess: (res) => {
+				console.log('ProductOrder', res)
+				// const productOrderInfo = res.productOrder.productOrder
+				// const supplierId = productOrderInfo?.supplierId
+				// method.setValue('supplierId', supplierId)
+				// const products =
+				// 	res?.productOrderDetail
+				// 		?.filter?.((prod: any) => prod?.billQuantity !== 0)
+				// 		.map((vl: any) => {
+				// 			return {
+				// 				...vl,
+				// 				quantity: vl.billQuantity
+				// 			}
+				// 		}) || []
+				// method.setValue('products', products)
+			}
 		}
 	)
 
@@ -46,26 +62,32 @@ export const PurchaseBillDetailPage: React.FC = () => {
 		['PurchaseOrderBillDetail', id],
 		() => purchaseOrderBill.getById(id as string).then((res) => res.data),
 		{
-			enabled: !!id,
-			onSuccess: (res) => console.log('res', res)
+			enabled: !!id && !fromPurchaseOrderId,
+			onSuccess: (res) => console.log('ProductOrderBill', res) //res.productOrderBillDetailList
 		}
 	)
 
 	// SIDE EFFECTS
 	useEffect(() => {
-		const supplierId = purchaseData?.supplierId
+		if (!id) {
+			const supplierId = purchaseData?.supplierId
 
-		method.setValue('supplierId', supplierId)
+			method.setValue('supplierId', supplierId)
 
-		const products = purchaseDetail?.productOrderDetail?.filter?.((prod: any) => prod?.billQuantity !== 0) || []
+			const products = purchaseDetail?.productOrderDetail?.filter?.((prod: any) => prod?.billQuantity !== 0) || []
 
-		method.setValue('products', products)
-	}, [purchaseDetail])
+			method.setValue('products', products)
+		}
+	}, [purchaseDetail, id])
 
 	useEffect(() => {
+		// if(!fromPurchaseOrderId) {
+
+		// }
 		const { productOrderId, billNumber, supplierId, attachFile } = billDetail?.productOrderBillById || {}
 		const files = !attachFile ? [] : attachFile.split?.(',')
 		const products = billDetail?.productOrderBillDetailList || []
+
 		method.reset({
 			productOrderId,
 			billNumber,
@@ -73,7 +95,7 @@ export const PurchaseBillDetailPage: React.FC = () => {
 			attachFile: files,
 			products
 		})
-	}, [billDetail])
+	}, [billDetail, fromPurchaseOrderId])
 
 	useEffect(() => {
 		!!fromPurchaseOrderId && method.setValue('productOrderId', fromPurchaseOrderId)
@@ -93,17 +115,20 @@ export const PurchaseBillDetailPage: React.FC = () => {
 				<Box className="col-span-2 lg:col-span-1">
 					<PurchaseBillDetailAttach />
 				</Box>
+
+				<Box className="col-span-2">
+					{/* SẢN PHẨM */}
+					<PurchaseBillDetailProducts productList={purchaseDetail?.productOrderDetail || []} />
+				</Box>
 				{!!id && (
 					<Box className="col-span-2">
+						{/* THÔNG TIN THANH TOÁN */}
 						<PurchaseBillDetailPaymentHistory
 							dataPayment={billDetail?.productOrderPayment || []}
 							productOrderBillId={id as string | undefined}
 						/>
 					</Box>
 				)}
-				<Box className="col-span-2">
-					<PurchaseBillDetailProducts productList={purchaseDetail?.productOrderDetail || []} />
-				</Box>
 				<Box className="col-span-2">
 					<PurchaseBillDetailButtons
 						refetch={refetch}

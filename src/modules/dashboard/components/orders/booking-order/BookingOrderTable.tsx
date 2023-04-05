@@ -74,7 +74,6 @@ export const BookingOrderTable: React.FC<TProps> = ({ onViewReport, ViewReport }
 				.then((res) => res.data),
 		{
 			onSuccess: (data) => {
-				console.log(data)
 				setPagination({ ...pagination, total: data.totalItem })
 			}
 		}
