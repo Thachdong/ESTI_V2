@@ -20,6 +20,7 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 
 	const [dialog, setDialog] = useState<TDefaultDialogState>()
 
+	const idEnterRow = useRef<any>()
 	const defaultValue = useRef<any>()
 
 	const { watch, setValue } = useFormContext()
@@ -74,12 +75,15 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 
 	const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
 		const id = e.currentTarget.dataset.id
-
-		const currentRow = products.find((item: any) => item.id === id)
-
-		defaultValue.current = currentRow
+		idEnterRow.current = id
 	}
-
+	const onRightClick = useCallback(
+		(id: string) => {
+			const currentRow = products.find((item: any) => item.id === id)
+			defaultValue.current = currentRow
+		},
+		[products]
+	)
 	const getPrice = useMemo(() => {
 		if (data) {
 			return {
@@ -117,7 +121,7 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 	return (
 		<Box className="flex flex-col col-span-2">
 			<Box className="flex items-center mb-3 justify-between">
-				<Typography className="font-bold uppercase mr-3 text-sm">Sản phẩm</Typography>
+				<Typography className="font-bold uppercase mr-3 text-sm">Danh sách sản phẩm</Typography>
 
 				<AddButton disabled={!!id} onClick={() => onOpen('Add')}>
 					Thêm SP
@@ -126,6 +130,7 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 
 			<Box className="bg-white rounded">
 				<ContextMenuWrapper
+					onRightClick={() => onRightClick(idEnterRow.current)}
 					menuId="product_table_menu"
 					menuComponent={
 						<Menu className="p-0" id="product_table_menu">
@@ -157,17 +162,17 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 				</ContextMenuWrapper>
 
 				<List className="border-0 border-t border-solid p-0 pb-1">
-					<ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
-						<span className="font-semibold col-span-4 text-right"> Thành tiền chưa có thuế(VNĐ):</span>
-						<span className="text-base"> {getPrice.totalPrice}</span>
+					<ListItem className="text-sm grid   grid-cols-2  lg:grid-cols-5 items-center gap-3 py-[8px] border-b border-0 border-dashed border-grey-3">
+						<span className="col-span-1 lg:col-span-4 text-right"> Thành tiền chưa có thuế:</span>
+						<span className="text-right text-[17px] text-main pr-0 lg:pr-[15%]"> {getPrice.totalPrice}</span>
 					</ListItem>
-					<ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1 border-b border-0 border-dashed border-grey-3">
-						<span className="font-semibold col-span-4 text-right">Thuế GTGT(VNĐ):</span>{' '}
-						<span className="text-base">{getPrice.totalTax}</span>
+					<ListItem className="text-sm grid  grid-cols-2 lg:grid-cols-5 items-center gap-3 py-[8px] border-b border-0 border-dashed border-grey-3">
+						<span className="col-span-1 lg:col-span-4 text-right">Thuế GTGT:</span>{' '}
+						<span className="text-right text-[17px] text-main pr-0 lg:pr-[15%]">{getPrice.totalTax}</span>
 					</ListItem>
-					<ListItem className="text-sm grid grid-cols-5 items-center gap-3 py-1">
-						<span className="font-semibold col-span-4 text-right"> Tổng cộng tiền thanh toán(VNĐ):</span>{' '}
-						<span className="text-base">{getPrice.finalPrice}</span>
+					<ListItem className="text-sm grid grid-cols-2 lg:grid-cols-5 items-center gap-3 py-[8px]">
+						<span className="col-span-1 lg:col-span-4 text-right">Thành tiền đã có thuế:</span>{' '}
+						<span className="text-right text-[17px] text-main pr-0 lg:pr-[15%]">{getPrice.finalPrice}</span>
 					</ListItem>
 				</List>
 			</Box>
