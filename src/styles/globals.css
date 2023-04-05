@@ -4,6 +4,8 @@
 
 
 .container-center {
+  padding-bottom: 16px;
+  padding-top: 16px;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
