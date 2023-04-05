@@ -1,343 +1,304 @@
-import { Box, Paper } from "@mui/material";
-import { useRouter } from "next/router";
-import React, { useCallback, useRef, useState } from "react";
-import { Item, Menu } from "react-contexify";
-import { useMutation, useQuery } from "react-query";
-import { preQuote } from "src/api";
-import { customerType } from "src/api/customer-type";
+import { Box, Paper } from '@mui/material'
+import { useRouter } from 'next/router'
+import React, { useCallback, useRef, useState } from 'react'
+import { Item, Menu } from 'react-contexify'
+import { useMutation, useQuery } from 'react-query'
+import { preQuote } from 'src/api'
+import { customerType } from 'src/api/customer-type'
 import {
-  AddButton,
-  ContextMenuWrapper,
-  DataTable,
-  DropdownButton,
-  FilterButton,
-  generatePaginationProps,
-  RefreshButton,
-  SearchBox,
-  StatisticButton,
-  StatusChip,
-} from "~modules-core/components";
-import { defaultPagination, quoteStatus } from "~modules-core/constance";
-import { usePathBaseFilter } from "~modules-core/customHooks";
-import { toast } from "~modules-core/toast";
-import { _format } from "~modules-core/utility/fomat";
-import { ViewListProductDrawer } from "~modules-dashboard/components";
-import { quoteListColumns } from "~modules-dashboard/pages/quotation/quote-list/data";
-import { TGridColDef } from "~types/data-grid";
+	AddButton,
+	ContextMenuWrapper,
+	DataTable,
+	DropdownButton,
+	FilterButton,
+	generatePaginationProps,
+	RefreshButton,
+	SearchBox,
+	StatisticButton,
+	StatusChip
+} from '~modules-core/components'
+import { defaultPagination, quoteStatus } from '~modules-core/constance'
+import { usePathBaseFilter } from '~modules-core/customHooks'
+import { toast } from '~modules-core/toast'
+import { _format } from '~modules-core/utility/fomat'
+import { ViewListProductDrawer } from '~modules-dashboard/components'
+import { quoteListColumns } from '~modules-dashboard/pages/quotation/quote-list/data'
+import { TGridColDef } from '~types/data-grid'
 
 type TProps = {
-  onViewReport: () => void;
-  viewReport: boolean;
-};
+	onViewReport: () => void
+	viewReport: boolean
+}
 
-export const QuoteRequestTable: React.FC<TProps> = ({
-  onViewReport,
-  viewReport,
-}) => {
-  const router = useRouter();
+export const QuoteRequestTable: React.FC<TProps> = ({ onViewReport, viewReport }) => {
+	const router = useRouter()
 
-  const { query } = router;
+	const { query } = router
 
-  const [pagination, setPagination] = useState(defaultPagination);
+	const [pagination, setPagination] = useState(defaultPagination)
+	const idEnterRow = useRef<any>()
+	const defaultValue = useRef<any>()
 
-  const defaultValue = useRef<any>();
+	usePathBaseFilter(pagination)
 
-  usePathBaseFilter(pagination);
+	// DATA FETCHING
+	const { data, isLoading, isFetching, refetch } = useQuery(
+		[
+			'preQuoteList',
+			'loading',
+			{
+				...pagination,
+				...query
+			}
+		],
+		() =>
+			preQuote
+				.getList({
+					pageIndex: pagination.pageIndex,
+					pageSize: pagination.pageSize,
+					...query
+				})
+				.then((res) => res.data),
+		{
+			onSuccess: (data) => {
+				setPagination({ ...pagination, total: data.totalItem })
+			}
+		}
+	)
 
-  // DATA FETCHING
-  const { data, isLoading, isFetching, refetch } = useQuery(
-    [
-      "preQuoteList",
-      "loading",
-      {
-        ...pagination,
-        ...query,
-      },
-    ],
-    () =>
-      preQuote
-        .getList({
-          pageIndex: pagination.pageIndex,
-          pageSize: pagination.pageSize,
-          ...query,
-        })
-        .then((res) => res.data),
-    {
-      onSuccess: (data) => {
-        setPagination({ ...pagination, total: data.totalItem });
-      },
-    }
-  );
+	const { data: customerTypes } = useQuery(['CustomerTypesList'], () =>
+		customerType
+			.getAll({
+				pageSize: 999,
+				pageIndex: 1
+			})
+			.then((res) => res.data?.map?.((d: any) => ({ label: d?.levelName, value: d?.id })))
+	)
 
-  const { data: customerTypes } = useQuery(["CustomerTypesList"], () =>
-    customerType
-      .getAll({
-        pageSize: 999,
-        pageIndex: 1,
-      })
-      .then((res) =>
-        res.data?.map?.((d: any) => ({ label: d?.levelName, value: d?.id }))
-      )
-  );
+	// METHODS
+	const muatateCancel = useMutation((id: string) => preQuote.cancel(id), {
+		onSuccess: (data) => {
+			toast.success(data?.resultMessage)
+			refetch()
+		}
+	})
 
-  // METHODS
-  const muatateCancel = useMutation((id: string) => preQuote.cancel(id), {
-    onSuccess: (data) => {
-      toast.success(data?.resultMessage);
+	const handleCancel = useCallback(async () => {
+		const { id, preQuoteCode } = defaultValue.current || {}
+		if (!id) {
+			toast.error('Có lỗi xãy ra, vui lòng thử lại!')
+			return
+		}
+		if (confirm('Xác nhận hủy báo giá ' + preQuoteCode)) {
+			await muatateCancel.mutateAsync(id)
+		}
+	}, [defaultValue])
 
-      refetch();
-    },
-  });
+	const handleRedirect = useCallback(
+		(url: string) => {
+			const { status } = defaultValue.current || {}
 
-  const handleCancel = useCallback(async () => {
-    const { id, preQuoteCode } = defaultValue.current || {};
+			if (status !== 1) {
+				toast.error('Không thể tạo đơn hàng từ trạng thái ' + quoteStatus[status]?.label)
 
-    if (!id) {
-      toast.error("Có lỗi xãy ra, vui lòng thử lại!");
+				return
+			}
+			router.push(url)
+		},
+		[defaultValue.current]
+	)
 
-      return;
-    }
+	// DATA TABLE
+	const columns: TGridColDef[] = [
+		...quoteListColumns,
+		{
+			field: 'levelName',
+			headerName: 'Cấp độ NLH',
+			flex: 1,
+			minWidth: 125,
+			type: 'select',
+			options: customerTypes || [],
+			filterKey: 'typeAccount',
+			sortAscValue: 21,
+			sortDescValue: 18
+		},
+		{
+			field: 'totalPrice',
+			headerName: 'Tổng giá trị',
+			minWidth: 125,
+			isFilter: false,
+			sortAscValue: 12,
+			sortDescValue: 4,
+			renderCell: ({ row }) => _format.getVND(row.totalPrice),
+			flex: 1
+		},
+		{
+			field: 'branchCode',
+			headerName: 'Chi nhánh',
+			minWidth: 125,
+			filterKey: 'branchCode',
+			sortAscValue: 13,
+			sortDescValue: 5
+		},
+		{
+			field: 'salesCode',
+			headerName: 'Nhân viên sale',
+			minWidth: 125,
+			filterKey: 'salesCode',
+			sortAscValue: 13,
+			sortDescValue: 5
+		},
+		{
+			field: 'status',
+			headerName: 'Trạng thái YC',
+			minWidth: 150,
+			filterKey: 'status',
+			sortAscValue: 15,
+			sortDescValue: 7,
+			type: 'select',
+			flex: 1,
+			options: quoteStatus,
+			renderCell: ({ row }) => {
+				const label = quoteStatus.find((status) => status.value === row?.status)?.label
 
-    if (confirm("Xác nhận hủy báo giá " + preQuoteCode)) {
-      await muatateCancel.mutateAsync(id);
-    }
-  }, [defaultValue]);
+				const colors = ['default', 'success', 'primary', 'secondary', 'info', 'warning', 'error']
 
-  const handleRedirect = useCallback(
-    (url: string) => {
-      const { status } = defaultValue.current || {};
+				return <StatusChip label={label as string} status={row.status} color={colors[row?.status] as any} />
+			}
+		},
+		{
+			field: 'action',
+			headerName: '',
+			align: 'center',
+			width: 50,
+			renderCell: ({ row }) => (
+				<DropdownButton
+					id={row?.id}
+					items={[
+						{
+							action: () => router.push(`quote-detail?id=${defaultValue.current?.id}`),
+							label: 'Nội dung chi tiết'
+						},
+						{
+							action: () => router.push(`quote-detail?cloneId=${defaultValue.current?.id}`),
+							label: 'Clone'
+						},
+						{
+							action: () => handleRedirect('/dashboard/orders/order-request'),
+							label: 'Tạo đơn đặt hàng'
+							// disabled: defaultValue.current?.status !== 1,
+						},
+						{
+							action: handleCancel,
+							label: 'Hủy đơn báo giá'
+						}
+					]}
+				/>
+			)
+		}
+	]
 
-      if (status !== 1) {
-        toast.error(
-          "Không thể tạo đơn hàng từ trạng thái " + quoteStatus[status]?.label
-        );
+	const contextMenu = (
+		<Menu className="p-0" id="quote-request_table_menu">
+			<Item id="view" onClick={() => router.push(`quote-detail?id=${defaultValue.current?.id}`)}>
+				Nội dung chi tiết
+			</Item>
 
-        return;
-      }
-      router.push(url);
-    },
-    [defaultValue.current]
-  );
+			<Item id="clone" onClick={() => router.push(`quote-detail?cloneId=${defaultValue.current?.id}`)}>
+				Clone
+			</Item>
 
-  // DATA TABLE
-  const columns: TGridColDef[] = [
-    ...quoteListColumns,
-    {
-      field: "levelName",
-      headerName: "Cấp độ NLH",
-      flex: 1,
-      minWidth: 125,
-      type: "select",
-      options: customerTypes || [],
-      filterKey: "typeAccount",
-      sortAscValue: 21,
-      sortDescValue: 18,
-    },
-    {
-      field: "totalPrice",
-      headerName: "Tổng giá trị",
-      minWidth: 125,
-      isFilter: false,
-      sortAscValue: 12,
-      sortDescValue: 4,
-      renderCell: ({ row }) => _format.getVND(row.totalPrice),
-      flex: 1,
-    },
-    {
-      field: "branchCode",
-      headerName: "Chi nhánh",
-      minWidth: 125,
-      filterKey: "branchCode",
-      sortAscValue: 13,
-      sortDescValue: 5,
-    },
-    {
-      field: "salesCode",
-      headerName: "Nhân viên sale",
-      minWidth: 125,
-      filterKey: "salesCode",
-      sortAscValue: 13,
-      sortDescValue: 5,
-    },
-    {
-      field: "status",
-      headerName: "Trạng thái YC",
-      minWidth: 150,
-      filterKey: "status",
-      sortAscValue: 15,
-      sortDescValue: 7,
-      type: "select",
-      flex: 1,
-      options: quoteStatus,
-      renderCell: ({ row }) => {
-        const label = quoteStatus.find(
-          (status) => status.value === row?.status
-        )?.label;
+			<Item id="create" onClick={() => handleRedirect('/dashboard/orders/order-request')}>
+				Tạo đơn đặt hàng
+			</Item>
 
-        const colors = [
-          "default",
-          "success",
-          "primary",
-          "secondary",
-          "info",
-          "warning",
-          "error",
-        ];
+			<Item id="cancel" onClick={handleCancel}>
+				Hủy đơn báo giá
+			</Item>
+		</Menu>
+	)
 
-        return (
-          <StatusChip
-            label={label as string}
-            status={row.status}
-            color={colors[row?.status] as any}
-          />
-        );
-      },
-    },
-    {
-      field: "action",
-      headerName: "",
-      align: "center",
-      width: 50,
-      renderCell: ({ row }) => (
-        <DropdownButton
-          id={row?.id}
-          items={[
-            {
-              action: () =>
-                router.push(`quote-detail?id=${defaultValue.current?.id}`),
-              label: "Nội dung chi tiết",
-            },
-            {
-              action: () =>
-                router.push(`quote-detail?cloneId=${defaultValue.current?.id}`),
-              label: "Clone",
-            },
-            {
-              action: () => handleRedirect("/dashboard/orders/order-request"),
-              label: "Tạo đơn đặt hàng",
-              // disabled: defaultValue.current?.status !== 1,
-            },
-            {
-              action: handleCancel,
-              label: "Hủy đơn báo giá",
-            },
-          ]}
-        />
-      ),
-    },
-  ];
+	const paginationProps = generatePaginationProps(pagination, setPagination)
 
-  const contextMenu = (
-    <Menu className="p-0" id="quote-request_table_menu">
-      <Item
-        id="view"
-        onClick={() =>
-          router.push(`quote-detail?id=${defaultValue.current?.id}`)
-        }
-      >
-        Nội dung chi tiết
-      </Item>
+	const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
+		const id = e.currentTarget.dataset.id
+		idEnterRow.current = id
+	}
+	const onRightClick = useCallback(
+		(id: string) => {
+			const currentRow = data?.items.find((item) => item.id === id)
+			defaultValue.current = currentRow
+		},
+		[data]
+	)
 
-      <Item
-        id="clone"
-        onClick={() =>
-          router.push(`quote-detail?cloneId=${defaultValue.current?.id}`)
-        }
-      >
-        Clone
-      </Item>
+	const [Open, setOpen] = useState<boolean>(false)
 
-      <Item
-        id="create"
-        onClick={() => handleRedirect("/dashboard/orders/order-request")}
-      >
-        Tạo đơn đặt hàng
-      </Item>
+	const dataViewDetail = useRef<any>()
 
-      <Item id="cancel" onClick={handleCancel}>
-        Hủy đơn báo giá
-      </Item>
-    </Menu>
-  );
+	const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
+		const id: any = e.currentTarget.dataset.id
 
-  const paginationProps = generatePaginationProps(pagination, setPagination);
+		const currentRow = await preQuote.getPreQuoteDetail(id).then((res) => {
+			return res.data
+		})
 
-  const onMouseEnterRow = (e: React.MouseEvent<HTMLElement>) => {
-    const id = e.currentTarget.dataset.id;
+		dataViewDetail.current = { ...currentRow, id: id }
 
-    const currentRow = data?.items.find((item: any) => item.id === id);
+		setOpen(true)
+	}
 
-    defaultValue.current = currentRow;
-  };
+	return (
+		<Paper className="bgContainer">
+			<Box className="flex justify-between flex-wrap gap-2 mb-3">
+				<Box className="flex items-center gap-3">
+					<AddButton onClick={() => router.push('quote-detail')}>Tạo báo giá</AddButton>
 
-  const [Open, setOpen] = useState<boolean>(false);
+					<SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
+				</Box>
 
-  const dataViewDetail = useRef<any>();
+				<Box className="flex gap-2">
+					<StatisticButton onClick={onViewReport} View={viewReport} />
 
-  const handleViewProduct = async (e: React.MouseEvent<HTMLElement>) => {
-    const id: any = e.currentTarget.dataset.id;
+					<FilterButton listFilterKey={[]} />
 
-    const currentRow = await preQuote.getPreQuoteDetail(id).then((res) => {
-      return res.data;
-    });
+					<RefreshButton onClick={() => refetch()} />
+				</Box>
+			</Box>
 
-    dataViewDetail.current = { ...currentRow, id: id };
+			<ContextMenuWrapper
+				onRightClick={() => {
+					onRightClick(idEnterRow.current)
+				}}
+				menuId="quote-request_table_menu"
+				menuComponent={contextMenu}
+			>
+				<DataTable
+					rows={data?.items as []}
+					columns={columns}
+					gridProps={{
+						loading: isLoading || isFetching,
+						...paginationProps
+					}}
+					getRowClassName={({ id }) => (dataViewDetail?.current?.id == id && Open ? '!bg-[#fde9e9]' : '')}
+					componentsProps={{
+						row: {
+							onMouseEnter: onMouseEnterRow,
+							onDoubleClick: handleViewProduct
+						}
+					}}
+				/>
+			</ContextMenuWrapper>
 
-    setOpen(true);
-  };
-
-  return (
-    <Paper className="bgContainer">
-      <Box className="flex justify-between flex-wrap gap-2 mb-3">
-        <Box className="flex items-center gap-3">
-          <AddButton onClick={() => router.push("quote-detail")}>
-            Tạo báo giá
-          </AddButton>
-
-          <SearchBox label="Nhập mã đơn Y/C, mã KH, tên KH" />
-        </Box>
-
-        <Box className="flex gap-2">
-          <StatisticButton onClick={onViewReport} View={viewReport} />
-
-          <FilterButton listFilterKey={[]} />
-
-          <RefreshButton onClick={() => refetch()} />
-        </Box>
-      </Box>
-
-      <ContextMenuWrapper
-        menuId="quote-request_table_menu"
-        menuComponent={contextMenu}
-      >
-        <DataTable
-          rows={data?.items as []}
-          columns={columns}
-          gridProps={{
-            loading: isLoading || isFetching,
-            ...paginationProps,
-          }}
-          getRowClassName={({ id }) =>
-            dataViewDetail?.current?.id == id && Open ? "!bg-[#fde9e9]" : ""
-          }
-          componentsProps={{
-            row: {
-              onMouseEnter: onMouseEnterRow,
-              onDoubleClick: handleViewProduct,
-            },
-          }}
-        />
-      </ContextMenuWrapper>
-
-      <ViewListProductDrawer
-        Open={Open}
-        onClose={() => setOpen(false)}
-        data={dataViewDetail?.current?.preQuoteDetailView}
-        extraData={{
-          requirements: defaultValue.current?.requirements,
-          attachFile: defaultValue.current?.attachFile,
-        }}
-      />
-    </Paper>
-  );
-};
+			<ViewListProductDrawer
+				Open={Open}
+				onClose={() => setOpen(false)}
+				data={dataViewDetail?.current?.preQuoteDetailView}
+				extraData={{
+					requirements: defaultValue.current?.requirements,
+					attachFile: defaultValue.current?.attachFile
+				}}
+			/>
+		</Paper>
+	)
+}

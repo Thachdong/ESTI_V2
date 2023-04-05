@@ -54,5 +54,5 @@ export * from './stock-plan'
 export * from './product-lot'
 export * from './mail-to-customer'
 export * from './commission'
-
+export * from './quote-request'
 export * from './productOrderPayment'

@@ -45,10 +45,10 @@ export const DashboardLayout: React.FC<TProps> = ({ Page, data }) => {
 				>
 					<Box className={clsx(styles['page'], 'relative w-full h-full')}>
 						<Page />
+						<Footer />
 					</Box>
 				</Box>
 				{/* height: 45px */}
-				<Footer />
 			</Box>
 		</Box>
 	)
