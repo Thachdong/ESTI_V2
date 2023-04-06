@@ -28,6 +28,7 @@ export const PurchaseBillDetailGeneral: React.FC<TProps> = ({ purchaseData }) =>
 					labelKey="code"
 					fetcher={purchaseOrder.getList}
 					disabled={!!id}
+					enabled={false}
 				/>
 
 				<FormInput

@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { Item, Menu } from 'react-contexify'
 import { useFormContext } from 'react-hook-form'
 import { AddButton, ContextMenuWrapper, DataTable, DropdownButton } from '~modules-core/components'
+import { toast } from '~modules-core/toast'
 import { _format } from '~modules-core/utility/fomat'
 import { PurchaseBillDetailProductsDialog } from '~modules-dashboard/components'
 import { productColumns } from '~modules-dashboard/pages/purchase/purchase-bill-detail/data'
@@ -12,7 +13,7 @@ import { TDefaultDialogState } from '~types/dialog'
 
 type TProps = {
 	data?: any
-	productList: any[]
+	productList: any[] // product list from ProductOrder to select in ProductOrderBill
 }
 
 export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList }) => {
@@ -24,7 +25,7 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 	const defaultValue = useRef<any>()
 
 	const { watch, setValue } = useFormContext()
-
+	const allFormState = watch()
 	const products = watch('products')
 
 	const columns: TGridColDef[] = [
@@ -117,13 +118,23 @@ export const PurchaseBillDetailProducts: React.FC<TProps> = ({ data, productList
 			}
 		}
 	}, [data, products])
-
+	const onOpenAddProduct = () => {
+		if (!allFormState.productOrderId) {
+			toast.error('Bạn phải chọn đơn mua hàng trước')
+			return
+		}
+		if (!productList.length) {
+			toast.error('Không có sản phẩm chưa thanh toán')
+			return
+		}
+		onOpen('Add')
+	}
 	return (
 		<Box className="flex flex-col col-span-2">
 			<Box className="flex items-center mb-3 justify-between">
 				<Typography className="font-bold uppercase mr-3 text-sm">Danh sách sản phẩm</Typography>
 
-				<AddButton disabled={!!id} onClick={() => onOpen('Add')}>
+				<AddButton disabled={!!id} onClick={onOpenAddProduct}>
 					Thêm SP
 				</AddButton>
 			</Box>
