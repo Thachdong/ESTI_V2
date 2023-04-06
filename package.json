@@ -20,6 +20,7 @@
     "@emotion/styled": "^11.10.4",
     "@fontsource/roboto": "^4.5.8",
     "@hookform/error-message": "^2.0.0",
+    "@hookform/resolvers": "^3.0.1",
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "^5.10.9",
@@ -49,7 +50,8 @@
     "react-toastify": "^9.0.8",
     "recharts": "^2.5.0",
     "sass": "^1.58.3",
-    "tinymce": "^6.3.1"
+    "tinymce": "^6.3.1",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.186",

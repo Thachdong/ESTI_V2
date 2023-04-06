@@ -6,6 +6,8 @@ import { Box } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import { useQuery } from 'react-query'
 import { purchaseOrder } from 'src/api'
 import { purchaseOrderBill } from 'src/api/purchase-order-bill'
@@ -22,14 +24,23 @@ import {
 export const PurchaseBillDetailPage: React.FC = () => {
 	const { id, fromPurchaseOrderId } = useRouter().query
 	//fromPurchaseOrderId id of ProductOrder
+	const schema = yup
+		.object()
+		.shape({
+			productOrderId: yup.string().required('Phải chọn đơn mua hàng'),
+			billNumber: yup.string().required('Phải nhập số hóa đơn'),
+			products: yup.array().min(1, 'Sản phẩm không được để trống')
+		})
+		.required()
 	const method = useForm<any>({
 		mode: 'onBlur',
 		defaultValues: {
 			products: []
-		}
+		},
+		resolver: yupResolver(schema)
 	})
 
-	const { productOrderId, products } = method.watch()
+	const { productOrderId, supplierId, products } = method.watch()
 
 	// DATA FETCHING
 	const { data: purchaseDetail } = useQuery(
@@ -39,19 +50,6 @@ export const PurchaseBillDetailPage: React.FC = () => {
 			enabled: !!productOrderId && !id,
 			onSuccess: (res) => {
 				console.log('ProductOrder', res)
-				// const productOrderInfo = res.productOrder.productOrder
-				// const supplierId = productOrderInfo?.supplierId
-				// method.setValue('supplierId', supplierId)
-				// const products =
-				// 	res?.productOrderDetail
-				// 		?.filter?.((prod: any) => prod?.billQuantity !== 0)
-				// 		.map((vl: any) => {
-				// 			return {
-				// 				...vl,
-				// 				quantity: vl.billQuantity
-				// 			}
-				// 		}) || []
-				// method.setValue('products', products)
 			}
 		}
 	)
@@ -70,6 +68,7 @@ export const PurchaseBillDetailPage: React.FC = () => {
 	// SIDE EFFECTS
 	useEffect(() => {
 		if (!id) {
+			// make sure this page is not detail productOrderBill PAGE
 			const supplierId = purchaseData?.supplierId
 
 			method.setValue('supplierId', supplierId)
@@ -81,17 +80,14 @@ export const PurchaseBillDetailPage: React.FC = () => {
 	}, [purchaseDetail, id])
 
 	useEffect(() => {
-		// if(!fromPurchaseOrderId) {
-
-		// }
-		const { productOrderId, billNumber, supplierId, attachFile } = billDetail?.productOrderBillById || {}
+		const { attachFile, ...restProductOrder } = billDetail?.productOrderBillById || {}
 		const files = !attachFile ? [] : attachFile.split?.(',')
 		const products = billDetail?.productOrderBillDetailList || []
 
 		method.reset({
-			productOrderId,
-			billNumber,
-			supplierId,
+			// productOrderId,
+			// billNumber,
+			...restProductOrder,
 			attachFile: files,
 			products
 		})
@@ -118,7 +114,7 @@ export const PurchaseBillDetailPage: React.FC = () => {
 
 				<Box className="col-span-2">
 					{/* SẢN PHẨM */}
-					<PurchaseBillDetailProducts productList={purchaseDetail?.productOrderDetail || []} />
+					<PurchaseBillDetailProducts productList={products || []} />
 				</Box>
 				{!!id && (
 					<Box className="col-span-2">

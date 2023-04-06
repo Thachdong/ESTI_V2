@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { suppliers } from 'src/api'
-import { FormInputBase } from '~modules-core/components'
+import { FormInput, FormInputBase } from '~modules-core/components'
 import { productTypes } from '~modules-core/constance'
 
 export const PurchaseBillDetailSupplier: React.FC = () => {
@@ -32,6 +32,15 @@ export const PurchaseBillDetailSupplier: React.FC = () => {
 				<Typography className="font-bold uppercase mb-4 text-sm">THÔNG TIN NHÀ CUNG CẤP</Typography>
 
 				<Box className="bg-white grid gap-3 rounded flex-grow p-3">
+					{/* <FormInput  controlProps={{
+							name: "plan",
+							control: control,
+						}}
+						label={"Kế hoạch thực hiện"}
+						multiline
+						minRows={3}
+						disabled={disabled}
+						shrinkLabel  /> */}
 					<FormInputBase label="Nhà cung cấp:" value={supplierDetail?.supplierCode} disabled />
 
 					<FormInputBase label="Địa chỉ:" value={supplierDetail?.address} disabled />
