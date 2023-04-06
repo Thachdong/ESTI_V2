@@ -7,6 +7,7 @@ import { useReactToPrint } from 'react-to-print'
 import { purchaseOrderBill, TCreatePurchaseOrderBill } from 'src/api/purchase-order-bill'
 import { AddButton, PrintButton } from '~modules-core/components'
 import { toast } from '~modules-core/toast'
+import { toastFormError } from '~modules-core/toast/toastFormError'
 import { PrintPurchaseBillDetail } from '~modules-dashboard/components'
 
 type TProps = {
@@ -24,13 +25,12 @@ export const PurchaseBillDetailButtons: React.FC<TProps> = ({ refetch, sendMailD
 
 	const { id } = router.query
 
-	const { handleSubmit } = useFormContext()
+	const { handleSubmit, formState } = useFormContext()
 
 	// METHODS
 	const mutateCreate = useMutation((payload: TCreatePurchaseOrderBill) => purchaseOrderBill.create(payload), {
 		onSuccess: (data: any) => {
 			toast.success(data?.resultMessage)
-
 			router.push('/dashboard/purchase/purchase-bill')
 		}
 	})
@@ -55,6 +55,11 @@ export const PurchaseBillDetailButtons: React.FC<TProps> = ({ refetch, sendMailD
 		await mutateCreate.mutateAsync(payload)
 	}, [])
 
+	const onErrorForm = (err: any) => {
+		toastFormError(err)
+		console.log(formState.errors)
+	}
+
 	const printAreaRef = useRef<HTMLTableElement>(null)
 	const handlePrint = useReactToPrint({
 		content: () => printAreaRef.current,
@@ -68,7 +73,7 @@ export const PurchaseBillDetailButtons: React.FC<TProps> = ({ refetch, sendMailD
 	return (
 		<Box className="flex justify-end">
 			{!id ? (
-				<AddButton onClick={handleSubmit(handleCreate)}>Tạo hóa đơn</AddButton>
+				<AddButton onClick={handleSubmit(handleCreate, onErrorForm)}>Tạo hóa đơn</AddButton>
 			) : (
 				<PrintButton onClick={handlePrint} className="bg-error ">
 					In
