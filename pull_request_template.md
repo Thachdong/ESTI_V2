@@ -1,32 +1,31 @@
-### 🛠 Changes being made
+### 📜 PR CHECK LIST
 
-Here give examples of the changes you've made in this pull request. Include an itemized list if you can. It'll help the reviewer
+### 👨‍💻 Coding - Validation + Convention
+- [ ] Does the code follow the Coding Convention?
 
+### 🤡 Commenting
+- [ ] Are comments follow comment rule?
 
-### ✨ What's the context?
+- [ ] Are comments up to date?
 
-What's the context for the changes? Are there any
+- [ ] Are comments clear and correct?
 
+- [ ] Do the comments focus on explaining why, and not how?
 
-### 🧠 Rationale behind the change
+### 💾 Source code
 
-Why did you choose to make these changes? Were there any trade-offs you had to consider? 
+- [ ] Do the parameters have descriptive names?
 
+- [ ] Each time a coding paragraph is updated, are there also description of the change ?
 
-### 🧪 Test plan
+- [ ] Are there any redundant lines of code, not used?
 
-How do you know the changes are safe to ship to production?
+- [ ] Is nesting of loops minimized?
 
+### 👮 Git rules
 
-### 📸 Screenshots (optional)
+- [ ] Does the code follow the Branch Convention?
 
-If you made UI changes, what are the before an afters?
+- [ ] Does the PR follow the GitFlow ?
 
-
-### 🏎 Quality check
-
-- [ ] Are your changes following SOLID principles?
-
-- [ ] Are there any erroneous console logs, debuggers or leftover code in your changes?
-
-- [ ] Walk away, take a break, re-read what you filled out above does it make sense if you were coming in cold? What extra context could you provide?
+- [ ] Does the PR HotFix follow the GitFlow ?
