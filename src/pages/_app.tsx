@@ -35,7 +35,7 @@ function MyApp({ Component, emotionCache = clientEmotionCache }: IMyAppProps) {
 			<MuiProvider emotionCache={emotionCache}>
 				<Head>
 					<link rel="icon" type="image/png" href="/logo-small.png" />
-					<title>{loading ? 'Đang chuyển hướng add some change here...' : displayName}</title>
+					<title>{loading ? 'Đang chuyển hướng' : displayName}</title>
 				</Head>
 
 				<ToastContainer {...toastOptions} />
